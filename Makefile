@@ -10,8 +10,8 @@
 CXX = c++
 CXXFLAGS = -pthread -std=c++0x -march=native -fPIC
 OBJS = args.o dictionary.o productquantizer.o matrix.o qmatrix.o vector.o model.o utils.o fasttext.o ftindex.o
-INCLUDES = -I. -I /home/search/ulike/model/fastText/mylib/include
-LIBS = -L /home/search/ulike/model/fastText/mylib/lib -ltrie -lpub
+INCLUDES = -I. -I./mylib/include
+LIBS = -L./mylib/lib -ltrie -lpub
 LIBNAME = libfasttext
 
 opt: CXXFLAGS += -O1 -funroll-loops
