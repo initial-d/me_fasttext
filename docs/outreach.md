@@ -76,3 +76,30 @@ Submit only where the project clearly fits:
 
 Start with one or two high-fit submissions. If maintainers respond well, reuse
 their preferred wording elsewhere.
+
+## Distribution map
+
+| Community | Fit | Suggested action | Notes |
+| --- | --- | --- | --- |
+| FastText / word embedding lists | High | Submit concise project entry. | Lead with OOV behavior and subword ids. |
+| NLP and ML library lists | High | Submit to C++ or text embedding sections. | Keep wording short and disclose authorship. |
+| Trie / double-array trie communities | Medium | Share a technical note, not a generic listing. | The repo uses trie indexes inside an NLP system; it is not a standalone DA-trie library. |
+| Memory management / systems communities | Medium | Write an engineering note about mark-compact export and mmap layout. | Frame it as compact model layout, not as a garbage collector. |
+| RAG / retrieval communities | Medium | Mention as a lexical prefilter or OOV fallback layer. | Avoid positioning it as a complete RAG framework. |
+| Functional programming communities | Low | Do not submit as-is. | The implementation is imperative C++; only discuss deterministic pipeline design if asked. |
+| General C++ awesome lists | Conditional | Submit only if project age and list rules allow. | Some lists reject repositories created after a cutoff date. |
+
+## Technical note outline
+
+Use this outline when writing for systems, data-structure, or memory-management
+readers:
+
+1. Problem: FastText hash buckets bound memory but make subword identity opaque.
+2. Data structure: exact word and n-gram ids through trie-backed dictionaries.
+3. Compression: merge only structurally related n-gram rows with close vectors.
+4. Layout: mark live rows, assign dense ids, and serialize an mmap-friendly
+   `.z` file.
+5. Serving: avoid reconstructing heavyweight training-time structures at
+   startup.
+6. Caveat: compression ratio and latency depend on corpus, n-gram range,
+   dimension, and OS page-cache behavior.
