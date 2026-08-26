@@ -1,0 +1,69 @@
+name: Benchmark result
+description: Share a reproducible me_fasttext benchmark on your corpus or hardware
+title: "[Benchmark] "
+labels:
+  - benchmark
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing a benchmark. Please include enough context for other
+        users to compare results fairly.
+  - type: input
+    id: commit
+    attributes:
+      label: Git commit
+      description: The me_fasttext commit used for the run.
+      placeholder: "abcdef1"
+    validations:
+      required: true
+  - type: textarea
+    id: corpus
+    attributes:
+      label: Corpus manifest
+      description: Language, document count, token count, split, and preprocessing notes.
+      placeholder: |
+        language:
+        documents:
+        tokens:
+        preprocessing:
+    validations:
+      required: true
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware and OS
+      description: CPU, memory, storage, OS, compiler, and filesystem if relevant.
+      placeholder: |
+        cpu:
+        memory_gb:
+        storage:
+        os:
+        compiler:
+    validations:
+      required: true
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands
+      description: Build, train, export, and serving commands.
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: results
+    attributes:
+      label: Results
+      description: Memory, load time, storage, query latency, and quality metrics.
+      placeholder: |
+        | Method | Memory | Load time | Storage | Query p50 | Query p95 | Quality |
+        | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+        | Original FastText | | | | | | |
+        | me_fasttext | | | | | | |
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Anything surprising, missing, or hard to reproduce.

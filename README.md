@@ -6,6 +6,26 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 
 > Status: research / production-prototype code. The command-line interface remains close to the original fastText workflow, while the storage and serving path has been extended for large-vocabulary, memory-sensitive deployments.
 
+## Start here
+
+- [Benchmark protocol](docs/benchmark_protocol.md): how to compare memory, load time, latency, and task quality.
+- [Outreach notes](docs/outreach.md): concise wording for adding the project to NLP, embedding, retrieval, or systems lists.
+- [Citation metadata](CITATION.cff): machine-readable citation information for GitHub and reference managers.
+- [Release notes](docs/release_notes_v0.1.0.md): scope and caveats for the first research-prototype release.
+
+## Where it fits
+
+Use `me_fasttext` when you need a small lexical memory layer rather than a
+large semantic encoder:
+
+| Use case | Why this project is relevant |
+| --- | --- |
+| OOV-heavy retrieval | Character n-grams preserve signals for rare and unseen words. |
+| Entity-heavy search | Exact trie ids make subword identities inspectable before compression. |
+| RAG prefiltering | A low-cost lexical stage can reduce candidates before dense reranking. |
+| Memory-sensitive serving | The compact `.z` artifact is designed for mmap-based loading. |
+| Long-tail Chinese or multilingual text | UTF-8 n-gram enumeration avoids byte-level shortcuts. |
+
 ## Why this exists
 
 Standard fastText represents a word by averaging its word vector and character n-gram vectors. To avoid storing every observed n-gram, the reference implementation hashes subwords into a fixed bucket table. That keeps memory bounded, but unrelated n-grams can collide into the same row.
@@ -280,4 +300,7 @@ If this repository or the accompanying method is useful in your work, please cit
 
 ## License
 
-This codebase is derived from the public fastText C++ implementation, whose source headers refer to a BSD-style license. This repository should include a top-level `LICENSE` file before packaging or redistribution.
+This codebase is derived from the public fastText C++ implementation and is
+distributed under the MIT License. See [LICENSE](LICENSE). Before redistributing
+binary artifacts, review any third-party or platform-specific dependency terms
+that may apply to the bundled support libraries.

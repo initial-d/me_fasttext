@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use me_fasttext or the accompanying method, please cite the arXiv paper."
+title: "Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management"
+authors:
+  - family-names: Du
+    given-names: Yimin
+repository-code: "https://github.com/initial-d/me_fasttext"
+url: "https://arxiv.org/abs/2506.01254"
+license: MIT
+keywords:
+  - fastText
+  - word embeddings
+  - subword embeddings
+  - memory efficiency
+  - double-array trie
+  - retrieval
+preferred-citation:
+  type: article
+  title: "Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management"
+  authors:
+    - family-names: Du
+      given-names: Yimin
+  year: 2026
+  url: "https://arxiv.org/abs/2506.01254"
