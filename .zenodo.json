@@ -1,0 +1,37 @@
+{
+  "title": "me_fasttext: Memory-Efficient FastText with Exact Trie N-Gram IDs and mmap Serving",
+  "creators": [
+    {
+      "name": "Du, Yimin",
+      "affiliation": "Independent Researcher"
+    }
+  ],
+  "description": "A FastText-derived C++ research prototype that replaces hash-bucketed character n-gram ids with exact trie-backed ids, then exports a compact mmap serving index through conservative n-gram row sharing and mark-compact layout.",
+  "license": "MIT",
+  "keywords": [
+    "fastText",
+    "word embeddings",
+    "subword embeddings",
+    "information retrieval",
+    "model compression",
+    "double-array trie",
+    "mmap",
+    "NLP"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://arxiv.org/abs/2506.01254",
+      "relation": "isSupplementTo",
+      "scheme": "url",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "https://github.com/initial-d/me_fasttext",
+      "relation": "isIdenticalTo",
+      "scheme": "url",
+      "resource_type": "software"
+    }
+  ],
+  "upload_type": "software",
+  "access_right": "open"
+}
