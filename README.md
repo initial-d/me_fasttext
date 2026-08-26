@@ -9,6 +9,7 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 ## Start here
 
 - [Benchmark protocol](docs/benchmark_protocol.md): how to compare memory, load time, latency, and task quality.
+- [Engineering note](docs/engineering_note.md): how trie ids, mark-compact style row rewriting, and mmap serving fit together.
 - [Outreach notes](docs/outreach.md): concise wording for adding the project to NLP, embedding, retrieval, or systems lists.
 - [Citation metadata](CITATION.cff): machine-readable citation information for GitHub and reference managers.
 - [Release notes](docs/release_notes_v0.1.0.md): scope and caveats for the first research-prototype release.

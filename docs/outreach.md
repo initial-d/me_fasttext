@@ -91,8 +91,9 @@ their preferred wording elsewhere.
 
 ## Technical note outline
 
-Use this outline when writing for systems, data-structure, or memory-management
-readers:
+Use [engineering_note.md](engineering_note.md) when sharing with systems,
+data-structure, or memory-management readers. If adapting it into a shorter
+post, keep this outline:
 
 1. Problem: FastText hash buckets bound memory but make subword identity opaque.
 2. Data structure: exact word and n-gram ids through trie-backed dictionaries.
