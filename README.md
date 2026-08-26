@@ -12,6 +12,7 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 - [Citation guide](docs/citation_guide.md): how to cite the paper, position related work, and report comparisons.
 - [Engineering note](docs/engineering_note.md): how trie ids, mark-compact style row rewriting, and mmap serving fit together.
 - [Outreach notes](docs/outreach.md): concise wording for adding the project to NLP, embedding, retrieval, or systems lists.
+- [Promotion posts](docs/promotion_posts.md): short posts and maintainer notes for careful outreach.
 - [Citation metadata](CITATION.cff): machine-readable citation information for GitHub and reference managers.
 - [Release notes](docs/release_notes_v0.1.0.md): scope and caveats for the first research-prototype release.
 
