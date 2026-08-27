@@ -48,17 +48,68 @@ Paper: https://arxiv.org/abs/2506.01254
 Engineering note: https://github.com/initial-d/me_fasttext/blob/main/docs/engineering_note.md
 ```
 
+## Systems-angle post
+
+```text
+I finally wrote down the design idea behind me_fasttext:
+
+FastText-style subword models are not only NLP models. At large vocabulary
+scale, they become memory-layout problems.
+
+me_fasttext treats character n-gram embeddings as structured memory objects:
+train first with exact trie-backed subword identities, then rewrite retained
+rows into a compact mmap serving artifact using a mark-compact-style export
+step.
+
+The interesting part is the bridge between three older ideas:
+
+1. classical dynamic memory management
+2. trie-backed lexical identity
+3. FastText's character n-gram statistics
+
+Design essay:
+https://github.com/initial-d/me_fasttext/blob/main/docs/memory_management_for_ai_embeddings.md
+
+Code:
+https://github.com/initial-d/me_fasttext
+```
+
+## Chinese long-form post
+
+```text
+我整理了一篇 `me_fasttext` 的中文技术回顾：
+
+《我把动态内存管理用在了 FastText 的 n-gram embedding 上》
+
+这个项目表面上是一个 memory-efficient FastText 变体，但真正的设计点是：
+把 FastText 的大规模 n-gram embedding 矩阵看成一个结构化内存对象。
+
+先用 trie 保留精确 subword identity，再在训练后用类似 mark-compact 的方式
+把向量行整理成紧凑、可 mmap serving 的模型 artifact。
+
+我觉得它最有意思的地方，是把动态内存管理、字典树、FastText 的 n-gram
+语言统计现象接在了一起。
+
+文章：
+https://github.com/initial-d/me_fasttext/blob/main/docs/technical_retrospective_zh.md
+
+代码：
+https://github.com/initial-d/me_fasttext
+```
+
 ## Hacker News / Lobsters title options
 
 - Memory-Efficient FastText with Exact Trie N-Gram IDs and mmap Serving
 - Replacing FastText Hash Buckets with Trie-Backed Subword IDs
 - Mark-Compact Layouts for FastText-Style Embedding Serving
+- Memory Management for FastText-Style Subword Embeddings
 
 ## Reddit title options
 
 - I built a memory-efficient FastText variant with trie-backed subword IDs
 - Exact subword IDs + mmap serving for FastText-style embeddings
 - Revisiting FastText for OOV-heavy retrieval and low-memory serving
+- Applying mark-compact memory management ideas to subword embeddings
 
 ## Maintainer note
 

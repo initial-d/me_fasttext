@@ -11,6 +11,8 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 - [Benchmark protocol](docs/benchmark_protocol.md): how to compare memory, load time, latency, and task quality.
 - [Citation guide](docs/citation_guide.md): how to cite the paper, position related work, and report comparisons.
 - [Engineering note](docs/engineering_note.md): how trie ids, mark-compact style row rewriting, and mmap serving fit together.
+- [Design essay](docs/memory_management_for_ai_embeddings.md): why this project reframes FastText storage as an AI memory-management problem.
+- [Chinese retrospective](docs/technical_retrospective_zh.md): a long-form Chinese note for technical storytelling and outreach.
 - [Outreach notes](docs/outreach.md): concise wording for adding the project to NLP, embedding, retrieval, or systems lists.
 - [Promotion posts](docs/promotion_posts.md): short posts and maintainer notes for careful outreach.
 - [Distribution log](docs/distribution_log.md): external list submissions, accepted entries, and follow-up status.
