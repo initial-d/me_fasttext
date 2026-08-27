@@ -13,8 +13,13 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 - [Engineering note](docs/engineering_note.md): how trie ids, mark-compact style row rewriting, and mmap serving fit together.
 - [Outreach notes](docs/outreach.md): concise wording for adding the project to NLP, embedding, retrieval, or systems lists.
 - [Promotion posts](docs/promotion_posts.md): short posts and maintainer notes for careful outreach.
+- [Distribution log](docs/distribution_log.md): external list submissions, accepted entries, and follow-up status.
 - [Citation metadata](CITATION.cff): machine-readable citation information for GitHub and reference managers.
 - [Release notes](docs/release_notes_v0.1.0.md): scope and caveats for the first research-prototype release.
+
+## External listings
+
+- [Awesome Data Science](https://github.com/academic/awesome-datascience) lists `me_fasttext` under General Machine Learning Packages.
 
 ## Where it fits
 
