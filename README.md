@@ -16,6 +16,7 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 - [Outreach notes](docs/outreach.md): concise wording for adding the project to NLP, embedding, retrieval, or systems lists.
 - [Promotion posts](docs/promotion_posts.md): short posts and maintainer notes for careful outreach.
 - [Distribution log](docs/distribution_log.md): external list submissions, accepted entries, and follow-up status.
+- [Reuse and citation pathways](docs/reuse_and_citation_pathways.md): where follow-up work can naturally cite the method.
 - [Citation metadata](CITATION.cff): machine-readable citation information for GitHub and reference managers.
 - [Release notes](docs/release_notes_v0.1.0.md): scope and caveats for the first research-prototype release.
 
