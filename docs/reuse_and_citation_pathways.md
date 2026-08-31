@@ -101,7 +101,9 @@ which provides trie-backed subword ids and an mmap-ready compact index.
 
 ## What to include in a reproduction report
 
-For reports that should be comparable or citable, include:
+For reports that should be comparable or citable, use the GitHub
+[benchmark result template](https://github.com/initial-d/me_fasttext/issues/new?template=benchmark-result.yml)
+and include:
 
 - commit SHA;
 - corpus description and language;
@@ -115,3 +117,22 @@ For reports that should be comparable or citable, include:
 Negative results are useful when the setup is clear. A dataset where trie-backed
 identity does not improve the trade-off is still evidence about where the
 method belongs.
+
+## How reports become citation evidence
+
+A good public report does not need to be flattering. It needs to be specific.
+The most useful reports tie one claim to one measurable setting: memory
+reduction, mmap cold-load behavior, OOV-heavy retrieval quality, or the
+difference between hash-bucketed and exact n-gram ids.
+
+When a report is public and self-contained, it can support later citations in
+three ways:
+
+- as independent reproduction evidence for the paper's memory and load-time
+  claims;
+- as a new-domain benchmark showing where the method transfers or fails;
+- as implementation evidence for systems papers that need a compact lexical
+  embedding layer rather than a large dense encoder.
+
+Keep private data out of reports. Public corpus summaries, aggregate metrics,
+hardware manifests, and redacted commands are enough for useful comparison.

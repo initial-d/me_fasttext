@@ -1,5 +1,5 @@
 name: Benchmark result
-description: Share a reproducible me_fasttext benchmark on your corpus or hardware
+description: Share a reproducible me_fasttext benchmark, replication, or negative result
 title: "[Benchmark] "
 labels:
   - benchmark
@@ -7,8 +7,35 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for sharing a benchmark. Please include enough context for other
-        users to compare results fairly.
+        Thanks for sharing a benchmark or replication. Please include enough
+        context for other users to compare results fairly.
+
+        Do not include private corpora, access tokens, internal hostnames, or
+        proprietary logs. Summaries and aggregate metrics are enough.
+  - type: dropdown
+    id: report_type
+    attributes:
+      label: Report type
+      description: What kind of evidence are you sharing?
+      options:
+        - Reproduction of paper-style memory/load-time result
+        - New corpus or new language benchmark
+        - Serving latency or mmap deployment report
+        - Retrieval, ranking, or classification downstream result
+        - Negative result or limitation report
+        - Other comparison
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: Claim or question tested
+      description: State the specific claim, comparison, or deployment question this run evaluates.
+      placeholder: |
+        Example: Does trie-backed exact n-gram identity plus compact export
+        reduce memory for an OOV-heavy retrieval corpus without hurting recall?
+    validations:
+      required: true
   - type: input
     id: commit
     attributes:
@@ -21,12 +48,45 @@ body:
     id: corpus
     attributes:
       label: Corpus manifest
-      description: Language, document count, token count, split, and preprocessing notes.
+      description: Language, document count, token count, split, preprocessing notes, and whether the corpus is public.
       placeholder: |
         language:
         documents:
         tokens:
+        train_split:
+        eval_split:
         preprocessing:
+        public_or_private:
+    validations:
+      required: true
+  - type: textarea
+    id: model_config
+    attributes:
+      label: Model and compression settings
+      description: Training mode, vector dimension, n-gram range, vocabulary cutoff, thread count, and export/compression settings.
+      placeholder: |
+        mode:
+        dim:
+        minn:
+        maxn:
+        min_count:
+        epoch:
+        thread:
+        compact_index:
+        compression_threshold:
+    validations:
+      required: true
+  - type: textarea
+    id: baselines
+    attributes:
+      label: Baselines and controls
+      description: List the compared methods and explain any omitted baseline.
+      placeholder: |
+        - Original FastText:
+        - Hash-free uncompressed:
+        - Quantized FastText:
+        - Other:
+        omitted_baselines:
     validations:
       required: true
   - type: textarea
@@ -54,16 +114,43 @@ body:
     id: results
     attributes:
       label: Results
-      description: Memory, load time, storage, query latency, and quality metrics.
+      description: Memory, load time, storage, query latency, OOV coverage, and quality metrics.
       placeholder: |
-        | Method | Memory | Load time | Storage | Query p50 | Query p95 | Quality |
-        | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-        | Original FastText | | | | | | |
-        | me_fasttext | | | | | | |
+        | Method | Memory | Load time | Storage | Query p50 | Query p95 | OOV coverage | Quality |
+        | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+        | Original FastText | | | | | | | |
+        | me_fasttext | | | | | | | |
     validations:
       required: true
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: Reproducibility artifacts
+      description: Link public scripts, manifests, logs, or derived artifacts when available. Redact private paths or credentials.
+      placeholder: |
+        scripts:
+        logs:
+        model_or_index_artifacts:
+        notes_on_redactions:
+  - type: textarea
+    id: citation_fit
+    attributes:
+      label: Citation or reuse fit
+      description: If this result supports a paper, report, deployment note, or comparison table, describe how me_fasttext is used.
+      placeholder: |
+        Example: used as a compact lexical embedding layer before dense reranking;
+        compared against hash-bucketed FastText for memory and OOV recall.
   - type: textarea
     id: notes
     attributes:
       label: Notes
-      description: Anything surprising, missing, or hard to reproduce.
+      description: Anything surprising, missing, hard to reproduce, or unfavorable to me_fasttext.
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Disclosure
+      options:
+        - label: I have not included secrets, credentials, private corpora, or proprietary logs.
+          required: true
+        - label: I am comfortable with this report being referenced as public reproducibility evidence.
+          required: false
