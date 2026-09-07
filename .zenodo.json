@@ -13,6 +13,8 @@
     "word embeddings",
     "subword embeddings",
     "information retrieval",
+    "inference optimization",
+    "model serving",
     "model compression",
     "double-array trie",
     "mmap",

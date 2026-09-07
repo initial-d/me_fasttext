@@ -74,6 +74,33 @@ Code:
 https://github.com/initial-d/me_fasttext
 ```
 
+## Inference-optimization post
+
+```text
+I have been reframing me_fasttext as an early compact-inference prototype for
+lexical embeddings.
+
+Before the current LLM-serving wave, this project already explored a familiar
+deployment problem: keep useful embedding behavior while reducing serving
+memory, cold-load time, and artifact size.
+
+The design:
+
+1. train FastText-style embeddings with exact trie-backed word/subword ids
+2. keep character n-gram identity inspectable before compression
+3. merge only selected structurally related rows after training
+4. rewrite live rows into a compact mmap-ready serving artifact
+
+It is not trying to replace dense embedding models. It is a small lexical
+inference layer for OOV-heavy retrieval, entity search, long-tail Chinese text,
+and low-memory first-stage ranking.
+
+Code: https://github.com/initial-d/me_fasttext
+Paper: https://arxiv.org/abs/2506.01254
+Inference note:
+https://github.com/initial-d/me_fasttext/blob/main/docs/inference_optimization_note.md
+```
+
 ## Chinese long-form post
 
 ```text

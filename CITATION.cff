@@ -12,7 +12,11 @@ keywords:
   - word embeddings
   - subword embeddings
   - memory efficiency
+  - inference optimization
+  - compact inference
+  - model serving
   - double-array trie
+  - mmap serving
   - retrieval
 preferred-citation:
   type: article

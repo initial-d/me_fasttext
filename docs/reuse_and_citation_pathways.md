@@ -7,6 +7,22 @@ embedding models.
 
 ## Strong citation fits
 
+### 0. Compact lexical embedding inference
+
+`me_fasttext` is a strong fit when a paper or system needs a small lexical
+embedding layer with explicit subword identity, compact model layout, and
+mmap-based serving. This is closest to inference-optimization work that reports
+cold-start time, resident memory, artifact size, and lookup latency.
+
+Useful evidence to report:
+
+- `.bin` versus `.z` artifact size;
+- cold mmap load time;
+- peak resident memory after loading;
+- p50 and p95 lookup latency;
+- OOV or rare-token coverage;
+- downstream retrieval, ranking, or classification quality.
+
 ### 1. Large-vocabulary subword embedding storage
 
 `me_fasttext` is most directly relevant when a system needs FastText-style

@@ -21,6 +21,7 @@ body:
         - Reproduction of paper-style memory/load-time result
         - New corpus or new language benchmark
         - Serving latency or mmap deployment report
+        - Compact inference or cold-start report
         - Retrieval, ranking, or classification downstream result
         - Negative result or limitation report
         - Other comparison

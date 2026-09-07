@@ -6,10 +6,13 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 
 > Status: research / production-prototype code. The command-line interface remains close to the original fastText workflow, while the storage and serving path has been extended for large-vocabulary, memory-sensitive deployments.
 
+> Inference framing: `me_fasttext` can also be read as an early compact-inference prototype for lexical embeddings. It keeps subword identity exact during training, then rewrites the learned rows into a smaller mmap-friendly serving artifact for low-memory retrieval and feature-serving workloads.
+
 ## Start here
 
 - [Benchmark protocol](docs/benchmark_protocol.md): how to compare memory, load time, latency, and task quality.
 - [Citation guide](docs/citation_guide.md): how to cite the paper, position related work, and report comparisons.
+- [Inference optimization note](docs/inference_optimization_note.md): how to position the project as compact lexical embedding inference.
 - [Related work map](docs/related_work_map.md): how the project connects to FastText, tries, mmap serving, retrieval, and memory management.
 - [Engineering note](docs/engineering_note.md): how trie ids, mark-compact style row rewriting, and mmap serving fit together.
 - [Design essay](docs/memory_management_for_ai_embeddings.md): why this project reframes FastText storage as an AI memory-management problem.
@@ -35,6 +38,7 @@ large semantic encoder:
 | OOV-heavy retrieval | Character n-grams preserve signals for rare and unseen words. |
 | Entity-heavy search | Exact trie ids make subword identities inspectable before compression. |
 | RAG prefiltering | A low-cost lexical stage can reduce candidates before dense reranking. |
+| Compact inference | A dense compact matrix plus mmap loading lowers the cost of keeping lexical embeddings online. |
 | Memory-sensitive serving | The compact `.z` artifact is designed for mmap-based loading. |
 | Long-tail Chinese or multilingual text | UTF-8 n-gram enumeration avoids byte-level shortcuts. |
 
