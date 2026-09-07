@@ -24,6 +24,13 @@ need maintainer follow-up.
 | 2026-08-26 | awesome-NLP-resources | [PR 12](https://github.com/HanXinzi-AI/awesome-NLP-resources/pull/12) | Text retrieval and semantic matching |
 | 2026-08-26 | Awesome-Text-Classification | [PR 2](https://github.com/fendouai/Awesome-Text-Classification/pull/2) | Projects |
 
+## Blocked or unsuitable targets
+
+| Date | Target | Status | Note |
+| --- | --- | --- | --- |
+| 2026-09-07 | Separius/awesome-sentence-embedding | Archived / read-only | Prepared a fork branch adding the paper to the Word Embeddings table, but GitHub rejected PR creation because the upstream repository is archived. |
+| 2026-09-07 | currentslab/awesome-vector-search | Deferred | Strong list, but current taxonomy focuses on ANN engines, vector databases, and similarity-search libraries; `me_fasttext` would need a clearer vector-search benchmark before submission. |
+
 ## Follow-up rule
 
 Avoid same-day nudges. For open pull requests, wait at least one week before a
@@ -38,3 +45,17 @@ maintainer asks for changes.
 | 2026-09-07 | [awesome-embedding-models PR 12](https://github.com/Hironsan/awesome-embedding-models/pull/12#issuecomment-5570207623) | Added embedding/citation context. |
 | 2026-09-07 | [awesome-information-retrieval PR 22](https://github.com/harpribot/awesome-information-retrieval/pull/22#issuecomment-5570207663) | Added retrieval and benchmark context. |
 | 2026-09-07 | [awesome-ml-model-compression PR 11](https://github.com/cedrickchee/awesome-ml-model-compression/pull/11#issuecomment-5570207731) | Added exact-then-compact compression context. |
+
+## Next high-fit targets
+
+Prioritize targets where one of these phrases is naturally true:
+
+- FastText-style word/subword embeddings;
+- OOV-heavy lexical embedding model;
+- double-array trie used as model-index infrastructure;
+- mark-compact layout transformation outside runtime GC;
+- compact lexical inference or mmap serving artifact.
+
+Avoid generic vector database, LLM-agent, or runtime-GC lists unless there is a
+specific section for retrieval features, model layout, or applied memory
+management.
