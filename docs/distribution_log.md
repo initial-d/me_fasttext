@@ -28,7 +28,7 @@ need maintainer follow-up.
 
 | Date | Target | Status | Note |
 | --- | --- | --- | --- |
-| 2026-09-07 | Separius/awesome-sentence-embedding | Archived / read-only | Prepared a fork branch adding the paper to the Word Embeddings table, but GitHub rejected PR creation because the upstream repository is archived. |
+| 2026-09-07 | Separius/awesome-sentence-embedding | Archived / read-only | Prepared fork branch [`initial-d:add-me-fasttext-word-embedding`](https://github.com/initial-d/awesome-sentence-embedding/tree/add-me-fasttext-word-embedding) adding the paper to the Word Embeddings table, but GitHub rejected PR creation because the upstream repository is archived. |
 | 2026-09-07 | currentslab/awesome-vector-search | Deferred | Strong list, but current taxonomy focuses on ANN engines, vector databases, and similarity-search libraries; `me_fasttext` would need a clearer vector-search benchmark before submission. |
 
 ## Follow-up rule
@@ -45,6 +45,12 @@ maintainer asks for changes.
 | 2026-09-07 | [awesome-embedding-models PR 12](https://github.com/Hironsan/awesome-embedding-models/pull/12#issuecomment-5570207623) | Added embedding/citation context. |
 | 2026-09-07 | [awesome-information-retrieval PR 22](https://github.com/harpribot/awesome-information-retrieval/pull/22#issuecomment-5570207663) | Added retrieval and benchmark context. |
 | 2026-09-07 | [awesome-ml-model-compression PR 11](https://github.com/cedrickchee/awesome-ml-model-compression/pull/11#issuecomment-5570207731) | Added exact-then-compact compression context. |
+
+## Release page updates
+
+| Date | Release | Note |
+| --- | --- | --- |
+| 2026-09-07 | [v0.1.0 research prototype](https://github.com/initial-d/me_fasttext/releases/tag/v0.1.0) | Added compact-inference and cross-community positioning links to the release notes. |
 
 ## Next high-fit targets
 
