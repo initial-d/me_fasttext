@@ -13,6 +13,7 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 - [Benchmark protocol](docs/benchmark_protocol.md): how to compare memory, load time, latency, and task quality.
 - [Citation guide](docs/citation_guide.md): how to cite the paper, position related work, and report comparisons.
 - [Inference optimization note](docs/inference_optimization_note.md): how to position the project as compact lexical embedding inference.
+- [Cross-community positioning](docs/cross_community_positioning.md): precise framing for FastText, word-embedding, DA-trie, GC, and inference-optimization readers.
 - [Related work map](docs/related_work_map.md): how the project connects to FastText, tries, mmap serving, retrieval, and memory management.
 - [Engineering note](docs/engineering_note.md): how trie ids, mark-compact style row rewriting, and mmap serving fit together.
 - [Design essay](docs/memory_management_for_ai_embeddings.md): why this project reframes FastText storage as an AI memory-management problem.

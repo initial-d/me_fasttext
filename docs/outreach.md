@@ -72,6 +72,8 @@ Submit only where the project clearly fits:
 | Awesome NLP lists | Word embeddings and efficient representation learning. |
 | Embedding lists | Subword embedding infrastructure, not sentence-level SOTA. |
 | RAG lists | Cheap lexical prefilter or fallback retrieval layer. |
+| DA-trie / data-structure lists | Trie terminal ids as embedding row ids, with compact serving remapping. |
+| GC / memory-management lists | Mark-compact as an offline model-layout transformation, not runtime GC. |
 | Systems forums | mmap serving, model footprint, trie indexing, cold-start cost. |
 
 Start with one or two high-fit submissions. If maintainers respond well, reuse
