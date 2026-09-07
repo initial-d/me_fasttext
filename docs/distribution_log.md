@@ -14,6 +14,7 @@ need maintainer follow-up.
 
 | Date | List | Link | Placement proposed |
 | --- | --- | --- | --- |
+| 2026-09-07 | awesome-gc | [PR 1](https://github.com/cch123/awesome-gc/pull/1) | Applications |
 | 2026-08-26 | awesome-nlp | [PR 422](https://github.com/keon/awesome-nlp/pull/422) | Text embeddings |
 | 2026-08-26 | awesome-machine-learning | [PR 1411](https://github.com/josephmisiti/awesome-machine-learning/pull/1411) | C++ NLP resources |
 | 2026-08-26 | awesome-embedding-models | [PR 12](https://github.com/Hironsan/awesome-embedding-models/pull/12) | Paper and implementation |
@@ -28,3 +29,12 @@ need maintainer follow-up.
 Avoid same-day nudges. For open pull requests, wait at least one week before a
 single polite follow-up, and only follow up when the list is still active or the
 maintainer asks for changes.
+
+## Follow-up log
+
+| Date | Link | Note |
+| --- | --- | --- |
+| 2026-09-07 | [awesome-nlp PR 422](https://github.com/keon/awesome-nlp/pull/422#issuecomment-5570207578) | Added compact-inference and positioning context. |
+| 2026-09-07 | [awesome-embedding-models PR 12](https://github.com/Hironsan/awesome-embedding-models/pull/12#issuecomment-5570207623) | Added embedding/citation context. |
+| 2026-09-07 | [awesome-information-retrieval PR 22](https://github.com/harpribot/awesome-information-retrieval/pull/22#issuecomment-5570207663) | Added retrieval and benchmark context. |
+| 2026-09-07 | [awesome-ml-model-compression PR 11](https://github.com/cedrickchee/awesome-ml-model-compression/pull/11#issuecomment-5570207731) | Added exact-then-compact compression context. |
