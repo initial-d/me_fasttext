@@ -58,6 +58,7 @@ maintainer asks for changes.
 | Date | Commit | Note |
 | --- | --- | --- |
 | 2026-09-07 | [a450399](https://github.com/initial-d/me_fasttext/commit/a450399) | Added `bench_ftindex` and a retrieval/OOV serving benchmark guide for mmap load time, p50/p95 query latency, and OOV subword coverage. |
+| 2026-09-07 | docs update | Added a retrieval comparison matrix and artifact card so external reports can compare FastText, BM25, dense embeddings, rerankers, and vector-search systems without overclaiming. |
 
 ## Next high-fit targets
 

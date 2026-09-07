@@ -14,6 +14,7 @@ artifact for readers of the accompanying arXiv paper.
 - `bench_ftindex` for compact `.z` retrieval/OOV serving measurements.
 - Retrieval comparison matrix for FastText, BM25, dense embedding, reranker,
   and vector-search comparisons.
+- Artifact card for quick citation, benchmark, and list-maintainer triage.
 - Citation metadata for GitHub and reference managers.
 
 ## Intended use
@@ -34,6 +35,7 @@ backgrounds, see:
 
 - Compact inference note: https://github.com/initial-d/me_fasttext/blob/main/docs/inference_optimization_note.md
 - Cross-community positioning: https://github.com/initial-d/me_fasttext/blob/main/docs/cross_community_positioning.md
+- Artifact card: https://github.com/initial-d/me_fasttext/blob/main/docs/artifact_card.md
 - Retrieval and OOV serving benchmark: https://github.com/initial-d/me_fasttext/blob/main/docs/retrieval_oov_benchmark.md
 - Retrieval comparison matrix: https://github.com/initial-d/me_fasttext/blob/main/docs/retrieval_comparison_matrix.md
 

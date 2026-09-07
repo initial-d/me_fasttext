@@ -5,6 +5,9 @@ likely to be useful enough to cite. It is deliberately conservative: the project
 is a compact lexical-memory layer, not a replacement for modern dense
 embedding models.
 
+For quick triage, start with the one-page [`artifact_card.md`](artifact_card.md).
+It lists the strongest claims, the evidence to report, and the claims to avoid.
+
 ## Strong citation fits
 
 ### 0. Compact lexical embedding inference

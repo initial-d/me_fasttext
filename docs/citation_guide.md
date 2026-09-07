@@ -3,6 +3,9 @@
 This page is for researchers who want to cite, compare, or reproduce
 `me_fasttext`.
 
+For a one-page summary of the artifact, including fit, claims, evidence, and
+non-goals, see [`artifact_card.md`](artifact_card.md).
+
 ## Cite the paper
 
 If the method, implementation, benchmark protocol, or compact serving layout is

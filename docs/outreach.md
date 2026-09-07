@@ -9,6 +9,10 @@ Memory-efficient FastText for large-vocabulary, OOV-heavy NLP: exact trie-based
 subword ids, conservative n-gram row sharing, and mmap serving for lower-memory
 lexical retrieval and feature generation.
 
+For maintainers who need a quick technical summary, link the
+[`artifact_card.md`](artifact_card.md) page before longer essays or benchmark
+notes.
+
 ## When to mention it
 
 - Large vocabularies where FastText-style OOV behavior is still useful.
