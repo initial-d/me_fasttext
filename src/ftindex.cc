@@ -70,6 +70,21 @@ int32_t getWordId(FTIndex* fti, const std::string& word)
 	return (int32_t)id;
 }
 
+int32_t ftindex_dim(FTIndex* fti)
+{
+	return fti ? fti->dim : 0;
+}
+
+int32_t ftindex_nwords(FTIndex* fti)
+{
+	return fti ? fti->nwords : 0;
+}
+
+int32_t ftindex_nngrams(FTIndex* fti)
+{
+	return fti ? fti->nngrams : 0;
+}
+
 int32_t getNgramId(FTIndex* fti, const std::string& word)
 {
 	size_t id = 0;

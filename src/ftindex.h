@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 #include <string>
 #include <vector>
 
@@ -10,6 +11,9 @@ typedef struct _FTIndex FTIndex;
 FTIndex*	ftindex_mmap(const char* uri, void** o_mmap_addr, size_t* o_mmap_len);
 int			ftindex_munmap(void* mmap_addr, size_t mmap_len);
 void		ftindex_delete_unsafe(FTIndex* fti);
+int32_t		ftindex_dim(FTIndex* fti);
+int32_t		ftindex_nwords(FTIndex* fti);
+int32_t		ftindex_nngrams(FTIndex* fti);
 int32_t		getWordId(FTIndex* fti, const std::string& word);
 int32_t		getNgramId(FTIndex* fti, const std::string& word);
 void		getWordVector(FTIndex* fti, const std::string& word, real* o_vec);

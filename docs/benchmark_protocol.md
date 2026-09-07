@@ -97,6 +97,11 @@ model:
 For RAG or search prefiltering use cases, report recall-at-k or downstream
 reranking quality in addition to raw latency.
 
+For a concrete mmap query benchmark, see
+[`retrieval_oov_benchmark.md`](retrieval_oov_benchmark.md). It documents the
+`bench_ftindex` helper for cold mmap load time, p50/p95 sentence-vector latency,
+and OOV subword coverage.
+
 ## Paper reference point
 
 The paper reports a Chinese large-vocabulary setting with 30.1M words and

@@ -15,7 +15,7 @@ LIBS = -L./mylib/lib -ltrie -lpub
 LIBNAME = libfasttext
 
 opt: CXXFLAGS += -O1 -funroll-loops
-opt: fasttext $(LIBNAME).a index cut_ngram print_ngrams
+opt: fasttext $(LIBNAME).a index cut_ngram print_ngrams bench_ftindex
 
 debug: CXXFLAGS += -g -O0 -fno-inline
 debug: fasttext
@@ -74,5 +74,8 @@ print_ngrams: $(OBJS) src/print_ngrams.cc
 $(LIBNAME).a: $(OBJS)
 	ar r $(LIBNAME).a *.o
 
+bench_ftindex: $(OBJS) src/bench_ftindex.cc
+	$(CXX) $(CXXFLAGS) $(OBJS) src/bench_ftindex.cc -o bench_ftindex $(INCLUDES) $(LIBS)
+
 clean:
-	rm -rf *.o fasttext $(LIBNAME).a
+	rm -rf *.o fasttext index cut_ngram print_ngrams bench_ftindex $(LIBNAME).a
