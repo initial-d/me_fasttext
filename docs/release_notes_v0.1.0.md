@@ -11,6 +11,9 @@ artifact for readers of the accompanying arXiv paper.
 - Mark-compact export into a single mmap serving index (`<output>.z`).
 - Helper tools for compact-index generation and n-gram inspection.
 - Benchmark protocol and benchmark issue template for external reports.
+- `bench_ftindex` for compact `.z` retrieval/OOV serving measurements.
+- Retrieval comparison matrix for FastText, BM25, dense embedding, reranker,
+  and vector-search comparisons.
 - Citation metadata for GitHub and reference managers.
 
 ## Intended use
@@ -22,6 +25,17 @@ features, and mmap serving investigations.
 This is not presented as a drop-in replacement for transformer embedding models
 or a complete RAG framework. It is a compact lexical memory layer that can be
 used alongside modern retrieval and reranking systems.
+
+## Positioning updates
+
+For readers approaching the project from efficient inference, FastText, word
+embeddings, double-array tries, retrieval systems, or memory-management
+backgrounds, see:
+
+- Compact inference note: https://github.com/initial-d/me_fasttext/blob/main/docs/inference_optimization_note.md
+- Cross-community positioning: https://github.com/initial-d/me_fasttext/blob/main/docs/cross_community_positioning.md
+- Retrieval and OOV serving benchmark: https://github.com/initial-d/me_fasttext/blob/main/docs/retrieval_oov_benchmark.md
+- Retrieval comparison matrix: https://github.com/initial-d/me_fasttext/blob/main/docs/retrieval_comparison_matrix.md
 
 ## Notes
 
