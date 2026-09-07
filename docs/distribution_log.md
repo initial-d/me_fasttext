@@ -14,6 +14,7 @@ need maintainer follow-up.
 
 | Date | List | Link | Placement proposed |
 | --- | --- | --- | --- |
+| 2026-09-07 | awesome-vector-search | [PR 70](https://github.com/currentslab/awesome-vector-search/pull/70) | Library |
 | 2026-09-07 | awesome-gc | [PR 1](https://github.com/cch123/awesome-gc/pull/1) | Applications |
 | 2026-08-26 | awesome-nlp | [PR 422](https://github.com/keon/awesome-nlp/pull/422) | Text embeddings |
 | 2026-08-26 | awesome-machine-learning | [PR 1411](https://github.com/josephmisiti/awesome-machine-learning/pull/1411) | C++ NLP resources |
@@ -29,7 +30,7 @@ need maintainer follow-up.
 | Date | Target | Status | Note |
 | --- | --- | --- | --- |
 | 2026-09-07 | Separius/awesome-sentence-embedding | Archived / read-only | Prepared fork branch [`initial-d:add-me-fasttext-word-embedding`](https://github.com/initial-d/awesome-sentence-embedding/tree/add-me-fasttext-word-embedding) adding the paper to the Word Embeddings table, but GitHub rejected PR creation because the upstream repository is archived. |
-| 2026-09-07 | currentslab/awesome-vector-search | Deferred | Strong list, but current taxonomy focuses on ANN engines, vector databases, and similarity-search libraries; `me_fasttext` would need a clearer vector-search benchmark before submission. |
+| 2026-09-07 | currentslab/awesome-vector-search | Submitted after benchmark tooling | Initially deferred because the list focuses on ANN engines, vector databases, and similarity-search libraries; submitted after adding the `bench_ftindex` retrieval/OOV serving benchmark. |
 
 ## Follow-up rule
 
@@ -51,6 +52,12 @@ maintainer asks for changes.
 | Date | Release | Note |
 | --- | --- | --- |
 | 2026-09-07 | [v0.1.0 research prototype](https://github.com/initial-d/me_fasttext/releases/tag/v0.1.0) | Added compact-inference and cross-community positioning links to the release notes. |
+
+## Benchmark tooling updates
+
+| Date | Commit | Note |
+| --- | --- | --- |
+| 2026-09-07 | [a450399](https://github.com/initial-d/me_fasttext/commit/a450399) | Added `bench_ftindex` and a retrieval/OOV serving benchmark guide for mmap load time, p50/p95 query latency, and OOV subword coverage. |
 
 ## Next high-fit targets
 
