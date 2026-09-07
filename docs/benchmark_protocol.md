@@ -102,6 +102,11 @@ For a concrete mmap query benchmark, see
 `bench_ftindex` helper for cold mmap load time, p50/p95 sentence-vector latency,
 and OOV subword coverage.
 
+For comparisons against lexical search, dense embeddings, rerankers, or vector
+indexes, see [`retrieval_comparison_matrix.md`](retrieval_comparison_matrix.md).
+It gives a conservative table shape for pairing deployment metrics with
+retrieval quality.
+
 ## Paper reference point
 
 The paper reports a Chinese large-vocabulary setting with 30.1M words and
@@ -134,6 +139,17 @@ own corpus manifest, hardware manifest, and downstream quality metric.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Original FastText | | | | | | |
 | me_fasttext | | | | | | |
+
+`bench_ftindex` output:
+
+| metric | value |
+| --- | ---: |
+| cold_mmap_load_ms | |
+| mmap_bytes | |
+| oov_rate | |
+| oov_subword_coverage | |
+| query_p50_us | |
+| query_p95_us | |
 
 Notes:
 -

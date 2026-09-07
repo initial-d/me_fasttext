@@ -124,6 +124,27 @@ body:
     validations:
       required: true
   - type: textarea
+    id: bench_ftindex_output
+    attributes:
+      label: bench_ftindex output
+      description: If you used bench_ftindex, paste the Markdown table it prints. Redact only local paths or private names.
+      placeholder: |
+        | metric | value |
+        | --- | ---: |
+        | cold_mmap_load_ms | |
+        | mmap_bytes | |
+        | dim | |
+        | nwords | |
+        | nngrams | |
+        | queries | |
+        | total_tokens | |
+        | oov_tokens | |
+        | oov_rate | |
+        | oov_subword_coverage | |
+        | query_mean_us | |
+        | query_p50_us | |
+        | query_p95_us | |
+  - type: textarea
     id: artifacts
     attributes:
       label: Reproducibility artifacts

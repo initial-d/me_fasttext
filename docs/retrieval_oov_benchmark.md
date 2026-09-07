@@ -82,6 +82,11 @@ Useful downstream metrics include recall@k, MRR, NDCG, classification accuracy,
 or candidate-set recall before dense reranking. The benchmark table alone is
 not enough: pair latency and memory with a quality metric.
 
+If the comparison includes BM25, dense embeddings, rerankers, ANN indexes, or a
+vector database, use the companion
+[`retrieval_comparison_matrix.md`](retrieval_comparison_matrix.md) to keep the
+claim narrow and comparable.
+
 ## Reporting checklist
 
 - Commit SHA.

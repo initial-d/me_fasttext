@@ -65,6 +65,11 @@ For search systems, `me_fasttext` is relevant as a small lexical embedding
 layer. It is most plausible when rare terms, product names, domain entities,
 misspellings, or Chinese/multilingual long-tail tokens matter.
 
+For benchmark reports in this area, the
+[`retrieval_comparison_matrix.md`](retrieval_comparison_matrix.md) document
+shows how to compare the compact lexical layer with FastText, BM25, dense
+embeddings, rerankers, and vector-search systems without overclaiming.
+
 Useful questions:
 
 - Can it improve first-stage recall for OOV-heavy queries?
