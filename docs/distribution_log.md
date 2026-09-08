@@ -64,7 +64,7 @@ maintainer asks for changes.
 
 | Date | Commit | Note |
 | --- | --- | --- |
-| 2026-09-08 | pending | Recorded the first visibility snapshot: 248 views, 80 clones, 48 unique cloners, and a next-action plan focused on benchmark evidence rather than generic star requests. |
+| 2026-09-08 | [3f78130](https://github.com/initial-d/me_fasttext/commit/3f78130) | Recorded the first visibility snapshot: 248 views, 80 clones, 48 unique cloners, and a next-action plan focused on benchmark evidence rather than generic star requests. |
 
 ## Next high-fit targets
 
