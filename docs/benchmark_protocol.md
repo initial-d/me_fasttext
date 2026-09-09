@@ -107,6 +107,11 @@ indexes, see [`retrieval_comparison_matrix.md`](retrieval_comparison_matrix.md).
 It gives a conservative table shape for pairing deployment metrics with
 retrieval quality.
 
+For a focused first external report, see
+[`first_public_corpus_benchmark.md`](first_public_corpus_benchmark.md). It
+turns the general protocol into a small public-corpus run with query slices,
+serving metrics, and report fields.
+
 ## Paper reference point
 
 The paper reports a Chinese large-vocabulary setting with 30.1M words and

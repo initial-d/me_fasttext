@@ -22,6 +22,29 @@ than broad social metrics.
 
 ## Traffic snapshot
 
+Recorded on 2026-09-09 from GitHub's rolling 14-day traffic window
+(latest daily bucket available through 2026-09-07):
+
+- Views: 268 total, 11 unique visitors.
+- Clones: 136 total, 68 unique cloners.
+- Repository stars/forks/watchers at snapshot time: 1 star, 0 forks, 0 watchers.
+- The largest recent clone bucket was 56 clones from 23 unique cloners on
+  2026-09-07.
+- Top referrers by visits: GitHub (42) and Zhihu (1). These are visits, not
+  unique-user totals.
+- High-interest paths beyond the repository root include benchmark issue #1,
+  design note issue #2, `fasttext`, `index`, the Chinese retrospective, and a
+  recent commit page.
+
+Operating takeaways:
+
+- The September 7 clone spike makes a first public-corpus benchmark more useful
+  than another broad positioning note.
+- The best next conversion is a single reproducible report that an embedding,
+  retrieval, or systems reader can cite.
+- A dedicated first-run plan was added in
+  [`first_public_corpus_benchmark.md`](first_public_corpus_benchmark.md).
+
 Recorded on 2026-09-08 from GitHub's rolling 14-day traffic window
 (latest daily bucket available through 2026-09-05):
 
@@ -70,7 +93,9 @@ Primary ask:
 ## Next iterations
 
 - Keep benchmark issue #1 as the main intake for reproducible results.
-- Ask for one external corpus run rather than more generic promotion.
+- Ask for one external corpus run using
+  [`first_public_corpus_benchmark.md`](first_public_corpus_benchmark.md) rather
+  than more generic promotion.
 - Wait for maintainer feedback before nudging open awesome-list PRs.
 - Use the artifact card when approaching maintainers who need a quick triage
   page rather than a long essay.

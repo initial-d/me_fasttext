@@ -101,3 +101,6 @@ claim narrow and comparable.
 This evidence is the strongest bridge to vector-search and inference
 optimization communities because it makes the project comparable to other
 first-stage retrieval and serving systems.
+
+For contributors looking for the smallest useful public report to run first,
+start with [`first_public_corpus_benchmark.md`](first_public_corpus_benchmark.md).

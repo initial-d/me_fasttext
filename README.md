@@ -11,6 +11,7 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 ## Start here
 
 - [Benchmark protocol](docs/benchmark_protocol.md): how to compare memory, load time, latency, and task quality.
+- [First public corpus benchmark](docs/first_public_corpus_benchmark.md): a concrete external run plan for the first citable public-corpus report.
 - [Retrieval and OOV serving benchmark](docs/retrieval_oov_benchmark.md): how to measure mmap load time, p50/p95 query latency, and OOV subword coverage.
 - [Retrieval comparison matrix](docs/retrieval_comparison_matrix.md): how to compare the compact lexical layer with FastText, BM25, dense embeddings, and ANN/vector-search systems.
 - [Artifact card](docs/artifact_card.md): a one-page summary for citation, benchmark, and list-maintainer triage.
