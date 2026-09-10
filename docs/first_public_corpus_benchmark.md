@@ -82,6 +82,29 @@ Then run:
 
 Paste the printed Markdown table into the benchmark issue template.
 
+To prepare a first-pass manifest and query file from a plain-text public
+corpus, use the helper script:
+
+```bash
+python3 tools/prepare_public_benchmark.py \
+  --input data/public_train.txt \
+  --output-dir runs/public-benchmark \
+  --name "example-public-corpus" \
+  --language en \
+  --license "CC BY-SA / public-domain / unknown"
+```
+
+This writes:
+
+- `corpus_manifest.json` with document, token, and rare-token counts;
+- deduplicated `queries.txt` for `bench_ftindex`;
+- per-slice query files such as `queries_oov_heavy.txt`;
+- `query_slices.md` describing the `in_vocab`, `oov_heavy`, and
+  `entity_heavy` slices.
+
+Review the generated slices before publishing a report. The script is a
+starter, not a substitute for corpus-specific sampling judgment.
+
 ## Quality metric
 
 Pair the serving metrics with at least one quality metric:

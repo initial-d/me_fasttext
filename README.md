@@ -99,6 +99,8 @@ These numbers are from the paper and will vary with corpus, vocabulary size, har
 |   |-- index.cc            # helper for generating serving artifacts
 |   |-- cut_ngram.cc        # helper for cutting n-gram trie by vocabulary
 |   `-- print_ngrams.cc     # helper for inspecting n-gram trie contents
+|-- tools/
+|   `-- prepare_public_benchmark.py
 |-- mylib/
 |   |-- include/            # trie, hash, pub, spell, xml headers
 |   `-- lib/                # bundled static libraries used by the Makefile
