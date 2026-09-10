@@ -60,12 +60,14 @@ maintainer asks for changes.
 | 2026-09-07 | [a450399](https://github.com/initial-d/me_fasttext/commit/a450399) | Added `bench_ftindex` and a retrieval/OOV serving benchmark guide for mmap load time, p50/p95 query latency, and OOV subword coverage. |
 | 2026-09-07 | [a56a909](https://github.com/initial-d/me_fasttext/commit/a56a909) | Added an artifact card so external reports can triage fit, claims, evidence, comparisons, and citation hooks without overclaiming. |
 | 2026-09-09 | [3226776](https://github.com/initial-d/me_fasttext/commit/3226776) | Added a first public-corpus benchmark plan to convert clone interest into one reproducible external report. |
+| 2026-09-10 | [560a48f](https://github.com/initial-d/me_fasttext/commit/560a48f) | Added report-ready criteria and a dedicated first public-corpus benchmark issue type so external runs can be triaged for citation readiness. |
 
 ## Visibility updates
 
 | Date | Commit | Note |
 | --- | --- | --- |
 | 2026-09-08 | [3f78130](https://github.com/initial-d/me_fasttext/commit/3f78130) | Recorded the first visibility snapshot: 248 views, 80 clones, 48 unique cloners, and a next-action plan focused on benchmark evidence rather than generic star requests. |
+| 2026-09-10 | [560a48f](https://github.com/initial-d/me_fasttext/commit/560a48f) | Recorded the latest snapshot: 288 views, 164 clones, 79 unique cloners, with the clone/star gap pointing toward private evaluation and benchmark-report conversion. |
 
 ## Next high-fit targets
 
