@@ -18,6 +18,7 @@ body:
       label: Report type
       description: What kind of evidence are you sharing?
       options:
+        - First public corpus benchmark
         - Reproduction of paper-style memory/load-time result
         - New corpus or new language benchmark
         - Serving latency or mmap deployment report
@@ -35,6 +36,10 @@ body:
       placeholder: |
         Example: Does trie-backed exact n-gram identity plus compact export
         reduce memory for an OOV-heavy retrieval corpus without hurting recall?
+
+        For a first public-corpus benchmark, state the corpus, the query slice,
+        and whether the report includes both serving metrics and a task or
+        retrieval metric.
     validations:
       required: true
   - type: input

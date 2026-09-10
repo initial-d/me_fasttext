@@ -22,6 +22,32 @@ than broad social metrics.
 
 ## Traffic snapshot
 
+Recorded on 2026-09-10 from GitHub's rolling 14-day traffic window
+(latest daily bucket available through 2026-09-08):
+
+- Views: 288 total, 13 unique visitors.
+- Clones: 164 total, 79 unique cloners.
+- Repository stars/forks/watchers at snapshot time: 1 star, 0 forks, 0 watchers.
+- Clone interest accelerated after the benchmark/reporting docs landed:
+  56 clones from 23 unique cloners on 2026-09-07 and 28 clones from
+  14 unique cloners on 2026-09-08.
+- Top referrers by visits: GitHub (48) and Zhihu (1). These are visits, not
+  unique-user totals.
+- High-interest paths beyond the repository root include benchmark issue #1,
+  design note issue #2, `index`, `fasttext`, `Makefile`, the Chinese
+  retrospective, activity, pulse, and traffic pages.
+
+Operating takeaways:
+
+- The gap between clones and stars widened again. Treat this as private
+  evaluation or automated exploration, not as broad community adoption.
+- The practical next step is to make one external public-corpus report
+  complete enough to cite. The benchmark issue template now includes a
+  "First public corpus benchmark" report type.
+- Because `index`, `fasttext`, and `Makefile` are visible traffic paths,
+  build/export instructions should stay close to the first-corpus benchmark
+  page and the README entry points.
+
 Recorded on 2026-09-09 from GitHub's rolling 14-day traffic window
 (latest daily bucket available through 2026-09-07):
 

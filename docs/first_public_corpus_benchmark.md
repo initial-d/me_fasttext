@@ -112,3 +112,35 @@ and include this compact table:
 Negative results are welcome. A report showing that a corpus has too few
 repeated n-grams, too little OOV pressure, or no quality-preserving compression
 is still useful evidence about where the method belongs.
+
+## Report-ready criteria
+
+A first public-corpus report is ready to cite or link from project docs when it
+has all of the following:
+
+- public corpus name, license status, language, split, and preprocessing note;
+- exact `me_fasttext` commit SHA;
+- build command, training command, export command, and `bench_ftindex` command;
+- artifact sizes for the full `.bin` path and compact `.z` path;
+- cold-load or cold-mmap timing, plus p50/p95 query latency;
+- OOV rate and OOV subword coverage for the reported query slice;
+- one quality metric, or an explicit "serving-only" caveat;
+- hardware, OS, compiler, filesystem, and storage type;
+- a short note on failures, portability patches, or omitted baselines.
+
+If any of these are missing, the run can still be shared as a work-in-progress,
+but it should not be used as citation evidence yet.
+
+## Maintainer triage
+
+When a report arrives, classify it as one of:
+
+| Status | Meaning |
+| --- | --- |
+| Citable report | Complete manifest, commands, serving metrics, and quality or explicit serving-only caveat. |
+| Useful partial | Clear corpus and command record, but missing a baseline, quality metric, or hardware detail. |
+| Negative result | Reproducible run where memory, OOV behavior, portability, or quality does not support the method. |
+| Needs redaction | Contains private paths, proprietary data, credentials, or organization-identifying details. |
+
+Only link citable reports from README-level docs. Partial and negative reports
+belong in issue discussion until they are clarified.
