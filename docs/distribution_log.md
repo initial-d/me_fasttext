@@ -61,6 +61,7 @@ maintainer asks for changes.
 | 2026-09-07 | [a56a909](https://github.com/initial-d/me_fasttext/commit/a56a909) | Added an artifact card so external reports can triage fit, claims, evidence, comparisons, and citation hooks without overclaiming. |
 | 2026-09-09 | [3226776](https://github.com/initial-d/me_fasttext/commit/3226776) | Added a first public-corpus benchmark plan to convert clone interest into one reproducible external report. |
 | 2026-09-10 | [560a48f](https://github.com/initial-d/me_fasttext/commit/560a48f) | Added report-ready criteria and a dedicated first public-corpus benchmark issue type so external runs can be triaged for citation readiness. |
+| 2026-09-10 | [84064df](https://github.com/initial-d/me_fasttext/commit/84064df) | Added a public benchmark preparation helper that creates a corpus manifest, deduplicated query file, and per-slice query files from a plain-text corpus. |
 
 ## Visibility updates
 
