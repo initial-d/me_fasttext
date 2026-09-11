@@ -22,6 +22,32 @@ than broad social metrics.
 
 ## Traffic snapshot
 
+Recorded on 2026-09-11 from GitHub's rolling 14-day traffic window
+(latest daily bucket available through 2026-09-09):
+
+- Views: 295 total, 11 unique visitors.
+- Clones: 139 total, 65 unique cloners.
+- Repository stars/forks/watchers at snapshot time: 1 star, 0 forks, 0 watchers.
+- The strongest recent clone buckets remain 56 clones from 23 unique cloners on
+  2026-09-07 and 28 clones from 14 unique cloners on 2026-09-08, followed by
+  12 clones from 8 unique cloners on 2026-09-09.
+- Top referrers by visits: GitHub (52) and Zhihu (1). These are visits, not
+  unique-user totals.
+- High-interest paths beyond the repository root include benchmark issue #1,
+  design note issue #2, `Makefile`, `fasttext`, `index`, and the Chinese
+  retrospective.
+
+Operating takeaways:
+
+- Interest is still concentrated in private evaluation: clones remain much
+  stronger than stars, forks, or public issue discussion.
+- The most useful visibility improvement is to turn first-time visitors into
+  benchmark reporters. The README now points evaluators to a short
+  [`evaluator_quickstart.md`](evaluator_quickstart.md) before the longer
+  protocol documents.
+- Keep the public ask narrow: one corpus, one manifest, one compact `.z`
+  serving benchmark, one quality metric or an explicit serving-only caveat.
+
 Recorded on 2026-09-10 from GitHub's rolling 14-day traffic window
 (latest daily bucket available through 2026-09-08):
 

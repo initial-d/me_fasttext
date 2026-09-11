@@ -8,8 +8,28 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 
 > Inference framing: `me_fasttext` can also be read as an early compact-inference prototype for lexical embeddings. It keeps subword identity exact during training, then rewrites the learned rows into a smaller mmap-friendly serving artifact for low-memory retrieval and feature-serving workloads.
 
+## If you are evaluating this project
+
+The most valuable contribution right now is a reproducible public-corpus
+benchmark: memory, load time, compact `.z` mmap-serving latency, OOV coverage,
+and one retrieval, ranking, or classification quality metric. Negative results
+are welcome if the corpus and hardware context are clear.
+
+Fast paths:
+
+- [Evaluator quickstart](docs/evaluator_quickstart.md): a short path from clone
+  to a useful benchmark report.
+- [Benchmark issue](https://github.com/initial-d/me_fasttext/issues/1): share a
+  reproducible run, replication, or negative result.
+- [Artifact card](docs/artifact_card.md): decide quickly whether the project is
+  relevant to cite, benchmark, or list.
+- [Citation guide](docs/citation_guide.md): cite the paper and describe the
+  comparison without overclaiming.
+
 ## Start here
 
+- [Evaluator quickstart](docs/evaluator_quickstart.md): the shortest route from
+  clone to a useful report.
 - [Benchmark protocol](docs/benchmark_protocol.md): how to compare memory, load time, latency, and task quality.
 - [First public corpus benchmark](docs/first_public_corpus_benchmark.md): a concrete external run plan for the first citable public-corpus report.
 - [Retrieval and OOV serving benchmark](docs/retrieval_oov_benchmark.md): how to measure mmap load time, p50/p95 query latency, and OOV subword coverage.
