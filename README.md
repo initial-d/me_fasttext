@@ -143,6 +143,14 @@ For debug builds:
 make debug
 ```
 
+### Test helper scripts
+
+The Python benchmark helper uses only the standard library. Run its tests with:
+
+```bash
+python3 -m unittest discover -s tests
+```
+
 To clean generated objects and the main binary:
 
 ```bash
