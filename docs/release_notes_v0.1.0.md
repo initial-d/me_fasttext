@@ -11,6 +11,7 @@ artifact for readers of the accompanying arXiv paper.
 - Mark-compact export into a single mmap serving index (`<output>.z`).
 - Helper tools for compact-index generation and n-gram inspection.
 - Benchmark protocol and benchmark issue template for external reports.
+- Evaluator quickstart for turning a first clone into a useful benchmark report.
 - `bench_ftindex` for compact `.z` retrieval/OOV serving measurements.
 - Retrieval comparison matrix for FastText, BM25, dense embedding, reranker,
   and vector-search comparisons.
@@ -34,6 +35,7 @@ embeddings, double-array tries, retrieval systems, or memory-management
 backgrounds, see:
 
 - Compact inference note: https://github.com/initial-d/me_fasttext/blob/main/docs/inference_optimization_note.md
+- Evaluator quickstart: https://github.com/initial-d/me_fasttext/blob/main/docs/evaluator_quickstart.md
 - Cross-community positioning: https://github.com/initial-d/me_fasttext/blob/main/docs/cross_community_positioning.md
 - Artifact card: https://github.com/initial-d/me_fasttext/blob/main/docs/artifact_card.md
 - Retrieval and OOV serving benchmark: https://github.com/initial-d/me_fasttext/blob/main/docs/retrieval_oov_benchmark.md

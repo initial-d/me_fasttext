@@ -22,6 +22,28 @@ than broad social metrics.
 
 ## Traffic snapshot
 
+Recorded on 2026-09-12 from GitHub's rolling 14-day traffic window
+(latest daily bucket available through 2026-09-11):
+
+- Views: 236 total, 10 unique visitors.
+- Clones: 156 total, 66 unique cloners.
+- Repository stars/forks/watchers at snapshot time: 1 star, 0 forks, 0 watchers.
+- Clone activity continued after the benchmark conversion docs landed:
+  21 clones from 10 unique cloners on 2026-09-10 and 18 clones from
+  10 unique cloners on 2026-09-11.
+- The rolling view total fell because the high 2026-08-28 bucket aged out of
+  the 14-day window, while clone activity stayed comparatively strong.
+
+Operating takeaways:
+
+- The signal is still evaluator-heavy rather than social: unique cloners remain
+  far higher than stargazers or public issue participants.
+- Add high-trust first-screen links rather than more prose. The README now
+  exposes the arXiv paper, CI, release, benchmark intake, and evaluator
+  quickstart before the project description.
+- The next best conversion remains one external benchmark report; broad
+  promotion should wait until there is at least one public run to cite.
+
 Recorded on 2026-09-11 from GitHub's rolling 14-day traffic window
 (latest daily bucket available through 2026-09-09):
 

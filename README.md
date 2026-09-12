@@ -1,5 +1,11 @@
 # me_fasttext
 
+[![arXiv](https://img.shields.io/badge/arXiv-2506.01254-b31b1b.svg)](https://arxiv.org/abs/2506.01254)
+[![CI](https://github.com/initial-d/me_fasttext/actions/workflows/ci.yml/badge.svg)](https://github.com/initial-d/me_fasttext/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/initial-d/me_fasttext?label=release)](https://github.com/initial-d/me_fasttext/releases/tag/v0.1.0)
+[![Benchmark reports welcome](https://img.shields.io/badge/benchmark_reports-welcome-2ea44f)](https://github.com/initial-d/me_fasttext/issues/1)
+[![Evaluator quickstart](https://img.shields.io/badge/evaluator-quickstart-blue)](docs/evaluator_quickstart.md)
+
 Memory-Efficient FastText: a FastText-derived C++ prototype that replaces hashed character n-gram buckets with exact trie indexes, then compresses the learned n-gram matrix through structure-aware row sharing and mark-compact layout.
 
 This repository accompanies the paper [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).

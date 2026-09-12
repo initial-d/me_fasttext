@@ -46,6 +46,7 @@ maintainer asks for changes.
 | 2026-09-07 | [awesome-embedding-models PR 12](https://github.com/Hironsan/awesome-embedding-models/pull/12#issuecomment-5570207623) | Added embedding/citation context. |
 | 2026-09-07 | [awesome-information-retrieval PR 22](https://github.com/harpribot/awesome-information-retrieval/pull/22#issuecomment-5570207663) | Added retrieval and benchmark context. |
 | 2026-09-07 | [awesome-ml-model-compression PR 11](https://github.com/cedrickchee/awesome-ml-model-compression/pull/11#issuecomment-5570207731) | Added exact-then-compact compression context. |
+| 2026-09-12 | [awesome-machine-learning PR 1411](https://github.com/josephmisiti/awesome-machine-learning/pull/1411#issuecomment-5646575114) | Added evaluator quickstart and narrowed the placement to C++ NLP / FastText-style subword embeddings. |
 
 ## Release page updates
 
@@ -70,6 +71,7 @@ maintainer asks for changes.
 | 2026-09-08 | [3f78130](https://github.com/initial-d/me_fasttext/commit/3f78130) | Recorded the first visibility snapshot: 248 views, 80 clones, 48 unique cloners, and a next-action plan focused on benchmark evidence rather than generic star requests. |
 | 2026-09-10 | [560a48f](https://github.com/initial-d/me_fasttext/commit/560a48f) | Recorded the latest snapshot: 288 views, 164 clones, 79 unique cloners, with the clone/star gap pointing toward private evaluation and benchmark-report conversion. |
 | 2026-09-11 | This update | Recorded the latest snapshot: 295 views, 139 clones, 65 unique cloners, and added an evaluator quickstart to convert silent clones into benchmark reports. |
+| 2026-09-12 | This update | Recorded the latest snapshot: 236 views, 156 clones, 66 unique cloners, and added first-screen trust badges for paper, CI, release, benchmark intake, and evaluator quickstart. |
 
 ## Next high-fit targets
 
