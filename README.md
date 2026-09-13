@@ -25,6 +25,8 @@ Fast paths:
 
 - [Evaluator quickstart](docs/evaluator_quickstart.md): a short path from clone
   to a useful benchmark report.
+- [Contributing guide](CONTRIBUTING.md): what benchmark reports, negative
+  results, documentation fixes, and code patches should include.
 - [Benchmark issue](https://github.com/initial-d/me_fasttext/issues/1): share a
   reproducible run, replication, or negative result.
 - [Artifact card](docs/artifact_card.md): decide quickly whether the project is
@@ -36,6 +38,8 @@ Fast paths:
 
 - [Evaluator quickstart](docs/evaluator_quickstart.md): the shortest route from
   clone to a useful report.
+- [Contributing guide](CONTRIBUTING.md): how to share benchmark evidence,
+  negative results, docs fixes, and code patches.
 - [Benchmark protocol](docs/benchmark_protocol.md): how to compare memory, load time, latency, and task quality.
 - [First public corpus benchmark](docs/first_public_corpus_benchmark.md): a concrete external run plan for the first citable public-corpus report.
 - [Retrieval and OOV serving benchmark](docs/retrieval_oov_benchmark.md): how to measure mmap load time, p50/p95 query latency, and OOV subword coverage.

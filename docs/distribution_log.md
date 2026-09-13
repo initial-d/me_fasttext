@@ -64,6 +64,12 @@ maintainer asks for changes.
 | 2026-09-10 | [560a48f](https://github.com/initial-d/me_fasttext/commit/560a48f) | Added report-ready criteria and a dedicated first public-corpus benchmark issue type so external runs can be triaged for citation readiness. |
 | 2026-09-10 | [84064df](https://github.com/initial-d/me_fasttext/commit/84064df) | Added a public benchmark preparation helper that creates a corpus manifest, deduplicated query file, and per-slice query files from a plain-text corpus. |
 
+## Contributor conversion updates
+
+| Date | Commit | Note |
+| --- | --- | --- |
+| 2026-09-13 | This update | Added `CONTRIBUTING.md` and a pull request template so silent evaluators have a clear path for benchmark reports, negative results, documentation fixes, and code patches. |
+
 ## Visibility updates
 
 | Date | Commit | Note |
