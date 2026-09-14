@@ -14,6 +14,10 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 
 > Inference framing: `me_fasttext` can also be read as an early compact-inference prototype for lexical embeddings. It keeps subword identity exact during training, then rewrites the learned rows into a smaller mmap-friendly serving artifact for low-memory retrieval and feature-serving workloads.
 
+> Adjacent context: `me_fasttext` is also a small, inspectable lexical example
+> of indexed n-gram memory outside the dense path, adjacent to newer
+> Engram-style conditional memory work without claiming lineage or equivalence.
+
 ## If you are evaluating this project
 
 The most valuable contribution right now is a reproducible public-corpus
