@@ -71,6 +71,12 @@ maintainer asks for changes.
 | 2026-09-13 | This update | Added `CONTRIBUTING.md` and a pull request template so silent evaluators have a clear path for benchmark reports, negative results, documentation fixes, and code patches. |
 | 2026-09-14 | This update | Added a code of conduct, an evaluation-question issue template, and issue-template contact links so evaluators can ask focused questions before writing a full benchmark report. |
 
+## Positioning updates
+
+| Date | Commit | Note |
+| --- | --- | --- |
+| 2026-09-14 | This update | Added a restrained conditional-memory context note connecting `me_fasttext` to Engram-style indexed memory as adjacent design pressure, without claiming lineage or equivalence. |
+
 ## Visibility updates
 
 | Date | Commit | Note |

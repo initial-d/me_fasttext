@@ -103,6 +103,23 @@ Useful questions:
 - What RSS is observed before and after warmup?
 - How stable are p50 and p95 lookup latencies?
 
+### Conditional memory and Engram-style lookup
+
+Recent conditional-memory work such as DeepSeek's Engram is adjacent but not
+identical. It operates inside large-model systems, while `me_fasttext` is a
+compact lexical embedding artifact. The safe connection is that both designs
+move reusable token or n-gram-like memory toward indexed lookup and away from
+putting every signal through the same dense computation path.
+
+See [`conditional_memory_context.md`](conditional_memory_context.md) for a
+cautious comparison and source links.
+
+Useful questions:
+
+- Which parts of linguistic memory should be indexed rather than recomputed?
+- What memory should stay inspectable before compression or learned routing?
+- How should reports pair serving cost with downstream quality?
+
 ### Classical memory-management ideas
 
 The mark-compact analogy is precise but limited. Original rows are treated like

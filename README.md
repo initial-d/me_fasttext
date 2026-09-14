@@ -51,6 +51,8 @@ Fast paths:
 - [Artifact card](docs/artifact_card.md): a one-page summary for citation, benchmark, and list-maintainer triage.
 - [Citation guide](docs/citation_guide.md): how to cite the paper, position related work, and report comparisons.
 - [Inference optimization note](docs/inference_optimization_note.md): how to position the project as compact lexical embedding inference.
+- [Conditional memory context](docs/conditional_memory_context.md): a cautious
+  note connecting indexed lexical memory with newer Engram-style conditional memory.
 - [Cross-community positioning](docs/cross_community_positioning.md): precise framing for FastText, word-embedding, DA-trie, GC, and inference-optimization readers.
 - [Related work map](docs/related_work_map.md): how the project connects to FastText, tries, mmap serving, retrieval, and memory management.
 - [Engineering note](docs/engineering_note.md): how trie ids, mark-compact style row rewriting, and mmap serving fit together.
