@@ -27,6 +27,8 @@ Fast paths:
   to a useful benchmark report.
 - [Contributing guide](CONTRIBUTING.md): what benchmark reports, negative
   results, documentation fixes, and code patches should include.
+- [Evaluation question](https://github.com/initial-d/me_fasttext/issues/new?template=evaluation-question.yml):
+  ask about build, benchmark setup, corpus preparation, baselines, or result interpretation.
 - [Benchmark issue](https://github.com/initial-d/me_fasttext/issues/1): share a
   reproducible run, replication, or negative result.
 - [Artifact card](docs/artifact_card.md): decide quickly whether the project is
@@ -40,6 +42,8 @@ Fast paths:
   clone to a useful report.
 - [Contributing guide](CONTRIBUTING.md): how to share benchmark evidence,
   negative results, docs fixes, and code patches.
+- [Code of conduct](CODE_OF_CONDUCT.md): expectations for evidence-oriented
+  benchmark and reuse discussions.
 - [Benchmark protocol](docs/benchmark_protocol.md): how to compare memory, load time, latency, and task quality.
 - [First public corpus benchmark](docs/first_public_corpus_benchmark.md): a concrete external run plan for the first citable public-corpus report.
 - [Retrieval and OOV serving benchmark](docs/retrieval_oov_benchmark.md): how to measure mmap load time, p50/p95 query latency, and OOV subword coverage.

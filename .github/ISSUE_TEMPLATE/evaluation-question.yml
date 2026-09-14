@@ -1,0 +1,50 @@
+name: Evaluation question
+description: Ask about building, benchmarking, reproducing, or interpreting me_fasttext
+title: "[Question] "
+labels:
+  - question
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for evaluation questions that are not ready to become a full benchmark report yet.
+
+        Please do not include private corpora, credentials, proprietary logs, or internal hostnames.
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      options:
+        - Build or portability
+        - Benchmark setup
+        - Corpus or query-slice preparation
+        - Compact .z serving or bench_ftindex
+        - Baseline comparison
+        - Result interpretation
+        - Citation or reuse fit
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What are you trying to evaluate or understand?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Include the relevant command, platform, corpus summary, or metric. Redact private paths or names.
+      placeholder: |
+        OS / compiler:
+        command:
+        corpus summary:
+        expected result:
+        observed result:
+  - type: textarea
+    id: related_docs
+    attributes:
+      label: Docs already checked
+      description: Link any docs you already used, such as evaluator_quickstart.md or retrieval_oov_benchmark.md.

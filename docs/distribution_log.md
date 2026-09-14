@@ -69,6 +69,7 @@ maintainer asks for changes.
 | Date | Commit | Note |
 | --- | --- | --- |
 | 2026-09-13 | This update | Added `CONTRIBUTING.md` and a pull request template so silent evaluators have a clear path for benchmark reports, negative results, documentation fixes, and code patches. |
+| 2026-09-14 | This update | Added a code of conduct, an evaluation-question issue template, and issue-template contact links so evaluators can ask focused questions before writing a full benchmark report. |
 
 ## Visibility updates
 

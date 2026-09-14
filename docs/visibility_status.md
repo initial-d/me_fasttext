@@ -22,6 +22,29 @@ than broad social metrics.
 
 ## Traffic snapshot
 
+Recorded on 2026-09-14 from GitHub's rolling 14-day traffic window
+(latest daily bucket available through 2026-09-13):
+
+- Views: 187 total, 14 unique visitors.
+- Clones: 168 total, 72 unique cloners.
+- Repository stars/forks/watchers at snapshot time: 1 star, 0 forks, 0 watchers.
+- Recent clone activity continued after the contributor guide landed:
+  8 clones from 6 unique cloners on 2026-09-12 and 10 clones from
+  8 unique cloners on 2026-09-13.
+- Top paths remain evaluator-oriented: repository overview, benchmark/design
+  issues, `Makefile`, `fasttext`, `index`, and the Chinese retrospective.
+
+Operating takeaways:
+
+- The rolling view count is lower because older high-traffic buckets aged out,
+  but unique cloners increased again. The project still needs public conversion
+  more than more private evaluation.
+- Add a lighter question path before asking everyone for a full benchmark
+  report. The issue templates now include an evaluation question form for build,
+  benchmark setup, corpus preparation, baseline, and interpretation questions.
+- A code of conduct was added to make negative-result and benchmark discussions
+  safer to post publicly.
+
 Recorded on 2026-09-12 from GitHub's rolling 14-day traffic window
 (latest daily bucket available through 2026-09-11):
 

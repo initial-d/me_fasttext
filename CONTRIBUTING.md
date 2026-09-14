@@ -4,6 +4,9 @@ Thanks for taking a look at `me_fasttext`. This is a research prototype, so the
 most valuable contributions are the ones that make its evidence easier to
 understand, reproduce, or falsify.
 
+Please follow the [code of conduct](CODE_OF_CONDUCT.md). In short: keep
+discussion respectful, evidence-oriented, and careful with private data.
+
 ## Best first contributions
 
 The highest-impact contribution is a benchmark report on a public or clearly
@@ -14,6 +17,10 @@ Good first contributions include:
 
 - a public-corpus benchmark report using the
   [evaluator quickstart](docs/evaluator_quickstart.md);
+- an
+  [evaluation question](https://github.com/initial-d/me_fasttext/issues/new?template=evaluation-question.yml)
+  about build, benchmark setup, corpus preparation, baselines, or result
+  interpretation;
 - a retrieval, ranking, classification, or OOV-heavy serving result;
 - a negative result showing where the compact `.z` path does not help;
 - a build, portability, or documentation fix;

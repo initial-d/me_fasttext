@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Evaluator quickstart
+    url: https://github.com/initial-d/me_fasttext/blob/main/docs/evaluator_quickstart.md
+    about: Start here if you want to run a first public-corpus benchmark.
+  - name: Benchmark protocol
+    url: https://github.com/initial-d/me_fasttext/blob/main/docs/benchmark_protocol.md
+    about: Use this for the fuller memory, latency, OOV, and quality report shape.
