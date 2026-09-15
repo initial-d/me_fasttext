@@ -101,6 +101,58 @@ Inference note:
 https://github.com/initial-d/me_fasttext/blob/main/docs/inference_optimization_note.md
 ```
 
+## Conditional-memory angle post
+
+Use this when discussing Engram-style conditional memory or indexed memory
+systems. Keep the framing cautious: adjacent design pressure, not lineage.
+
+```text
+DeepSeek's Engram is a useful reminder that language memory does not always
+need to live in the same dense computation path.
+
+That is also the narrow systems lens behind me_fasttext, at a much smaller and
+more inspectable scale:
+
+- keep word and character n-gram identities explicit
+- use trie-backed lookup instead of opaque hash buckets
+- compact learned rows after training
+- serve the result as a mmap-friendly lexical memory artifact
+
+This is not an LLM memory module, and it is not a claim of lineage. It is a
+compact lexical example of the same broader design pressure: indexed memory,
+sparse lookup, and careful reporting of memory, latency, coverage, and quality.
+
+Context note:
+https://github.com/initial-d/me_fasttext/blob/main/docs/conditional_memory_context.md
+
+Code:
+https://github.com/initial-d/me_fasttext
+```
+
+## Chinese conditional-memory post
+
+```text
+DeepSeek 把 Engram / conditional memory 带回视野以后，我觉得可以重新看
+me_fasttext 这个小项目。
+
+它不是 LLM memory module，也不是说两者有直接继承关系。更准确的说法是：
+它们面对的是相邻的系统压力。
+
+有些语言记忆不一定都要走昂贵的 dense computation path。比如长尾词、实体名、
+n-gram-like signal，可以先保留显式 identity，再用索引结构查找，最后为 serving
+做 compact layout。
+
+me_fasttext 做的是 FastText / lexical embedding 这一层的小型版本：
+
+- trie-backed exact word/subword ids
+- training 后再做保守 row sharing
+- mark-compact-style row rewriting
+- mmap-friendly `.z` serving artifact
+
+我写了一个克制的 context note，只讲 adjacent design pressure，不碰瓷 lineage：
+https://github.com/initial-d/me_fasttext/blob/main/docs/conditional_memory_context.md
+```
+
 ## Chinese long-form post
 
 ```text

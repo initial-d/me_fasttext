@@ -76,6 +76,7 @@ maintainer asks for changes.
 | Date | Commit | Note |
 | --- | --- | --- |
 | 2026-09-14 | This update | Added a restrained conditional-memory context note connecting `me_fasttext` to Engram-style indexed memory as adjacent design pressure, without claiming lineage or equivalence. |
+| 2026-09-15 | This update | Added English and Chinese conditional-memory promotion snippets that keep the Engram framing cautious and point back to the context note. |
 
 ## Visibility updates
 
