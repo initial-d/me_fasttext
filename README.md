@@ -57,6 +57,9 @@ Fast paths:
 - [Inference optimization note](docs/inference_optimization_note.md): how to position the project as compact lexical embedding inference.
 - [Conditional memory context](docs/conditional_memory_context.md): a cautious
   note connecting indexed lexical memory with newer Engram-style conditional memory.
+- [Model-compression and Engram-style bridge](docs/model_compression_engram_bridge.md):
+  how to evaluate `me_fasttext` as a compact lexical-memory baseline without
+  overclaiming it as an LLM memory module.
 - [Cross-community positioning](docs/cross_community_positioning.md): precise framing for FastText, word-embedding, DA-trie, GC, and inference-optimization readers.
 - [Related work map](docs/related_work_map.md): how the project connects to FastText, tries, mmap serving, retrieval, and memory management.
 - [Engineering note](docs/engineering_note.md): how trie ids, mark-compact style row rewriting, and mmap serving fit together.

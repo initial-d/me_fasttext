@@ -16,6 +16,7 @@ should change.
 | GC / dynamic memory management | Mark-compact as an offline model-layout transformation. | A practical case where mark, forwarding ids, and compaction reorganize trained embedding rows. | It implements a runtime garbage collector. |
 | Inference optimization | Smaller artifact, mmap loading, lower cold-start cost, and p50/p95 lookup latency. | A compact-inference prototype for lexical embeddings before dense reranking. | It is an LLM inference engine. |
 | Retrieval / RAG | Cheap lexical first-stage recall before dense reranking. | A low-memory OOV-aware candidate generation layer. | It is a complete RAG framework. |
+| Model compression / Engram-style lookup | Exact identity before compression, compact mmap serving after export. | A small lexical-memory baseline for indexed n-gram-like lookup and measurable serving cost. | It implements Engram or a transformer memory module. |
 
 ## Strongest one-sentence version
 
@@ -61,6 +62,15 @@ for training and inspection, conservative row sharing after training, and a
 single mmap-ready `.z` artifact for lower-memory serving and faster cold starts.
 ```
 
+### Model compression / Engram-style lookup
+
+```text
+me_fasttext is a compact lexical-memory baseline for FastText-style subword
+embeddings. It keeps word and character n-gram identities explicit before
+compression, then exports a mmap-friendly artifact whose memory, load time,
+lookup latency, OOV coverage, and task quality can be reported together.
+```
+
 ## Where to submit
 
 Prefer narrow, high-fit submissions:
@@ -68,6 +78,10 @@ Prefer narrow, high-fit submissions:
 - word embedding and FastText lists;
 - efficient NLP / model-compression lists;
 - retrieval lists that accept lexical first-stage tools;
+- model-compression lists when the entry is framed around exact identity,
+  compact export, and quality-preserving measurement;
+- Engram or conditional-memory discussions only when the entry is framed as an
+  adjacent lexical baseline, not as lineage or equivalence;
 - GC or memory-management lists only when the entry is framed as an applied
   mark-compact model-layout case;
 - data-structure communities only when the entry explains DA-trie terminal ids

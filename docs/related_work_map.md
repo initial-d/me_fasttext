@@ -113,6 +113,9 @@ putting every signal through the same dense computation path.
 
 See [`conditional_memory_context.md`](conditional_memory_context.md) for a
 cautious comparison and source links.
+For model-compression and Engram-style readers who want a concrete benchmark
+shape, see
+[`model_compression_engram_bridge.md`](model_compression_engram_bridge.md).
 
 Useful questions:
 

@@ -77,6 +77,7 @@ maintainer asks for changes.
 | --- | --- | --- |
 | 2026-09-14 | This update | Added a restrained conditional-memory context note connecting `me_fasttext` to Engram-style indexed memory as adjacent design pressure, without claiming lineage or equivalence. |
 | 2026-09-15 | This update | Added English and Chinese conditional-memory promotion snippets that keep the Engram framing cautious and point back to the context note. |
+| 2026-09-21 | This update | Added a model-compression and Engram-style lookup bridge that frames `me_fasttext` as a compact lexical-memory baseline with explicit benchmark requirements. |
 
 ## Visibility updates
 
