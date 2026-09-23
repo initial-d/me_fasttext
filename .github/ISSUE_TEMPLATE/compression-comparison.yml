@@ -1,0 +1,151 @@
+name: Compression comparison
+description: Compare me_fasttext with sparse, quantized, or compact-serving baselines
+title: "[Compression] "
+labels:
+  - benchmark
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for focused comparisons against model-compression,
+        sparse-lookup, quantized embedding, or compact-serving baselines.
+
+        Please keep the claim narrow. me_fasttext is a compact lexical
+        embedding artifact, not a general LLM compression framework.
+  - type: dropdown
+    id: comparison_type
+    attributes:
+      label: Comparison type
+      options:
+        - Original FastText vs me_fasttext compact .z
+        - Quantized FastText vs me_fasttext compact .z
+        - Hash-free uncompressed vs compact export
+        - Sparse or table-compression baseline
+        - Lexical search or retrieval baseline
+        - Dense embedding or reranker prefilter comparison
+        - Negative result or limitation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question tested
+      description: State the narrow comparison question.
+      placeholder: |
+        Example: Does the compact .z artifact reduce cold-start memory and
+        mmap load time on an OOV-heavy product-title corpus without hurting
+        recall@100 compared with original FastText?
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Git commit
+      description: The me_fasttext commit used for this run.
+      placeholder: "abcdef1"
+    validations:
+      required: true
+  - type: textarea
+    id: corpus
+    attributes:
+      label: Corpus and query slices
+      description: Include name, language, license, size, preprocessing, split, and any OOV/entity-heavy query slices.
+      placeholder: |
+        corpus_name:
+        language:
+        license:
+        documents:
+        tokens:
+        preprocessing:
+        train_split:
+        eval_split:
+        query_slices:
+    validations:
+      required: true
+  - type: textarea
+    id: model_settings
+    attributes:
+      label: Model and compression settings
+      description: Include the shared settings used across compared methods.
+      placeholder: |
+        mode:
+        dim:
+        minn:
+        maxn:
+        minCount:
+        epoch:
+        thread:
+        compact_export:
+        row_sharing_threshold:
+    validations:
+      required: true
+  - type: textarea
+    id: baselines
+    attributes:
+      label: Baselines
+      description: List all compared methods and explain omissions.
+      placeholder: |
+        compared:
+          - Original FastText:
+          - Quantized FastText:
+          - Hash-free uncompressed:
+          - me_fasttext compact .z:
+        omitted:
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Hardware, OS, compiler, filesystem, and storage.
+      placeholder: |
+        cpu:
+        memory_gb:
+        storage:
+        os:
+        compiler:
+        filesystem:
+    validations:
+      required: true
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands
+      description: Build, train, export, and benchmark commands.
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: results
+    attributes:
+      label: Results
+      description: Pair compression metrics with serving and quality metrics.
+      placeholder: |
+        | Method | Artifact size | Cold load | RSS | Query p50 | Query p95 | OOV coverage | Quality |
+        | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+        | Original FastText | | | | | | | |
+        | Quantized FastText | | | | | | | |
+        | me_fasttext .z | | | | | | | |
+    validations:
+      required: true
+  - type: textarea
+    id: interpretation
+    attributes:
+      label: Interpretation
+      description: Explain what the result does and does not show.
+      placeholder: |
+        This result supports:
+        This result does not show:
+        Surprising or unfavorable observations:
+    validations:
+      required: true
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Disclosure
+      options:
+        - label: I have not included secrets, credentials, private corpora, or proprietary logs.
+          required: true
+        - label: I understand this is a lexical embedding comparison, not an LLM-compression claim.
+          required: true

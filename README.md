@@ -37,6 +37,8 @@ Fast paths:
   reproducible run, replication, or negative result.
 - [Artifact card](docs/artifact_card.md): decide quickly whether the project is
   relevant to cite, benchmark, or list.
+- [Compression comparison checklist](docs/compression_comparison_checklist.md):
+  report sparse, quantized, or compact-serving comparisons without overclaiming.
 - [Citation guide](docs/citation_guide.md): cite the paper and describe the
   comparison without overclaiming.
 
@@ -60,6 +62,8 @@ Fast paths:
 - [Model-compression and Engram-style bridge](docs/model_compression_engram_bridge.md):
   how to evaluate `me_fasttext` as a compact lexical-memory baseline without
   overclaiming it as an LLM memory module.
+- [Compression comparison checklist](docs/compression_comparison_checklist.md):
+  a focused report shape for sparse, quantized, and compact-serving baselines.
 - [Cross-community positioning](docs/cross_community_positioning.md): precise framing for FastText, word-embedding, DA-trie, GC, and inference-optimization readers.
 - [Related work map](docs/related_work_map.md): how the project connects to FastText, tries, mmap serving, retrieval, and memory management.
 - [Engineering note](docs/engineering_note.md): how trie ids, mark-compact style row rewriting, and mmap serving fit together.

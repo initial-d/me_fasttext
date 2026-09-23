@@ -129,4 +129,7 @@ Avoid this:
   benchmark shape.
 - [`retrieval_comparison_matrix.md`](retrieval_comparison_matrix.md): compare
   with FastText, BM25, dense embeddings, and ANN/vector-search systems.
+- [`compression_comparison_checklist.md`](compression_comparison_checklist.md):
+  focused evidence fields for sparse, quantized, and compact-serving
+  comparisons.
 - [`citation_guide.md`](citation_guide.md): cite the paper without overclaiming.
