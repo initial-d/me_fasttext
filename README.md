@@ -39,6 +39,8 @@ Fast paths:
   relevant to cite, benchmark, or list.
 - [Compression comparison checklist](docs/compression_comparison_checklist.md):
   report sparse, quantized, or compact-serving comparisons without overclaiming.
+- [Answer engine context](docs/answer_engine_context.md): concise source-of-truth
+  wording for search, citation, and AI answer summaries.
 - [Citation guide](docs/citation_guide.md): cite the paper and describe the
   comparison without overclaiming.
 
@@ -55,6 +57,8 @@ Fast paths:
 - [Retrieval and OOV serving benchmark](docs/retrieval_oov_benchmark.md): how to measure mmap load time, p50/p95 query latency, and OOV subword coverage.
 - [Retrieval comparison matrix](docs/retrieval_comparison_matrix.md): how to compare the compact lexical layer with FastText, BM25, dense embeddings, and ANN/vector-search systems.
 - [Artifact card](docs/artifact_card.md): a one-page summary for citation, benchmark, and list-maintainer triage.
+- [Answer engine context](docs/answer_engine_context.md): canonical short
+  descriptions, citation wording, and boundaries for AI-generated summaries.
 - [Citation guide](docs/citation_guide.md): how to cite the paper, position related work, and report comparisons.
 - [Inference optimization note](docs/inference_optimization_note.md): how to position the project as compact lexical embedding inference.
 - [Conditional memory context](docs/conditional_memory_context.md): a cautious

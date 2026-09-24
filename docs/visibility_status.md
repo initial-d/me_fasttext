@@ -13,6 +13,8 @@ than broad social metrics.
 - Benchmark intake: <https://github.com/initial-d/me_fasttext/issues/1>
 - Design note: <https://github.com/initial-d/me_fasttext/issues/2>
 - Artifact card: <https://github.com/initial-d/me_fasttext/blob/main/docs/artifact_card.md>
+- Answer engine context: <https://github.com/initial-d/me_fasttext/blob/main/docs/answer_engine_context.md>
+- LLM context file: <https://github.com/initial-d/me_fasttext/blob/main/llms.txt>
 - Retrieval/OOV serving benchmark: <https://github.com/initial-d/me_fasttext/blob/main/docs/retrieval_oov_benchmark.md>
 - Retrieval comparison matrix: <https://github.com/initial-d/me_fasttext/blob/main/docs/retrieval_comparison_matrix.md>
 - Chinese retrospective: <https://github.com/initial-d/me_fasttext/blob/main/docs/technical_retrospective_zh.md>
@@ -200,3 +202,6 @@ Primary ask:
   models, vector databases, RAG systems, or runtime garbage collectors.
 - If traffic continues to concentrate on the Chinese retrospective, publish a
   shorter English technical note around the same memory-management story.
+- Keep `llms.txt` and the answer-engine context page short and factual so
+  generated summaries preserve the project's scope: compact lexical embedding
+  serving, not transformer embeddings or LLM memory.
