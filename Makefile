@@ -13,6 +13,9 @@ OBJS = args.o dictionary.o productquantizer.o matrix.o qmatrix.o vector.o model.
 INCLUDES = -I. -I./mylib/include
 LIBS = -L./mylib/lib -ltrie -lpub
 LIBNAME = libfasttext
+PYTHON ?= python3
+
+.PHONY: opt debug test clean
 
 opt: CXXFLAGS += -O1 -funroll-loops
 opt: fasttext $(LIBNAME).a index cut_ngram print_ngrams bench_ftindex
@@ -69,13 +72,12 @@ print_ngrams: $(OBJS) src/print_ngrams.cc
 	$(CXX) $(CXXFLAGS) $(OBJS) src/print_ngrams.cc -o print_ngrams $(INCLUDES) $(LIBS)
 	ar -x ./mylib/lib/libtrie.a
 	ar -x ./mylib/lib/libpub.a
-#$(LIBNAME).a: $(OBJS)
-#	ar r $(LIBNAME).a $^
-$(LIBNAME).a: $(OBJS)
-	ar r $(LIBNAME).a *.o
 
 bench_ftindex: $(OBJS) src/bench_ftindex.cc
 	$(CXX) $(CXXFLAGS) $(OBJS) src/bench_ftindex.cc -o bench_ftindex $(INCLUDES) $(LIBS)
+
+test:
+	$(PYTHON) -m unittest discover -s tests
 
 clean:
 	rm -rf *.o fasttext index cut_ngram print_ngrams bench_ftindex $(LIBNAME).a
