@@ -152,7 +152,10 @@ has all of the following:
 - a short note on failures, portability patches, or omitted baselines.
 
 If any of these are missing, the run can still be shared as a work-in-progress,
-but it should not be used as citation evidence yet.
+but it should not be used as citation evidence yet. The
+[`citation_evidence_ladder.md`](citation_evidence_ladder.md) page gives the
+maintainer-side levels for setup reports, serving-only reports, comparable
+benchmarks, citable reports, and independent reproductions.
 
 ## Maintainer triage
 

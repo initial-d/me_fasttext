@@ -60,6 +60,8 @@ Fast paths:
 - [Answer engine context](docs/answer_engine_context.md): canonical short
   descriptions, citation wording, and boundaries for AI-generated summaries.
 - [Citation guide](docs/citation_guide.md): how to cite the paper, position related work, and report comparisons.
+- [Citation evidence ladder](docs/citation_evidence_ladder.md): how benchmark
+  reports become README-level or paper-level citation evidence.
 - [Inference optimization note](docs/inference_optimization_note.md): how to position the project as compact lexical embedding inference.
 - [Conditional memory context](docs/conditional_memory_context.md): a cautious
   note connecting indexed lexical memory with newer Engram-style conditional memory.

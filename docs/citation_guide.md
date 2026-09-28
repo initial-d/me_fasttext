@@ -75,7 +75,9 @@ When comparing against this work, please report:
 - hardware, storage, OS, compiler, and filesystem
 
 The [benchmark protocol](benchmark_protocol.md) includes a fuller report
-template.
+template. The [citation evidence ladder](citation_evidence_ladder.md) explains
+which reports are strong enough to link from README-level docs or reuse as
+paper/report evidence.
 
 ## Code citation metadata
 

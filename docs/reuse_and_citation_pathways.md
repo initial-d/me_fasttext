@@ -122,7 +122,10 @@ which provides trie-backed subword ids and an mmap-ready compact index.
 
 For reports that should be comparable or citable, use the GitHub
 [benchmark result template](https://github.com/initial-d/me_fasttext/issues/new?template=benchmark-result.yml)
-and include:
+and include the fields below. Use
+[`citation_evidence_ladder.md`](citation_evidence_ladder.md) to decide whether
+the report is a setup note, serving-only result, comparable benchmark, citable
+report, or independent reproduction.
 
 - commit SHA;
 - corpus description and language;

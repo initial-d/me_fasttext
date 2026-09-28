@@ -88,6 +88,7 @@ maintainer asks for changes.
 | 2026-09-11 | This update | Recorded the latest snapshot: 295 views, 139 clones, 65 unique cloners, and added an evaluator quickstart to convert silent clones into benchmark reports. |
 | 2026-09-12 | This update | Recorded the latest snapshot: 236 views, 156 clones, 66 unique cloners, and added first-screen trust badges for paper, CI, release, benchmark intake, and evaluator quickstart. |
 | 2026-09-24 | This update | Added `llms.txt` and an answer-engine context page so search and AI summaries can extract the canonical description, citation target, evaluation boundaries, and "do not claim" list. |
+| 2026-09-28 | This update | Added a citation evidence ladder so benchmark and compression reports can be classified from setup notes through citable independent reproductions. |
 
 ## Next high-fit targets
 
