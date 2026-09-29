@@ -8,6 +8,7 @@ docs/first_public_corpus_benchmark.md.
 
 import argparse
 import collections
+import hashlib
 import json
 import os
 import re
@@ -20,6 +21,14 @@ SLICE_DESCRIPTIONS = {
     "oov_heavy": "Lines containing at least one token observed once.",
     "entity_heavy": "Lines containing digits, separators, or mixed-case entity-like tokens.",
 }
+
+
+def file_sha256(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def positive_int(value):
@@ -148,6 +157,8 @@ def prepare_public_benchmark(
             "license": license_note,
             "split": split,
             "source_path": os.path.basename(str(input_path)),
+            "source_bytes": input_path.stat().st_size,
+            "source_sha256": file_sha256(input_path),
             "documents_or_lines": len(lines),
             "tokens": total_tokens,
             "unique_tokens": len(token_counts),

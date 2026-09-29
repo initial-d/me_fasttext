@@ -96,7 +96,8 @@ python3 tools/prepare_public_benchmark.py \
 
 This writes:
 
-- `corpus_manifest.json` with document, token, and rare-token counts;
+- `corpus_manifest.json` with document, token, rare-token, byte-size, and
+  SHA-256 input-corpus counts;
 - deduplicated `queries.txt` for `bench_ftindex`;
 - per-slice query files such as `queries_oov_heavy.txt`;
 - `query_slices.md` describing the `in_vocab`, `oov_heavy`, and

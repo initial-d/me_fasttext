@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import json
 import subprocess
 import sys
@@ -58,6 +59,11 @@ class PreparePublicBenchmarkTest(unittest.TestCase):
             self.assertEqual(manifest["corpus"]["documents_or_lines"], 8)
             self.assertEqual(manifest["corpus"]["tokens"], 40)
             self.assertEqual(manifest["corpus"]["source_path"], "corpus.txt")
+            self.assertEqual(manifest["corpus"]["source_bytes"], corpus_path.stat().st_size)
+            self.assertEqual(
+                manifest["corpus"]["source_sha256"],
+                hashlib.sha256(corpus_path.read_bytes()).hexdigest(),
+            )
             self.assertEqual(manifest["query_slices"]["in_vocab"]["lines"], 1)
             self.assertEqual(manifest["query_slices"]["oov_heavy"]["lines"], 2)
             self.assertEqual(manifest["query_slices"]["entity_heavy"]["lines"], 2)

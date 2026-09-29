@@ -42,6 +42,8 @@ Include a small manifest with every benchmark:
 corpus:
   name: example-corpus
   language: zh
+  source_sha256: "sha256 of the exact training text"
+  source_bytes: 123456789
   documents: 1000000
   tokens: 250000000
   train_split: train.txt
