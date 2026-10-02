@@ -98,6 +98,22 @@ class PreparePublicBenchmarkTest(unittest.TestCase):
                     max_queries_per_slice=0,
                 )
 
+    def test_rejects_empty_filtered_corpus(self):
+        tool = load_tool_module()
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            corpus_path = Path(tmpdir) / "corpus.txt"
+            corpus_path.write_text("tiny\nalso-tiny\n", encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "no eligible lines"):
+                tool.prepare_public_benchmark(
+                    corpus_path,
+                    Path(tmpdir) / "out",
+                    name="sample",
+                    language="en",
+                    min_line_tokens=3,
+                )
+
     def test_cli_reports_missing_input_without_traceback(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             result = subprocess.run(

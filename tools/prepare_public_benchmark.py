@@ -112,6 +112,9 @@ def prepare_public_benchmark(
             token_counts.update(tokens)
             total_tokens += len(tokens)
 
+    if not lines:
+        raise ValueError("input contains no eligible lines after min-line-tokens filtering")
+
     rare_tokens = {token for token, count in token_counts.items() if count == 1}
     common_tokens = {token for token, count in token_counts.items() if count >= 5}
 
