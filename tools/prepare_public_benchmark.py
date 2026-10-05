@@ -31,6 +31,15 @@ def file_sha256(path):
     return digest.hexdigest()
 
 
+def file_artifact(path):
+    path = Path(path)
+    return {
+        "path": str(path.as_posix()),
+        "bytes": path.stat().st_size,
+        "sha256": file_sha256(path),
+    }
+
+
 def positive_int(value):
     try:
         parsed = int(value)
@@ -180,6 +189,12 @@ def prepare_public_benchmark(
             "slice_manifest": str(slice_manifest_path.as_posix()),
             "slice_queries": {
                 name: str(path.as_posix()) for name, path in slice_paths.items()
+            },
+        },
+        "output_artifacts": {
+            "queries": file_artifact(query_path),
+            "slice_queries": {
+                name: file_artifact(path) for name, path in slice_paths.items()
             },
         },
     }

@@ -73,6 +73,14 @@ class PreparePublicBenchmarkTest(unittest.TestCase):
             self.assertIn("common token shared bridge stable", merged_queries)
             self.assertIn("rarealpha common token shared stable", merged_queries)
             self.assertIn("ACME-42 common token shared stable", merged_queries)
+            self.assertEqual(
+                manifest["output_artifacts"]["queries"]["sha256"],
+                hashlib.sha256(outputs["queries"].read_bytes()).hexdigest(),
+            )
+            self.assertEqual(
+                manifest["output_artifacts"]["queries"]["bytes"],
+                outputs["queries"].stat().st_size,
+            )
 
             query_slices = {
                 name: path.read_text(encoding="utf-8").splitlines()
@@ -81,6 +89,10 @@ class PreparePublicBenchmarkTest(unittest.TestCase):
             self.assertEqual(query_slices["in_vocab"], ["common token shared bridge stable"])
             self.assertEqual(len(query_slices["oov_heavy"]), 2)
             self.assertEqual(len(query_slices["entity_heavy"]), 2)
+            self.assertEqual(
+                manifest["output_artifacts"]["slice_queries"]["oov_heavy"]["sha256"],
+                hashlib.sha256(outputs["slice_queries"]["oov_heavy"].read_bytes()).hexdigest(),
+            )
 
     def test_rejects_non_positive_limits(self):
         tool = load_tool_module()
