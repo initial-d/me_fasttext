@@ -162,6 +162,25 @@ def prepare_public_benchmark(
             handle.write(line + "\n")
 
     slice_manifest_path = output_dir / "query_slices.md"
+    query_slices = {
+        slice_name: {
+            "lines": len(slice_lines),
+            "description": SLICE_DESCRIPTIONS[slice_name],
+        }
+        for slice_name, slice_lines in slices.items()
+    }
+
+    with slice_manifest_path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write("# Query slices\n\n")
+        handle.write(f"- Corpus: {name}\n")
+        handle.write(f"- Language: {language}\n")
+        handle.write(f"- License: {license_note}\n")
+        handle.write(f"- Source split: {split}\n\n")
+        handle.write("| Slice | Lines | Selection rule |\n")
+        handle.write("| --- | ---: | --- |\n")
+        for slice_name, meta in query_slices.items():
+            handle.write(f"| {slice_name} | {meta['lines']} | {meta['description']} |\n")
+
     manifest = {
         "corpus": {
             "name": name,
@@ -177,13 +196,7 @@ def prepare_public_benchmark(
             "rare_tokens_count_1": len(rare_tokens),
             "min_line_tokens": min_line_tokens,
         },
-        "query_slices": {
-            slice_name: {
-                "lines": len(slice_lines),
-                "description": SLICE_DESCRIPTIONS[slice_name],
-            }
-            for slice_name, slice_lines in slices.items()
-        },
+        "query_slices": query_slices,
         "outputs": {
             "queries": str(query_path.as_posix()),
             "slice_manifest": str(slice_manifest_path.as_posix()),
@@ -193,6 +206,7 @@ def prepare_public_benchmark(
         },
         "output_artifacts": {
             "queries": file_artifact(query_path),
+            "slice_manifest": file_artifact(slice_manifest_path),
             "slice_queries": {
                 name: file_artifact(path) for name, path in slice_paths.items()
             },
@@ -203,17 +217,6 @@ def prepare_public_benchmark(
     with manifest_path.open("w", encoding="utf-8", newline="\n") as handle:
         json.dump(manifest, handle, ensure_ascii=False, indent=2)
         handle.write("\n")
-
-    with slice_manifest_path.open("w", encoding="utf-8", newline="\n") as handle:
-        handle.write("# Query slices\n\n")
-        handle.write(f"- Corpus: {name}\n")
-        handle.write(f"- Language: {language}\n")
-        handle.write(f"- License: {license_note}\n")
-        handle.write(f"- Source split: {split}\n\n")
-        handle.write("| Slice | Lines | Selection rule |\n")
-        handle.write("| --- | ---: | --- |\n")
-        for slice_name, meta in manifest["query_slices"].items():
-            handle.write(f"| {slice_name} | {meta['lines']} | {meta['description']} |\n")
 
     return {
         "manifest": manifest_path,

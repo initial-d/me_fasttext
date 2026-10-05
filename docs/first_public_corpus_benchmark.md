@@ -98,7 +98,7 @@ This writes:
 
 - `corpus_manifest.json` with document, token, rare-token, byte-size, and
   SHA-256 input-corpus counts, plus byte-size and SHA-256 digests for the
-  generated query files;
+  generated query and slice manifest files;
 - deduplicated `queries.txt` for `bench_ftindex`;
 - per-slice query files such as `queries_oov_heavy.txt`;
 - `query_slices.md` describing the `in_vocab`, `oov_heavy`, and

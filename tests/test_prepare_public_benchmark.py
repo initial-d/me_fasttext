@@ -81,6 +81,14 @@ class PreparePublicBenchmarkTest(unittest.TestCase):
                 manifest["output_artifacts"]["queries"]["bytes"],
                 outputs["queries"].stat().st_size,
             )
+            self.assertEqual(
+                manifest["output_artifacts"]["slice_manifest"]["sha256"],
+                hashlib.sha256(outputs["slice_manifest"].read_bytes()).hexdigest(),
+            )
+            self.assertEqual(
+                manifest["output_artifacts"]["slice_manifest"]["bytes"],
+                outputs["slice_manifest"].stat().st_size,
+            )
 
             query_slices = {
                 name: path.read_text(encoding="utf-8").splitlines()
