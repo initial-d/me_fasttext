@@ -56,6 +56,7 @@ class PreparePublicBenchmarkTest(unittest.TestCase):
             )
 
             manifest = json.loads(outputs["manifest"].read_text(encoding="utf-8"))
+            self.assertEqual(manifest["manifest_schema_version"], 1)
             self.assertEqual(manifest["corpus"]["documents_or_lines"], 8)
             self.assertEqual(manifest["corpus"]["tokens"], 40)
             self.assertEqual(manifest["corpus"]["source_path"], "corpus.txt")

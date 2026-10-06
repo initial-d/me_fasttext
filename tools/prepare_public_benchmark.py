@@ -16,6 +16,7 @@ from pathlib import Path
 
 
 TOKEN_RE = re.compile(r"\S+")
+MANIFEST_SCHEMA_VERSION = 1
 SLICE_DESCRIPTIONS = {
     "in_vocab": "Lines whose first tokens are all frequent in the corpus.",
     "oov_heavy": "Lines containing at least one token observed once.",
@@ -182,6 +183,7 @@ def prepare_public_benchmark(
             handle.write(f"| {slice_name} | {meta['lines']} | {meta['description']} |\n")
 
     manifest = {
+        "manifest_schema_version": MANIFEST_SCHEMA_VERSION,
         "corpus": {
             "name": name,
             "language": language,
