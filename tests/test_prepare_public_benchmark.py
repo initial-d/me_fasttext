@@ -56,8 +56,11 @@ class PreparePublicBenchmarkTest(unittest.TestCase):
             )
 
             manifest = json.loads(outputs["manifest"].read_text(encoding="utf-8"))
-            self.assertEqual(manifest["manifest_schema_version"], 1)
+            self.assertEqual(manifest["manifest_schema_version"], 2)
+            self.assertEqual(manifest["corpus"]["source_lines"], 10)
             self.assertEqual(manifest["corpus"]["documents_or_lines"], 8)
+            self.assertEqual(manifest["corpus"]["skipped_empty_lines"], 1)
+            self.assertEqual(manifest["corpus"]["skipped_short_lines"], 1)
             self.assertEqual(manifest["corpus"]["tokens"], 40)
             self.assertEqual(manifest["corpus"]["source_path"], "corpus.txt")
             self.assertEqual(manifest["corpus"]["source_bytes"], corpus_path.stat().st_size)

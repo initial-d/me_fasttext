@@ -16,7 +16,7 @@ from pathlib import Path
 
 
 TOKEN_RE = re.compile(r"\S+")
-MANIFEST_SCHEMA_VERSION = 1
+MANIFEST_SCHEMA_VERSION = 2
 SLICE_DESCRIPTIONS = {
     "in_vocab": "Lines whose first tokens are all frequent in the corpus.",
     "oov_heavy": "Lines containing at least one token observed once.",
@@ -108,15 +108,21 @@ def prepare_public_benchmark(
 
     token_counts = collections.Counter()
     lines = []
+    raw_lines = 0
+    skipped_empty_lines = 0
+    skipped_short_lines = 0
     total_tokens = 0
 
     with input_path.open("r", encoding="utf-8", errors="replace") as handle:
         for raw_line in handle:
+            raw_lines += 1
             line = raw_line.strip()
             if not line:
+                skipped_empty_lines += 1
                 continue
             tokens = tokenize(line)
             if len(tokens) < min_line_tokens:
+                skipped_short_lines += 1
                 continue
             lines.append((line, tokens))
             token_counts.update(tokens)
@@ -192,7 +198,10 @@ def prepare_public_benchmark(
             "source_path": os.path.basename(str(input_path)),
             "source_bytes": input_path.stat().st_size,
             "source_sha256": file_sha256(input_path),
+            "source_lines": raw_lines,
             "documents_or_lines": len(lines),
+            "skipped_empty_lines": skipped_empty_lines,
+            "skipped_short_lines": skipped_short_lines,
             "tokens": total_tokens,
             "unique_tokens": len(token_counts),
             "rare_tokens_count_1": len(rare_tokens),
