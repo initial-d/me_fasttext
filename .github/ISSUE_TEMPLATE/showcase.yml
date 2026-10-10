@@ -1,0 +1,95 @@
+name: Showcase / use case
+description: Share a citation, integration, list entry, comparison, or use-case note
+title: "[Showcase] "
+labels:
+  - showcase
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping other readers understand where `me_fasttext` fits.
+
+        Use this template for citations, public list entries, comparison notes,
+        integration experiments, deployment notes, or concrete use cases. Short
+        notes are welcome. Please do not include private corpora, credentials,
+        internal hostnames, proprietary logs, or secrets.
+  - type: dropdown
+    id: showcase_type
+    attributes:
+      label: Type
+      description: What are you sharing?
+      options:
+        - Citation or paper reference
+        - Public benchmark or replication
+        - Awesome-list or directory entry
+        - Retrieval or RAG prefilter experiment
+        - OOV-heavy or entity-heavy search use case
+        - Chinese or multilingual text use case
+        - Compact serving or cold-start deployment note
+        - Comparison against FastText, BM25, dense embeddings, or vector search
+        - Documentation, tutorial, talk, or blog post
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Briefly describe how `me_fasttext` was used, cited, compared, or listed.
+      placeholder: |
+        Example: Used as a compact lexical embedding baseline before dense
+        reranking on an entity-heavy product-title retrieval corpus.
+    validations:
+      required: true
+  - type: textarea
+    id: link
+    attributes:
+      label: Public link or reference
+      description: Link the paper, list entry, issue, pull request, post, benchmark, or repository when public.
+      placeholder: |
+        URL:
+        citation:
+        private_or_not_public_yet:
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domain
+      description: Which audience or workload does this connect to?
+      options:
+        - Word embeddings
+        - NLP systems
+        - Information retrieval
+        - RAG prefiltering
+        - Model compression
+        - Memory-mapped serving
+        - Trie or indexing data structures
+        - Chinese NLP
+        - Multilingual or OOV-heavy text
+        - Other
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or context
+      description: Share non-sensitive metrics, corpus summary, compared baselines, or why the project fit.
+      placeholder: |
+        corpus or workload:
+        compared methods:
+        useful result:
+        limitation or negative observation:
+  - type: textarea
+    id: quote
+    attributes:
+      label: Suggested public wording
+      description: Optional wording maintainers can quote in README, docs, release notes, or distribution logs.
+      placeholder: |
+        Example: me_fasttext was useful as a compact lexical embedding layer
+        for OOV-heavy candidate generation before dense reranking.
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: Disclosure
+      options:
+        - label: I have not included secrets, credentials, private corpora, internal hostnames, or proprietary logs.
+          required: true
+        - label: This note may be linked from project docs or README as public adoption/reuse evidence.
+          required: false

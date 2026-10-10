@@ -6,3 +6,6 @@ contact_links:
   - name: Benchmark protocol
     url: https://github.com/initial-d/me_fasttext/blob/main/docs/benchmark_protocol.md
     about: Use this for the fuller memory, latency, OOV, and quality report shape.
+  - name: Outreach notes
+    url: https://github.com/initial-d/me_fasttext/blob/main/docs/outreach.md
+    about: Use this when adding the project to lists or sharing it with maintainers.

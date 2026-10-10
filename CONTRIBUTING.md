@@ -21,6 +21,9 @@ Good first contributions include:
   [evaluation question](https://github.com/initial-d/me_fasttext/issues/new?template=evaluation-question.yml)
   about build, benchmark setup, corpus preparation, baselines, or result
   interpretation;
+- a
+  [showcase or use-case note](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
+  for citations, list entries, comparisons, integrations, or deployment notes;
 - a retrieval, ranking, classification, or OOV-heavy serving result;
 - a negative result showing where the compact `.z` path does not help;
 - a build, portability, or documentation fix;
@@ -48,6 +51,18 @@ Start with [`docs/evaluator_quickstart.md`](docs/evaluator_quickstart.md) for
 the shortest path. Use
 [`docs/first_public_corpus_benchmark.md`](docs/first_public_corpus_benchmark.md)
 for the fuller report shape.
+
+## Showcase and visibility notes
+
+Use the
+[showcase issue template](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
+for lighter-weight adoption evidence: citations, public list entries,
+integration notes, talks, blog posts, retrieval experiments, or compact-serving
+deployment notes.
+
+These notes help future readers decide whether the project is relevant before
+they run a full benchmark. Please keep them factual: say what was tried, what
+fit, what did not fit, and whether the evidence is public.
 
 ## Code and documentation changes
 

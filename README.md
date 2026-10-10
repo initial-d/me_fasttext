@@ -5,6 +5,7 @@
 [![Release](https://img.shields.io/github/v/release/initial-d/me_fasttext?label=release)](https://github.com/initial-d/me_fasttext/releases/tag/v0.1.0)
 [![Benchmark reports welcome](https://img.shields.io/badge/benchmark_reports-welcome-2ea44f)](https://github.com/initial-d/me_fasttext/issues/1)
 [![Evaluator quickstart](https://img.shields.io/badge/evaluator-quickstart-blue)](docs/evaluator_quickstart.md)
+[![Showcase](https://img.shields.io/badge/use_cases-showcase-orange)](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
 
 Memory-Efficient FastText: a FastText-derived C++ prototype that replaces hashed character n-gram buckets with exact trie indexes, then compresses the learned n-gram matrix through structure-aware row sharing and mark-compact layout.
 
@@ -17,6 +18,26 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 > Adjacent context: `me_fasttext` is also a small, inspectable lexical example
 > of indexed n-gram memory outside the dense path, adjacent to newer
 > Engram-style conditional memory work without claiming lineage or equivalence.
+
+## Help the project grow
+
+If `me_fasttext` is useful or relevant to your work, the fastest ways to help
+other people find it are:
+
+- star or watch the repository so new benchmark notes surface to more readers;
+- share a public-corpus benchmark, replication, or negative result with the
+  [benchmark template](https://github.com/initial-d/me_fasttext/issues/new?template=benchmark-result.yml);
+- open a
+  [showcase / use-case note](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
+  if you cite it, compare it, add it to a list, or try it in retrieval,
+  ranking, OOV-heavy text, Chinese text, or compact-serving work;
+- send an
+  [evaluation question](https://github.com/initial-d/me_fasttext/issues/new?template=evaluation-question.yml)
+  if you are unsure how to build, benchmark, or interpret a result.
+
+Short, honest reports are better than polished success stories. Reproducible
+negative results, omitted-baseline notes, and corpus-specific limits all make
+the project easier to trust and cite.
 
 ## If you are evaluating this project
 
@@ -33,6 +54,8 @@ Fast paths:
   results, documentation fixes, and code patches should include.
 - [Evaluation question](https://github.com/initial-d/me_fasttext/issues/new?template=evaluation-question.yml):
   ask about build, benchmark setup, corpus preparation, baselines, or result interpretation.
+- [Showcase / use case](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml):
+  share citations, list entries, comparisons, integrations, or deployment notes.
 - [Benchmark issue](https://github.com/initial-d/me_fasttext/issues/1): share a
   reproducible run, replication, or negative result.
 - [Artifact card](docs/artifact_card.md): decide quickly whether the project is
