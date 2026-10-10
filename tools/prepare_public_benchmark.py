@@ -16,7 +16,7 @@ from pathlib import Path
 
 
 TOKEN_RE = re.compile(r"\S+")
-MANIFEST_SCHEMA_VERSION = 2
+MANIFEST_SCHEMA_VERSION = 3
 SLICE_DESCRIPTIONS = {
     "in_vocab": "Lines whose first tokens are all frequent in the corpus.",
     "oov_heavy": "Lines containing at least one token observed once.",
@@ -188,6 +188,7 @@ def prepare_public_benchmark(
         for slice_name, meta in query_slices.items():
             handle.write(f"| {slice_name} | {meta['lines']} | {meta['description']} |\n")
 
+    slice_lines_total = sum(len(slice_lines) for slice_lines in slices.values())
     manifest = {
         "manifest_schema_version": MANIFEST_SCHEMA_VERSION,
         "corpus": {
@@ -208,6 +209,11 @@ def prepare_public_benchmark(
             "min_line_tokens": min_line_tokens,
         },
         "query_slices": query_slices,
+        "query_summary": {
+            "slice_lines_total": slice_lines_total,
+            "unique_lines": len(merged_queries),
+            "deduplicated_lines": slice_lines_total - len(merged_queries),
+        },
         "outputs": {
             "queries": str(query_path.as_posix()),
             "slice_manifest": str(slice_manifest_path.as_posix()),

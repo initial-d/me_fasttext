@@ -56,7 +56,7 @@ class PreparePublicBenchmarkTest(unittest.TestCase):
             )
 
             manifest = json.loads(outputs["manifest"].read_text(encoding="utf-8"))
-            self.assertEqual(manifest["manifest_schema_version"], 2)
+            self.assertEqual(manifest["manifest_schema_version"], 3)
             self.assertEqual(manifest["corpus"]["source_lines"], 10)
             self.assertEqual(manifest["corpus"]["documents_or_lines"], 8)
             self.assertEqual(manifest["corpus"]["skipped_empty_lines"], 1)
@@ -71,6 +71,9 @@ class PreparePublicBenchmarkTest(unittest.TestCase):
             self.assertEqual(manifest["query_slices"]["in_vocab"]["lines"], 1)
             self.assertEqual(manifest["query_slices"]["oov_heavy"]["lines"], 2)
             self.assertEqual(manifest["query_slices"]["entity_heavy"]["lines"], 2)
+            self.assertEqual(manifest["query_summary"]["slice_lines_total"], 5)
+            self.assertEqual(manifest["query_summary"]["unique_lines"], 4)
+            self.assertEqual(manifest["query_summary"]["deduplicated_lines"], 1)
 
             merged_queries = outputs["queries"].read_text(encoding="utf-8").splitlines()
             self.assertEqual(len(merged_queries), len(set(merged_queries)))
