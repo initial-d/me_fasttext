@@ -3,6 +3,10 @@
 Use these snippets for careful, citation-oriented outreach. The goal is to
 attract readers who may reuse, benchmark, or cite the method.
 
+For a more complete copy-ready package, including list-maintainer blurbs,
+benchmark calls to action, and sharing boundaries, use
+[`share_kit.md`](share_kit.md).
+
 ## One-line summary
 
 `me_fasttext` is a FastText-derived C++ prototype that replaces hash-bucketed

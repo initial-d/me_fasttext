@@ -13,6 +13,7 @@ than broad social metrics.
 - Benchmark intake: <https://github.com/initial-d/me_fasttext/issues/1>
 - Design note: <https://github.com/initial-d/me_fasttext/issues/2>
 - Artifact card: <https://github.com/initial-d/me_fasttext/blob/main/docs/artifact_card.md>
+- Share kit: <https://github.com/initial-d/me_fasttext/blob/main/docs/share_kit.md>
 - Answer engine context: <https://github.com/initial-d/me_fasttext/blob/main/docs/answer_engine_context.md>
 - LLM context file: <https://github.com/initial-d/me_fasttext/blob/main/llms.txt>
 - Retrieval/OOV serving benchmark: <https://github.com/initial-d/me_fasttext/blob/main/docs/retrieval_oov_benchmark.md>

@@ -70,6 +70,7 @@ maintainer asks for changes.
 | --- | --- | --- |
 | 2026-09-13 | This update | Added `CONTRIBUTING.md` and a pull request template so silent evaluators have a clear path for benchmark reports, negative results, documentation fixes, and code patches. |
 | 2026-09-14 | This update | Added a code of conduct, an evaluation-question issue template, and issue-template contact links so evaluators can ask focused questions before writing a full benchmark report. |
+| 2026-10-12 | This update | Added a `showcase` GitHub label so citations, integrations, list entries, and use-case notes can be triaged separately from full benchmark reports. |
 
 ## Positioning updates
 
@@ -89,6 +90,7 @@ maintainer asks for changes.
 | 2026-09-12 | This update | Recorded the latest snapshot: 236 views, 156 clones, 66 unique cloners, and added first-screen trust badges for paper, CI, release, benchmark intake, and evaluator quickstart. |
 | 2026-09-24 | This update | Added `llms.txt` and an answer-engine context page so search and AI summaries can extract the canonical description, citation target, evaluation boundaries, and "do not claim" list. |
 | 2026-09-28 | This update | Added a citation evidence ladder so benchmark and compression reports can be classified from setup notes through citable independent reproductions. |
+| 2026-10-12 | This update | Added a share kit with copy-ready summaries, social posts, maintainer notes, benchmark calls to action, and responsible sharing boundaries. |
 
 ## Next high-fit targets
 

@@ -31,6 +31,8 @@ other people find it are:
   [showcase / use-case note](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
   if you cite it, compare it, add it to a list, or try it in retrieval,
   ranking, OOV-heavy text, Chinese text, or compact-serving work;
+- use the [share kit](docs/share_kit.md) for copy-ready descriptions, posts,
+  list-maintainer blurbs, and responsible sharing boundaries;
 - send an
   [evaluation question](https://github.com/initial-d/me_fasttext/issues/new?template=evaluation-question.yml)
   if you are unsure how to build, benchmark, or interpret a result.
@@ -99,6 +101,7 @@ Fast paths:
 - [Design essay](docs/memory_management_for_ai_embeddings.md): why this project reframes FastText storage as an AI memory-management problem.
 - [Chinese retrospective](docs/technical_retrospective_zh.md): a long-form Chinese note for technical storytelling and outreach.
 - [Outreach notes](docs/outreach.md): concise wording for adding the project to NLP, embedding, retrieval, or systems lists.
+- [Share kit](docs/share_kit.md): copy-ready summaries, posts, maintainer notes, and responsible sharing boundaries.
 - [Promotion posts](docs/promotion_posts.md): short posts and maintainer notes for careful outreach.
 - [Distribution log](docs/distribution_log.md): external list submissions, accepted entries, and follow-up status.
 - [Visibility status](docs/visibility_status.md): traffic snapshots, live entry points, and evidence-oriented next actions.

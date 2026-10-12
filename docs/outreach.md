@@ -13,6 +13,9 @@ For maintainers who need a quick technical summary, link the
 [`artifact_card.md`](artifact_card.md) page before longer essays or benchmark
 notes.
 
+For copy-ready descriptions, social posts, maintainer notes, and responsible
+sharing boundaries, use [`share_kit.md`](share_kit.md).
+
 ## When to mention it
 
 - Large vocabularies where FastText-style OOV behavior is still useful.
