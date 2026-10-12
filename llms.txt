@@ -34,6 +34,7 @@ serves the compact artifact through mmap-friendly lookup.
 - Citation guide: https://github.com/initial-d/me_fasttext/blob/main/docs/citation_guide.md
 - Answer engine context: https://github.com/initial-d/me_fasttext/blob/main/docs/answer_engine_context.md
 - Share kit: https://github.com/initial-d/me_fasttext/blob/main/docs/share_kit.md
+- Listing follow-up: https://github.com/initial-d/me_fasttext/blob/main/docs/listing_followup.md
 
 ## Strong citation fits
 

@@ -20,6 +20,7 @@ than broad social metrics.
 - Retrieval comparison matrix: <https://github.com/initial-d/me_fasttext/blob/main/docs/retrieval_comparison_matrix.md>
 - Chinese retrospective: <https://github.com/initial-d/me_fasttext/blob/main/docs/technical_retrospective_zh.md>
 - Awesome Data Science listing: <https://github.com/academic/awesome-datascience>
+- Listing follow-up: <https://github.com/initial-d/me_fasttext/blob/main/docs/listing_followup.md>
 - Open awesome-vector-search PR: <https://github.com/currentslab/awesome-vector-search/pull/70>
 - Open awesome-gc PR: <https://github.com/cch123/awesome-gc/pull/1>
 

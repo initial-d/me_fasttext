@@ -16,8 +16,6 @@ need maintainer follow-up.
 | --- | --- | --- | --- |
 | 2026-09-07 | awesome-vector-search | [PR 70](https://github.com/currentslab/awesome-vector-search/pull/70) | Library |
 | 2026-09-07 | awesome-gc | [PR 1](https://github.com/cch123/awesome-gc/pull/1) | Applications |
-| 2026-08-26 | awesome-nlp | [PR 422](https://github.com/keon/awesome-nlp/pull/422) | Text embeddings |
-| 2026-08-26 | awesome-machine-learning | [PR 1411](https://github.com/josephmisiti/awesome-machine-learning/pull/1411) | C++ NLP resources |
 | 2026-08-26 | awesome-embedding-models | [PR 12](https://github.com/Hironsan/awesome-embedding-models/pull/12) | Paper and implementation |
 | 2026-08-26 | awesome-information-retrieval | [PR 22](https://github.com/harpribot/awesome-information-retrieval/pull/22) | Retrieval software |
 | 2026-08-26 | awesome-ml-model-compression | [PR 11](https://github.com/cedrickchee/awesome-ml-model-compression/pull/11) | Compression resource |
@@ -29,6 +27,8 @@ need maintainer follow-up.
 
 | Date | Target | Status | Note |
 | --- | --- | --- | --- |
+| 2026-10-12 | [awesome-nlp PR 422](https://github.com/keon/awesome-nlp/pull/422) | Closed, not merged | Do not nudge again without maintainer guidance; use a better-fit NLP embeddings list instead. |
+| 2026-09-22 | [awesome-machine-learning PR 1411](https://github.com/josephmisiti/awesome-machine-learning/pull/1411) | Closed, not merged | Keep the narrowed C++ NLP wording for future lists, but do not describe this as an accepted listing. |
 | 2026-09-07 | Separius/awesome-sentence-embedding | Archived / read-only | Prepared fork branch [`initial-d:add-me-fasttext-word-embedding`](https://github.com/initial-d/awesome-sentence-embedding/tree/add-me-fasttext-word-embedding) adding the paper to the Word Embeddings table, but GitHub rejected PR creation because the upstream repository is archived. |
 | 2026-09-07 | currentslab/awesome-vector-search | Submitted after benchmark tooling | Initially deferred because the list focuses on ANN engines, vector databases, and similarity-search libraries; submitted after adding the `bench_ftindex` retrieval/OOV serving benchmark. |
 
@@ -91,6 +91,7 @@ maintainer asks for changes.
 | 2026-09-24 | This update | Added `llms.txt` and an answer-engine context page so search and AI summaries can extract the canonical description, citation target, evaluation boundaries, and "do not claim" list. |
 | 2026-09-28 | This update | Added a citation evidence ladder so benchmark and compression reports can be classified from setup notes through citable independent reproductions. |
 | 2026-10-12 | This update | Added a share kit with copy-ready summaries, social posts, maintainer notes, benchmark calls to action, and responsible sharing boundaries. |
+| 2026-10-13 | This update | Added a listing follow-up page and moved closed-not-merged external PRs out of the open-submission table. |
 
 ## Next high-fit targets
 

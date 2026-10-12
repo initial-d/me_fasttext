@@ -103,6 +103,7 @@ Fast paths:
 - [Outreach notes](docs/outreach.md): concise wording for adding the project to NLP, embedding, retrieval, or systems lists.
 - [Share kit](docs/share_kit.md): copy-ready summaries, posts, maintainer notes, and responsible sharing boundaries.
 - [Promotion posts](docs/promotion_posts.md): short posts and maintainer notes for careful outreach.
+- [Listing follow-up](docs/listing_followup.md): accepted, open, and closed external list submissions with next actions.
 - [Distribution log](docs/distribution_log.md): external list submissions, accepted entries, and follow-up status.
 - [Visibility status](docs/visibility_status.md): traffic snapshots, live entry points, and evidence-oriented next actions.
 - [Reuse and citation pathways](docs/reuse_and_citation_pathways.md): where follow-up work can naturally cite the method.

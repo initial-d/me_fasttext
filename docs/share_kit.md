@@ -13,6 +13,7 @@ goal is discoverability with accurate scope, not hype.
 - Benchmark report template: https://github.com/initial-d/me_fasttext/issues/new?template=benchmark-result.yml
 - Showcase / use-case template: https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml
 - Citation guide: https://github.com/initial-d/me_fasttext/blob/main/docs/citation_guide.md
+- Listing follow-up: https://github.com/initial-d/me_fasttext/blob/main/docs/listing_followup.md
 
 ## Short descriptions
 
