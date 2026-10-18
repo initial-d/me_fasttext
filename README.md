@@ -7,7 +7,10 @@
 [![Evaluator quickstart](https://img.shields.io/badge/evaluator-quickstart-blue)](docs/evaluator_quickstart.md)
 [![Showcase](https://img.shields.io/badge/use_cases-showcase-orange)](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
 
-Memory-Efficient FastText: a FastText-derived C++ prototype that replaces hashed character n-gram buckets with exact trie indexes, then compresses the learned n-gram matrix through structure-aware row sharing and mark-compact layout.
+**Compact n-gram memory: exact indexing, storage compression, and mmap lookup.**
+`me_fasttext` explores these systems problems through a FastText-derived C++
+prototype, with a new byte-exact row-store reference for Engram-style lookup
+experiments.
 
 This repository accompanies the paper [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).
 
@@ -15,9 +18,26 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 
 > Inference framing: `me_fasttext` can also be read as an early compact-inference prototype for lexical embeddings. It keeps subword identity exact during training, then rewrites the learned rows into a smaller mmap-friendly serving artifact for low-memory retrieval and feature-serving workloads.
 
-> Adjacent context: `me_fasttext` is also a small, inspectable lexical example
-> of indexed n-gram memory outside the dense path, adjacent to newer
-> Engram-style conditional memory work without claiming lineage or equivalence.
+## Engram readers: start here
+
+[DeepSeek's Engram](https://github.com/deepseek-ai/Engram) highlights a concrete
+systems question: **how do we store and serve large n-gram memory tables?**
+This project makes that question inspectable through exact trie indexing,
+compact row layouts, and mmap lookup.
+
+- [Engram storage guide](docs/engram_storage.md): architecture mapping,
+  byte-preservation contract, and the adapter boundary for token/hash row IDs.
+- [Run the lossless row-store demo](docs/engram_storage.md#run-the-byte-exact-demo):
+  exact-byte deduplication, compressed blocks, original-row-ID forwarding, and
+  bounded-cache mmap access. It runs with Python's standard library.
+- [English and Chinese launch copy](docs/engram_promotion.md): a technical
+  introduction centered on n-gram memory storage and lookup.
+
+The new reference preserves each original row's bytes and ID lookup. The legacy
+C++ `.z` exporter performs approximate row sharing and has known implementation
+limits; it is not a lossless Engram adapter. No trained Engram checkpoint or
+end-to-end model has been evaluated here. See the
+[implementation audit](docs/engram_storage.md#legacy-export-audit).
 
 ## Help the project grow
 
@@ -136,7 +156,9 @@ Standard fastText represents a word by averaging its word vector and character n
 
 1. Give every retained word and every observed character n-gram an explicit identity.
 2. Store word and n-gram ids in trie-based indexes instead of arbitrary hash buckets.
-3. Merge only structurally related n-gram rows whose learned vectors are extremely close.
+3. Explore offline row sharing followed by a compact layout; the paper's
+   intended similarity criterion differs from the current legacy exporter
+   ([audit](docs/engram_storage.md#legacy-export-audit)).
 4. Rewrite the remaining live rows into a compact, memory-mappable serving layout.
 
 The goal is not to replace modern LLM embedding models. The goal is to provide a small, deterministic, inspectable lexical memory layer for retrieval, ranking, entity-heavy search, long-tail Chinese text, and low-latency feature generation.
@@ -146,11 +168,13 @@ The goal is not to replace modern LLM embedding models. The goal is to provide a
 - FastText-style training and inference for `skipgram`, `cbow`, and `supervised` models.
 - Collision-free word and character n-gram lookup using trie indexes.
 - UTF-8 aware character n-gram enumeration.
-- Prefix and suffix based n-gram row sharing with high cosine-similarity checks.
+- Legacy prefix/suffix traversal and approximate row sharing; see the export audit.
 - Mark-compact style row reorganization for dense compact ids.
 - Single-file mmap serving index generated as `<output>.z`.
 - Static library output (`libfasttext.a`) for embedding the implementation in services.
 - Utility binaries for index generation and n-gram inspection.
+- Experimental Python byte-exact row deduplication and block-compressed mmap
+  lookup, preserving original row IDs independently of `.z` export.
 
 ## Reported paper results
 
@@ -165,6 +189,10 @@ The paper reports a large Chinese vocabulary benchmark with 30.1M words and 287.
 | me_fasttext | 28.9 GB | 3.2 min | 18.6 GB |
 
 These numbers are from the paper and will vary with corpus, vocabulary size, hardware, operating-system page cache behavior, and compression threshold.
+
+They are not Engram benchmarks and have not been reproduced by the new row
+store. The legacy exporter also differs from the paper's cosine-based method;
+inspect the implementation audit before treating it as a paper reproduction.
 
 ## Repository layout
 
@@ -369,12 +397,15 @@ At training time, the dictionary inserts retained words and UTF-8 character n-gr
 
 At export time, `FastText::saveIndex()` performs the compact-index pipeline:
 
-1. Walk the n-gram trie in prefix order and merge structurally related rows when cosine similarity is high enough.
+1. Walk the n-gram trie, selecting shared rows with the legacy norm-ratio
+   heuristic (the paper describes a cosine-based criterion).
 2. Build a reversed/suffix view and repeat the same conservative merge process.
 3. Mark live row ids, assign dense compact ids, and rewrite trie terminal values.
 4. Serialize metadata, compact vectors, word trie, and n-gram trie into `<output>.z`.
 
-This differs from hash buckets in one important way: row sharing happens after training and only between n-grams that can be audited through lexical structure and vector similarity.
+Row sharing happens after training and the index remapping can be inspected.
+The current norm-ratio check does not establish directional similarity or
+lossless reconstruction; see the [export audit](docs/engram_storage.md#legacy-export-audit).
 
 ## Differences from upstream fastText
 

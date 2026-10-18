@@ -8,6 +8,13 @@ Repository: https://github.com/initial-d/me_fasttext
 Paper: https://arxiv.org/abs/2506.01254
 Citation metadata: https://github.com/initial-d/me_fasttext/blob/main/CITATION.cff
 
+Engram-focused entry: https://github.com/initial-d/me_fasttext/blob/main/docs/engram_storage.md
+
+The new Python row-store reference preserves original row IDs and exact bytes
+through deduplication and block-compressed mmap lookup. It is experimental and
+has no trained Engram adapter. Legacy C++ `.z` export is approximate and uses a
+norm-ratio heuristic, not the paper's cosine rule; it is not strictly lossless.
+
 ## What this project is
 
 `me_fasttext` is a research and production-prototype codebase derived from

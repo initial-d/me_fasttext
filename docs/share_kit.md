@@ -14,6 +14,16 @@ goal is discoverability with accurate scope, not hype.
 - Showcase / use-case template: https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml
 - Citation guide: https://github.com/initial-d/me_fasttext/blob/main/docs/citation_guide.md
 - Listing follow-up: https://github.com/initial-d/me_fasttext/blob/main/docs/listing_followup.md
+- Engram storage guide: https://github.com/initial-d/me_fasttext/blob/main/docs/engram_storage.md
+- Engram-focused launch copy: https://github.com/initial-d/me_fasttext/blob/main/docs/engram_promotion.md
+
+## Engram-focused positioning
+
+Use [engram_promotion.md](engram_promotion.md) for the current technical post:
+compact n-gram memory storage and lookup, with a runnable byte-exact row store.
+Keep the experimental reference separate from the legacy `.z` exporter and
+reported paper numbers. The [source audit](engram_storage.md#legacy-export-audit)
+records why legacy approximate merging must not be advertised as lossless.
 
 ## Short descriptions
 

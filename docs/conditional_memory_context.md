@@ -37,12 +37,12 @@ serving layout are separate steps instead of one fixed hash-bucket table.
 
 ## How Engram is adjacent
 
-DeepSeek describes Engram as conditional memory through scalable lookup, a
-complementary sparsity axis for large language models. The official
-DeepSeek-V4.1-Flash model card lists Engram conditional memory alongside the
-model's MoE and long-context architecture, and the official Engram repository
-frames the method as modernizing classic n-gram embedding for lookup-oriented
-memory.
+DeepSeek's official Engram repository describes conditional memory through
+scalable lookup, a complementary sparsity axis for large language models.
+Its demo uses normalized token n-grams, multiple hash heads, an embedding
+gather, hidden-state-dependent gates and short convolution. These statements
+are based on the pinned official sources in the
+[storage guide](engram_storage.md), checked on 2026-10-18.
 
 That makes Engram an adjacent signal for the same broad direction:
 
@@ -68,18 +68,20 @@ neural computation.
 Avoid stronger claims:
 
 - do not say Engram is based on `me_fasttext`;
-- do not say `me_fasttext` predicts or explains DeepSeek-V4.1-Flash;
 - do not compare quality without a shared benchmark;
 - do not frame trie lookup as a universal replacement for learned memory.
 
 ## Sources for the adjacent context
 
-- DeepSeek-V4.1-Flash model card:
-  <https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash>
 - DeepSeek Engram repository:
   <https://github.com/deepseek-ai/Engram>
-- DeepSeek-V4.1-Flash announcement:
-  <https://www.deepseek.com/en/news/deepseek-v4-1-flash/>
+- Pinned architecture and storage mapping:
+  [engram_storage.md](engram_storage.md).
+
+The new [byte-exact row store](../tools/lossless_row_store.py) gives this
+connection a runnable storage experiment. It retains original numeric row IDs
+and bytes, independently of the legacy approximate `.z` export. The storage
+guide also records a source mismatch with the paper's merge criterion.
 
 For `me_fasttext`, continue with the
 [`artifact_card.md`](artifact_card.md),

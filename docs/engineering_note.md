@@ -21,8 +21,9 @@ large Chinese, multilingual, or entity-heavy corpora.
 1. During dictionary construction, words and UTF-8 character n-grams receive
    exact trie-backed ids.
 2. During training, each retained word or n-gram has a distinct row.
-3. During export, structurally related n-gram rows are considered for sharing
-   only when their learned vectors are very close.
+3. The paper proposes structurally constrained cosine-based row sharing.
+   The legacy exporter instead uses a norm-ratio heuristic; it does not
+   establish vector closeness ([source audit](engram_storage.md#legacy-export-audit)).
 4. The remaining live rows are assigned dense ids and serialized into a compact
    serving artifact.
 

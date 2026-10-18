@@ -3,10 +3,15 @@
 This page gives model-compression and conditional-memory readers a precise way
 to evaluate `me_fasttext` without turning it into an LLM memory claim.
 
+**Runnable starting point:** the [Engram storage guide](engram_storage.md)
+includes a byte-exact row-store demo, official architecture mapping and a
+source audit of legacy export. The new reference is independent of the C++
+`.z` exporter; the latter uses norm ratios, not the paper's cosine criterion.
+
 `me_fasttext` is not Engram, not an MoE component, and not a transformer
 architecture. It is a smaller lexical-memory compression baseline: keep word
 and character n-gram identity exact with trie-backed ids, then export a compact
-mmap-friendly artifact after conservative row sharing and mark-compact style id
+mmap-friendly artifact after legacy approximate row sharing and mark-compact style id
 rewriting.
 
 ## Why model-compression readers may care

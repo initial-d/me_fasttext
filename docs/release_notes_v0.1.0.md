@@ -7,7 +7,9 @@ artifact for readers of the accompanying arXiv paper.
 
 - FastText-compatible C++ training and inference commands.
 - Exact trie-based word and character n-gram ids.
-- Prefix/suffix n-gram row sharing with cosine-similarity checks.
+- Legacy trie traversal and row sharing. A subsequent
+  [source audit](engram_storage.md#legacy-export-audit) found norm-ratio checks
+  rather than the paper's cosine criterion, with hardcoded 128-dimensional loops.
 - Mark-compact export into a single mmap serving index (`<output>.z`).
 - Helper tools for compact-index generation and n-gram inspection.
 - Benchmark protocol and benchmark issue template for external reports.
