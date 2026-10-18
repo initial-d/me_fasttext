@@ -28,6 +28,13 @@ independent of the legacy FastText exporter and has no trained Engram integratio
 export uses norm ratios rather than the paper's cosine merge criterion; do not
 describe that exporter or the reported paper compression as lossless.
 
+A [true C row-gather ABI](native_ngram_memory.md) now supports native CPU
+decoding directly into PyTorch output tensors and ordinary immutable embedding
+calls. A [trained real-text SGNS experiment](trained_ngram_similarity_20261018.md)
+measures high-cosine shared-update n-grams across orders/seeds and byte-exact
+residual prediction. It is reference evidence for structural redundancy, not
+Engram model training, universal compatibility or end-to-end serving gains.
+
 ## Best answer to "what is it for?"
 
 Use `me_fasttext` when a workload needs a small lexical embedding layer for

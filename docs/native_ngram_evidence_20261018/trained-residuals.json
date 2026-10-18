@@ -1,0 +1,353 @@
+{
+  "category": "offline trained-row lossless prediction/layout experiment; no native gather codec",
+  "commit": "62fa3907c81df69a68e760a54c67867d481708f7",
+  "exact_command": "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/benchmark_trained_residuals.py --training-dir artifacts/native-ngram-20261018/trained-reference --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --output artifacts/native-ngram-20261018/trained-residuals.json",
+  "training_report_sha256": "d555aa72c2e761488e41b50b472cdfc88fd32fc29b73136e9effa522be050f02",
+  "training_commit": "ba564539489c44ff2582a7d83039a57c7dde7b9e",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "numpy": "2.5.4",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "block_rows": 64,
+  "runs": [
+    {
+      "max_order": 4,
+      "seed": 3,
+      "input_bytes": 2730496,
+      "layouts": {
+        "lexical": {
+          "plain_payload_bytes": 2548818,
+          "xor_payload_bytes": 2564247,
+          "estimated_overhead_bytes": 45408,
+          "estimated_plain_container_bytes": 2594226,
+          "estimated_xor_container_bytes": 2609655,
+          "estimated_xor_to_raw_ratio": 0.9557439380976936,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "b87cb171f9ce05babadb9abe917f696021522d5fafe1c497d777370a59cf220d"
+        },
+        "shuffled": {
+          "plain_payload_bytes": 2549195,
+          "xor_payload_bytes": 2591221,
+          "estimated_overhead_bytes": 45408,
+          "estimated_plain_container_bytes": 2594603,
+          "estimated_xor_container_bytes": 2636629,
+          "estimated_xor_to_raw_ratio": 0.9656227293502719,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "9591a55812696d6da85dd3e9df845ef3a531dffb54dc764ef479e213810df013"
+        },
+        "identical_update_group": {
+          "plain_payload_bytes": 2538478,
+          "xor_payload_bytes": 2496566,
+          "estimated_overhead_bytes": 45408,
+          "estimated_plain_container_bytes": 2583886,
+          "estimated_xor_container_bytes": 2541974,
+          "estimated_xor_to_raw_ratio": 0.9309568664447778,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "04e21e3d49baacf2e6961e3e2707993280fe6ddf30ec7757aa133263eed4ca3f"
+        }
+      }
+    },
+    {
+      "max_order": 4,
+      "seed": 7,
+      "input_bytes": 2730496,
+      "layouts": {
+        "lexical": {
+          "plain_payload_bytes": 2548403,
+          "xor_payload_bytes": 2564244,
+          "estimated_overhead_bytes": 45408,
+          "estimated_plain_container_bytes": 2593811,
+          "estimated_xor_container_bytes": 2609652,
+          "estimated_xor_to_raw_ratio": 0.9557428393962123,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "b87cb171f9ce05babadb9abe917f696021522d5fafe1c497d777370a59cf220d"
+        },
+        "shuffled": {
+          "plain_payload_bytes": 2548536,
+          "xor_payload_bytes": 2590947,
+          "estimated_overhead_bytes": 45408,
+          "estimated_plain_container_bytes": 2593944,
+          "estimated_xor_container_bytes": 2636355,
+          "estimated_xor_to_raw_ratio": 0.9655223812816426,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "591c4effd0b430bc8ba7397a37fff2cfa1f8cef14c2e530206ee62baddaf8d44"
+        },
+        "identical_update_group": {
+          "plain_payload_bytes": 2538013,
+          "xor_payload_bytes": 2496097,
+          "estimated_overhead_bytes": 45408,
+          "estimated_plain_container_bytes": 2583421,
+          "estimated_xor_container_bytes": 2541505,
+          "estimated_xor_to_raw_ratio": 0.9307851027798613,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "04e21e3d49baacf2e6961e3e2707993280fe6ddf30ec7757aa133263eed4ca3f"
+        }
+      }
+    },
+    {
+      "max_order": 4,
+      "seed": 11,
+      "input_bytes": 2730496,
+      "layouts": {
+        "lexical": {
+          "plain_payload_bytes": 2548459,
+          "xor_payload_bytes": 2564184,
+          "estimated_overhead_bytes": 45408,
+          "estimated_plain_container_bytes": 2593867,
+          "estimated_xor_container_bytes": 2609592,
+          "estimated_xor_to_raw_ratio": 0.9557208653665854,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "b87cb171f9ce05babadb9abe917f696021522d5fafe1c497d777370a59cf220d"
+        },
+        "shuffled": {
+          "plain_payload_bytes": 2548687,
+          "xor_payload_bytes": 2591143,
+          "estimated_overhead_bytes": 45408,
+          "estimated_plain_container_bytes": 2594095,
+          "estimated_xor_container_bytes": 2636551,
+          "estimated_xor_to_raw_ratio": 0.9655941631117569,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "e402fcbe21e13703d6732aac3cc526d01dc94e036813799f698a1d98923182f3"
+        },
+        "identical_update_group": {
+          "plain_payload_bytes": 2538005,
+          "xor_payload_bytes": 2496480,
+          "estimated_overhead_bytes": 45408,
+          "estimated_plain_container_bytes": 2583413,
+          "estimated_xor_container_bytes": 2541888,
+          "estimated_xor_to_raw_ratio": 0.9309253703356459,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "04e21e3d49baacf2e6961e3e2707993280fe6ddf30ec7757aa133263eed4ca3f"
+        }
+      }
+    },
+    {
+      "max_order": 8,
+      "seed": 3,
+      "input_bytes": 6873088,
+      "layouts": {
+        "lexical": {
+          "plain_payload_bytes": 6404647,
+          "xor_payload_bytes": 6292841,
+          "estimated_overhead_bytes": 114168,
+          "estimated_plain_container_bytes": 6518815,
+          "estimated_xor_container_bytes": 6407009,
+          "estimated_xor_to_raw_ratio": 0.9321878317286204,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "35888549e73e40bba1ad2e09fd530343fb49575b458c9b6a5a8768f1715dc97d"
+        },
+        "shuffled": {
+          "plain_payload_bytes": 6406829,
+          "xor_payload_bytes": 6515291,
+          "estimated_overhead_bytes": 114168,
+          "estimated_plain_container_bytes": 6520997,
+          "estimated_xor_container_bytes": 6629459,
+          "estimated_xor_to_raw_ratio": 0.9645531964671484,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "7538c6a5da1babf75374b37c7df28a16ca082ed27c9ac31c2d6536b42ad7649b"
+        },
+        "identical_update_group": {
+          "plain_payload_bytes": 6382935,
+          "xor_payload_bytes": 6146097,
+          "estimated_overhead_bytes": 114168,
+          "estimated_plain_container_bytes": 6497103,
+          "estimated_xor_container_bytes": 6260265,
+          "estimated_xor_to_raw_ratio": 0.9108373121368445,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "785a2a6d32863e2d56e54d1e66e8b1757eafa57dd3d3738d142ab93a4f183100"
+        }
+      }
+    },
+    {
+      "max_order": 8,
+      "seed": 7,
+      "input_bytes": 6873088,
+      "layouts": {
+        "lexical": {
+          "plain_payload_bytes": 6406896,
+          "xor_payload_bytes": 6294624,
+          "estimated_overhead_bytes": 114168,
+          "estimated_plain_container_bytes": 6521064,
+          "estimated_xor_container_bytes": 6408792,
+          "estimated_xor_to_raw_ratio": 0.932447249329559,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "35888549e73e40bba1ad2e09fd530343fb49575b458c9b6a5a8768f1715dc97d"
+        },
+        "shuffled": {
+          "plain_payload_bytes": 6408875,
+          "xor_payload_bytes": 6515617,
+          "estimated_overhead_bytes": 114168,
+          "estimated_plain_container_bytes": 6523043,
+          "estimated_xor_container_bytes": 6629785,
+          "estimated_xor_to_raw_ratio": 0.9646006278400626,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "9dfc35580568e4dc9b9758d93e0c15801437ac78051691201760d8c10ffe9b8e"
+        },
+        "identical_update_group": {
+          "plain_payload_bytes": 6385102,
+          "xor_payload_bytes": 6148093,
+          "estimated_overhead_bytes": 114168,
+          "estimated_plain_container_bytes": 6499270,
+          "estimated_xor_container_bytes": 6262261,
+          "estimated_xor_to_raw_ratio": 0.9111277201746871,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "785a2a6d32863e2d56e54d1e66e8b1757eafa57dd3d3738d142ab93a4f183100"
+        }
+      }
+    },
+    {
+      "max_order": 8,
+      "seed": 11,
+      "input_bytes": 6873088,
+      "layouts": {
+        "lexical": {
+          "plain_payload_bytes": 6406605,
+          "xor_payload_bytes": 6295532,
+          "estimated_overhead_bytes": 114168,
+          "estimated_plain_container_bytes": 6520773,
+          "estimated_xor_container_bytes": 6409700,
+          "estimated_xor_to_raw_ratio": 0.9325793587976758,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "35888549e73e40bba1ad2e09fd530343fb49575b458c9b6a5a8768f1715dc97d"
+        },
+        "shuffled": {
+          "plain_payload_bytes": 6409084,
+          "xor_payload_bytes": 6516640,
+          "estimated_overhead_bytes": 114168,
+          "estimated_plain_container_bytes": 6523252,
+          "estimated_xor_container_bytes": 6630808,
+          "estimated_xor_to_raw_ratio": 0.9647494692342073,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "76b34c0155efe07f658bfbbca70f66d161faa2ccd4b7c681ee636ba8eca20d5b"
+        },
+        "identical_update_group": {
+          "plain_payload_bytes": 6384674,
+          "xor_payload_bytes": 6150587,
+          "estimated_overhead_bytes": 114168,
+          "estimated_plain_container_bytes": 6498842,
+          "estimated_xor_container_bytes": 6264755,
+          "estimated_xor_to_raw_ratio": 0.9114905847269815,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "785a2a6d32863e2d56e54d1e66e8b1757eafa57dd3d3738d142ab93a4f183100"
+        }
+      }
+    },
+    {
+      "max_order": 12,
+      "seed": 3,
+      "input_bytes": 7235584,
+      "layouts": {
+        "lexical": {
+          "plain_payload_bytes": 6740740,
+          "xor_payload_bytes": 6612133,
+          "estimated_overhead_bytes": 120184,
+          "estimated_plain_container_bytes": 6860924,
+          "estimated_xor_container_bytes": 6732317,
+          "estimated_xor_to_raw_ratio": 0.9304455590592273,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "99f43c31125f55c54c27ed391ba505ce31e22821afc532165dd58cdc508f69fc"
+        },
+        "shuffled": {
+          "plain_payload_bytes": 6743566,
+          "xor_payload_bytes": 6857137,
+          "estimated_overhead_bytes": 120184,
+          "estimated_plain_container_bytes": 6863750,
+          "estimated_xor_container_bytes": 6977321,
+          "estimated_xor_to_raw_ratio": 0.9643065438809085,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "98a504cf85d387cd0391a067b42bf434285c016a3f03dd7a0efe551aaa0002a0"
+        },
+        "identical_update_group": {
+          "plain_payload_bytes": 6718393,
+          "xor_payload_bytes": 6460646,
+          "estimated_overhead_bytes": 120184,
+          "estimated_plain_container_bytes": 6838577,
+          "estimated_xor_container_bytes": 6580830,
+          "estimated_xor_to_raw_ratio": 0.9095091702342202,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "69d1492c25270a8b87a91c20cfa3075d9943a3f632689068a1733effa01b1090"
+        }
+      }
+    },
+    {
+      "max_order": 12,
+      "seed": 7,
+      "input_bytes": 7235584,
+      "layouts": {
+        "lexical": {
+          "plain_payload_bytes": 6742145,
+          "xor_payload_bytes": 6612535,
+          "estimated_overhead_bytes": 120184,
+          "estimated_plain_container_bytes": 6862329,
+          "estimated_xor_container_bytes": 6732719,
+          "estimated_xor_to_raw_ratio": 0.9305011178088735,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "99f43c31125f55c54c27ed391ba505ce31e22821afc532165dd58cdc508f69fc"
+        },
+        "shuffled": {
+          "plain_payload_bytes": 6745010,
+          "xor_payload_bytes": 6857868,
+          "estimated_overhead_bytes": 120184,
+          "estimated_plain_container_bytes": 6865194,
+          "estimated_xor_container_bytes": 6978052,
+          "estimated_xor_to_raw_ratio": 0.9644075723535239,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "a851f81bb59010a667bdbda2beb08525a6cfff2561c158c620c834a9254ca560"
+        },
+        "identical_update_group": {
+          "plain_payload_bytes": 6720027,
+          "xor_payload_bytes": 6460643,
+          "estimated_overhead_bytes": 120184,
+          "estimated_plain_container_bytes": 6840211,
+          "estimated_xor_container_bytes": 6580827,
+          "estimated_xor_to_raw_ratio": 0.9095087556166855,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "69d1492c25270a8b87a91c20cfa3075d9943a3f632689068a1733effa01b1090"
+        }
+      }
+    },
+    {
+      "max_order": 12,
+      "seed": 11,
+      "input_bytes": 7235584,
+      "layouts": {
+        "lexical": {
+          "plain_payload_bytes": 6742148,
+          "xor_payload_bytes": 6613776,
+          "estimated_overhead_bytes": 120184,
+          "estimated_plain_container_bytes": 6862332,
+          "estimated_xor_container_bytes": 6733960,
+          "estimated_xor_to_raw_ratio": 0.9306726312623832,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "99f43c31125f55c54c27ed391ba505ce31e22821afc532165dd58cdc508f69fc"
+        },
+        "shuffled": {
+          "plain_payload_bytes": 6744903,
+          "xor_payload_bytes": 6856832,
+          "estimated_overhead_bytes": 120184,
+          "estimated_plain_container_bytes": 6865087,
+          "estimated_xor_container_bytes": 6977016,
+          "estimated_xor_to_raw_ratio": 0.9642643910982168,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "e4f95eaba9c7e2d0927629df45bcb8483bbbd700db24d759084b193808e88d28"
+        },
+        "identical_update_group": {
+          "plain_payload_bytes": 6720455,
+          "xor_payload_bytes": 6463227,
+          "estimated_overhead_bytes": 120184,
+          "estimated_plain_container_bytes": 6840639,
+          "estimated_xor_container_bytes": 6583411,
+          "estimated_xor_to_raw_ratio": 0.909865879519884,
+          "original_id_roundtrip_byte_exact": true,
+          "permutation_sha256": "69d1492c25270a8b87a91c20cfa3075d9943a3f632689068a1733effa01b1090"
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Small English SGNS reference, not learned Engram or paper weights.",
+    "Update signatures are derived from the training corpus; this metadata is not in a frozen Engram table.",
+    "Container sizes are estimates with map/header/descriptors; this codec is not in MEFTNAT1.",
+    "No construction/RSS/query latency or downstream-quality measurement."
+  ]
+}

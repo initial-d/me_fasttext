@@ -137,7 +137,16 @@ separates key prefix encoding, weight compression and native query latency.
 Its narrow result: shared-prefix key encoding benefits at higher orders;
 random unique weight tables still grow after packing and gather work increases.
 It is not evidence that higher order universally improves compression or model
-quality. Front-coded key sizes are not a implemented trie/query result.
+quality. Front-coded key sizes are not an implemented trie/query result.
+
+Random rows are only interface/low-redundancy controls. The primary
+[learned-structure experiment](trained_ngram_similarity_20261018.md) trains
+real-text SGNS across maxima 4/8/12 and three seeds. Identical-update structural
+pairs have median cosine about 0.996; their share increases at higher orders.
+Native ordinary block storage preserves all bytes and saves about 5%. A separate
+offline XOR/layout experiment estimates 6.9–9.1% savings; that predictor is not
+part of the native reader. Similarity and exact-byte equality are measured
+separately, with shuffled controls and all runs disclosed.
 
 ## Verification and next milestones
 

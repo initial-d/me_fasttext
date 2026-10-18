@@ -1,0 +1,236 @@
+{
+  "category": "public-text trained reference n-gram experiment; not Engram or original C++ reproduction",
+  "commit": "edee7b2ad4608db40308a2b3ad801b5ec1b51464",
+  "command": "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/train_ngram_similarity.py --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --output-dir artifacts/native-ngram-20261018/trained-pilot --max-orders 4 --seeds 7 --steps 100",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "corpus_bytes": 1115394,
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "numpy": "2.5.4",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "device": "cpu",
+  "threads": 1,
+  "settings": {
+    "max_orders": "4",
+    "seeds": "7",
+    "dim": 128,
+    "vocab_limit": 1200,
+    "min_count": 5,
+    "steps": 100,
+    "batch_size": 256,
+    "negatives": 5,
+    "lr": 2.0
+  },
+  "limitations": [
+    "One small English public corpus; not the Chinese paper corpus.",
+    "Reference SGNS, fixed optimizer/settings and finite training; no task-quality or convergence claim.",
+    "Spelling-based structural pairs and identical update signatures are separate groups.",
+    "Cosine similarity does not prove byte equality or strict lossless row sharing."
+  ],
+  "runs": [
+    {
+      "max_order": 4,
+      "seed": 7,
+      "vocabulary": 1200,
+      "ngram_rows": 5333,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 25600,
+      "training_seconds": 0.08283329103142023,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss": 4.1588826179504395
+        },
+        {
+          "step": 99,
+          "loss": 4.158852577209473
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 4933,
+        "mean_cosine": -0.0017174459989496994,
+        "min_cosine": -0.28796395659446716,
+        "p10_cosine": -0.11410588473081588,
+        "median_cosine": -0.0020622648298740387,
+        "p90_cosine": 0.11013230085372926,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 4933,
+        "mean_cosine": -0.0005425955934464001,
+        "min_cosine": -0.29902493953704834,
+        "p10_cosine": -0.11083212345838547,
+        "median_cosine": 0.0006886161863803864,
+        "p90_cosine": 0.1117162972688675,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 9865,
+        "mean_cosine": -0.0011366994746097349,
+        "min_cosine": -0.29902493953704834,
+        "p10_cosine": -0.11230995655059814,
+        "median_cosine": -0.0009959060698747635,
+        "p90_cosine": 0.11099161803722382,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 9865,
+        "mean_cosine": -0.0011366994746097349,
+        "min_cosine": -0.29902493953704834,
+        "p10_cosine": -0.11230995655059814,
+        "median_cosine": -0.0009959060698747635,
+        "p90_cosine": 0.11099161803722382,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 2146,
+        "mean_cosine": -3.1991024177872126e-05,
+        "min_cosine": -0.2665846347808838,
+        "p10_cosine": -0.10775946080684662,
+        "median_cosine": 6.66880514472723e-05,
+        "p90_cosine": 0.10692864283919334,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "all_identical_update_signatures": {
+        "pairs": 2622,
+        "mean_cosine": 0.001214613137243871,
+        "min_cosine": -0.29633834958076477,
+        "p10_cosine": -0.1051572471857071,
+        "median_cosine": 0.000698198564350605,
+        "p90_cosine": 0.10953295975923538,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 1428,
+        "accepted_but_cosine_below_0_99": 1428
+      },
+      "learned_row_sha256": "cbd3fe18a6f9d8333ffb7bd9775fe834b8adeebeb2b0c9be82de70358a8f0274",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 2730496,
+        "artifact_bytes": 2538342,
+        "unique_rows": 5333,
+        "row_map_bytes": 42664,
+        "n_rows": 5333,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 84,
+        "raw_blocks": 0,
+        "compressed_blocks": 84,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "97a395ca7c62dc28d747b7716319eb93c6d628293abda046ce7a065403ab365d"
+      },
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.09890807420015335,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.0919402614235878,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.035737294703722,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.08707743138074875,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": -0.06436674296855927,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": -0.05979925021529198,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.06526213884353638,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.002409018576145172,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'t",
+          "b": "'t>",
+          "cosine": 0.010527167469263077,
+          "host_words": [
+            "is't",
+            "to't",
+            "do't",
+            "on't",
+            "in't"
+          ]
+        },
+        {
+          "a": "<ad",
+          "b": "<adi",
+          "cosine": -0.06596676260232925,
+          "host_words": [
+            "adieu"
+          ]
+        }
+      ]
+    }
+  ]
+}

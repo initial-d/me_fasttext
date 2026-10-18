@@ -136,6 +136,10 @@ approximate row merging cannot be called lossless.
 
 ## Next reading
 
+- [Native C ABI and model integration](native_ngram_memory.md): batched CPU
+  gather directly into PyTorch output and model/runtime compatibility boundaries.
+- [Trained structural similarity](trained_ngram_similarity_20261018.md): primary
+  learned n-gram evidence; random rows are interface controls only.
 - [Engram promotion copy](engram_promotion.md): English and Chinese posts.
 - [PyTorch gather adapter](engram_gather_adapter.md): unchanged head IDs and tensor bytes.
 - [Compression bridge](model_compression_engram_bridge.md): measurement questions.

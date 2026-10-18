@@ -95,6 +95,13 @@ Engram logits, model quality, or production offload performance.
 
 ## Current limits
 
+The [native C backend](native_ngram_memory.md) adds `backend="native"` export
+and `native_library=...` loading, writes directly into the output tensor, and
+supports ordinary immutable `nn.Embedding` calls through `MappedEmbedding`.
+Its no-dedup construction streams rows instead of retaining a unique-row
+dictionary; descriptors still grow with block count. The limits below describe
+the original Python backend where applicable.
+
 - CPU inference only; no GPU transfer, asynchronous prefetch, distributed
   sharding, concurrent-thread contract or embedding gradients.
 - Offline builder still keeps all unique rows and compressed payloads in RAM.
@@ -106,5 +113,7 @@ Engram logits, model quality, or production offload performance.
   [documented source mismatch](engram_storage.md#legacy-export-audit).
 
 See [the recorded interface result](engram_adapter_verification_20261018.md)
-and [launch copy](engram_promotion.md). A trained table is still needed for
-meaningful compression, memory-footprint and model-quality claims.
+and [launch copy](engram_promotion.md). The new
+[trained SGNS reference](trained_ngram_similarity_20261018.md) measures shared
+training and byte-exact storage on real text. A trained Engram checkpoint and
+serving workload are still needed for Engram footprint/model-quality claims.

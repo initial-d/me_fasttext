@@ -12,6 +12,8 @@ engineering starting point, not a demonstrated LLM performance improvement.
 | Hypothesis | What would support it | What could refute or explain it |
 | --- | --- | --- |
 | Longer n-gram keys benefit more from shared-prefix indexing | Same-source key storage/query comparisons by order; all identities preserved | Diverse keys share little structure; index metadata outweighs savings |
+| Shared training creates high-cosine structural rows, especially at higher orders | Trained prefix/suffix and identical-update distributions across orders, languages, seeds and training durations | Spelling alone does not imply shared host words/gradients; initial differences and sparse training remain |
+| Structural prediction compresses similar learned rows without losing bits | Reversible residual codecs with original-ID forwarding beat ordinary blocks and shuffled layouts | Independent low bits, predictor/layout overhead or query decode work erase benefits |
 | Larger trained memory tables offer exact-byte redundancy | Frozen learned-row hashes and dedup rates by order/layer/head | Random/learned rows remain unique; only quantization creates duplicates |
 | Native batched decoding reduces serving cost | Same-ID byte-exact outputs, latency/throughput/RSS versus raw mmap and tensor gather | Resident tensor gathers remain faster; sorting/decode/transfer dominates |
 | Higher-order memory improves model task quality | Trained architecture ablation with equal capacity/compute and strong baselines | Additional capacity/training causes apparent gain; sparse keys harm generalization |
@@ -19,6 +21,15 @@ engineering starting point, not a demonstrated LLM performance improvement.
 Key compression, exact row deduplication, block codecs and approximate vector
 sharing are different mechanisms. Approximate sharing must have its own error
 and downstream-quality study and cannot be advertised as lossless.
+
+The [public-text trained reference](trained_ngram_similarity_20261018.md) is the
+starting evidence for shared updates, including all nine runs and frequency
+strata. Median cosine is about 0.996 for identical-update structural pairs;
+random weights are initialization/interface controls only. Native zlib saves
+about 5%; offline shared-update-group XOR estimates save 6.9–9.1%, with every
+byte verified. Next implement a versioned predictor codec and test grouping
+that does not require source training signatures. High cosine does not itself
+establish exact duplicates or a universal compression ratio.
 
 ## Experimental design before learned-weight claims
 

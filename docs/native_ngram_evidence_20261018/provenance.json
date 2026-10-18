@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-18",
+  "cpu": "Apple M5",
+  "logical_cpus": 10,
+  "physical_memory_bytes": 34359738368,
+  "os": "macOS 26.6.2 arm64",
+  "device": "CPU, no GPU used",
+  "compiler": "Apple clang 21.0.0 (clang-2100.1.1.101)",
+  "native_build_command": "make native NATIVE_SHARED=-dynamiclib NATIVE_EXT=dylib",
+  "native_library_sha256": "6511428dcc09df8cf5ae5b141179eccd7dceefcf3a5564a5d0dea16db1a89fd3",
+  "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "corpus_bytes": 1115394,
+  "corpus_note": "Publicly accessible English text, not redistributed here; source dataset license not established in this run. Pinned bytes verified.",
+  "official_engram_source_commit": "fb7f84a21f91223715394a33a1dc24bbfb7f788e",
+  "official_engram_source_sha256": "9d082070654df217e21bbca9926a4267bdf2cce7777aa6739747c24de30d2044",
+  "cost": "Local CPU only; no paid API or rented compute. No monetary/energy estimate.",
+  "report_sha256": {
+    "order-control.json": "b7b233d3bfadedc2ca792af170b02ace2e7101b610bc4e0e73d202b669be724d",
+    "trained-reference.json": "d555aa72c2e761488e41b50b472cdfc88fd32fc29b73136e9effa522be050f02",
+    "trained-residuals.json": "c157d5f94d1e812d076451dc1b7f68665bbc2d71f5e4b2c366122b24d6d43145",
+    "development-pilot.json": "b46d5482805a55e52977e33cc8430f37a5f9e41295e624335e26edcd392f3bd1",
+    "development-pilot2.json": "b20d7e82321f2026585274b6aaf1b2c0deb9cde2de008d8de21d113422fa8cdc",
+    "tests.txt": "0962cfdd7e6c3b9394f209d7410ac5c5c6c89331a90d8fce90641527f2ff2ae6",
+    "sanitizers.txt": "395c8d0d963867571a6388645bd8272e47e159a78fcd360eebbf0c8fcf1f2cb2",
+    "stdlib-tests.txt": "d38b1525e20f4f0522393781322a0c6560e360c8851b2e453a97f397b0ec6e62"
+  },
+  "pilots_note": "Development pilots with changed optimization settings, preserved separately and excluded from final comparisons."
+}
