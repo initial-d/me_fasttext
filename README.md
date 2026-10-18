@@ -36,6 +36,9 @@ compact row layouts, and mmap lookup.
 - [C ABI and model integration](docs/native_ngram_memory.md): standalone native
   gather, direct PyTorch output, ordinary embedding support, and integration
   boundaries for Engram, HF decoders and C++/GPU runtimes.
+- [Full official Engram CPU module verification](docs/engram_full_adapter_verification_20261018.md):
+  Python/native storage produces identical gates/convolution outputs across
+  three dtypes on tiny random weights; trained/GPU results remain open.
 - [Trained n-gram evidence](docs/trained_ngram_similarity_20261018.md): real-text
   SGNS across orders 4/8/12 and three seeds. Identical-update structural pairs
   have median cosine about 0.996; offline byte-exact residual prediction tests

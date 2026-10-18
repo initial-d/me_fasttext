@@ -112,7 +112,7 @@ path does not have lazy startup even though the C reader does.
 
 | Model or runtime | Candidate integration point | Current evidence | Additional work |
 | --- | --- | --- | --- |
-| Engram-style conditional memory | Multi-head embedding gather after the existing token/ngram hash | Official demo hash/gather interface tested; random weights | Trained checkpoint, gates/logits, model quality, GPU transfer |
+| Engram-style conditional memory | Multi-head embedding gather after the existing token/ngram hash | Official full CPU module output matches in 6 random-weight cases, including gates/ShortConv | Trained checkpoint, backbone/LM logits, model quality, GPU transfer |
 | PyTorch decoder with ordinary embeddings | Global-ID input embedding lookup | Byte-exact gather; small synthetic untied causal Transformer logits match | Model-specific wrappers, tied heads, device/distributed placement |
 | Llama/Qwen/Mistral/Gemma-style HF models | A compatible `nn.Embedding` call or a separately trained n-gram branch | No downloaded model validated here | Inspect `.weight` use, tying, `set_input_embeddings`, device map, export and generation |
 | C++ inference / llama.cpp-style runtime | CPU row gather behind a runtime-specific tensor operator | C ABI and example compile/test | Loader, tensor layout and runtime scheduling integration; no plugin yet |
@@ -149,6 +149,12 @@ part of the native reader. Similarity and exact-byte equality are measured
 separately, with shuffled controls and all runs disclosed.
 
 ## Verification and next milestones
+
+The [full official Engram module verification](engram_full_adapter_verification_20261018.md)
+runs unchanged hash initialization, addressing, gates/projections and ShortConv
+with a local normalized-token fixture. Python/native × three dtypes preserve
+every row and full module output. It does not validate real tokenizer/weights,
+backbone logits or GPU use.
 
 Native tests compile pure C, check byte equality and repeated batch order, raw
 fallback/compressed blocks, output capacity, corrupt forwarding/descriptors,
