@@ -127,6 +127,36 @@ class NativeRowsTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 export_embedding(torch.nn.Embedding(17, 7, max_norm=1), Path(tmp) / "maxnorm")
 
+    def test_small_causal_transformer_logits_match_with_untied_embedding(self):
+        try:
+            import torch
+        except ImportError:
+            self.skipTest("optional PyTorch unavailable")
+        from tools.engram_row_adapter import MappedEmbedding, export_embedding
+
+        class TinyDecoder(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.embedding = torch.nn.Embedding(31, 16)
+                layer = torch.nn.TransformerEncoderLayer(16, 2, 32, dropout=0, batch_first=True)
+                self.blocks = torch.nn.TransformerEncoder(layer, 2, enable_nested_tensor=False)
+                self.lm_head = torch.nn.Linear(16, 31, bias=False)  # deliberately untied
+
+            def forward(self, ids):
+                mask = torch.triu(torch.ones(ids.shape[-1], ids.shape[-1], dtype=torch.bool), diagonal=1)
+                return self.lm_head(self.blocks(self.embedding(ids), mask=mask))
+
+        with tempfile.TemporaryDirectory() as tmp, torch.inference_mode():
+            torch.manual_seed(7)
+            model = TinyDecoder().eval()
+            ids = torch.tensor([[0, 1, 2, 3, 4], [4, 4, 2, 0, 30]])
+            before = model(ids)
+            export_embedding(model.embedding, tmp, 4)
+            with MappedEmbedding(tmp, self.library) as replacement:
+                model.embedding = replacement
+                after = model(ids)
+                self.assertTrue(torch.equal(before.view(torch.uint8), after.view(torch.uint8)))
+
 
 if __name__ == "__main__":
     unittest.main()
