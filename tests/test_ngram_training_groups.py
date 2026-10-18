@@ -8,6 +8,15 @@ except ImportError:
 
 @unittest.skipUnless(torch is not None, "optional training reference needs PyTorch")
 class NgramGroupsTest(unittest.TestCase):
+    def test_bitwise_prediction_restores_arbitrary_original_row_order(self):
+        import numpy as np
+        from tools.benchmark_trained_residuals import measure, xor_encode, xor_decode
+        rows = np.random.default_rng(7).integers(0, 256, size=(17, 512), dtype=np.uint8)
+        rows[3] = rows[2]
+        self.assertTrue(np.array_equal(xor_decode(xor_encode(rows)), rows))
+        result = measure(rows, np.random.default_rng(3).permutation(len(rows)), 4)
+        self.assertTrue(result["original_id_roundtrip_byte_exact"])
+
     def test_same_word_training_signature_is_narrower_than_prefix_relation(self):
         from tools.train_ngram_similarity import prepare
         words, grams, signatures, _, _, _, _ = prepare(" " .join(["playing", "playing", "played", "play"] * 10), 8, 10, 1)
