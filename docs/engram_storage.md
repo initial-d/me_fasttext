@@ -53,7 +53,9 @@ it is not ready to build multi-hundred-GB tables. Compression can increase
 storage when rows are mostly unique or incompressible. The reference omits
 GPU transfer, distributed sharding, asynchronous prefetch, concurrent serving,
 online training/updates and production artifact validation. It does not consume
-FastText `.bin`/`.z` or Engram checkpoints directly.
+FastText `.bin`/`.z` or full Engram checkpoints directly. The new
+[PyTorch gather adapter](engram_gather_adapter.md) can export the official
+demo's `MultiHeadEmbedding` interface and serve identical rows on CPU.
 
 ## Run the byte-exact demo
 
@@ -102,7 +104,10 @@ For an immutable inference checkpoint, the next integration should operate at
    cold p50/p95, batch throughput and CPU-to-GPU transfer. Compare with direct
    mmap and ordinary tensor gathers; disclose losses in latency or footprint.
 
-No adapter or trained-checkpoint comparison is completed here. Exact identity,
+An optional [CPU gather adapter](engram_gather_adapter.md) now supports this
+interface; its verification uses random weights and the official hash/gather
+definitions, without tokenizer downloads. No trained-checkpoint comparison is
+completed here. Exact identity,
 lossless storage and efficient queries are separate claims: proving one does
 not establish the others. The paper's FastText numbers cannot establish Engram
 memory savings.
@@ -132,6 +137,7 @@ approximate row merging cannot be called lossless.
 ## Next reading
 
 - [Engram promotion copy](engram_promotion.md): English and Chinese posts.
+- [PyTorch gather adapter](engram_gather_adapter.md): unchanged head IDs and tensor bytes.
 - [Compression bridge](model_compression_engram_bridge.md): measurement questions.
 - [Benchmark protocol](benchmark_protocol.md): public-corpus reporting.
 - [Paper](https://arxiv.org/abs/2506.01254): original FastText research context.

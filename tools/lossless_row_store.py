@@ -89,13 +89,15 @@ class MappedRows:
             self.close()
             raise
 
-    def row(self, row_id):
+    def _locate(self, row_id):
         if not isinstance(row_id, int) or not 0 <= row_id < self.header["n_rows"]:
             raise IndexError("row ID outside original table")
         unique_id, = ROW_ID.unpack_from(self.mapping, self.data_offset + row_id * ROW_ID.size)
         if unique_id >= self.header["unique_rows"]:
             raise ValueError("invalid forwarding row ID")
-        block_id, within = divmod(unique_id, self.header["block_rows"])
+        return divmod(unique_id, self.header["block_rows"])
+
+    def _block(self, block_id):
         raw = self.cache.pop(block_id, None)
         if raw is None:
             block = self.header["blocks"][block_id]
@@ -110,12 +112,33 @@ class MappedRows:
             self.cache[block_id] = raw
             while len(self.cache) > self.cache_blocks:
                 self.cache.popitem(last=False)
+        return raw
+
+    def row(self, row_id):
+        block_id, within = self._locate(row_id)
+        raw = self._block(block_id)
         width = self.header["row_bytes"]
         return raw[within * width:(within + 1) * width]
 
     def rows(self, row_ids):
-        """Preserve batch ordering and repeated original IDs."""
-        return b"".join(self.row(row_id) for row_id in row_ids)
+        """Coalesce each block once per batch and restore original ID order.
+
+        Working memory is output bytes, O(batch size) locations and one block,
+        plus the configured persistent block cache.
+        """
+        groups = {}
+        count = 0
+        for position, row_id in enumerate(row_ids):
+            block, within = self._locate(row_id)
+            groups.setdefault(block, []).append((position, within))
+            count += 1
+        width = self.header["row_bytes"]
+        output = bytearray(count * width)
+        for block, locations in groups.items():
+            raw = self._block(block)
+            for position, within in locations:
+                output[position * width:(position + 1) * width] = raw[within * width:(within + 1) * width]
+        return bytes(output)
 
     def close(self):
         self.cache.clear()
