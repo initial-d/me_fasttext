@@ -40,7 +40,7 @@ recomputed through dense neural paths?
 | --- | --- |
 | Memory unit | word rows and UTF-8 character n-gram rows |
 | Addressing | exact trie-backed ids before compact export |
-| Compression | prefix/suffix candidate sharing plus vector-similarity checks |
+| Compression | paper: structural cosine sharing; legacy code: norm-ratio heuristic; new reference: byte-exact deduplication |
 | Serving artifact | compact `.z` file with mmap-friendly vectors and tries |
 | Quality guardrail | OOV coverage plus retrieval, ranking, or classification metric |
 
@@ -58,8 +58,8 @@ For model-compression or Engram-adjacent reports, prefer one of these questions:
 - Does the compact `.z` artifact reduce cold load time or RSS?
 - What are p50 and p95 lookup latencies for in-vocabulary and OOV-heavy queries?
 - Does compression preserve a retrieval, ranking, or classification metric?
-- Which n-gram rows were shared, and can the decision be traced to lexical
-  structure plus vector similarity?
+- Which rows were shared, and can the decision be traced to exact bytes or a
+  disclosed approximation criterion? Audit the legacy mismatch first.
 
 ## Minimal report shape
 

@@ -183,8 +183,15 @@ Recorded on 2026-09-08 from GitHub's rolling 14-day traffic window
 
 Short description:
 
-> FastText inference optimization with trie-backed n-gram ids, mark-compact
-> vector storage, and mmap-friendly retrieval.
+> Compact n-gram memory: trie indexing, row compression and mmap lookup.
+> FastText C++ prototype plus byte-exact row-store experiments for Engram-style memory.
+
+Updated on 2026-10-18: README now gives Engram readers a direct
+[storage guide](engram_storage.md), [runnable smoke check](engram_rowstore_smoke_20261018.md)
+and [English/Chinese technical post](engram_promotion.md). The guide separates
+byte-exact storage from legacy approximate export and records its mismatch with
+the paper. These are synthetic tests and drafts; no trained Engram integration
+or new external/social distribution is claimed.
 
 Primary ask:
 

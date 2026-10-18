@@ -1,5 +1,14 @@
 # Distribution log
 
+## Engram storage entry — 2026-10-18
+
+Added an Engram-focused README entry, architecture/storage guide, byte-exact
+row-store reference, synthetic positive/negative results and English/Chinese
+technical launch drafts. The legacy-export audit records the norm-ratio/cosine
+implementation mismatch and hardcoded 128-dimensional loops. This is a repository
+update, not a social post, third-party submission or trained Engram benchmark.
+See [the guide](engram_storage.md) and [launch copy](engram_promotion.md).
+
 This file tracks public list submissions and follow-up status for `me_fasttext`.
 It is intentionally factual: accepted entries first, then open submissions that may
 need maintainer follow-up.
