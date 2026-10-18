@@ -25,6 +25,12 @@ The reference is a storage experiment, not an Engram checkpoint adapter. The
 legacy FastText exporter also has an implementation mismatch with the paper;
 the source audit is included. Random-byte demos do not predict model savings.
 
+Update: an immutable CPU adapter now matches the official demo's multi-head
+gather interface. On random weights, all rows and hash-driven query outputs
+match byte-for-byte in float32/float16/bfloat16. Grouped reads reduce repeated
+block decoding; files still grow and gathers are slower than resident PyTorch
+in this small test. A trained checkpoint remains the next evaluation step.
+
 I would like to test the same-row gather contract on immutable n-gram embedding
 tables, measuring storage, RSS and p50/p95 against direct mmap/tensor gathers.
 
@@ -46,6 +52,11 @@ Engram 把 n-gram 记忆重新带回了大模型讨论。我更关心它接下�
 
 也把边界公开说清楚：旧 C++ 导出实现与论文的相似度规则存在差异，已附源码
 审计；新工具还没有接入训练好的 Engram。随机字节实验不能推导真实模型收益。
+
+现在也补了官方 demo 多头 gather 接口的 CPU 适配：保持每个 head 的偏移不变，
+随机权重的 float32/float16/bfloat16 存储行和 hash 查询输出都逐字节一致。
+批量读按块合并能减少重复解压，但小样例文件仍增大，查询也慢于内存中的
+PyTorch gather；还需要训练权重才能评估实际价值。
 
 下一步最有价值的实验，是保持 Engram 的 hash/row ID 不变，对不可变记忆表
 比较原始 gather 和压缩查询，分别测字节一致性、存储、RSS、p50/p95 和吞吐。

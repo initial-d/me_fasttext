@@ -20,8 +20,10 @@ from an mmap-friendly artifact.
 
 The project now includes an experimental Python byte-exact row store for
 Engram-style memory-table experiments: exact-byte deduplication, original-row-ID
-forwarding, zlib blocks and bounded-cache mmap lookup. It is independent of the
-legacy FastText exporter and has no trained Engram integration. See
+forwarding, zlib blocks and bounded-cache mmap lookup. An optional
+[CPU multi-head gather adapter](engram_gather_adapter.md) preserves official-demo
+offsets, dtype and query shape; its verification uses random weights. It is
+independent of the legacy FastText exporter and has no trained Engram integration. See
 [the storage guide](engram_storage.md) for the demo and source audit. The legacy
 export uses norm ratios rather than the paper's cosine merge criterion; do not
 describe that exporter or the reported paper compression as lossless.

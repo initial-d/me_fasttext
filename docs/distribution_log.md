@@ -9,6 +9,12 @@ implementation mismatch and hardcoded 128-dimensional loops. This is a repositor
 update, not a social post, third-party submission or trained Engram benchmark.
 See [the guide](engram_storage.md) and [launch copy](engram_promotion.md).
 
+Follow-up: added an immutable CPU multi-head gather adapter and pinned official
+hash/gather interface verification with random weights, plus coalesced batch
+block reads. Byte equality, larger artifacts and slower gathers are recorded
+in [the interface result](engram_adapter_verification_20261018.md).
+No trained checkpoint or outside post/submission was used.
+
 This file tracks public list submissions and follow-up status for `me_fasttext`.
 It is intentionally factual: accepted entries first, then open submissions that may
 need maintainer follow-up.
