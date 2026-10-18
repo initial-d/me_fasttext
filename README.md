@@ -9,8 +9,8 @@
 
 **Compact n-gram memory: exact indexing, storage compression, and mmap lookup.**
 `me_fasttext` explores these systems problems through a FastText-derived C++
-prototype, with a new byte-exact row-store reference for Engram-style lookup
-experiments.
+prototype, a native C row-gather backend, and PyTorch adapters for Engram-style
+lookup experiments.
 
 This repository accompanies the paper [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).
 
@@ -32,7 +32,17 @@ compact row layouts, and mmap lookup.
   bounded-cache mmap access. It runs with Python's standard library.
 - [PyTorch gather adapter](docs/engram_gather_adapter.md): immutable CPU
   replacement for the official demo's multi-head embedding gather, preserving
-  per-head offsets, dtype and tensor shape. Verification uses random weights.
+  per-head offsets, dtype and tensor shape. Random weights verify the interface.
+- [C ABI and model integration](docs/native_ngram_memory.md): standalone native
+  gather, direct PyTorch output, ordinary embedding support, and integration
+  boundaries for Engram, HF decoders and C++/GPU runtimes.
+- [Trained n-gram evidence](docs/trained_ngram_similarity_20261018.md): real-text
+  SGNS across orders 4/8/12 and three seeds. Identical-update structural pairs
+  have median cosine about 0.996; offline byte-exact residual prediction tests
+  how to exploit that redundancy. This is a FastText-style reference, not Engram
+  training or a model-quality result.
+- [High-order memory research plan](docs/ngram_memory_research_plan.md): trained
+  structural redundancy, lossless codecs, indexing and serving experiments.
 - [English and Chinese launch copy](docs/engram_promotion.md): a technical
   introduction centered on n-gram memory storage and lookup.
 

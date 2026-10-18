@@ -1,81 +1,101 @@
 # Engram-focused technical launch copy
 
-These drafts are ready to share after checking the linked branch/commit is
-public. No social post or third-party message is sent by creating this page.
+Repository publication makes these materials reviewable. No social post or
+third-party message is sent by creating this page. Results and limits link to
+[trained evidence](trained_ngram_similarity_20261018.md) and the
+[C ABI/model guide](native_ngram_memory.md).
 
 ## One-line positioning
 
-**Compact n-gram memory: exact indexing, storage compression, and mmap lookup —
-with a byte-exact row-store reference for Engram-style experiments.**
+**Compact high-order n-gram memory: structural indexing, byte-exact storage,
+and native batched gather for Engram-style systems.**
 
-## English post
+## English technical post
 
 ```text
-Engram brings n-gram memory back into the LLM systems conversation. The next
-question is practical: how should large memory tables be stored and queried?
+Engram puts a practical systems question on the table: as n-gram memory grows,
+how do we store and query it efficiently while keeping original lookup results?
 
-I am developing me_fasttext around that storage problem: exact trie indexing,
-compact row layouts and mmap serving, originally explored with FastText.
+me_fasttext studies that boundary through exact n-gram indexing, compact row
+layouts and mmap access. It now has a standalone C row-gather ABI and immutable
+CPU PyTorch adapters. The native path writes directly into the output tensor,
+preserving original row IDs, head offsets, dtype and every stored byte.
 
-There is now a small runnable lossless row-store reference: deduplicate only
-byte-identical rows, keep original row IDs, compress blocks and retrieve through
-mmap with a bounded cache. It verifies every row and repeated-ID query ordering.
+The interesting compression hypothesis concerns trained structure. Prefix/suffix
+n-grams that share their training updates can become highly similar; independent
+random vectors are useful interface controls but do not represent that mechanism.
 
-The reference is a storage experiment, not an Engram checkpoint adapter. The
-legacy FastText exporter also has an implementation mismatch with the paper;
-the source audit is included. Random-byte demos do not predict model savings.
+We trained an exact character-ngram SGNS reference on public English text at
+max orders 4/8/12 with three seeds. Identical-update structural pairs have median
+cosine around 0.996, with 85.9–89.4% reaching 0.99. Their share of structural
+pairs rises from 21.8% to 59.4% as the max order rises from 4 to 12.
 
-Update: an immutable CPU adapter now matches the official demo's multi-head
-gather interface. On random weights, all rows and hash-driven query outputs
-match byte-for-byte in float32/float16/bfloat16. Grouped reads reduce repeated
-block decoding; files still grow and gathers are slower than resident PyTorch
-in this small test. A trained checkpoint remains the next evaluation step.
+High cosine is not byte equality. All trained rows remain distinct. Ordinary
+native block compression saves about 5%; a separate reversible bitwise-XOR
+experiment with shared-update row grouping estimates 6.9–9.1% savings including
+map/descriptor overhead. Shuffling rows weakens the effect. All original bytes
+are recovered, and all runs/settings are public. The predictor is not yet a
+native query codec, and update-signature grouping requires training metadata.
 
-I would like to test the same-row gather contract on immutable n-gram embedding
-tables, measuring storage, RSS and p50/p95 against direct mmap/tensor gathers.
+This is a FastText-style reference, not a trained Engram/model-quality result.
+Native gathers beat our Python reference in a small warm control but remain
+slower than resident tensor gather. GPU/runtime integrations need further work.
+
+Next: trained token-ngram tables, structure-aware lossless predictors, native
+query scheduling and matched-cost model/serving evaluations. A licensed frozen
+memory table or reproducible gather trace would make a useful comparison.
 
 Code: https://github.com/initial-d/me_fasttext
-Guide: https://github.com/initial-d/me_fasttext/blob/main/docs/engram_storage.md
+Evidence: https://github.com/initial-d/me_fasttext/blob/main/docs/trained_ngram_similarity_20261018.md
+C/PyTorch integration: https://github.com/initial-d/me_fasttext/blob/main/docs/native_ngram_memory.md
 ```
 
 ## 中文技术帖
 
 ```text
-Engram 把 n-gram 记忆重新带回了大模型讨论。我更关心它接下来的工程问题：
-当记忆表变得很大，怎样存得更紧凑、查得更有效，同时保持原始查询结果？
+Engram 让 n-gram 记忆重新进入大模型视野。me_fasttext 想深入其中一个具体问题：
+记忆表越做越大，怎样利用训练形成的结构，把它存得更紧凑、查得更有效？
 
-这是 me_fasttext 想深入的方向。项目从 FastText 出发，研究精确 trie 索引、
-紧凑行布局和 mmap 查询；现在补了一个可以直接运行的无损行存储参考实现。
+项目从 FastText 的精确 n-gram 索引、紧凑行布局和 mmap 查询出发，现在补上了
+真正的 C 行查询 ABI，以及直接写入 PyTorch 输出张量的 CPU 适配器。原始 row ID、
+head 偏移、dtype 和每一行的原始字节都保持一致。
 
-它只共享字节完全相同的行，保留每个原始 row ID，再做分块压缩和 mmap 查询。
-测试检查逐行字节一致、重复 ID 顺序和缓存淘汰；不是靠“相似向量”声称无损。
+压缩实验应当研究训练过的向量。前后缀相关的 n-gram 往往一起更新，随机向量
+只能验证接口和低冗余边界，不能代表这种机制。
 
-也把边界公开说清楚：旧 C++ 导出实现与论文的相似度规则存在差异，已附源码
-审计；新工具还没有接入训练好的 Engram。随机字节实验不能推导真实模型收益。
+这次用公开英文文本训练精确字符 n-gram SGNS，在最高 4/8/12 阶、三个种子下
+做了 9 组实验。更新来源和次数完全相同的结构组合，相似度中位数约为 0.996，
+85.9–89.4% 达到 0.99。随着最高阶数从 4 到 12，这类组合在结构组合中的占比
+从 21.8% 增到 59.4%。这支持进一步研究高阶 n-gram 的训练冗余。
 
-现在也补了官方 demo 多头 gather 接口的 CPU 适配：保持每个 head 的偏移不变，
-随机权重的 float32/float16/bfloat16 存储行和 hash 查询输出都逐字节一致。
-批量读按块合并能减少重复解压，但小样例文件仍增大，查询也慢于内存中的
-PyTorch gather；还需要训练权重才能评估实际价值。
+高相似度仍然保留各行的独立细节。直接分块压缩节省约 5%；进一步把共享更新
+的行分组、做可逆的按位 XOR 差异编码，估算节省约 6.9–9.1%，包含行映射和块
+描述开销。打乱行序后收益减弱；恢复时每一位都保持原样，不做近似合并。
 
-下一步最有价值的实验，是保持 Engram 的 hash/row ID 不变，对不可变记忆表
-比较原始 gather 和压缩查询，分别测字节一致性、存储、RSS、p50/p95 和吞吐。
+全部实验、种子、命令、哈希和限制都已公开。这是 FastText 风格训练参考，还
+没有真实 Engram 权重或大模型质量结果；差异编码目前是离线实验，尚未接入 C
+查询。现有 C 查询在小型热访问对照中快于 Python 参考，仍慢于内存张量 gather。
 
-欢迎做 n-gram memory / embedding serving 的朋友复现或提供公开表的对比结果。
+接下来应当用训练好的 token n-gram 表，验证结构预测压缩、原生查询调度，以及
+同预算下的模型质量和实际存储/RSS/延迟。欢迎有公开记忆表或查询轨迹的研究者复现。
+
 代码：https://github.com/initial-d/me_fasttext
-技术说明：https://github.com/initial-d/me_fasttext/blob/main/docs/engram_storage.md
+训练证据：https://github.com/initial-d/me_fasttext/blob/main/docs/trained_ngram_similarity_20261018.md
+接入说明：https://github.com/initial-d/me_fasttext/blob/main/docs/native_ngram_memory.md
 ```
 
-## Where this version fits
+## Article outline and follow-up
 
-- A technical blog or Zhihu article titled
-  **《Engram 之后：大规模 n-gram 记忆怎样存、怎样查？》**.
-- Embedding-serving, model-storage and conditional-memory discussions with
-  room for source links and measurements.
-- A reproducible public benchmark post. Include the actual row distribution,
-  checkpoint/license, exact command/commit, CPU/GPU and cold/warm conditions.
+Suggested title: **《Engram 之后：利用高阶 n-gram 的共同训练结构做无损存储》**.
 
-Prefer one substantive technical post and benchmark follow-up to repeated
-generic list submissions. The concrete invitation is a same-ID, same-byte gather
-comparison; Engram-wide speedups, universal compression ratios and strict
-losslessness of the legacy exporter are not supported claims.
+1. The scaling problem: exact key identity, table storage and query fan-out.
+2. Why shared training matters: structural pairs versus identical update sources.
+3. All nine trained results and shuffled controls, including weaker cases.
+4. Byte-exact XOR prediction versus approximate row sharing; source audit of
+   the legacy norm-ratio criterion and the paper's different cosine rule.
+5. C ABI → FFI → PyTorch gather; tested boundaries and remaining GPU/runtime work.
+6. A concrete licensed-table benchmark request and the next reproducible experiment.
+
+The [research plan](ngram_memory_research_plan.md) defines the paper follow-up.
+Current evidence supports a structural compression research direction; it does
+not establish universal compression, model quality or production speedups.

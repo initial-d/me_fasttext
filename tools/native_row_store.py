@@ -1,0 +1,141 @@
+"""Native C ABI bindings and exporter for the versioned MEFTNAT1 format."""
+import ctypes
+import os
+from pathlib import Path
+import struct
+import tempfile
+import zlib
+
+HEADER = struct.Struct("<8s6Q")
+DESC = struct.Struct("<4Q")
+ROW = struct.Struct("<Q")
+
+
+def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True):
+    """Stream blocks into a spool; exact dedup index still grows with unique rows.
+
+    deduplicate=False avoids the unbounded unique-row dictionary for large raw
+    tables, while preserving the identity forwarding map. No numeric changes.
+    Incompressible blocks are stored raw, avoiding codec expansion per block.
+    """
+    source, output = Path(source), Path(output)
+    if source.resolve() == output.resolve() or row_bytes <= 0 or block_rows <= 0:
+        raise ValueError("invalid paths or block dimensions")
+    nrows, remainder = divmod(source.stat().st_size, row_bytes)
+    if remainder:
+        raise ValueError("partial input row")
+    unique, blocks, seen, pending = 0, [], {}, []
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryFile(dir=output.parent) as map_file, tempfile.TemporaryFile(dir=output.parent) as spool:
+        def flush():
+            raw = b"".join(pending)
+            compressed = zlib.compress(raw)
+            codec = int(len(compressed) < len(raw))
+            encoded = compressed if codec else raw
+            blocks.append((spool.tell(), len(encoded), len(raw), codec))
+            spool.write(encoded)
+            pending.clear()
+
+        with source.open("rb") as stream:
+            for _ in range(nrows):
+                row = stream.read(row_bytes)
+                if len(row) != row_bytes:
+                    raise ValueError("source changed or truncated while exporting")
+                index = seen.get(row) if deduplicate else None
+                if index is None:
+                    index = unique
+                    unique += 1
+                    if deduplicate:
+                        seen[row] = index
+                    pending.append(row)
+                    if len(pending) == block_rows:
+                        flush()
+                map_file.write(ROW.pack(index))
+            if stream.read(1):
+                raise ValueError("source grew while exporting")
+        if pending:
+            flush()
+        payload_start = HEADER.size + nrows * ROW.size + len(blocks) * DESC.size
+        with output.open("wb") as dest:
+            dest.write(HEADER.pack(b"MEFTNAT1", 1, nrows, row_bytes, unique, block_rows, len(blocks)))
+            map_file.seek(0)
+            for part in iter(lambda: map_file.read(1024 * 1024), b""):
+                dest.write(part)
+            for offset, stored, raw_size, codec in blocks:
+                dest.write(DESC.pack(payload_start + offset, stored, raw_size, codec))
+            spool.seek(0)
+            for part in iter(lambda: spool.read(1024 * 1024), b""):
+                dest.write(part)
+    return {"format": "MEFTNAT1", "input_bytes": nrows * row_bytes,
+            "artifact_bytes": output.stat().st_size, "unique_rows": unique,
+            "row_map_bytes": nrows * ROW.size, "n_rows": nrows, "row_bytes": row_bytes,
+            "block_rows": block_rows, "blocks": len(blocks),
+            "raw_blocks": sum(codec == 0 for _, _, _, codec in blocks),
+            "compressed_blocks": sum(codec == 1 for _, _, _, codec in blocks),
+            "deduplicate": deduplicate}
+
+
+class NativeRows:
+    """Single-worker C handle. Library path is explicit or MEFT_ROWS_LIBRARY."""
+    def __init__(self, path, library=None):
+        library = library or os.environ.get("MEFT_ROWS_LIBRARY")
+        if not library:
+            raise ValueError("set MEFT_ROWS_LIBRARY or pass a compiled library path")
+        self.lib = ctypes.CDLL(str(Path(library).resolve()))
+        self.lib.meft_rows_open.argtypes = [ctypes.c_char_p, ctypes.c_void_p, ctypes.c_size_t]
+        self.lib.meft_rows_open.restype = ctypes.c_void_p
+        self.lib.meft_rows_close.argtypes = [ctypes.c_void_p]
+        self.lib.meft_rows_close.restype = None
+        for name in ("count", "width", "last_block_reads", "last_decompressions"):
+            method = getattr(self.lib, "meft_rows_" + name)
+            method.argtypes = [ctypes.c_void_p]
+            method.restype = ctypes.c_uint64
+        self.lib.meft_rows_gather.argtypes = [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t,
+                                             ctypes.c_void_p, ctypes.c_size_t, ctypes.c_void_p, ctypes.c_size_t]
+        self.lib.meft_rows_gather.restype = ctypes.c_int
+        error = ctypes.create_string_buffer(256)
+        self.handle = self.lib.meft_rows_open(os.fsencode(path), error, len(error))
+        if not self.handle:
+            raise ValueError(error.value.decode())
+        self.header = {"n_rows": self.lib.meft_rows_count(self.handle),
+                       "row_bytes": self.lib.meft_rows_width(self.handle)}
+
+    def gather_into(self, ids_address, count, output_address, output_bytes):
+        if not self.handle:
+            raise ValueError("row store is closed")
+        error = ctypes.create_string_buffer(256)
+        status = self.lib.meft_rows_gather(self.handle, ids_address, count, output_address,
+                                          output_bytes, error, len(error))
+        if status:
+            raise ValueError(error.value.decode())
+
+    def rows(self, ids):
+        ids = list(ids)
+        if any(type(i) is not int or not 0 <= i < self.header["n_rows"] for i in ids):
+            raise IndexError("row ID out of bounds")
+        query = (ctypes.c_uint64 * len(ids))(*ids)
+        output = ctypes.create_string_buffer(len(ids) * self.header["row_bytes"])
+        self.gather_into(ctypes.addressof(query), len(ids), ctypes.addressof(output), len(output))
+        return output.raw
+
+    def row(self, row_id):
+        return self.rows([row_id])
+
+    @property
+    def last_block_reads(self):
+        return self.lib.meft_rows_last_block_reads(self.handle)
+
+    @property
+    def last_decompressions(self):
+        return self.lib.meft_rows_last_decompressions(self.handle)
+
+    def close(self):
+        if self.handle:
+            self.lib.meft_rows_close(self.handle)
+            self.handle = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.close()

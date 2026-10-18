@@ -1,0 +1,3185 @@
+{
+  "category": "public-text trained reference n-gram experiment; not Engram or original C++ reproduction",
+  "commit": "ba564539489c44ff2582a7d83039a57c7dde7b9e",
+  "command": "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/train_ngram_similarity.py --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --output-dir artifacts/native-ngram-20261018/trained-reference --max-orders 4,8,12 --seeds 3,7,11 --steps 2000",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "corpus_bytes": 1115394,
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "numpy": "2.5.4",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "device": "cpu",
+  "threads": 1,
+  "settings": {
+    "max_orders": "4,8,12",
+    "seeds": "3,7,11",
+    "dim": 128,
+    "vocab_limit": 1200,
+    "min_count": 5,
+    "steps": 2000,
+    "batch_size": 256,
+    "negatives": 5,
+    "lr": 0.05
+  },
+  "limitations": [
+    "One small English public corpus; not the Chinese paper corpus.",
+    "Reference SGNS, fixed optimizer/settings and finite training; no task-quality or convergence claim.",
+    "Spelling-based structural pairs and identical update signatures are separate groups.",
+    "Cosine similarity does not prove byte equality or strict lossless row sharing."
+  ],
+  "runs": [
+    {
+      "max_order": 4,
+      "seed": 3,
+      "vocabulary": 1200,
+      "ngram_rows": 5333,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 512000,
+      "training_seconds": 1.159027666086331,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss_per_pair": 4.1588826179504395
+        },
+        {
+          "step": 100,
+          "loss_per_pair": 2.679330825805664
+        },
+        {
+          "step": 200,
+          "loss_per_pair": 2.465142250061035
+        },
+        {
+          "step": 300,
+          "loss_per_pair": 2.5157272815704346
+        },
+        {
+          "step": 400,
+          "loss_per_pair": 2.5023984909057617
+        },
+        {
+          "step": 500,
+          "loss_per_pair": 2.4061994552612305
+        },
+        {
+          "step": 600,
+          "loss_per_pair": 2.4827890396118164
+        },
+        {
+          "step": 700,
+          "loss_per_pair": 2.400041341781616
+        },
+        {
+          "step": 800,
+          "loss_per_pair": 2.5554349422454834
+        },
+        {
+          "step": 900,
+          "loss_per_pair": 2.3955729007720947
+        },
+        {
+          "step": 1000,
+          "loss_per_pair": 2.4454782009124756
+        },
+        {
+          "step": 1100,
+          "loss_per_pair": 2.408304452896118
+        },
+        {
+          "step": 1200,
+          "loss_per_pair": 2.3249480724334717
+        },
+        {
+          "step": 1300,
+          "loss_per_pair": 2.342366933822632
+        },
+        {
+          "step": 1400,
+          "loss_per_pair": 2.4535372257232666
+        },
+        {
+          "step": 1500,
+          "loss_per_pair": 2.3748929500579834
+        },
+        {
+          "step": 1600,
+          "loss_per_pair": 2.3168091773986816
+        },
+        {
+          "step": 1700,
+          "loss_per_pair": 2.3685593605041504
+        },
+        {
+          "step": 1800,
+          "loss_per_pair": 2.3828210830688477
+        },
+        {
+          "step": 1900,
+          "loss_per_pair": 2.4903767108917236
+        },
+        {
+          "step": 1999,
+          "loss_per_pair": 2.4571914672851562
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 4933,
+        "mean_cosine": 0.5477530978482799,
+        "min_cosine": -0.7261866927146912,
+        "p10_cosine": 0.018295203149318706,
+        "median_cosine": 0.5732337236404419,
+        "p90_cosine": 0.996534276008606,
+        "fraction_ge_0_99": 0.18528278937766066,
+        "fraction_ge_0_999": 0.0251368335698358,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 4933,
+        "mean_cosine": 0.5553562783820416,
+        "min_cosine": -0.6661200523376465,
+        "p10_cosine": 0.018398526310920725,
+        "median_cosine": 0.5895095467567444,
+        "p90_cosine": 0.9968381404876709,
+        "fraction_ge_0_99": 0.19643219136428136,
+        "fraction_ge_0_999": 0.027772146766673424,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 9865,
+        "mean_cosine": 0.5515117278069568,
+        "min_cosine": -0.7261866927146912,
+        "p10_cosine": 0.01828557550907136,
+        "median_cosine": 0.5813602209091187,
+        "p90_cosine": 0.9967036843299866,
+        "fraction_ge_0_99": 0.19087683730359858,
+        "fraction_ge_0_999": 0.026457171819564116,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 9865,
+        "mean_cosine": 0.5515117278069568,
+        "min_cosine": -0.7261866927146912,
+        "p10_cosine": 0.01828557550907136,
+        "median_cosine": 0.5813602209091187,
+        "p90_cosine": 0.9967036843299866,
+        "fraction_ge_0_99": 0.19087683730359858,
+        "fraction_ge_0_999": 0.026457171819564116,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 2146,
+        "mean_cosine": 0.9947121934644108,
+        "min_cosine": 0.9565513730049133,
+        "p10_cosine": 0.988633006811142,
+        "median_cosine": 0.9963618814945221,
+        "p90_cosine": 0.9991152882575989,
+        "fraction_ge_0_99": 0.875116495806151,
+        "fraction_ge_0_999": 0.12162162162162163,
+        "byte_identical_pairs": 0
+      },
+      "initial_structural": {
+        "pairs": 9865,
+        "mean_cosine": -0.0006713728371108857,
+        "min_cosine": -0.33152055740356445,
+        "p10_cosine": -0.11537633687257766,
+        "median_cosine": -0.0003561079502105713,
+        "p90_cosine": 0.1122723370790482,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "structural_by_min_host_occurrences": {
+        "5": {
+          "pairs": 9865,
+          "mean_cosine": 0.5515117278069568,
+          "min_cosine": -0.7261866927146912,
+          "p10_cosine": 0.01828557550907136,
+          "median_cosine": 0.5813602209091187,
+          "p90_cosine": 0.9967036843299866,
+          "fraction_ge_0_99": 0.19087683730359858,
+          "fraction_ge_0_999": 0.026457171819564116,
+          "byte_identical_pairs": 0
+        },
+        "50": {
+          "pairs": 5819,
+          "mean_cosine": 0.5520302201381162,
+          "min_cosine": -0.6661200523376465,
+          "p10_cosine": 0.039016741514205935,
+          "median_cosine": 0.5738712549209595,
+          "p90_cosine": 0.9979859471321106,
+          "fraction_ge_0_99": 0.1759752534799794,
+          "fraction_ge_0_999": 0.04450936587042447,
+          "byte_identical_pairs": 0
+        },
+        "200": {
+          "pairs": 2088,
+          "mean_cosine": 0.5226540657938316,
+          "min_cosine": -0.530582070350647,
+          "p10_cosine": 0.05140470974147321,
+          "median_cosine": 0.5301225483417511,
+          "p90_cosine": 0.9981599569320678,
+          "fraction_ge_0_99": 0.10727969348659004,
+          "fraction_ge_0_999": 0.07567049808429119,
+          "byte_identical_pairs": 0
+        },
+        "1000": {
+          "pairs": 426,
+          "mean_cosine": 0.4518203776998734,
+          "min_cosine": -0.46372294425964355,
+          "p10_cosine": -0.04198243468999863,
+          "median_cosine": 0.47114813327789307,
+          "p90_cosine": 0.9129137396812439,
+          "fraction_ge_0_99": 0.046948356807511735,
+          "fraction_ge_0_999": 0.046948356807511735,
+          "byte_identical_pairs": 0
+        }
+      },
+      "all_identical_update_signatures": {
+        "pairs": 2622,
+        "mean_cosine": 0.9944777558042656,
+        "min_cosine": 0.9496971368789673,
+        "p10_cosine": 0.9882092297077179,
+        "median_cosine": 0.9963323175907135,
+        "p90_cosine": 0.999084335565567,
+        "fraction_ge_0_99": 0.8565980167810832,
+        "fraction_ge_0_999": 0.11327231121281464,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 1742,
+        "accepted_but_cosine_below_0_99": 186
+      },
+      "learned_row_sha256": "90831a04809658c42b56b37046b1ad7b6035c1d55bb5c3ab2f777c5ca66145b3",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 2730496,
+        "artifact_bytes": 2594226,
+        "unique_rows": 5333,
+        "row_map_bytes": 42664,
+        "n_rows": 5333,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 84,
+        "raw_blocks": 0,
+        "compressed_blocks": 84,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "40ca3d5d7caee4f2454506eed9b8e675f1b42fedbf244440ade6f3ff7d18230a"
+      },
+      "shuffled_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 2730496,
+        "artifact_bytes": 2594354,
+        "unique_rows": 5333,
+        "row_map_bytes": 42664,
+        "n_rows": 5333,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 84,
+        "raw_blocks": 0,
+        "compressed_blocks": 84,
+        "deduplicate": true,
+        "all_rows_byte_exact": true
+      },
+      "training_settings_note": "forward average / unscaled input-row gradient follows legacy SGNS; negative counts exponent 0.5; batched updates, no C++ subsampling/learning-rate schedule",
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.9993990659713745,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.9954226016998291,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.9938979744911194,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.9984982013702393,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": 0.9996601343154907,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": 0.9996287226676941,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.9970425963401794,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.9970991611480713,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'t",
+          "b": "'t>",
+          "cosine": 0.9995424747467041,
+          "host_words": [
+            "is't",
+            "to't",
+            "do't",
+            "on't",
+            "in't"
+          ]
+        },
+        {
+          "a": "<ad",
+          "b": "<adi",
+          "cosine": 0.9972120523452759,
+          "host_words": [
+            "adieu"
+          ]
+        }
+      ]
+    },
+    {
+      "max_order": 4,
+      "seed": 7,
+      "vocabulary": 1200,
+      "ngram_rows": 5333,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 512000,
+      "training_seconds": 1.1430247919633985,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss_per_pair": 4.1588826179504395
+        },
+        {
+          "step": 100,
+          "loss_per_pair": 2.6341471672058105
+        },
+        {
+          "step": 200,
+          "loss_per_pair": 2.52947735786438
+        },
+        {
+          "step": 300,
+          "loss_per_pair": 2.4790194034576416
+        },
+        {
+          "step": 400,
+          "loss_per_pair": 2.466236114501953
+        },
+        {
+          "step": 500,
+          "loss_per_pair": 2.411497116088867
+        },
+        {
+          "step": 600,
+          "loss_per_pair": 2.478764533996582
+        },
+        {
+          "step": 700,
+          "loss_per_pair": 2.3762764930725098
+        },
+        {
+          "step": 800,
+          "loss_per_pair": 2.457954168319702
+        },
+        {
+          "step": 900,
+          "loss_per_pair": 2.358703136444092
+        },
+        {
+          "step": 1000,
+          "loss_per_pair": 2.404726982116699
+        },
+        {
+          "step": 1100,
+          "loss_per_pair": 2.3965001106262207
+        },
+        {
+          "step": 1200,
+          "loss_per_pair": 2.3160738945007324
+        },
+        {
+          "step": 1300,
+          "loss_per_pair": 2.311511516571045
+        },
+        {
+          "step": 1400,
+          "loss_per_pair": 2.300995349884033
+        },
+        {
+          "step": 1500,
+          "loss_per_pair": 2.3050742149353027
+        },
+        {
+          "step": 1600,
+          "loss_per_pair": 2.395970582962036
+        },
+        {
+          "step": 1700,
+          "loss_per_pair": 2.3617992401123047
+        },
+        {
+          "step": 1800,
+          "loss_per_pair": 2.3880088329315186
+        },
+        {
+          "step": 1900,
+          "loss_per_pair": 2.3597664833068848
+        },
+        {
+          "step": 1999,
+          "loss_per_pair": 2.3831863403320312
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 4933,
+        "mean_cosine": 0.5502011648872208,
+        "min_cosine": -0.6433982849121094,
+        "p10_cosine": 0.04160212352871897,
+        "median_cosine": 0.5754697918891907,
+        "p90_cosine": 0.9965513944625854,
+        "fraction_ge_0_99": 0.18933711737279546,
+        "fraction_ge_0_999": 0.02574498276910602,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 4933,
+        "mean_cosine": 0.5581004370950554,
+        "min_cosine": -0.7625269293785095,
+        "p10_cosine": 0.0345360636711121,
+        "median_cosine": 0.5922878384590149,
+        "p90_cosine": 0.9968629837036133,
+        "fraction_ge_0_99": 0.19947293736063249,
+        "fraction_ge_0_999": 0.028177579566186904,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 9865,
+        "mean_cosine": 0.5541091343396458,
+        "min_cosine": -0.7625269293785095,
+        "p10_cosine": 0.03752766847610475,
+        "median_cosine": 0.5843082070350647,
+        "p90_cosine": 0.9966975688934326,
+        "fraction_ge_0_99": 0.1944247339077547,
+        "fraction_ge_0_999": 0.02696401419158642,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 9865,
+        "mean_cosine": 0.5541091343396458,
+        "min_cosine": -0.7625269293785095,
+        "p10_cosine": 0.03752766847610475,
+        "median_cosine": 0.5843082070350647,
+        "p90_cosine": 0.9966975688934326,
+        "fraction_ge_0_99": 0.1944247339077547,
+        "fraction_ge_0_999": 0.02696401419158642,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 2146,
+        "mean_cosine": 0.9950851366715462,
+        "min_cosine": 0.9513643980026245,
+        "p10_cosine": 0.9896501004695892,
+        "median_cosine": 0.9964559376239777,
+        "p90_cosine": 0.9991430342197418,
+        "fraction_ge_0_99": 0.8937558247903076,
+        "fraction_ge_0_999": 0.1239515377446412,
+        "byte_identical_pairs": 0
+      },
+      "initial_structural": {
+        "pairs": 9865,
+        "mean_cosine": -0.0013536593542815207,
+        "min_cosine": -0.29761892557144165,
+        "p10_cosine": -0.11246138364076615,
+        "median_cosine": -0.0011956356465816498,
+        "p90_cosine": 0.11048846989870072,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "structural_by_min_host_occurrences": {
+        "5": {
+          "pairs": 9865,
+          "mean_cosine": 0.5541091343396458,
+          "min_cosine": -0.7625269293785095,
+          "p10_cosine": 0.03752766847610475,
+          "median_cosine": 0.5843082070350647,
+          "p90_cosine": 0.9966975688934326,
+          "fraction_ge_0_99": 0.1944247339077547,
+          "fraction_ge_0_999": 0.02696401419158642,
+          "byte_identical_pairs": 0
+        },
+        "50": {
+          "pairs": 5819,
+          "mean_cosine": 0.5553835686728356,
+          "min_cosine": -0.7625269293785095,
+          "p10_cosine": 0.0633448719978333,
+          "median_cosine": 0.5793083906173706,
+          "p90_cosine": 0.9980331420898437,
+          "fraction_ge_0_99": 0.17511599931259667,
+          "fraction_ge_0_999": 0.04433751503694793,
+          "byte_identical_pairs": 0
+        },
+        "200": {
+          "pairs": 2088,
+          "mean_cosine": 0.5272221679333597,
+          "min_cosine": -0.5251311659812927,
+          "p10_cosine": 0.07336566299200059,
+          "median_cosine": 0.5433862209320068,
+          "p90_cosine": 0.9982376217842102,
+          "fraction_ge_0_99": 0.10488505747126436,
+          "fraction_ge_0_999": 0.08045977011494253,
+          "byte_identical_pairs": 0
+        },
+        "1000": {
+          "pairs": 426,
+          "mean_cosine": 0.45293421146980195,
+          "min_cosine": -0.45776915550231934,
+          "p10_cosine": 0.007293228060007095,
+          "median_cosine": 0.45317527651786804,
+          "p90_cosine": 0.9331346452236176,
+          "fraction_ge_0_99": 0.046948356807511735,
+          "fraction_ge_0_999": 0.04460093896713615,
+          "byte_identical_pairs": 0
+        }
+      },
+      "all_identical_update_signatures": {
+        "pairs": 2622,
+        "mean_cosine": 0.9948565447539613,
+        "min_cosine": 0.9576053619384766,
+        "p10_cosine": 0.9890629827976227,
+        "median_cosine": 0.9963655769824982,
+        "p90_cosine": 0.9990926504135131,
+        "fraction_ge_0_99": 0.8813882532418001,
+        "fraction_ge_0_999": 0.11403508771929824,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 1735,
+        "accepted_but_cosine_below_0_99": 156
+      },
+      "learned_row_sha256": "8e02a804ab58387d46d2ffc3cf20b2e4afe2a2d05b24dca43ec60087753a574b",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 2730496,
+        "artifact_bytes": 2593811,
+        "unique_rows": 5333,
+        "row_map_bytes": 42664,
+        "n_rows": 5333,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 84,
+        "raw_blocks": 0,
+        "compressed_blocks": 84,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "08360f79fb532b3bb0a9fa6853acaf70c855601687e5dcd21d03d034740cea2f"
+      },
+      "shuffled_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 2730496,
+        "artifact_bytes": 2594083,
+        "unique_rows": 5333,
+        "row_map_bytes": 42664,
+        "n_rows": 5333,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 84,
+        "raw_blocks": 0,
+        "compressed_blocks": 84,
+        "deduplicate": true,
+        "all_rows_byte_exact": true
+      },
+      "training_settings_note": "forward average / unscaled input-row gradient follows legacy SGNS; negative counts exponent 0.5; batched updates, no C++ subsampling/learning-rate schedule",
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.9994723796844482,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.9958162307739258,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.9952735304832458,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.9986487030982971,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": 0.9995995759963989,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": 0.9996078014373779,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.9951862096786499,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.9950194954872131,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'t",
+          "b": "'t>",
+          "cosine": 0.9991450309753418,
+          "host_words": [
+            "is't",
+            "to't",
+            "do't",
+            "on't",
+            "in't"
+          ]
+        },
+        {
+          "a": "<ad",
+          "b": "<adi",
+          "cosine": 0.996111273765564,
+          "host_words": [
+            "adieu"
+          ]
+        }
+      ]
+    },
+    {
+      "max_order": 4,
+      "seed": 11,
+      "vocabulary": 1200,
+      "ngram_rows": 5333,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 512000,
+      "training_seconds": 1.1459707499016076,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss_per_pair": 4.1588826179504395
+        },
+        {
+          "step": 100,
+          "loss_per_pair": 2.6284983158111572
+        },
+        {
+          "step": 200,
+          "loss_per_pair": 2.5037810802459717
+        },
+        {
+          "step": 300,
+          "loss_per_pair": 2.6046011447906494
+        },
+        {
+          "step": 400,
+          "loss_per_pair": 2.4191198348999023
+        },
+        {
+          "step": 500,
+          "loss_per_pair": 2.4601736068725586
+        },
+        {
+          "step": 600,
+          "loss_per_pair": 2.374809980392456
+        },
+        {
+          "step": 700,
+          "loss_per_pair": 2.4336562156677246
+        },
+        {
+          "step": 800,
+          "loss_per_pair": 2.435534715652466
+        },
+        {
+          "step": 900,
+          "loss_per_pair": 2.4084699153900146
+        },
+        {
+          "step": 1000,
+          "loss_per_pair": 2.4062418937683105
+        },
+        {
+          "step": 1100,
+          "loss_per_pair": 2.4026308059692383
+        },
+        {
+          "step": 1200,
+          "loss_per_pair": 2.3151822090148926
+        },
+        {
+          "step": 1300,
+          "loss_per_pair": 2.2784290313720703
+        },
+        {
+          "step": 1400,
+          "loss_per_pair": 2.420865297317505
+        },
+        {
+          "step": 1500,
+          "loss_per_pair": 2.4142236709594727
+        },
+        {
+          "step": 1600,
+          "loss_per_pair": 2.2874739170074463
+        },
+        {
+          "step": 1700,
+          "loss_per_pair": 2.3100357055664062
+        },
+        {
+          "step": 1800,
+          "loss_per_pair": 2.366438627243042
+        },
+        {
+          "step": 1900,
+          "loss_per_pair": 2.3708508014678955
+        },
+        {
+          "step": 1999,
+          "loss_per_pair": 2.2941441535949707
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 4933,
+        "mean_cosine": 0.5496955543527855,
+        "min_cosine": -0.6773813962936401,
+        "p10_cosine": 0.03380176126956945,
+        "median_cosine": 0.5740357041358948,
+        "p90_cosine": 0.996744966506958,
+        "fraction_ge_0_99": 0.18305290898033652,
+        "fraction_ge_0_999": 0.02432596797080884,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 4933,
+        "mean_cosine": 0.5581738812530429,
+        "min_cosine": -0.7336686849594116,
+        "p10_cosine": 0.02726136147975924,
+        "median_cosine": 0.5849307179450989,
+        "p90_cosine": 0.9969462871551513,
+        "fraction_ge_0_99": 0.19420231096695723,
+        "fraction_ge_0_999": 0.027366713967159943,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 9865,
+        "mean_cosine": 0.5538910146768677,
+        "min_cosine": -0.7336686849594116,
+        "p10_cosine": 0.03006548844277861,
+        "median_cosine": 0.5787019729614258,
+        "p90_cosine": 0.9968496203422547,
+        "fraction_ge_0_99": 0.18864673086670045,
+        "fraction_ge_0_999": 0.025848960973137353,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 9865,
+        "mean_cosine": 0.5538910146768677,
+        "min_cosine": -0.7336686849594116,
+        "p10_cosine": 0.03006548844277861,
+        "median_cosine": 0.5787019729614258,
+        "p90_cosine": 0.9968496203422547,
+        "fraction_ge_0_99": 0.18864673086670045,
+        "fraction_ge_0_999": 0.025848960973137353,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 2146,
+        "mean_cosine": 0.9947540280092352,
+        "min_cosine": 0.9513536691665649,
+        "p10_cosine": 0.9884104430675507,
+        "median_cosine": 0.9964965879917145,
+        "p90_cosine": 0.9991360008716583,
+        "fraction_ge_0_99": 0.8662628145386766,
+        "fraction_ge_0_999": 0.11882572227399814,
+        "byte_identical_pairs": 0
+      },
+      "initial_structural": {
+        "pairs": 9865,
+        "mean_cosine": -0.0015051732143293735,
+        "min_cosine": -0.3798842430114746,
+        "p10_cosine": -0.11706062257289886,
+        "median_cosine": -0.0010968372225761414,
+        "p90_cosine": 0.11249132901430133,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "structural_by_min_host_occurrences": {
+        "5": {
+          "pairs": 9865,
+          "mean_cosine": 0.5538910146768677,
+          "min_cosine": -0.7336686849594116,
+          "p10_cosine": 0.03006548844277861,
+          "median_cosine": 0.5787019729614258,
+          "p90_cosine": 0.9968496203422547,
+          "fraction_ge_0_99": 0.18864673086670045,
+          "fraction_ge_0_999": 0.025848960973137353,
+          "byte_identical_pairs": 0
+        },
+        "50": {
+          "pairs": 5819,
+          "mean_cosine": 0.5573461231541751,
+          "min_cosine": -0.7134027481079102,
+          "p10_cosine": 0.06369446814060212,
+          "median_cosine": 0.5772315859794617,
+          "p90_cosine": 0.9979803919792175,
+          "fraction_ge_0_99": 0.17563155181302628,
+          "fraction_ge_0_999": 0.0438219625365183,
+          "byte_identical_pairs": 0
+        },
+        "200": {
+          "pairs": 2088,
+          "mean_cosine": 0.526579865919501,
+          "min_cosine": -0.7134027481079102,
+          "p10_cosine": 0.06280844956636432,
+          "median_cosine": 0.531575083732605,
+          "p90_cosine": 0.998361474275589,
+          "fraction_ge_0_99": 0.10584291187739464,
+          "fraction_ge_0_999": 0.07614942528735633,
+          "byte_identical_pairs": 0
+        },
+        "1000": {
+          "pairs": 426,
+          "mean_cosine": 0.4467017373677885,
+          "min_cosine": -0.3850923776626587,
+          "p10_cosine": -0.03325556591153145,
+          "median_cosine": 0.4577863961458206,
+          "p90_cosine": 0.9271863698959351,
+          "fraction_ge_0_99": 0.046948356807511735,
+          "fraction_ge_0_999": 0.04225352112676056,
+          "byte_identical_pairs": 0
+        }
+      },
+      "all_identical_update_signatures": {
+        "pairs": 2622,
+        "mean_cosine": 0.9945930493960028,
+        "min_cosine": 0.9467220902442932,
+        "p10_cosine": 0.9883081972599029,
+        "median_cosine": 0.9964021742343903,
+        "p90_cosine": 0.9990498125553131,
+        "fraction_ge_0_99": 0.8600305110602593,
+        "fraction_ge_0_999": 0.10602593440122045,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 1748,
+        "accepted_but_cosine_below_0_99": 182
+      },
+      "learned_row_sha256": "36ddfdc77bbd89e4a6d29ace0eb8d7434db7c6aea2f962b09a109ebd23d40966",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 2730496,
+        "artifact_bytes": 2593867,
+        "unique_rows": 5333,
+        "row_map_bytes": 42664,
+        "n_rows": 5333,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 84,
+        "raw_blocks": 0,
+        "compressed_blocks": 84,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "bc0a267c41aef5b4590e26d7102263fac597105de82c16550cfc394505184b84"
+      },
+      "shuffled_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 2730496,
+        "artifact_bytes": 2594125,
+        "unique_rows": 5333,
+        "row_map_bytes": 42664,
+        "n_rows": 5333,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 84,
+        "raw_blocks": 0,
+        "compressed_blocks": 84,
+        "deduplicate": true,
+        "all_rows_byte_exact": true
+      },
+      "training_settings_note": "forward average / unscaled input-row gradient follows legacy SGNS; negative counts exponent 0.5; batched updates, no C++ subsampling/learning-rate schedule",
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.9994961619377136,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.9967939257621765,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.9972365498542786,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.9989005327224731,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": 0.9997305870056152,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": 0.9997471570968628,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.9947994351387024,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.9956932663917542,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'t",
+          "b": "'t>",
+          "cosine": 0.999363362789154,
+          "host_words": [
+            "is't",
+            "to't",
+            "do't",
+            "on't",
+            "in't"
+          ]
+        },
+        {
+          "a": "<ad",
+          "b": "<adi",
+          "cosine": 0.9978987574577332,
+          "host_words": [
+            "adieu"
+          ]
+        }
+      ]
+    },
+    {
+      "max_order": 8,
+      "seed": 3,
+      "vocabulary": 1200,
+      "ngram_rows": 13424,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 512000,
+      "training_seconds": 1.5818422918673605,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss_per_pair": 4.1588826179504395
+        },
+        {
+          "step": 100,
+          "loss_per_pair": 2.676007032394409
+        },
+        {
+          "step": 200,
+          "loss_per_pair": 2.652515411376953
+        },
+        {
+          "step": 300,
+          "loss_per_pair": 2.6367368698120117
+        },
+        {
+          "step": 400,
+          "loss_per_pair": 2.490347385406494
+        },
+        {
+          "step": 500,
+          "loss_per_pair": 2.4199440479278564
+        },
+        {
+          "step": 600,
+          "loss_per_pair": 2.5121405124664307
+        },
+        {
+          "step": 700,
+          "loss_per_pair": 2.4040133953094482
+        },
+        {
+          "step": 800,
+          "loss_per_pair": 2.5464553833007812
+        },
+        {
+          "step": 900,
+          "loss_per_pair": 2.3703269958496094
+        },
+        {
+          "step": 1000,
+          "loss_per_pair": 2.3997552394866943
+        },
+        {
+          "step": 1100,
+          "loss_per_pair": 2.408681869506836
+        },
+        {
+          "step": 1200,
+          "loss_per_pair": 2.358041286468506
+        },
+        {
+          "step": 1300,
+          "loss_per_pair": 2.3199405670166016
+        },
+        {
+          "step": 1400,
+          "loss_per_pair": 2.4018537998199463
+        },
+        {
+          "step": 1500,
+          "loss_per_pair": 2.346971273422241
+        },
+        {
+          "step": 1600,
+          "loss_per_pair": 2.3158371448516846
+        },
+        {
+          "step": 1700,
+          "loss_per_pair": 2.401243209838867
+        },
+        {
+          "step": 1800,
+          "loss_per_pair": 2.333869457244873
+        },
+        {
+          "step": 1900,
+          "loss_per_pair": 2.458686351776123
+        },
+        {
+          "step": 1999,
+          "loss_per_pair": 2.384307861328125
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 13024,
+        "mean_cosine": 0.7881767205095854,
+        "min_cosine": -0.7419878244400024,
+        "p10_cosine": 0.29113830924034134,
+        "median_cosine": 0.989226222038269,
+        "p90_cosine": 0.9982508480548858,
+        "fraction_ge_0_99": 0.48817567567567566,
+        "fraction_ge_0_999": 0.04031019656019656,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 13024,
+        "mean_cosine": 0.7885411159184098,
+        "min_cosine": -0.8144219517707825,
+        "p10_cosine": 0.2921132445335388,
+        "median_cosine": 0.9898399710655212,
+        "p90_cosine": 0.9982937455177308,
+        "fraction_ge_0_99": 0.49746621621621623,
+        "fraction_ge_0_999": 0.04391891891891892,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 26047,
+        "mean_cosine": 0.7883510737485907,
+        "min_cosine": -0.8144219517707825,
+        "p10_cosine": 0.2919131994247437,
+        "median_cosine": 0.9895868301391602,
+        "p90_cosine": 0.9982763648033142,
+        "fraction_ge_0_99": 0.49280147425807197,
+        "fraction_ge_0_999": 0.042116174607440396,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 26047,
+        "mean_cosine": 0.7883510737485907,
+        "min_cosine": -0.8144219517707825,
+        "p10_cosine": 0.2919131994247437,
+        "median_cosine": 0.9895868301391602,
+        "p90_cosine": 0.9982763648033142,
+        "fraction_ge_0_99": 0.49280147425807197,
+        "fraction_ge_0_999": 0.042116174607440396,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 14938,
+        "mean_cosine": 0.9944526731034234,
+        "min_cosine": 0.9243252277374268,
+        "p10_cosine": 0.9881603419780731,
+        "median_cosine": 0.9961229562759399,
+        "p90_cosine": 0.9987928867340088,
+        "fraction_ge_0_99": 0.8586825545588432,
+        "fraction_ge_0_999": 0.07343687240594457,
+        "byte_identical_pairs": 0
+      },
+      "initial_structural": {
+        "pairs": 26047,
+        "mean_cosine": 0.0003992817971135144,
+        "min_cosine": -0.3724597692489624,
+        "p10_cosine": -0.11338845491409301,
+        "median_cosine": 0.00011294335126876831,
+        "p90_cosine": 0.11435650587081911,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "structural_by_min_host_occurrences": {
+        "5": {
+          "pairs": 26047,
+          "mean_cosine": 0.7883510737485907,
+          "min_cosine": -0.8144219517707825,
+          "p10_cosine": 0.2919131994247437,
+          "median_cosine": 0.9895868301391602,
+          "p90_cosine": 0.9982763648033142,
+          "fraction_ge_0_99": 0.49280147425807197,
+          "fraction_ge_0_999": 0.042116174607440396,
+          "byte_identical_pairs": 0
+        },
+        "50": {
+          "pairs": 12305,
+          "mean_cosine": 0.762101961702278,
+          "min_cosine": -0.8144219517707825,
+          "p10_cosine": 0.2735545694828034,
+          "median_cosine": 0.9570260047912598,
+          "p90_cosine": 0.9989149093627929,
+          "fraction_ge_0_99": 0.48167411621292155,
+          "fraction_ge_0_999": 0.08858187728565624,
+          "byte_identical_pairs": 0
+        },
+        "200": {
+          "pairs": 3004,
+          "mean_cosine": 0.6575041765272096,
+          "min_cosine": -0.7386979460716248,
+          "p10_cosine": 0.15381117016077042,
+          "median_cosine": 0.7361156046390533,
+          "p90_cosine": 0.9993588268756867,
+          "fraction_ge_0_99": 0.26131824234354195,
+          "fraction_ge_0_999": 0.16910785619174434,
+          "byte_identical_pairs": 0
+        },
+        "1000": {
+          "pairs": 498,
+          "mean_cosine": 0.4978756980547854,
+          "min_cosine": -0.6022778749465942,
+          "p10_cosine": -0.042254045605659485,
+          "median_cosine": 0.5379502177238464,
+          "p90_cosine": 0.9989264488220215,
+          "fraction_ge_0_99": 0.10441767068273092,
+          "fraction_ge_0_999": 0.09839357429718876,
+          "byte_identical_pairs": 0
+        }
+      },
+      "all_identical_update_signatures": {
+        "pairs": 10401,
+        "mean_cosine": 0.9944863380027407,
+        "min_cosine": 0.9276580214500427,
+        "p10_cosine": 0.9881749153137207,
+        "median_cosine": 0.9961923956871033,
+        "p90_cosine": 0.9988516569137573,
+        "fraction_ge_0_99": 0.8601096048456879,
+        "fraction_ge_0_999": 0.08095375444668781,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 11668,
+        "accepted_but_cosine_below_0_99": 1135
+      },
+      "learned_row_sha256": "88ef8b5ba65079c79087b3a393cdf85dea46b1782995d5a6bda1289c567d0a07",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 6873088,
+        "artifact_bytes": 6518815,
+        "unique_rows": 13424,
+        "row_map_bytes": 107392,
+        "n_rows": 13424,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 210,
+        "raw_blocks": 0,
+        "compressed_blocks": 210,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "f9c758da3b7030c436989e61c19ad8b207e19d3bfc978916076aa9ffd4085f46"
+      },
+      "shuffled_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 6873088,
+        "artifact_bytes": 6520950,
+        "unique_rows": 13424,
+        "row_map_bytes": 107392,
+        "n_rows": 13424,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 210,
+        "raw_blocks": 0,
+        "compressed_blocks": 210,
+        "deduplicate": true,
+        "all_rows_byte_exact": true
+      },
+      "training_settings_note": "forward average / unscaled input-row gradient follows legacy SGNS; negative counts exponent 0.5; batched updates, no C++ subsampling/learning-rate schedule",
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.9996335506439209,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.9961611032485962,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.996222198009491,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en>",
+          "b": "a'en>",
+          "cosine": 0.9967754483222961,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.9984809160232544,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": 0.9998076558113098,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": 0.9998013973236084,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.9974583387374878,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.9980752468109131,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st>",
+          "b": "w'st>",
+          "cosine": 0.9974539875984192,
+          "host_words": [
+            "know'st"
+          ]
+        }
+      ]
+    },
+    {
+      "max_order": 8,
+      "seed": 7,
+      "vocabulary": 1200,
+      "ngram_rows": 13424,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 512000,
+      "training_seconds": 1.5651074589695781,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss_per_pair": 4.1588826179504395
+        },
+        {
+          "step": 100,
+          "loss_per_pair": 2.6720261573791504
+        },
+        {
+          "step": 200,
+          "loss_per_pair": 2.527069568634033
+        },
+        {
+          "step": 300,
+          "loss_per_pair": 2.5253894329071045
+        },
+        {
+          "step": 400,
+          "loss_per_pair": 2.467686176300049
+        },
+        {
+          "step": 500,
+          "loss_per_pair": 2.4016799926757812
+        },
+        {
+          "step": 600,
+          "loss_per_pair": 2.4629178047180176
+        },
+        {
+          "step": 700,
+          "loss_per_pair": 2.411466598510742
+        },
+        {
+          "step": 800,
+          "loss_per_pair": 2.4787237644195557
+        },
+        {
+          "step": 900,
+          "loss_per_pair": 2.33123779296875
+        },
+        {
+          "step": 1000,
+          "loss_per_pair": 2.4153130054473877
+        },
+        {
+          "step": 1100,
+          "loss_per_pair": 2.3938260078430176
+        },
+        {
+          "step": 1200,
+          "loss_per_pair": 2.298158645629883
+        },
+        {
+          "step": 1300,
+          "loss_per_pair": 2.328887701034546
+        },
+        {
+          "step": 1400,
+          "loss_per_pair": 2.3123412132263184
+        },
+        {
+          "step": 1500,
+          "loss_per_pair": 2.323843240737915
+        },
+        {
+          "step": 1600,
+          "loss_per_pair": 2.3124194145202637
+        },
+        {
+          "step": 1700,
+          "loss_per_pair": 2.291132926940918
+        },
+        {
+          "step": 1800,
+          "loss_per_pair": 2.408381223678589
+        },
+        {
+          "step": 1900,
+          "loss_per_pair": 2.388720989227295
+        },
+        {
+          "step": 1999,
+          "loss_per_pair": 2.3730223178863525
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 13024,
+        "mean_cosine": 0.7888393106594546,
+        "min_cosine": -0.7843822240829468,
+        "p10_cosine": 0.2897809654474259,
+        "median_cosine": 0.9896750450134277,
+        "p90_cosine": 0.9983397006988526,
+        "fraction_ge_0_99": 0.4939342751842752,
+        "fraction_ge_0_999": 0.041078009828009826,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 13024,
+        "mean_cosine": 0.7896193939384347,
+        "min_cosine": -0.8398685455322266,
+        "p10_cosine": 0.2970355153083802,
+        "median_cosine": 0.9902631640434265,
+        "p90_cosine": 0.9983709812164306,
+        "fraction_ge_0_99": 0.5040694103194103,
+        "fraction_ge_0_999": 0.04430282555282555,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 26047,
+        "mean_cosine": 0.7892223016447979,
+        "min_cosine": -0.8398685455322266,
+        "p10_cosine": 0.29350851774215697,
+        "median_cosine": 0.9899252653121948,
+        "p90_cosine": 0.9983543276786804,
+        "fraction_ge_0_99": 0.4990210004990978,
+        "fraction_ge_0_999": 0.04269205666679464,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 26047,
+        "mean_cosine": 0.7892223016447979,
+        "min_cosine": -0.8398685455322266,
+        "p10_cosine": 0.29350851774215697,
+        "median_cosine": 0.9899252653121948,
+        "p90_cosine": 0.9983543276786804,
+        "fraction_ge_0_99": 0.4990210004990978,
+        "fraction_ge_0_999": 0.04269205666679464,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 14938,
+        "mean_cosine": 0.9946689890847976,
+        "min_cosine": 0.9565734267234802,
+        "p10_cosine": 0.9887383818626404,
+        "median_cosine": 0.9960510432720184,
+        "p90_cosine": 0.998832243680954,
+        "fraction_ge_0_99": 0.8700629267639577,
+        "fraction_ge_0_999": 0.07444102289463114,
+        "byte_identical_pairs": 0
+      },
+      "initial_structural": {
+        "pairs": 26047,
+        "mean_cosine": 6.5255396271687776e-06,
+        "min_cosine": -0.36537352204322815,
+        "p10_cosine": -0.11287627816200255,
+        "median_cosine": 6.463192403316498e-05,
+        "p90_cosine": 0.11286287307739261,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "structural_by_min_host_occurrences": {
+        "5": {
+          "pairs": 26047,
+          "mean_cosine": 0.7892223016447979,
+          "min_cosine": -0.8398685455322266,
+          "p10_cosine": 0.29350851774215697,
+          "median_cosine": 0.9899252653121948,
+          "p90_cosine": 0.9983543276786804,
+          "fraction_ge_0_99": 0.4990210004990978,
+          "fraction_ge_0_999": 0.04269205666679464,
+          "byte_identical_pairs": 0
+        },
+        "50": {
+          "pairs": 12305,
+          "mean_cosine": 0.7622468637779343,
+          "min_cosine": -0.8304069638252258,
+          "p10_cosine": 0.2615066707134247,
+          "median_cosine": 0.9511939287185669,
+          "p90_cosine": 0.9989198446273804,
+          "fraction_ge_0_99": 0.4789110117838277,
+          "fraction_ge_0_999": 0.08785046728971962,
+          "byte_identical_pairs": 0
+        },
+        "200": {
+          "pairs": 3004,
+          "mean_cosine": 0.6597002661667923,
+          "min_cosine": -0.6296271085739136,
+          "p10_cosine": 0.17678190767765048,
+          "median_cosine": 0.730226993560791,
+          "p90_cosine": 0.999380499124527,
+          "fraction_ge_0_99": 0.25998668442077233,
+          "fraction_ge_0_999": 0.17609853528628494,
+          "byte_identical_pairs": 0
+        },
+        "1000": {
+          "pairs": 498,
+          "mean_cosine": 0.5030953907800546,
+          "min_cosine": -0.6296271085739136,
+          "p10_cosine": -0.011013154685497283,
+          "median_cosine": 0.5437924265861511,
+          "p90_cosine": 0.9989517867565155,
+          "fraction_ge_0_99": 0.10441767068273092,
+          "fraction_ge_0_999": 0.09839357429718876,
+          "byte_identical_pairs": 0
+        }
+      },
+      "all_identical_update_signatures": {
+        "pairs": 10401,
+        "mean_cosine": 0.9947020221004096,
+        "min_cosine": 0.9565384387969971,
+        "p10_cosine": 0.9887591004371643,
+        "median_cosine": 0.9960828423500061,
+        "p90_cosine": 0.9988723397254944,
+        "fraction_ge_0_99": 0.8701086433996731,
+        "fraction_ge_0_999": 0.08297279107778098,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 11717,
+        "accepted_but_cosine_below_0_99": 1041
+      },
+      "learned_row_sha256": "00284f971f805571271cde5339ddc057c00eb8e6117ce037be95c658a9f03477",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 6873088,
+        "artifact_bytes": 6521064,
+        "unique_rows": 13424,
+        "row_map_bytes": 107392,
+        "n_rows": 13424,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 210,
+        "raw_blocks": 0,
+        "compressed_blocks": 210,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "77acc9da56d7a6a3d417d319f68181f16eb78088f19dfcf4f2d846e89b35ddc7"
+      },
+      "shuffled_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 6873088,
+        "artifact_bytes": 6523120,
+        "unique_rows": 13424,
+        "row_map_bytes": 107392,
+        "n_rows": 13424,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 210,
+        "raw_blocks": 0,
+        "compressed_blocks": 210,
+        "deduplicate": true,
+        "all_rows_byte_exact": true
+      },
+      "training_settings_note": "forward average / unscaled input-row gradient follows legacy SGNS; negative counts exponent 0.5; batched updates, no C++ subsampling/learning-rate schedule",
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.9996207356452942,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.9964147806167603,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.996497392654419,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en>",
+          "b": "a'en>",
+          "cosine": 0.9969965219497681,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.9985179901123047,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": 0.9997602701187134,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": 0.9997918605804443,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.9970579147338867,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.9962202310562134,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st>",
+          "b": "w'st>",
+          "cosine": 0.9967906475067139,
+          "host_words": [
+            "know'st"
+          ]
+        }
+      ]
+    },
+    {
+      "max_order": 8,
+      "seed": 11,
+      "vocabulary": 1200,
+      "ngram_rows": 13424,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 512000,
+      "training_seconds": 1.601939625106752,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss_per_pair": 4.1588826179504395
+        },
+        {
+          "step": 100,
+          "loss_per_pair": 2.8153233528137207
+        },
+        {
+          "step": 200,
+          "loss_per_pair": 2.5886120796203613
+        },
+        {
+          "step": 300,
+          "loss_per_pair": 2.5767054557800293
+        },
+        {
+          "step": 400,
+          "loss_per_pair": 2.404818534851074
+        },
+        {
+          "step": 500,
+          "loss_per_pair": 2.49179744720459
+        },
+        {
+          "step": 600,
+          "loss_per_pair": 2.3674306869506836
+        },
+        {
+          "step": 700,
+          "loss_per_pair": 2.4462273120880127
+        },
+        {
+          "step": 800,
+          "loss_per_pair": 2.4436440467834473
+        },
+        {
+          "step": 900,
+          "loss_per_pair": 2.4470977783203125
+        },
+        {
+          "step": 1000,
+          "loss_per_pair": 2.4925427436828613
+        },
+        {
+          "step": 1100,
+          "loss_per_pair": 2.3708512783050537
+        },
+        {
+          "step": 1200,
+          "loss_per_pair": 2.3199222087860107
+        },
+        {
+          "step": 1300,
+          "loss_per_pair": 2.2575278282165527
+        },
+        {
+          "step": 1400,
+          "loss_per_pair": 2.355743408203125
+        },
+        {
+          "step": 1500,
+          "loss_per_pair": 2.3746094703674316
+        },
+        {
+          "step": 1600,
+          "loss_per_pair": 2.300539970397949
+        },
+        {
+          "step": 1700,
+          "loss_per_pair": 2.2961716651916504
+        },
+        {
+          "step": 1800,
+          "loss_per_pair": 2.3615665435791016
+        },
+        {
+          "step": 1900,
+          "loss_per_pair": 2.3240408897399902
+        },
+        {
+          "step": 1999,
+          "loss_per_pair": 2.292327642440796
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 13024,
+        "mean_cosine": 0.7894548181605586,
+        "min_cosine": -0.7080003023147583,
+        "p10_cosine": 0.29660580754280097,
+        "median_cosine": 0.9894940555095673,
+        "p90_cosine": 0.9982254981994629,
+        "fraction_ge_0_99": 0.4917076167076167,
+        "fraction_ge_0_999": 0.03501228501228501,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 13024,
+        "mean_cosine": 0.7903235690725146,
+        "min_cosine": -0.7907668352127075,
+        "p10_cosine": 0.2990903317928315,
+        "median_cosine": 0.9900548458099365,
+        "p90_cosine": 0.9982863664627075,
+        "fraction_ge_0_99": 0.5015356265356266,
+        "fraction_ge_0_999": 0.037162162162162164,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 26047,
+        "mean_cosine": 0.7898817179044076,
+        "min_cosine": -0.7907668352127075,
+        "p10_cosine": 0.29751625061035164,
+        "median_cosine": 0.9897993803024292,
+        "p90_cosine": 0.9982552051544189,
+        "fraction_ge_0_99": 0.49664068798710026,
+        "fraction_ge_0_999": 0.036088609052865976,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 26047,
+        "mean_cosine": 0.7898817179044076,
+        "min_cosine": -0.7907668352127075,
+        "p10_cosine": 0.29751625061035164,
+        "median_cosine": 0.9897993803024292,
+        "p90_cosine": 0.9982552051544189,
+        "fraction_ge_0_99": 0.49664068798710026,
+        "fraction_ge_0_999": 0.036088609052865976,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 14938,
+        "mean_cosine": 0.9944590646741157,
+        "min_cosine": 0.9492292404174805,
+        "p10_cosine": 0.9886013090610504,
+        "median_cosine": 0.9958948194980621,
+        "p90_cosine": 0.998711109161377,
+        "fraction_ge_0_99": 0.8656446646137368,
+        "fraction_ge_0_999": 0.0629267639576918,
+        "byte_identical_pairs": 0
+      },
+      "initial_structural": {
+        "pairs": 26047,
+        "mean_cosine": -0.0003662004784546498,
+        "min_cosine": -0.37470775842666626,
+        "p10_cosine": -0.11508674323558805,
+        "median_cosine": 1.0671094059944153e-05,
+        "p90_cosine": 0.11307412087917332,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "structural_by_min_host_occurrences": {
+        "5": {
+          "pairs": 26047,
+          "mean_cosine": 0.7898817179044076,
+          "min_cosine": -0.7907668352127075,
+          "p10_cosine": 0.29751625061035164,
+          "median_cosine": 0.9897993803024292,
+          "p90_cosine": 0.9982552051544189,
+          "fraction_ge_0_99": 0.49664068798710026,
+          "fraction_ge_0_999": 0.036088609052865976,
+          "byte_identical_pairs": 0
+        },
+        "50": {
+          "pairs": 12305,
+          "mean_cosine": 0.7642207240892445,
+          "min_cosine": -0.7907668352127075,
+          "p10_cosine": 0.28191702961921694,
+          "median_cosine": 0.9536038637161255,
+          "p90_cosine": 0.9988266229629517,
+          "fraction_ge_0_99": 0.48289313287281593,
+          "fraction_ge_0_999": 0.07631044290938643,
+          "byte_identical_pairs": 0
+        },
+        "200": {
+          "pairs": 3004,
+          "mean_cosine": 0.659804635050926,
+          "min_cosine": -0.6674685478210449,
+          "p10_cosine": 0.16642656326293945,
+          "median_cosine": 0.7388548851013184,
+          "p90_cosine": 0.9993719935417176,
+          "fraction_ge_0_99": 0.26131824234354195,
+          "fraction_ge_0_999": 0.16711051930758988,
+          "byte_identical_pairs": 0
+        },
+        "1000": {
+          "pairs": 498,
+          "mean_cosine": 0.5000584205485372,
+          "min_cosine": -0.5743935108184814,
+          "p10_cosine": -0.04268995001912117,
+          "median_cosine": 0.5330762565135956,
+          "p90_cosine": 0.9983344793319702,
+          "fraction_ge_0_99": 0.10441767068273092,
+          "fraction_ge_0_999": 0.09437751004016064,
+          "byte_identical_pairs": 0
+        }
+      },
+      "all_identical_update_signatures": {
+        "pairs": 10401,
+        "mean_cosine": 0.9944906346546482,
+        "min_cosine": 0.9528533220291138,
+        "p10_cosine": 0.9886053204536438,
+        "median_cosine": 0.9959800243377686,
+        "p90_cosine": 0.9987822771072388,
+        "fraction_ge_0_99": 0.8629939428901067,
+        "fraction_ge_0_999": 0.07153158350158638,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 11634,
+        "accepted_but_cosine_below_0_99": 1092
+      },
+      "learned_row_sha256": "2c882b270b22669d0de174b3941a1445e2f0dada1c2c346d1e5e0ee8d8063d05",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 6873088,
+        "artifact_bytes": 6520773,
+        "unique_rows": 13424,
+        "row_map_bytes": 107392,
+        "n_rows": 13424,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 210,
+        "raw_blocks": 0,
+        "compressed_blocks": 210,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "bf56faf2ff02ba6a6004a115ac130f4fd12c569221d799399a216ff4a4fddb26"
+      },
+      "shuffled_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 6873088,
+        "artifact_bytes": 6522785,
+        "unique_rows": 13424,
+        "row_map_bytes": 107392,
+        "n_rows": 13424,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 210,
+        "raw_blocks": 0,
+        "compressed_blocks": 210,
+        "deduplicate": true,
+        "all_rows_byte_exact": true
+      },
+      "training_settings_note": "forward average / unscaled input-row gradient follows legacy SGNS; negative counts exponent 0.5; batched updates, no C++ subsampling/learning-rate schedule",
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.9996177554130554,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.9973710775375366,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.9975009560585022,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en>",
+          "b": "a'en>",
+          "cosine": 0.9969361424446106,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.998706579208374,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": 0.9998041391372681,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": 0.9997974634170532,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.9974043369293213,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.996854305267334,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st>",
+          "b": "w'st>",
+          "cosine": 0.9970970749855042,
+          "host_words": [
+            "know'st"
+          ]
+        }
+      ]
+    },
+    {
+      "max_order": 12,
+      "seed": 3,
+      "vocabulary": 1200,
+      "ngram_rows": 14132,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 512000,
+      "training_seconds": 1.7221030408982188,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss_per_pair": 4.1588826179504395
+        },
+        {
+          "step": 100,
+          "loss_per_pair": 2.737191677093506
+        },
+        {
+          "step": 200,
+          "loss_per_pair": 2.54707670211792
+        },
+        {
+          "step": 300,
+          "loss_per_pair": 2.5674405097961426
+        },
+        {
+          "step": 400,
+          "loss_per_pair": 2.4639248847961426
+        },
+        {
+          "step": 500,
+          "loss_per_pair": 2.4655253887176514
+        },
+        {
+          "step": 600,
+          "loss_per_pair": 2.502528190612793
+        },
+        {
+          "step": 700,
+          "loss_per_pair": 2.3501546382904053
+        },
+        {
+          "step": 800,
+          "loss_per_pair": 2.5243263244628906
+        },
+        {
+          "step": 900,
+          "loss_per_pair": 2.3987908363342285
+        },
+        {
+          "step": 1000,
+          "loss_per_pair": 2.435088634490967
+        },
+        {
+          "step": 1100,
+          "loss_per_pair": 2.407492160797119
+        },
+        {
+          "step": 1200,
+          "loss_per_pair": 2.358558177947998
+        },
+        {
+          "step": 1300,
+          "loss_per_pair": 2.3477416038513184
+        },
+        {
+          "step": 1400,
+          "loss_per_pair": 2.4174017906188965
+        },
+        {
+          "step": 1500,
+          "loss_per_pair": 2.360038995742798
+        },
+        {
+          "step": 1600,
+          "loss_per_pair": 2.348484754562378
+        },
+        {
+          "step": 1700,
+          "loss_per_pair": 2.3848037719726562
+        },
+        {
+          "step": 1800,
+          "loss_per_pair": 2.2663586139678955
+        },
+        {
+          "step": 1900,
+          "loss_per_pair": 2.5001463890075684
+        },
+        {
+          "step": 1999,
+          "loss_per_pair": 2.403453826904297
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 13732,
+        "mean_cosine": 0.7986434997364465,
+        "min_cosine": -0.7661675810813904,
+        "p10_cosine": 0.3049629867076874,
+        "median_cosine": 0.9907099604606628,
+        "p90_cosine": 0.9983076810836792,
+        "fraction_ge_0_99": 0.5134721817652199,
+        "fraction_ge_0_999": 0.04165452956597728,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 13732,
+        "mean_cosine": 0.7990191423362768,
+        "min_cosine": -0.8598824143409729,
+        "p10_cosine": 0.29801619946956637,
+        "median_cosine": 0.9911966621875763,
+        "p90_cosine": 0.9983610928058624,
+        "fraction_ge_0_99": 0.5259248470725313,
+        "fraction_ge_0_999": 0.04573259539761142,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 27463,
+        "mean_cosine": 0.7988242988105587,
+        "min_cosine": -0.8598824143409729,
+        "p10_cosine": 0.30221840143203743,
+        "median_cosine": 0.9909881353378296,
+        "p90_cosine": 0.9983346581459045,
+        "fraction_ge_0_99": 0.5196810253796016,
+        "fraction_ge_0_999": 0.043695153479226596,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 27463,
+        "mean_cosine": 0.7988242988105587,
+        "min_cosine": -0.8598824143409729,
+        "p10_cosine": 0.30221840143203743,
+        "median_cosine": 0.9909881353378296,
+        "p90_cosine": 0.9983346581459045,
+        "fraction_ge_0_99": 0.5196810253796016,
+        "fraction_ge_0_999": 0.043695153479226596,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 16317,
+        "mean_cosine": 0.9946425675965922,
+        "min_cosine": 0.9393263459205627,
+        "p10_cosine": 0.988970136642456,
+        "median_cosine": 0.9962296485900879,
+        "p90_cosine": 0.9987882018089295,
+        "fraction_ge_0_99": 0.8744254458540173,
+        "fraction_ge_0_999": 0.07354293068578782,
+        "byte_identical_pairs": 0
+      },
+      "initial_structural": {
+        "pairs": 27463,
+        "mean_cosine": -0.0005200838924253384,
+        "min_cosine": -0.35911938548088074,
+        "p10_cosine": -0.11537720561027526,
+        "median_cosine": -0.0010266657918691635,
+        "p90_cosine": 0.1141740784049034,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "structural_by_min_host_occurrences": {
+        "5": {
+          "pairs": 27463,
+          "mean_cosine": 0.7988242988105587,
+          "min_cosine": -0.8598824143409729,
+          "p10_cosine": 0.30221840143203743,
+          "median_cosine": 0.9909881353378296,
+          "p90_cosine": 0.9983346581459045,
+          "fraction_ge_0_99": 0.5196810253796016,
+          "fraction_ge_0_999": 0.043695153479226596,
+          "byte_identical_pairs": 0
+        },
+        "50": {
+          "pairs": 12873,
+          "mean_cosine": 0.772683571199659,
+          "min_cosine": -0.8598824143409729,
+          "p10_cosine": 0.28329668045043943,
+          "median_cosine": 0.9903221130371094,
+          "p90_cosine": 0.9989513874053955,
+          "fraction_ge_0_99": 0.5008156606851549,
+          "fraction_ge_0_999": 0.09267459022760817,
+          "byte_identical_pairs": 0
+        },
+        "200": {
+          "pairs": 3042,
+          "mean_cosine": 0.6612751387071323,
+          "min_cosine": -0.6782975792884827,
+          "p10_cosine": 0.15596140176057816,
+          "median_cosine": 0.7462812066078186,
+          "p90_cosine": 0.9993984580039978,
+          "fraction_ge_0_99": 0.2695595003287311,
+          "fraction_ge_0_999": 0.18244575936883628,
+          "byte_identical_pairs": 0
+        },
+        "1000": {
+          "pairs": 498,
+          "mean_cosine": 0.4944993975052393,
+          "min_cosine": -0.6782975792884827,
+          "p10_cosine": -0.041869401186704604,
+          "median_cosine": 0.5252657830715179,
+          "p90_cosine": 0.9990167558193207,
+          "fraction_ge_0_99": 0.10441767068273092,
+          "fraction_ge_0_999": 0.10040160642570281,
+          "byte_identical_pairs": 0
+        }
+      },
+      "all_identical_update_signatures": {
+        "pairs": 11109,
+        "mean_cosine": 0.9946466501433667,
+        "min_cosine": 0.9373959302902222,
+        "p10_cosine": 0.9890108585357666,
+        "median_cosine": 0.9962815046310425,
+        "p90_cosine": 0.9988402366638184,
+        "fraction_ge_0_99": 0.8753263119992799,
+        "fraction_ge_0_999": 0.07840489693041677,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 12911,
+        "accepted_but_cosine_below_0_99": 1138
+      },
+      "learned_row_sha256": "f52f97f6be5a5c643586efdc377a6b8e236e245f915abcc4e9dbfbb0558cd127",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 7235584,
+        "artifact_bytes": 6860924,
+        "unique_rows": 14132,
+        "row_map_bytes": 113056,
+        "n_rows": 14132,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 221,
+        "raw_blocks": 0,
+        "compressed_blocks": 221,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "bab9d5179d76d412f82d268cd20bdf3d0c7ebb2d45d8613503ec45a0652852c8"
+      },
+      "shuffled_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 7235584,
+        "artifact_bytes": 6863709,
+        "unique_rows": 14132,
+        "row_map_bytes": 113056,
+        "n_rows": 14132,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 221,
+        "raw_blocks": 0,
+        "compressed_blocks": 221,
+        "deduplicate": true,
+        "all_rows_byte_exact": true
+      },
+      "training_settings_note": "forward average / unscaled input-row gradient follows legacy SGNS; negative counts exponent 0.5; batched updates, no C++ subsampling/learning-rate schedule",
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.9995810985565186,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.9949196577072144,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.9946221113204956,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en>",
+          "b": "a'en>",
+          "cosine": 0.9950469136238098,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.9985743761062622,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": 0.9998164772987366,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": 0.9998112916946411,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.9977662563323975,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.9976396560668945,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st>",
+          "b": "w'st>",
+          "cosine": 0.997935950756073,
+          "host_words": [
+            "know'st"
+          ]
+        }
+      ]
+    },
+    {
+      "max_order": 12,
+      "seed": 7,
+      "vocabulary": 1200,
+      "ngram_rows": 14132,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 512000,
+      "training_seconds": 1.742252083029598,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss_per_pair": 4.1588826179504395
+        },
+        {
+          "step": 100,
+          "loss_per_pair": 2.6520090103149414
+        },
+        {
+          "step": 200,
+          "loss_per_pair": 2.505945920944214
+        },
+        {
+          "step": 300,
+          "loss_per_pair": 2.523921489715576
+        },
+        {
+          "step": 400,
+          "loss_per_pair": 2.4776172637939453
+        },
+        {
+          "step": 500,
+          "loss_per_pair": 2.3670084476470947
+        },
+        {
+          "step": 600,
+          "loss_per_pair": 2.4778289794921875
+        },
+        {
+          "step": 700,
+          "loss_per_pair": 2.398287773132324
+        },
+        {
+          "step": 800,
+          "loss_per_pair": 2.509908437728882
+        },
+        {
+          "step": 900,
+          "loss_per_pair": 2.4200620651245117
+        },
+        {
+          "step": 1000,
+          "loss_per_pair": 2.4423532485961914
+        },
+        {
+          "step": 1100,
+          "loss_per_pair": 2.4306795597076416
+        },
+        {
+          "step": 1200,
+          "loss_per_pair": 2.2983291149139404
+        },
+        {
+          "step": 1300,
+          "loss_per_pair": 2.3467960357666016
+        },
+        {
+          "step": 1400,
+          "loss_per_pair": 2.305091142654419
+        },
+        {
+          "step": 1500,
+          "loss_per_pair": 2.3232221603393555
+        },
+        {
+          "step": 1600,
+          "loss_per_pair": 2.3025622367858887
+        },
+        {
+          "step": 1700,
+          "loss_per_pair": 2.3619112968444824
+        },
+        {
+          "step": 1800,
+          "loss_per_pair": 2.4316253662109375
+        },
+        {
+          "step": 1900,
+          "loss_per_pair": 2.3863284587860107
+        },
+        {
+          "step": 1999,
+          "loss_per_pair": 2.3851029872894287
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 13732,
+        "mean_cosine": 0.7992729720647143,
+        "min_cosine": -0.7704284191131592,
+        "p10_cosine": 0.3029620677232742,
+        "median_cosine": 0.9911351501941681,
+        "p90_cosine": 0.9984295547008515,
+        "fraction_ge_0_99": 0.5177687154092631,
+        "fraction_ge_0_999": 0.04267404602388582,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 13732,
+        "mean_cosine": 0.80002431299164,
+        "min_cosine": -0.8174532651901245,
+        "p10_cosine": 0.32003287971019756,
+        "median_cosine": 0.9916081130504608,
+        "p90_cosine": 0.9984679043292999,
+        "fraction_ge_0_99": 0.5272356539469851,
+        "fraction_ge_0_999": 0.04624235362656569,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 27463,
+        "mean_cosine": 0.7996427620892776,
+        "min_cosine": -0.8174532651901245,
+        "p10_cosine": 0.31242299079895025,
+        "median_cosine": 0.9913694262504578,
+        "p90_cosine": 0.9984473943710327,
+        "fraction_ge_0_99": 0.5225212103557514,
+        "fraction_ge_0_999": 0.04445981866511306,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 27463,
+        "mean_cosine": 0.7996427620892776,
+        "min_cosine": -0.8174532651901245,
+        "p10_cosine": 0.31242299079895025,
+        "median_cosine": 0.9913694262504578,
+        "p90_cosine": 0.9984473943710327,
+        "fraction_ge_0_99": 0.5225212103557514,
+        "fraction_ge_0_999": 0.04445981866511306,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 16317,
+        "mean_cosine": 0.9948261072181667,
+        "min_cosine": 0.9421061277389526,
+        "p10_cosine": 0.9891942143440247,
+        "median_cosine": 0.9962649941444397,
+        "p90_cosine": 0.9988288879394531,
+        "fraction_ge_0_99": 0.879267022124165,
+        "fraction_ge_0_999": 0.07482993197278912,
+        "byte_identical_pairs": 0
+      },
+      "initial_structural": {
+        "pairs": 27463,
+        "mean_cosine": -0.000335617396794246,
+        "min_cosine": -0.3767821192741394,
+        "p10_cosine": -0.11384160965681075,
+        "median_cosine": 0.00011161155998706818,
+        "p90_cosine": 0.11308383047580718,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "structural_by_min_host_occurrences": {
+        "5": {
+          "pairs": 27463,
+          "mean_cosine": 0.7996427620892776,
+          "min_cosine": -0.8174532651901245,
+          "p10_cosine": 0.31242299079895025,
+          "median_cosine": 0.9913694262504578,
+          "p90_cosine": 0.9984473943710327,
+          "fraction_ge_0_99": 0.5225212103557514,
+          "fraction_ge_0_999": 0.04445981866511306,
+          "byte_identical_pairs": 0
+        },
+        "50": {
+          "pairs": 12873,
+          "mean_cosine": 0.7733118474415267,
+          "min_cosine": -0.8077716827392578,
+          "p10_cosine": 0.2907575488090515,
+          "median_cosine": 0.9921303987503052,
+          "p90_cosine": 0.9989503264427185,
+          "fraction_ge_0_99": 0.5050881690359668,
+          "fraction_ge_0_999": 0.09275227219762293,
+          "byte_identical_pairs": 0
+        },
+        "200": {
+          "pairs": 3042,
+          "mean_cosine": 0.6647868916596837,
+          "min_cosine": -0.6599644422531128,
+          "p10_cosine": 0.16647182852029802,
+          "median_cosine": 0.7436937093734741,
+          "p90_cosine": 0.9993918657302856,
+          "fraction_ge_0_99": 0.2692307692307692,
+          "fraction_ge_0_999": 0.17455621301775148,
+          "byte_identical_pairs": 0
+        },
+        "1000": {
+          "pairs": 498,
+          "mean_cosine": 0.5027411822641051,
+          "min_cosine": -0.627392590045929,
+          "p10_cosine": -0.02471931856125593,
+          "median_cosine": 0.5423608422279358,
+          "p90_cosine": 0.9988333642482757,
+          "fraction_ge_0_99": 0.10441767068273092,
+          "fraction_ge_0_999": 0.09839357429718876,
+          "byte_identical_pairs": 0
+        }
+      },
+      "all_identical_update_signatures": {
+        "pairs": 11109,
+        "mean_cosine": 0.9948386988627813,
+        "min_cosine": 0.9510221481323242,
+        "p10_cosine": 0.989145565032959,
+        "median_cosine": 0.9963157176971436,
+        "p90_cosine": 0.9988567590713501,
+        "fraction_ge_0_99": 0.8791070303357638,
+        "fraction_ge_0_999": 0.07930506796291295,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 12933,
+        "accepted_but_cosine_below_0_99": 1078
+      },
+      "learned_row_sha256": "c57dd713d91fb69fec6853aa0b34ca8b479f86acffb9aca5ab48614b45217178",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 7235584,
+        "artifact_bytes": 6862329,
+        "unique_rows": 14132,
+        "row_map_bytes": 113056,
+        "n_rows": 14132,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 221,
+        "raw_blocks": 0,
+        "compressed_blocks": 221,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "98e918cbeed227cac4e08890b537d52301040c0ca131edb215edf29401f617a5"
+      },
+      "shuffled_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 7235584,
+        "artifact_bytes": 6865369,
+        "unique_rows": 14132,
+        "row_map_bytes": 113056,
+        "n_rows": 14132,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 221,
+        "raw_blocks": 0,
+        "compressed_blocks": 221,
+        "deduplicate": true,
+        "all_rows_byte_exact": true
+      },
+      "training_settings_note": "forward average / unscaled input-row gradient follows legacy SGNS; negative counts exponent 0.5; batched updates, no C++ subsampling/learning-rate schedule",
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.9996192455291748,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.9958556890487671,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.9959689974784851,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en>",
+          "b": "a'en>",
+          "cosine": 0.9962804317474365,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.998574435710907,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": 0.9997484683990479,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": 0.9997595548629761,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.9966340661048889,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.9958703517913818,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st>",
+          "b": "w'st>",
+          "cosine": 0.9961175322532654,
+          "host_words": [
+            "know'st"
+          ]
+        }
+      ]
+    },
+    {
+      "max_order": 12,
+      "seed": 11,
+      "vocabulary": 1200,
+      "ngram_rows": 14132,
+      "training_pair_pool": 574118,
+      "sampled_training_pairs": 512000,
+      "training_seconds": 1.7458311249502003,
+      "loss_samples": [
+        {
+          "step": 0,
+          "loss_per_pair": 4.1588826179504395
+        },
+        {
+          "step": 100,
+          "loss_per_pair": 2.7583980560302734
+        },
+        {
+          "step": 200,
+          "loss_per_pair": 2.5288965702056885
+        },
+        {
+          "step": 300,
+          "loss_per_pair": 2.6803436279296875
+        },
+        {
+          "step": 400,
+          "loss_per_pair": 2.3800740242004395
+        },
+        {
+          "step": 500,
+          "loss_per_pair": 2.4255447387695312
+        },
+        {
+          "step": 600,
+          "loss_per_pair": 2.37453031539917
+        },
+        {
+          "step": 700,
+          "loss_per_pair": 2.4615871906280518
+        },
+        {
+          "step": 800,
+          "loss_per_pair": 2.4405856132507324
+        },
+        {
+          "step": 900,
+          "loss_per_pair": 2.4199204444885254
+        },
+        {
+          "step": 1000,
+          "loss_per_pair": 2.436638355255127
+        },
+        {
+          "step": 1100,
+          "loss_per_pair": 2.35689115524292
+        },
+        {
+          "step": 1200,
+          "loss_per_pair": 2.348262310028076
+        },
+        {
+          "step": 1300,
+          "loss_per_pair": 2.2508115768432617
+        },
+        {
+          "step": 1400,
+          "loss_per_pair": 2.358018398284912
+        },
+        {
+          "step": 1500,
+          "loss_per_pair": 2.4634666442871094
+        },
+        {
+          "step": 1600,
+          "loss_per_pair": 2.2527706623077393
+        },
+        {
+          "step": 1700,
+          "loss_per_pair": 2.262061595916748
+        },
+        {
+          "step": 1800,
+          "loss_per_pair": 2.292536497116089
+        },
+        {
+          "step": 1900,
+          "loss_per_pair": 2.282012462615967
+        },
+        {
+          "step": 1999,
+          "loss_per_pair": 2.3554420471191406
+        }
+      ],
+      "prefix_parent": {
+        "pairs": 13732,
+        "mean_cosine": 0.7995272426765416,
+        "min_cosine": -0.752591609954834,
+        "p10_cosine": 0.3062386125326157,
+        "median_cosine": 0.9908803403377533,
+        "p90_cosine": 0.9983832716941834,
+        "fraction_ge_0_99": 0.5147829886396738,
+        "fraction_ge_0_999": 0.037212350713661524,
+        "byte_identical_pairs": 0
+      },
+      "suffix_parent": {
+        "pairs": 13732,
+        "mean_cosine": 0.800932964161996,
+        "min_cosine": -0.8279221057891846,
+        "p10_cosine": 0.31091011166572574,
+        "median_cosine": 0.9913415610790253,
+        "p90_cosine": 0.9984012246131897,
+        "fraction_ge_0_99": 0.5233032333236236,
+        "fraction_ge_0_999": 0.03961549665016021,
+        "byte_identical_pairs": 0
+      },
+      "all_structural": {
+        "pairs": 27463,
+        "mean_cosine": 0.8002233569263674,
+        "min_cosine": -0.8279221057891846,
+        "p10_cosine": 0.30851907134056106,
+        "median_cosine": 0.9911068677902222,
+        "p90_cosine": 0.9983903050422669,
+        "fraction_ge_0_99": 0.5190620107053125,
+        "fraction_ge_0_999": 0.03841532243382005,
+        "byte_identical_pairs": 0
+      },
+      "shared_host_word": {
+        "pairs": 27463,
+        "mean_cosine": 0.8002233569263674,
+        "min_cosine": -0.8279221057891846,
+        "p10_cosine": 0.30851907134056106,
+        "median_cosine": 0.9911068677902222,
+        "p90_cosine": 0.9983903050422669,
+        "fraction_ge_0_99": 0.5190620107053125,
+        "fraction_ge_0_999": 0.03841532243382005,
+        "byte_identical_pairs": 0
+      },
+      "identical_host_multiplicity_signature": {
+        "pairs": 16317,
+        "mean_cosine": 0.9946545233816801,
+        "min_cosine": 0.9349706768989563,
+        "p10_cosine": 0.9888082146644592,
+        "median_cosine": 0.9961402416229248,
+        "p90_cosine": 0.998753011226654,
+        "fraction_ge_0_99": 0.8733835876693019,
+        "fraction_ge_0_999": 0.0646564932279218,
+        "byte_identical_pairs": 0
+      },
+      "initial_structural": {
+        "pairs": 27463,
+        "mean_cosine": 0.000668591002765851,
+        "min_cosine": -0.37470775842666626,
+        "p10_cosine": -0.11406408846378326,
+        "median_cosine": 0.0010039228945970535,
+        "p90_cosine": 0.11470323204994201,
+        "fraction_ge_0_99": 0.0,
+        "fraction_ge_0_999": 0.0,
+        "byte_identical_pairs": 0
+      },
+      "structural_by_min_host_occurrences": {
+        "5": {
+          "pairs": 27463,
+          "mean_cosine": 0.8002233569263674,
+          "min_cosine": -0.8279221057891846,
+          "p10_cosine": 0.30851907134056106,
+          "median_cosine": 0.9911068677902222,
+          "p90_cosine": 0.9983903050422669,
+          "fraction_ge_0_99": 0.5190620107053125,
+          "fraction_ge_0_999": 0.03841532243382005,
+          "byte_identical_pairs": 0
+        },
+        "50": {
+          "pairs": 12873,
+          "mean_cosine": 0.7754487575772723,
+          "min_cosine": -0.8117803335189819,
+          "p10_cosine": 0.28967325687408446,
+          "median_cosine": 0.9919107556343079,
+          "p90_cosine": 0.9988842725753784,
+          "fraction_ge_0_99": 0.5052435329759962,
+          "fraction_ge_0_999": 0.08172143245552707,
+          "byte_identical_pairs": 0
+        },
+        "200": {
+          "pairs": 3042,
+          "mean_cosine": 0.6629722103890445,
+          "min_cosine": -0.7270461916923523,
+          "p10_cosine": 0.15921213328838352,
+          "median_cosine": 0.7447779178619385,
+          "p90_cosine": 0.9993797302246094,
+          "fraction_ge_0_99": 0.269888231426693,
+          "fraction_ge_0_999": 0.16798159105851412,
+          "byte_identical_pairs": 0
+        },
+        "1000": {
+          "pairs": 498,
+          "mean_cosine": 0.49381123212386807,
+          "min_cosine": -0.5986718535423279,
+          "p10_cosine": -0.027549333684146367,
+          "median_cosine": 0.5179821252822876,
+          "p90_cosine": 0.9990357041358948,
+          "fraction_ge_0_99": 0.10441767068273092,
+          "fraction_ge_0_999": 0.10240963855421686,
+          "byte_identical_pairs": 0
+        }
+      },
+      "all_identical_update_signatures": {
+        "pairs": 11109,
+        "mean_cosine": 0.994659144262006,
+        "min_cosine": 0.9329357147216797,
+        "p10_cosine": 0.9888271212577819,
+        "median_cosine": 0.9961660504341125,
+        "p90_cosine": 0.9988043069839477,
+        "fraction_ge_0_99": 0.8695652173913043,
+        "fraction_ge_0_999": 0.07309388783868935,
+        "byte_identical_pairs": 0
+      },
+      "norm_ratio_audit": {
+        "accepted": 12767,
+        "accepted_but_cosine_below_0_99": 1045
+      },
+      "learned_row_sha256": "d0f54618325a4f2c9ffa3ab5779125a3b6d0c7192249f54dad23a6ea5e81304c",
+      "training_reference": "exact char-ngram bag + word row, SGNS 5 negatives, sparse SGD; not original C++ trainer",
+      "native_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 7235584,
+        "artifact_bytes": 6862332,
+        "unique_rows": 14132,
+        "row_map_bytes": 113056,
+        "n_rows": 14132,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 221,
+        "raw_blocks": 0,
+        "compressed_blocks": 221,
+        "deduplicate": true,
+        "all_rows_byte_exact": true,
+        "artifact_sha256": "7a90aa624f3cbcb02d789cd77fc91109cee9b8143b82645548b442e7132945a4"
+      },
+      "shuffled_lossless_storage": {
+        "format": "MEFTNAT1",
+        "input_bytes": 7235584,
+        "artifact_bytes": 6865232,
+        "unique_rows": 14132,
+        "row_map_bytes": 113056,
+        "n_rows": 14132,
+        "row_bytes": 512,
+        "block_rows": 64,
+        "blocks": 221,
+        "raw_blocks": 0,
+        "compressed_blocks": 221,
+        "deduplicate": true,
+        "all_rows_byte_exact": true
+      },
+      "training_settings_note": "forward average / unscaled input-row gradient follows legacy SGNS; negative counts exponent 0.5; batched updates, no C++ subsampling/learning-rate schedule",
+      "same_update_examples": [
+        {
+          "a": "'d",
+          "b": "'d>",
+          "cosine": 0.999627947807312,
+          "host_words": [
+            "banish'd",
+            "look'd",
+            "call'd",
+            "kill'd"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "'en>",
+          "cosine": 0.9978586435317993,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en",
+          "b": "a'en",
+          "cosine": 0.9974819421768188,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'en>",
+          "b": "a'en>",
+          "cosine": 0.9978482127189636,
+          "host_words": [
+            "ta'en"
+          ]
+        },
+        {
+          "a": "'er",
+          "b": "'er>",
+          "cosine": 0.9991565346717834,
+          "host_words": [
+            "ne'er",
+            "o'er",
+            "e'er"
+          ]
+        },
+        {
+          "a": "'l",
+          "b": "'ll",
+          "cosine": 0.9997717142105103,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'ll",
+          "b": "'ll>",
+          "cosine": 0.9997407793998718,
+          "host_words": [
+            "i'll",
+            "we'll",
+            "you'll",
+            "he'll"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "'st>",
+          "cosine": 0.9970910549163818,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st",
+          "b": "w'st",
+          "cosine": 0.9970400929450989,
+          "host_words": [
+            "know'st"
+          ]
+        },
+        {
+          "a": "'st>",
+          "b": "w'st>",
+          "cosine": 0.9973509907722473,
+          "host_words": [
+            "know'st"
+          ]
+        }
+      ]
+    }
+  ]
+}

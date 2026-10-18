@@ -21,6 +21,14 @@ dtype and query shape. Batch reads coalesce block decoding. This is immutable
 CPU inference, not trained-checkpoint or end-to-end Engram validation:
 https://github.com/initial-d/me_fasttext/blob/main/docs/engram_gather_adapter.md
 
+The native C ABI supports batched CPU row gather directly into PyTorch output:
+https://github.com/initial-d/me_fasttext/blob/main/docs/native_ngram_memory.md
+Real-text trained n-gram reference experiments measure shared-update similarity
+across orders 4/8/12 and three seeds; random vectors are interface controls.
+Lossless XOR/layout prediction is an offline experiment, not a native codec or
+Engram training result:
+https://github.com/initial-d/me_fasttext/blob/main/docs/trained_ngram_similarity_20261018.md
+
 ## What this project is
 
 `me_fasttext` is a research and production-prototype codebase derived from

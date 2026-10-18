@@ -14,8 +14,10 @@ from torch import nn
 
 try:
     from .lossless_row_store import MappedRows, pack_rows
+    from .native_row_store import NativeRows, pack_native
 except ImportError:  # direct script imports from tools/
     from lossless_row_store import MappedRows, pack_rows
+    from native_row_store import NativeRows, pack_native
 
 DTYPES = {str(dtype): dtype for dtype in (torch.float32, torch.float16, torch.bfloat16)}
 
@@ -38,7 +40,7 @@ def head_offsets(head_sizes):
     return offsets
 
 
-def export_multihead(weight, head_sizes, output_dir, block_rows=256):
+def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="python", deduplicate=True):
     """Preserve every row, including unseen/unused rows, and the source dtype."""
     offsets = head_offsets(head_sizes)
     if weight.layout != torch.strided or weight.ndim != 2 or weight.shape[1] <= 0:
@@ -47,7 +49,9 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256):
         raise ValueError("unsupported dtype or row count inconsistent with head sizes")
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    table = output_dir / "table.mer"
+    if backend not in ("python", "native"):
+        raise ValueError("backend must be python or native")
+    table = output_dir / ("table.men" if backend == "native" else "table.mer")
     manifest = output_dir / "embedding.json"
     if table.exists() or manifest.exists():
         raise FileExistsError("adapter artifacts already exist; use a fresh output directory")
@@ -56,7 +60,13 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256):
     with tempfile.TemporaryDirectory(dir=output_dir) as tmp:
         source = Path(tmp) / "table.raw"
         source.write_bytes(raw)
-        packed = pack_rows(source, table, frozen.shape[1] * frozen.element_size(), block_rows)
+        width = frozen.shape[1] * frozen.element_size()
+        if backend == "native":
+            packed = pack_native(source, table, width, block_rows, deduplicate)
+        else:
+            if not deduplicate:
+                raise ValueError("non-deduplicating export requires the native backend")
+            packed = pack_rows(source, table, width, block_rows)
     metadata = {
         "schema_version": 1, "table_file": table.name,
         "shape": list(frozen.shape), "dtype": str(frozen.dtype), "byteorder": sys.byteorder,
@@ -66,18 +76,19 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256):
         "input_bytes": len(raw), "artifact_bytes": table.stat().st_size,
         "unique_rows": packed["unique_rows"], "row_map_bytes": packed["row_map_bytes"],
         "block_rows": block_rows,
+        "backend": backend,
         "contract": "unchanged local-head IDs plus original offsets; byte-exact CPU gather",
     }
     manifest.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
     return metadata
 
 
-def export_demo_embedding(module, head_sizes, output_dir, block_rows=256):
+def export_demo_embedding(module, head_sizes, output_dir, block_rows=256, backend="python", deduplicate=True):
     """Accept the official demo's .embedding.weight / .offsets interface."""
     expected = torch.tensor(head_offsets(head_sizes), dtype=torch.int64)
     if not torch.equal(module.offsets.detach().cpu(), expected):
         raise ValueError("source offsets differ from declared head sizes")
-    return export_multihead(module.embedding.weight, head_sizes, output_dir, block_rows)
+    return export_multihead(module.embedding.weight, head_sizes, output_dir, block_rows, backend, deduplicate)
 
 
 class MappedMultiHeadEmbedding(nn.Module):
@@ -87,12 +98,14 @@ class MappedMultiHeadEmbedding(nn.Module):
     [..., heads, embedding_dim] preserve the official gather's layout.
     """
 
-    def __init__(self, output_dir, cache_blocks=4):
+    def __init__(self, output_dir, cache_blocks=4, native_library=None):
         super().__init__()
         output_dir = Path(output_dir)
         meta = json.loads((output_dir / "embedding.json").read_text())
+        backend = meta.get("backend", "python")
+        table_name = {"python": "table.mer", "native": "table.men"}.get(backend)
         if (meta["schema_version"] != 1 or meta["dtype"] not in DTYPES
-                or meta["byteorder"] != sys.byteorder or meta["table_file"] != "table.mer"):
+                or meta["byteorder"] != sys.byteorder or meta["table_file"] != table_name):
             raise ValueError("unsupported adapter metadata")
         offsets = head_offsets(meta["head_sizes"])
         if meta["offsets"] != offsets or meta["shape"][0] != sum(meta["head_sizes"]):
@@ -104,9 +117,10 @@ class MappedMultiHeadEmbedding(nn.Module):
         self.num_heads = len(offsets)
         self.embedding_dim = meta["shape"][1]
         self.metadata = meta
+        self.backend = backend
         self.register_buffer("offsets", torch.tensor(offsets, dtype=torch.int64))
         self.register_buffer("head_sizes", torch.tensor(meta["head_sizes"], dtype=torch.int64))
-        self.table = MappedRows(path, cache_blocks)
+        self.table = NativeRows(path, native_library) if backend == "native" else MappedRows(path, cache_blocks)
         width = self.embedding_dim * torch.empty((), dtype=self.dtype).element_size()
         if self.table.header["n_rows"] != meta["shape"][0] or self.table.header["row_bytes"] != width:
             self.table.close()
@@ -130,13 +144,60 @@ class MappedMultiHeadEmbedding(nn.Module):
         shape = (*input_ids.shape, self.embedding_dim)
         if input_ids.numel() == 0:
             return torch.empty(shape, dtype=self.dtype)
-        global_ids = (input_ids.to(torch.int64) + self.offsets).reshape(-1).tolist()
-        raw = self.table.rows(global_ids)
+        global_tensor = (input_ids.to(torch.int64) + self.offsets).contiguous()
+        if self.backend == "native":
+            output = torch.empty(shape, dtype=self.dtype)
+            self.table.gather_into(global_tensor.data_ptr(), global_tensor.numel(),
+                                   output.data_ptr(), output.numel() * output.element_size())
+            return output
+        raw = self.table.rows(global_tensor.reshape(-1).tolist())
         # A fresh owned tensor avoids exposing mutable mmap/cache backing data.
         return torch.frombuffer(bytearray(raw), dtype=self.dtype).clone().reshape(shape)
 
     def close(self):
         self.table.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.close()
+
+
+def export_embedding(module, output_dir, block_rows=256, backend="native", deduplicate=True):
+    """Export ordinary nn.Embedding without forward-time max_norm mutation."""
+    if not isinstance(module, nn.Embedding) or module.max_norm is not None:
+        raise ValueError("requires nn.Embedding without forward-time max_norm mutation")
+    return export_multihead(module.weight, [module.num_embeddings], output_dir,
+                            block_rows, backend, deduplicate)
+
+
+class MappedEmbedding(nn.Module):
+    """Ordinary global-ID embedding gather. No .weight parameter/tied-head support.
+
+    Compatible with callers that only invoke embedding(ids); model-specific
+    wrappers that inspect .weight or perform training need separate integration.
+    """
+    def __init__(self, output_dir, native_library=None):
+        super().__init__()
+        self.gather = MappedMultiHeadEmbedding(output_dir, native_library=native_library)
+        if self.gather.num_heads != 1:
+            self.gather.close()
+            raise ValueError("ordinary embedding needs a single global-ID table")
+        self.num_embeddings = self.gather.metadata["shape"][0]
+        self.embedding_dim = self.gather.embedding_dim
+        self.training = False
+
+    def train(self, mode=True):
+        if mode:
+            raise RuntimeError("mapped embeddings support inference only")
+        return super().train(False)
+
+    def forward(self, ids):
+        return self.gather(ids.unsqueeze(-1)).squeeze(-2)
+
+    def close(self):
+        self.gather.close()
 
     def __enter__(self):
         return self

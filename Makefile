@@ -15,7 +15,17 @@ LIBS = -L./mylib/lib -ltrie -lpub
 LIBNAME = libfasttext
 PYTHON ?= python3
 
-.PHONY: opt debug test clean
+.PHONY: opt debug test clean native
+
+# Standalone C ABI: does not depend on the bundled legacy C++ libraries.
+# On macOS use: make native NATIVE_SHARED='-dynamiclib' NATIVE_EXT=dylib
+CC ?= cc
+NATIVE_SHARED ?= -shared
+NATIVE_EXT ?= so
+native:
+	mkdir -p build
+	$(CC) -std=c11 -O2 -Wall -Wextra -Werror -fPIC $(NATIVE_SHARED) native/meft_rows.c -lz -o build/libmeft_rows.$(NATIVE_EXT)
+	$(CC) -std=c11 -O2 -Wall -Wextra -Werror -Inative examples/native_gather.c native/meft_rows.c -lz -o build/native_gather
 
 opt: CXXFLAGS += -O1 -funroll-loops
 opt: fasttext $(LIBNAME).a index cut_ngram print_ngrams bench_ftindex

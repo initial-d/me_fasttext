@@ -1,0 +1,546 @@
+{
+  "category": "controlled synthetic n-gram order and native gather experiment; not trained model evidence",
+  "commit": "edee7b2ad4608db40308a2b3ad801b5ec1b51464",
+  "official_commit": "fb7f84a21f91223715394a33a1dc24bbfb7f788e",
+  "exact_command": "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/benchmark_ngram_native.py --official-source /tmp/me-fasttext-engram-20261018/engram_demo_v1.py --native-library build/libmeft_rows.dylib --output-dir artifacts/native-ngram-20261018/order-sweep",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "numpy": "2.5.4",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "device": "cpu",
+  "seed": 7,
+  "threads": {
+    "torch": 1,
+    "interop": 1
+  },
+  "library_sha256": "6511428dcc09df8cf5ae5b141179eccd7dceefcf3a5564a5d0dea16db1a89fd3",
+  "order_maxima": [
+    2,
+    3,
+    4,
+    6,
+    8,
+    12
+  ],
+  "heads_per_order": 2,
+  "embedding_dim": 16,
+  "dtype": "torch.float32",
+  "block_rows": 64,
+  "fixed_head_sizes": [
+    257,
+    263
+  ],
+  "cases": [
+    {
+      "max_order": 2,
+      "workload": "diverse",
+      "keys": {
+        "windows": 2032,
+        "unique_keys": 2022,
+        "flat_key_bytes": 16176,
+        "prefix_key_bytes": 18168,
+        "prefix_to_flat_ratio": 1.1231454005934718,
+        "zlib_flat_key_bytes": 5233,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "0c0613d7b6d95788af361d947e8db0bf1c938f4eeeac7b68089f397f3fc40f77",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 33280,
+      "native_artifact_bytes": 36283,
+      "native_ratio": 1.090234375,
+      "python_artifact_bytes": 36549,
+      "native_unique_rows": 520,
+      "weight_sha256": "a0c63b3dcdc186cb86de29d2868cfc3616a6979039e11217c0ed7fea880f0c2d",
+      "head_ids_sha256": "a6a6cd918176660c7108f8f02b034af4ddf48f00b09f191eecbb78bfcab82e0b",
+      "query_row_count": 256,
+      "output_sha256": "b767620e1ba5042c3723d4c6366714b60a09385f7a331bcc92e13fddc6a62dfe",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 9,
+      "decodes_per_batch": 8,
+      "official_gather": {
+        "p50_us": 10.3125,
+        "p95_us": 10.792,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 129.7295,
+        "p95_us": 134.75,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 286.5,
+        "p95_us": 332.167,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 2,
+      "workload": "shared_prefix",
+      "keys": {
+        "windows": 2032,
+        "unique_keys": 351,
+        "flat_key_bytes": 2808,
+        "prefix_key_bytes": 3776,
+        "prefix_to_flat_ratio": 1.3447293447293447,
+        "zlib_flat_key_bytes": 1154,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "a8428d4fb03fcf44256d8cb8cb2d851cbbe89212db92ca2664319883897d98ec",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 33280,
+      "native_artifact_bytes": 36283,
+      "native_ratio": 1.090234375,
+      "python_artifact_bytes": 36549,
+      "native_unique_rows": 520,
+      "weight_sha256": "a0c63b3dcdc186cb86de29d2868cfc3616a6979039e11217c0ed7fea880f0c2d",
+      "head_ids_sha256": "c3cd4fd1285f4f989966b23afeba7ccc5d17b998d8f99dddb440c506d141dee5",
+      "query_row_count": 256,
+      "output_sha256": "876ad108bc185dd7044dd01c7c8b3288746079e4257c940f0dd545f725b0c7c6",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 9,
+      "decodes_per_batch": 8,
+      "official_gather": {
+        "p50_us": 7.896,
+        "p95_us": 8.458,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 93.0205,
+        "p95_us": 179.125,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 177.25,
+        "p95_us": 245.709,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 3,
+      "workload": "diverse",
+      "keys": {
+        "windows": 2016,
+        "unique_keys": 2016,
+        "flat_key_bytes": 24192,
+        "prefix_key_bytes": 26140,
+        "prefix_to_flat_ratio": 1.0805224867724867,
+        "zlib_flat_key_bytes": 8630,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "2f21fbf0dd3b5375938e3a580371adc9be415727de60928636cfd7bb8ae15ed3",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 66560,
+      "native_artifact_bytes": 71863,
+      "native_ratio": 1.0796724759615384,
+      "python_artifact_bytes": 72243,
+      "native_unique_rows": 1040,
+      "weight_sha256": "bb6dfa9b5414dde029010476c9e6ee261f521e8301304de21da732f5de5a133d",
+      "head_ids_sha256": "df2c2389b5170deb36232e3d454e2321ff271baa0854668030653523b800b9d9",
+      "query_row_count": 512,
+      "output_sha256": "72253e73e6e9d6da240b6549deb950138fb01d27a08928d06139db18a50cef3f",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 17,
+      "decodes_per_batch": 17,
+      "official_gather": {
+        "p50_us": 5.4795,
+        "p95_us": 5.709,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 222.35399999999998,
+        "p95_us": 223.292,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 347.91650000000004,
+        "p95_us": 370.833,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 3,
+      "workload": "shared_prefix",
+      "keys": {
+        "windows": 2016,
+        "unique_keys": 391,
+        "flat_key_bytes": 4692,
+        "prefix_key_bytes": 5440,
+        "prefix_to_flat_ratio": 1.1594202898550725,
+        "zlib_flat_key_bytes": 1565,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "d0170eacc1a7d5723cf2a391aee09db295ea0e8839cc68a2e853d347ade06487",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 66560,
+      "native_artifact_bytes": 71863,
+      "native_ratio": 1.0796724759615384,
+      "python_artifact_bytes": 72243,
+      "native_unique_rows": 1040,
+      "weight_sha256": "bb6dfa9b5414dde029010476c9e6ee261f521e8301304de21da732f5de5a133d",
+      "head_ids_sha256": "29773ac6077993c898bb6f82f1540ff618d3ba43e740e55c060eddcaa9f185f9",
+      "query_row_count": 512,
+      "output_sha256": "9736b1381356fd3c40ad8143403ad75218545d72cb3a7309d9d0543311355ded",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 17,
+      "decodes_per_batch": 17,
+      "official_gather": {
+        "p50_us": 4.1045,
+        "p95_us": 4.417,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 183.042,
+        "p95_us": 186.417,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 312.54200000000003,
+        "p95_us": 323.292,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 4,
+      "workload": "diverse",
+      "keys": {
+        "windows": 2000,
+        "unique_keys": 2000,
+        "flat_key_bytes": 32000,
+        "prefix_key_bytes": 33944,
+        "prefix_to_flat_ratio": 1.06075,
+        "zlib_flat_key_bytes": 10088,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "d8502d6b77ea007e8e4264431fa8c8d4a2bc649728c0bbbd1b717da2342889cf",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 99840,
+      "native_artifact_bytes": 107461,
+      "native_ratio": 1.0763321314102565,
+      "python_artifact_bytes": 107964,
+      "native_unique_rows": 1560,
+      "weight_sha256": "56f602c58f5d8c9d6d591253898700e763fb6ed1b192d179a8155c76dc1e879e",
+      "head_ids_sha256": "a1504eec9f2aacf034c7bda5f4bf29d7eb6bf929d5f358c6d3e22ca0c18e2884",
+      "query_row_count": 768,
+      "output_sha256": "2ac7345a50bb7dddbc7e3bad67f9468bfcb64c84d2da86b9e3ffc6201b40feeb",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 25,
+      "decodes_per_batch": 25,
+      "official_gather": {
+        "p50_us": 4.9795,
+        "p95_us": 5.375,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 229.417,
+        "p95_us": 252.5,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 417.08299999999997,
+        "p95_us": 434.5,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 4,
+      "workload": "shared_prefix",
+      "keys": {
+        "windows": 2000,
+        "unique_keys": 431,
+        "flat_key_bytes": 6896,
+        "prefix_key_bytes": 7264,
+        "prefix_to_flat_ratio": 1.0533642691415313,
+        "zlib_flat_key_bytes": 1863,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "4d18a59cc1ba4b47358c32fc505a2b9aa5a6d637dfa85f7a6606c37cf26b47d9",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 99840,
+      "native_artifact_bytes": 107461,
+      "native_ratio": 1.0763321314102565,
+      "python_artifact_bytes": 107964,
+      "native_unique_rows": 1560,
+      "weight_sha256": "56f602c58f5d8c9d6d591253898700e763fb6ed1b192d179a8155c76dc1e879e",
+      "head_ids_sha256": "ffd38cb8830cc0631b102e102ff6b8e6d499c4b10e6be15bf8cdeec7f30a615f",
+      "query_row_count": 768,
+      "output_sha256": "000d0602c7ca1e3dfcfca57c4e8bdffd325cb2942e00f3bbec0dea4651b3269b",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 25,
+      "decodes_per_batch": 25,
+      "official_gather": {
+        "p50_us": 4.375,
+        "p95_us": 4.583,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 226.209,
+        "p95_us": 227.625,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 407.917,
+        "p95_us": 411.375,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 6,
+      "workload": "diverse",
+      "keys": {
+        "windows": 1968,
+        "unique_keys": 1968,
+        "flat_key_bytes": 47232,
+        "prefix_key_bytes": 49172,
+        "prefix_to_flat_ratio": 1.0410738482384825,
+        "zlib_flat_key_bytes": 11456,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "71e3e794aacb722734e88f0249502efcc6953998b4fff65e61cd97c29d0aa251",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 166400,
+      "native_artifact_bytes": 178559,
+      "native_ratio": 1.0730709134615384,
+      "python_artifact_bytes": 179320,
+      "native_unique_rows": 2600,
+      "weight_sha256": "7e7605003cb5b35d02f4ca70dfaca148384e2da0243d48ce4d559f333303e220",
+      "head_ids_sha256": "6997ca8380ffd6715d0193fd82260688fa67925e752eb6c61fa1ee3fe271daaa",
+      "query_row_count": 1280,
+      "output_sha256": "be2d56d6fca281d74beada0a20df1cf25ab2e75fe8a5f5bb65c4280e3af95d2a",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 41,
+      "decodes_per_batch": 41,
+      "official_gather": {
+        "p50_us": 5.708,
+        "p95_us": 6.083,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 376.3125,
+        "p95_us": 409.25,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 679.1875,
+        "p95_us": 707.416,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 6,
+      "workload": "shared_prefix",
+      "keys": {
+        "windows": 1968,
+        "unique_keys": 511,
+        "flat_key_bytes": 12264,
+        "prefix_key_bytes": 11392,
+        "prefix_to_flat_ratio": 0.928897586431833,
+        "zlib_flat_key_bytes": 2378,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "bd1a49571d807f65d4682b0f8ed4a0a1597484cc0047b45c6ad6f236fc4832b8",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 166400,
+      "native_artifact_bytes": 178559,
+      "native_ratio": 1.0730709134615384,
+      "python_artifact_bytes": 179320,
+      "native_unique_rows": 2600,
+      "weight_sha256": "7e7605003cb5b35d02f4ca70dfaca148384e2da0243d48ce4d559f333303e220",
+      "head_ids_sha256": "c5d661ed26e5ffa67a9c12cd6fab818b9ee3318fd3e977ffa21cdbdedcb8b18f",
+      "query_row_count": 1280,
+      "output_sha256": "16dffc247453bd382e628c61c976573443e0e2715a8e00d8782e49bc306f744e",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 41,
+      "decodes_per_batch": 41,
+      "official_gather": {
+        "p50_us": 5.6875,
+        "p95_us": 5.875,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 373.47950000000003,
+        "p95_us": 379.292,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 677.9785,
+        "p95_us": 708.584,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 8,
+      "workload": "diverse",
+      "keys": {
+        "windows": 1936,
+        "unique_keys": 1936,
+        "flat_key_bytes": 61952,
+        "prefix_key_bytes": 63892,
+        "prefix_to_flat_ratio": 1.0313145661157024,
+        "zlib_flat_key_bytes": 12203,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "abf70f419d760ed03253ebc46365c5f3f934d5a9bebae00c1cb83381e43673b3",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 232960,
+      "native_artifact_bytes": 249692,
+      "native_ratio": 1.071823489010989,
+      "python_artifact_bytes": 250711,
+      "native_unique_rows": 3640,
+      "weight_sha256": "eceab11082a2966699b98ce37eb41af0731a2558fc43b01a4bd3e2a5eee66600",
+      "head_ids_sha256": "d10755044f82d0d5b9460f3459abdc63b229386058abb0fac25c1b2cb98a266f",
+      "query_row_count": 1792,
+      "output_sha256": "c8f0d6c729e0197f1645b5d805bedadce6794fbcd39cf1588d2dea4a55b5dd51",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 57,
+      "decodes_per_batch": 57,
+      "official_gather": {
+        "p50_us": 6.833,
+        "p95_us": 7.042,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 525.4785,
+        "p95_us": 563.167,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 946.292,
+        "p95_us": 968.125,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 8,
+      "workload": "shared_prefix",
+      "keys": {
+        "windows": 1936,
+        "unique_keys": 591,
+        "flat_key_bytes": 18912,
+        "prefix_key_bytes": 16160,
+        "prefix_to_flat_ratio": 0.8544839255499154,
+        "zlib_flat_key_bytes": 2782,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "82c19557c5e82c827f01323bfd4365c6a6daab5f064952de42c6bf2361463b51",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 232960,
+      "native_artifact_bytes": 249692,
+      "native_ratio": 1.071823489010989,
+      "python_artifact_bytes": 250711,
+      "native_unique_rows": 3640,
+      "weight_sha256": "eceab11082a2966699b98ce37eb41af0731a2558fc43b01a4bd3e2a5eee66600",
+      "head_ids_sha256": "7091b11a9e3c527de46777134eebe13e2234a9fd2e8105b1659bbe4b6bb9136e",
+      "query_row_count": 1792,
+      "output_sha256": "512ebd349012099a1be00667a11b205da1450e3fcf52e249478af7dad8b9ea79",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 57,
+      "decodes_per_batch": 57,
+      "official_gather": {
+        "p50_us": 6.666,
+        "p95_us": 6.75,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 522.2495,
+        "p95_us": 535.584,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 957.4795,
+        "p95_us": 974.583,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 12,
+      "workload": "diverse",
+      "keys": {
+        "windows": 1872,
+        "unique_keys": 1872,
+        "flat_key_bytes": 89856,
+        "prefix_key_bytes": 91800,
+        "prefix_to_flat_ratio": 1.0216346153846154,
+        "zlib_flat_key_bytes": 13106,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "ce28e1d42f4188798d1f724e3155d71b9fd91e5ce7e1d94d3adf70f10bc0d074",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 366080,
+      "native_artifact_bytes": 392050,
+      "native_ratio": 1.070940777972028,
+      "python_artifact_bytes": 393601,
+      "native_unique_rows": 5720,
+      "weight_sha256": "ecbe23414a811517036948949469362cdc19f4713d944a73b0016b9ada74dbab",
+      "head_ids_sha256": "5ad061e71abf7d5e9dac10c68a6f273b80ef844c61633efddb86f60bc09c0da2",
+      "query_row_count": 2816,
+      "output_sha256": "27b81e1344e7d8a848a5aaef6141e9ae3e25cb47d97a027227aa353cc7543ba2",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 90,
+      "decodes_per_batch": 90,
+      "official_gather": {
+        "p50_us": 8.875,
+        "p95_us": 9.083,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 830.5205000000001,
+        "p95_us": 865.959,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 1546.7085000000002,
+        "p95_us": 1583.833,
+        "repeats": 30
+      }
+    },
+    {
+      "max_order": 12,
+      "workload": "shared_prefix",
+      "keys": {
+        "windows": 1872,
+        "unique_keys": 751,
+        "flat_key_bytes": 36048,
+        "prefix_key_bytes": 27616,
+        "prefix_to_flat_ratio": 0.7660896582334665,
+        "zlib_flat_key_bytes": 3582,
+        "keys_roundtrip_exact": true,
+        "key_sha256": "02fa4239007354fd2dd2e57e1cbbae7806d671b3c731a60d9bd0cbe765f6ff83",
+        "note": "Sorted front-coded key bytes, not a random-access trie or trained weight compression."
+      },
+      "weight_input_bytes": 366080,
+      "native_artifact_bytes": 392050,
+      "native_ratio": 1.070940777972028,
+      "python_artifact_bytes": 393601,
+      "native_unique_rows": 5720,
+      "weight_sha256": "ecbe23414a811517036948949469362cdc19f4713d944a73b0016b9ada74dbab",
+      "head_ids_sha256": "0b730241f33714f8a4fdc25c51ec0290334f9c476d64a234929548a2a2416ee9",
+      "query_row_count": 2816,
+      "output_sha256": "67064a150a99e4d7f811635df6224614ff9150b5a9dd7f4788b1ec45be8ce4a0",
+      "native_and_python_gather_byte_exact": true,
+      "blocks_per_batch": 90,
+      "decodes_per_batch": 90,
+      "official_gather": {
+        "p50_us": 8.7915,
+        "p95_us": 8.958,
+        "repeats": 30
+      },
+      "native_gather": {
+        "p50_us": 821.6665,
+        "p95_us": 842.667,
+        "repeats": 30
+      },
+      "python_gather": {
+        "p50_us": 1540.104,
+        "p95_us": 1587.208,
+        "repeats": 30
+      }
+    }
+  ],
+  "limitations": [
+    "Untrained random embedding rows and synthetic tokens; no accuracy, trained checkpoint or logits.",
+    "Higher max order adds heads/tables linearly here; fixed per-head capacity is a control, not optimal model allocation.",
+    "Key prefix encoding is an offline index-footprint comparison, not a query backend.",
+    "C gather has no persistent decoded-block cache; Python reference uses cache_blocks=0 for byte-gather comparison.",
+    "All latencies are warm 30-call CPU microbenchmarks, not cold I/O, RSS or GPU-transfer measurements."
+  ]
+}
