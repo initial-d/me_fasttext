@@ -1,0 +1,23 @@
+{
+  "cpu": "Apple M5",
+  "logical_cpus": 10,
+  "physical_memory_bytes": 34359738368,
+  "os": "macOS 26.6.2 arm64",
+  "native_compiler": "Apple clang 21.0.0 (clang-2100.1.1.101)",
+  "cost": "Local CPU only, no paid API/rented compute, no monetary/energy estimate.",
+  "training_provenance": "../native_ngram_evidence_20261018/provenance.json",
+  "validation": "135 cases, every native approximated row checked; direct cosine/norm bounds and byte denominator checked; 24 unit tests passed.",
+  "sha256": {
+    "norm_rule_comparison.svg": "eeabdff0b01163d5efb074df8e2c1248a1609e6dcba4b61a36d8ba740d4bf665",
+    "report.json": "4777cf33fda0405c39b79761c9495bdc64924ab61cc873c94e2915ce87a24211",
+    "tests.txt": "b7bdaee9549e0349c764f5d81608ed16c9d978fed1bc90777c39c39c761fac7c",
+    "curve.csv": "45be69df4589f0bc93284aabbf8676bd4c2de429e25e94407de1fb1afc58b803",
+    "plot_provenance.json": "a6c28fee287375f3e12897c91d6ec9a65823fdbd456ec6990fc81237633b5ca3",
+    "norm_rule_comparison.pdf": "cc69728098e091c252e9d9af090b244611c8c3a2ff07bded55015ca5ff3c8895",
+    "norm_rule_comparison.png": "ad8155ce8dcceb49cae90e0a1347c5e94e6b1aad0ee8abc1aab6e50219cb2c02",
+    "stdlib-tests.txt": "8677ea7ca2829114071868bf76b9aa0d8fc31ba03e4629fdbf201566be637d7c",
+    "cosine_tradeoff.svg": "17dc4494e96abb6b3af189b29846d182529fba59e6062fe7f64de4a53c8fea94",
+    "cosine_tradeoff.pdf": "0ed20ef03b1adbdb41049fdb9d72804c4ca133ca4effdf18395aa951820b14b8",
+    "cosine_tradeoff.png": "b4434560ff9903d8215f60c2d2a11619492dd0a536520640658ee83c102ee868"
+  }
+}

@@ -86,6 +86,14 @@ head 偏移、dtype 和每一行的原始字节都保持一致。
 
 ## Article outline and follow-up
 
+Additional result: [approximate row-sharing curves](approximate_ngram_compression_20261018.md)
+now compare cosine 0.999/0.995/0.99/0.98/0.97/0.95/0.90 with a norm-ratio guard.
+At max order 12, cosine/norm ≥0.99 produces 2.14–2.16× actual n-gram storage
+reduction; loosening cosine to 0.98 produces about 2.35×. Mean relative change
+of the word n-gram component is about 0.48% and 0.52%, respectively. Approximate
+sharing changes original vectors; these are not held-out model-quality results.
+Cosine-only and norm-only controls retain the larger tail errors in the report.
+
 Suggested title: **《Engram 之后：利用高阶 n-gram 的共同训练结构做无损存储》**.
 
 1. The scaling problem: exact key identity, table storage and query fan-out.

@@ -138,6 +138,11 @@ with their different step/optimization settings, excluded from final comparisons
 
 ## Next evidence needed
 
+The [approximate row-sharing follow-up](approximate_ngram_compression_20261018.md)
+now measures cosine thresholds 0.999..0.90 on these same learned tables, with
+cosine-only, joint norm/cosine and norm-only controls. It records actual packed
+bytes and reconstruction-error curves separately from strict losslessness.
+
 Repeat on licensed multilingual and trained token-ngram/Engram tables, with
 longer training, matched total memory/compute, trained baselines and task quality.
 Test structural predictors with corpus-independent grouping, then implement a
