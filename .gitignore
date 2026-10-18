@@ -3,3 +3,4 @@ __pycache__/
 tmp_public_benchmark_out*/
 tmp_public_benchmark_sample.txt
 artifacts/
+build/

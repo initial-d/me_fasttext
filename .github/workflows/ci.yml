@@ -35,3 +35,14 @@ jobs:
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
       - name: Verify adapter and row storage
         run: python -m unittest discover -s tests
+
+  native-sanitizers:
+    name: Native C sanitizers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check native ABI and malformed files
+        run: python tools/check_native_sanitizers.py
