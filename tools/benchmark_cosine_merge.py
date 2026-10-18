@@ -30,7 +30,7 @@ def structural_merge(rows, grams, threshold, min_norm_ratio=0.0):
     Spelling only generates candidates; actual float64 cosine/norm tests decide.
     Zero-norm rows are kept, and representatives never change after retention.
     """
-    if not 0 < threshold <= 1 or not 0 <= min_norm_ratio <= 1:
+    if not -1 <= threshold <= 1 or not 0 <= min_norm_ratio <= 1:
         raise ValueError("invalid similarity/norm thresholds")
     if len(rows) != len(grams) or len(set(grams)) != len(grams) or not np.isfinite(rows).all():
         raise ValueError("invalid trained rows/keys")
@@ -117,7 +117,7 @@ def main():
               "native_library_sha256": hashlib.sha256(args.native_library.read_bytes()).hexdigest(),
               "thresholds": thresholds, "block_rows": 64,
               "algorithm": "shortest-key-first, retained proper prefix/suffix ancestors, highest direct original-to-representative cosine; no transitive chains",
-              "norm_policies": {"cosine_only": 0.0, "cosine_and_norm_0_99": 0.99},
+              "norm_policies": {"cosine_only": 0.0, "cosine_and_norm_0_99": 0.99, "norm_only_0_99": 0.99},
               "limitations": ["Same small English reference as the lossless study, not original C++ or Engram weights.",
                               "Approximate sharing changes source bytes; native store is exact only for reconstructed rows.",
                               "Compression denominators cover ngram vector rows, not word/output rows, key index or full model.",
@@ -136,11 +136,14 @@ def main():
         original_words = compose_subwords(rows, words, grams, order)
         for threshold in thresholds:
             for policy, norm_threshold in report["norm_policies"].items():
+                if policy == "norm_only_0_99" and threshold != thresholds[0]:
+                    continue
+                cosine_threshold = -1.0 if policy == "norm_only_0_99" else threshold
                 start = time.perf_counter()
-                mapping = structural_merge(rows, grams, threshold, norm_threshold)
+                mapping = structural_merge(rows, grams, cosine_threshold, norm_threshold)
                 reconstructed = rows[mapping]
                 merged = mapping != np.arange(len(rows))
-                if fidelity(rows, reconstructed)["minimum_cosine"] < threshold - 1e-12:
+                if fidelity(rows, reconstructed)["minimum_cosine"] < cosine_threshold - 1e-12:
                     raise AssertionError("direct representative threshold violated")
                 directory = args.output_dir / f"order-{order}-seed-{seed}" / f"tau-{threshold}-{policy}"
                 directory.mkdir(parents=True, exist_ok=True)
@@ -151,7 +154,8 @@ def main():
                 with NativeRows(artifact, args.native_library) as table:
                     if table.rows(range(len(rows))) != expected:
                         raise AssertionError("native gather disagrees with approximated rows")
-                entry = {"max_order": order, "seed": seed, "threshold": threshold, "policy": policy,
+                entry = {"max_order": order, "seed": seed, "threshold": threshold if policy != "norm_only_0_99" else None, "policy": policy,
+                         "minimum_cosine_threshold": cosine_threshold, "minimum_norm_ratio": norm_threshold,
                          "rows": len(rows), "retained_representatives": int(len(np.unique(mapping))),
                          "merged_fraction": float(merged.mean()), "source_row_sha256": source["learned_row_sha256"],
                          "input_bytes": len(raw), "representative_float_bytes": int(len(np.unique(mapping)) * settings["dim"] * 4),

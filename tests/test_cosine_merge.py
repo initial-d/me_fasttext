@@ -31,6 +31,14 @@ class CosineMergeTest(unittest.TestCase):
         rows = np.array([[1, 0], [1, 0], [1, 0]], dtype=np.float32)
         self.assertEqual(structural_merge(rows, ["bc", "abc", "xyz"], 0.99).tolist(), [0, 0, 2])
 
+    def test_norm_only_accepts_opposite_directions(self):
+        from tools.benchmark_cosine_merge import structural_merge, fidelity
+        rows = np.array([[1, 0], [-1, 0]], dtype=np.float32)
+        mapping = structural_merge(rows, ["ab", "abc"], -1, 0.99)
+        self.assertEqual(mapping.tolist(), [0, 0])
+        self.assertEqual(fidelity(rows, rows[mapping])["minimum_cosine"], -1)
+        self.assertEqual(fidelity(rows, rows[mapping])["relative_l2_max"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()
