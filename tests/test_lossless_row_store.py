@@ -2,6 +2,7 @@ import random
 import struct
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from tools.lossless_row_store import MappedRows, pack_rows
@@ -41,6 +42,20 @@ class LosslessRowsTest(unittest.TestCase):
                 pack_rows(source, Path(tmp) / "out", 2)
             with self.assertRaises(ValueError):
                 pack_rows(source, source, 1)
+
+    def test_batch_decompresses_each_requested_block_once_with_cache_disabled(self):
+        import tools.lossless_row_store as store
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "packed"
+            rows = [b"aaaa", b"bbbb", b"cccc", b"dddd"]
+            source.write_bytes(b"".join(rows))
+            pack_rows(source, packed, 4, block_rows=2)
+            ids = [0, 2, 0, 2, 1, 3, 0]
+            with MappedRows(packed, cache_blocks=0) as table:
+                with mock.patch.object(store.zlib, "decompress", wraps=store.zlib.decompress) as decode:
+                    self.assertEqual(table.rows(iter(ids)), b"".join(rows[i] for i in ids))
+                    self.assertEqual(decode.call_count, 2)
+                self.assertEqual(table.rows([]), b"")
 
     def test_truncated_payload_is_not_returned_as_a_vector(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -30,13 +30,16 @@ compact row layouts, and mmap lookup.
 - [Run the lossless row-store demo](docs/engram_storage.md#run-the-byte-exact-demo):
   exact-byte deduplication, compressed blocks, original-row-ID forwarding, and
   bounded-cache mmap access. It runs with Python's standard library.
+- [PyTorch gather adapter](docs/engram_gather_adapter.md): immutable CPU
+  replacement for the official demo's multi-head embedding gather, preserving
+  per-head offsets, dtype and tensor shape. Verification uses random weights.
 - [English and Chinese launch copy](docs/engram_promotion.md): a technical
   introduction centered on n-gram memory storage and lookup.
 
 The new reference preserves each original row's bytes and ID lookup. The legacy
 C++ `.z` exporter performs approximate row sharing and has known implementation
-limits; it is not a lossless Engram adapter. No trained Engram checkpoint or
-end-to-end model has been evaluated here. See the
+limits. The new gather adapter is independent of that exporter. No trained
+Engram checkpoint or end-to-end model has been evaluated here. See the
 [implementation audit](docs/engram_storage.md#legacy-export-audit).
 
 ## Help the project grow

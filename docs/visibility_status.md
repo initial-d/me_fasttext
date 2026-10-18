@@ -193,6 +193,13 @@ byte-exact storage from legacy approximate export and records its mismatch with
 the paper. These are synthetic tests and drafts; no trained Engram integration
 or new external/social distribution is claimed.
 
+The next iteration adds an [immutable CPU gather adapter](engram_gather_adapter.md)
+and [official-demo-interface verification](engram_adapter_verification_20261018.md).
+Random-weight results preserve all stored/gathered bytes and original offsets;
+coalescing reduces block decodes within a batch. Storage grows and resident
+PyTorch gather remains faster on these small tables. There is no trained-table
+or end-to-end Engram result.
+
 Primary ask:
 
 > Share a reproducible memory, load-time, retrieval/OOV, or compact-inference
