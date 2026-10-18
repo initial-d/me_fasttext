@@ -52,7 +52,8 @@ def structural_merge(rows, grams, threshold, min_norm_ratio=0.0):
             eligible = (norms[candidates] > 0) & (cosine >= threshold) & (ratios >= min_norm_ratio)
             if eligible.any():
                 positions = np.flatnonzero(eligible)
-                best = positions[np.argmax(cosine[eligible])]
+                score = ratios if threshold == -1 else cosine
+                best = positions[np.argmax(score[eligible])]
                 mapping[row_id] = candidates[best]
                 continue
         retained.add(row_id)
@@ -93,7 +94,7 @@ def main():
     parser.add_argument("--corpus", type=Path, required=True)
     parser.add_argument("--native-library", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--thresholds", default="0.99,0.995,0.999")
+    parser.add_argument("--thresholds", default="0.999,0.995,0.99,0.98,0.97,0.95,0.90")
     args = parser.parse_args()
     thresholds = [float(x) for x in args.thresholds.split(",")]
     if not thresholds or any(not 0 < x <= 1 for x in thresholds):
@@ -116,7 +117,7 @@ def main():
               "device": "CPU", "threads": 1,
               "native_library_sha256": hashlib.sha256(args.native_library.read_bytes()).hexdigest(),
               "thresholds": thresholds, "block_rows": 64,
-              "algorithm": "shortest-key-first, retained proper prefix/suffix ancestors, highest direct original-to-representative cosine; no transitive chains",
+              "algorithm": "shortest-key-first, retained proper prefix/suffix ancestors, highest direct cosine (highest norm ratio for norm-only); no transitive chains",
               "norm_policies": {"cosine_only": 0.0, "cosine_and_norm_0_99": 0.99, "norm_only_0_99": 0.99},
               "limitations": ["Same small English reference as the lossless study, not original C++ or Engram weights.",
                               "Approximate sharing changes source bytes; native store is exact only for reconstructed rows.",
