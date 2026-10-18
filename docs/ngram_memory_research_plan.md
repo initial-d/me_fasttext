@@ -31,6 +31,13 @@ byte verified. Next implement a versioned predictor codec and test grouping
 that does not require source training signatures. High cosine does not itself
 establish exact duplicates or a universal compression ratio.
 
+The [approximate-sharing curves](approximate_ngram_compression_20261018.md) add
+direct representative cosine thresholds and a norm-ratio constraint. At max
+order 12, joint 0.99 cosine/norm gives 2.14–2.16× actual n-gram table compression;
+0.98 gives about 2.35×. Mean n-gram component distortion is small, while changed
+row errors and tail errors are reported separately. Complete-model held-out
+quality remains required before accepting approximation for a serving workload.
+
 ## Experimental design before learned-weight claims
 
 Freeze checkpoint/source hash, tokenizer normalization/hash settings, layers,

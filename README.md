@@ -43,6 +43,10 @@ compact row layouts, and mmap lookup.
   training or a model-quality result.
 - [High-order memory research plan](docs/ngram_memory_research_plan.md): trained
   structural redundancy, lossless codecs, indexing and serving experiments.
+- [Approximate compression curves](docs/approximate_ngram_compression_20261018.md):
+  cosine thresholds 0.999..0.90, norm-ratio controls, actual artifact sizes and
+  vector error. At max order 12, joint cosine/norm ≥0.99 gives 2.14–2.16×
+  n-gram storage reduction; these are vector-only results, not model task loss.
 - [English and Chinese launch copy](docs/engram_promotion.md): a technical
   introduction centered on n-gram memory storage and lookup.
 
