@@ -107,6 +107,11 @@ https://github.com/initial-d/me_fasttext/blob/main/docs/inference_optimization_n
 
 ## Conditional-memory angle post
 
+For the current runnable storage experiment and source audit, prefer
+[Engram-focused launch copy](engram_promotion.md). The older snippets below
+describe broad context; they are not evidence of lossless export or Engram
+integration.
+
 Use this when discussing Engram-style conditional memory or indexed memory
 systems. Keep the framing cautious: adjacent design pressure, not lineage.
 

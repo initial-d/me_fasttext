@@ -1,0 +1,65 @@
+{
+  "category": "synthetic engineering; not an Engram model benchmark",
+  "command": "tools/demo_lossless_rows.py --output-dir artifacts/engram-20261018/rowstore",
+  "commit": "fc137a49f022f8e113180cb36f3165fa355ddd83",
+  "python": "3.9.6 (default, Apr 17 2026, 18:15:52) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "machine": "arm64",
+  "seed": 7,
+  "row_bytes": 256,
+  "n_rows": 2048,
+  "codec": "zlib",
+  "block_rows": 32,
+  "cache_blocks": 4,
+  "cases": {
+    "exact_duplicates": {
+      "unique_rows": 128,
+      "input_bytes": 524288,
+      "artifact_bytes": 49566,
+      "row_map_bytes": 16384,
+      "artifact_to_raw_ratio": 0.09453964233398438,
+      "input_sha256": "944fca7f827eb3b2fff54a6bae94ca9cbe198ad8a11e46505a7dce5c5d3415cf",
+      "artifact_sha256": "521d2697e6e3eedd5f8e81dd6b747d4573a1ec5b6b0a49613fcb8d7e2dd797ed",
+      "all_rows_byte_exact": true,
+      "batch_order_byte_exact": true,
+      "build_seconds": 0.0010799999999999976,
+      "warm_lookup_p50_us": 0.5,
+      "warm_lookup_p95_us": 0.583,
+      "raw_mmap_p50_us": 0.084,
+      "raw_mmap_p95_us": 0.25
+    },
+    "unique_random": {
+      "unique_rows": 2048,
+      "input_bytes": 524288,
+      "artifact_bytes": 544620,
+      "row_map_bytes": 16384,
+      "artifact_to_raw_ratio": 1.0387802124023438,
+      "input_sha256": "e717c56c54547d4d25497ce5155a7f4e9948345593ac8365c873d0d70d7681f4",
+      "artifact_sha256": "99d0681d8119c7e151ba28128ae2bec467c75d48097d45cf464d738fe8ca872c",
+      "all_rows_byte_exact": true,
+      "batch_order_byte_exact": true,
+      "build_seconds": 0.006066457999999997,
+      "warm_lookup_p50_us": 1.542,
+      "warm_lookup_p95_us": 1.667,
+      "raw_mmap_p50_us": 0.083,
+      "raw_mmap_p95_us": 0.208
+    }
+  },
+  "limitations": [
+    "Random bytes, not trained embedding weights.",
+    "Offline builder keeps rows and compressed payloads in RAM.",
+    "Python timing includes dispatch and bytes copies; warm cache, no RSS or GPU test.",
+    "No Engram integration or end-to-end model equivalence measured."
+  ],
+  "exact_command": "python3 tools/demo_lossless_rows.py --output-dir artifacts/engram-20261018/rowstore",
+  "hardware": {
+    "cpu": "Apple M5",
+    "logical_cpus": 10,
+    "memory_bytes": 34359738368,
+    "device": "cpu",
+    "pytorch": "not used",
+    "gpu": "not used"
+  },
+  "test_log": "python3 -m unittest discover -s tests\n.......\n----------------------------------------------------------------------\nRan 7 tests in 0.041s\n\nOK\n",
+  "cost_assumptions": "not applicable; local synthetic byte-table experiment"
+}

@@ -13,7 +13,9 @@ collapsed together:
 1. **Identity.** Use exact trie-backed ids for words and character n-grams, so
    subword rows remain inspectable before compression.
 2. **Compression.** Merge only selected n-gram rows after training, when
-   lexical structure and vector similarity support sharing.
+   the paper's lexical-structure and vector-similarity criterion supports
+   sharing. The legacy implementation differs from that criterion; inspect
+   the [source audit](engram_storage.md#legacy-export-audit) before evaluating it.
 3. **Serving layout.** Rewrite live rows into a dense compact matrix and update
    trie terminal values so the exported `.z` artifact can be mmap-loaded.
 

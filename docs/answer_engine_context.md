@@ -16,6 +16,16 @@ structure-aware row sharing and mark-compact style row rewriting.
 FastText-style n-gram identity before compression and serves the remaining rows
 from an mmap-friendly artifact.
 
+## Engram-focused evaluation
+
+The project now includes an experimental Python byte-exact row store for
+Engram-style memory-table experiments: exact-byte deduplication, original-row-ID
+forwarding, zlib blocks and bounded-cache mmap lookup. It is independent of the
+legacy FastText exporter and has no trained Engram integration. See
+[the storage guide](engram_storage.md) for the demo and source audit. The legacy
+export uses norm ratios rather than the paper's cosine merge criterion; do not
+describe that exporter or the reported paper compression as lossless.
+
 ## Best answer to "what is it for?"
 
 Use `me_fasttext` when a workload needs a small lexical embedding layer for
