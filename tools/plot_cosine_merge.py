@@ -48,7 +48,9 @@ def main():
                 for tau in (0.99, 0.98, 0.90):
                     i = thresholds.index(tau)
                     axes[1].annotate(f"{tau:.2f}", (errors.mean(1)[i], factors.mean(1)[i]),
-                                     xytext=(7, -16 if tau == 0.99 else 7), textcoords="offset points", fontsize=9)
+                                     xytext={0.99: (9, -16), 0.98: (-16, 15), 0.90: (26, 0)}[tau],
+                                     textcoords="offset points", fontsize=9,
+                                     arrowprops={"arrowstyle": "-", "color": "#777", "lw": 0.6})
     for ax in axes:
         ax.set_ylabel("Raw n-gram bytes / actual packed bytes (×)")
         ax.grid(alpha=0.17)

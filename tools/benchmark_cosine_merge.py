@@ -155,13 +155,22 @@ def main():
                 with NativeRows(artifact, args.native_library) as table:
                     if table.rows(range(len(rows))) != expected:
                         raise AssertionError("native gather disagrees with approximated rows")
+                manifest = directory / "APPROXIMATION.json"
+                manifest.write_text(json.dumps({"approximate": True, "source_row_sha256": source["learned_row_sha256"],
+                                                "reconstructed_row_sha256": hashlib.sha256(expected).hexdigest(),
+                                                "minimum_cosine": cosine_threshold, "minimum_norm_ratio": norm_threshold,
+                                                "policy": policy, "original_rows": len(rows), "dtype": "little-endian float32",
+                                                "dim": settings["dim"], "warning": "Reconstruction changes original source vectors; not lossless."}, indent=2) + "\n")
+                artifact_bytes = packed["artifact_bytes"] + manifest.stat().st_size
                 entry = {"max_order": order, "seed": seed, "threshold": threshold if policy != "norm_only_0_99" else None, "policy": policy,
                          "minimum_cosine_threshold": cosine_threshold, "minimum_norm_ratio": norm_threshold,
                          "rows": len(rows), "retained_representatives": int(len(np.unique(mapping))),
                          "merged_fraction": float(merged.mean()), "source_row_sha256": source["learned_row_sha256"],
                          "input_bytes": len(raw), "representative_float_bytes": int(len(np.unique(mapping)) * settings["dim"] * 4),
-                         "storage": packed, "compression_factor_raw_to_artifact": len(raw) / packed["artifact_bytes"],
-                         "compression_factor_lossless_to_artifact": source["native_lossless_storage"]["artifact_bytes"] / packed["artifact_bytes"],
+                         "storage": packed, "approximation_manifest_bytes": manifest.stat().st_size,
+                         "total_artifact_bytes": artifact_bytes,
+                         "compression_factor_raw_to_artifact": len(raw) / artifact_bytes,
+                         "compression_factor_lossless_to_artifact": source["native_lossless_storage"]["artifact_bytes"] / artifact_bytes,
                          "row_fidelity": fidelity(rows, reconstructed, mass),
                          "merged_row_fidelity": fidelity(rows[merged], reconstructed[merged], np.asarray(mass)[merged]) if merged.any() else {"rows": 0},
                          "word_ngram_component_fidelity": fidelity(original_words, compose_subwords(reconstructed, words, grams, order), word_mass),
