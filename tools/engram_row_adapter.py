@@ -164,6 +164,22 @@ class MappedMultiHeadEmbedding(nn.Module):
         self.close()
 
 
+def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library=None):
+    """Factory-compatible loader for one exported immutable CPU layer.
+
+    Bind output_dir with functools.partial for Engram's proposed factory hook.
+    Validate the requesting layer's layout; caller owns returned module.close().
+    """
+    head_offsets(list_of_N)
+    if type(D) is not int or D <= 0:
+        raise ValueError("embedding dimension must be a positive integer")
+    mapped = MappedMultiHeadEmbedding(output_dir, cache_blocks, native_library)
+    if list(list_of_N) != mapped.metadata["head_sizes"] or D != mapped.embedding_dim:
+        mapped.close()
+        raise ValueError("exported head sizes/dimension differ from requesting Engram layer")
+    return mapped
+
+
 def export_embedding(module, output_dir, block_rows=256, backend="native", deduplicate=True):
     """Export ordinary nn.Embedding without forward-time max_norm mutation."""
     if not isinstance(module, nn.Embedding) or module.max_norm is not None:

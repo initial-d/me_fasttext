@@ -97,6 +97,29 @@ class EngramGatherTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "checksum"):
                 MappedMultiHeadEmbedding(tmp)
 
+    def test_factory_layout_checks_and_cleanup_on_failure(self):
+        from functools import partial
+        from unittest.mock import patch
+        from tools.engram_row_adapter import export_multihead, open_demo_embedding, MappedMultiHeadEmbedding
+        with tempfile.TemporaryDirectory() as tmp:
+            source = torch.arange(21, dtype=torch.float32).reshape(7, 3)
+            export_multihead(source, [3, 4], tmp, 2)
+            factory = partial(open_demo_embedding, tmp)
+            with factory(list_of_N=[3, 4], D=3) as mapped:
+                ids = torch.tensor([[2, 3], [0, 0]])
+                expected = torch.nn.functional.embedding(ids + torch.tensor([0, 3]), source)
+                self.assertTrue(torch.equal(mapped(ids), expected))
+                with self.assertRaises(RuntimeError):
+                    mapped.train()
+            self.assertTrue(mapped.table.file.closed)
+            # Same total rows does not mean the head addressing is compatible.
+            for sizes, dim in (([4, 3], 3), ([3, 4], 4)):
+                opened = MappedMultiHeadEmbedding(tmp)
+                with patch("tools.engram_row_adapter.MappedMultiHeadEmbedding", return_value=opened), \
+                        self.assertRaisesRegex(ValueError, "requesting Engram layer"):
+                    factory(list_of_N=sizes, D=dim)
+                self.assertTrue(opened.table.file.closed)
+
 
 if __name__ == "__main__":
     unittest.main()

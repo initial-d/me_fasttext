@@ -23,7 +23,40 @@ useful in your work, please cite the arXiv paper:
 }
 ```
 
-## When to cite
+## Cite the native n-gram artifact
+
+The C gather ABI, immutable PyTorch adapters and Engram-related experiments are
+later software work. Cite their exact repository commit/report alongside the
+FastText paper when relevant; do not attribute the new results to that paper.
+Replace the bracketed commit below with the full SHA used in your experiment:
+
+```bibtex
+@misc{du2026mefasttextngramstorage,
+  author       = {Yimin Du},
+  title        = {me_fasttext: Native n-gram storage and gather experiments},
+  year         = {2026},
+  howpublished = {Software and reproducibility artifact},
+  url          = {https://github.com/initial-d/me_fasttext},
+  note         = {Commit [full SHA]; report [report path and date]}
+}
+```
+
+This is a repository/software citation, not a new publication or minted DOI.
+The [Engram quickstart](engram_quickstart.md) connects code, source-pinned
+verification, trained results and comparison requirements.
+
+Suggested wording for the tested boundary:
+
+> The me_fasttext artifact provides immutable CPU storage/gather adapters that
+> preserve original hash IDs, head offsets and row bytes. Small source-pinned
+> Engram demo checks also preserve gated module output; trained checkpoint,
+> GPU-serving and task-quality validation remain open.
+
+For approximate compression, name the actual trained table/corpus, threshold,
+norm guard, byte denominator and distortion metric. Do not describe the
+character-ngram reference's compression factor as an Engram model result.
+
+## When to cite the method
 
 `me_fasttext` is most relevant when your work discusses:
 

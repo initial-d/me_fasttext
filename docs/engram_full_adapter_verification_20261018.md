@@ -36,6 +36,11 @@ store during construction, avoiding that initial allocation. It is a narrow
 extension point; it neither bundles this project's code nor supplies offload,
 compression, checkpoint loading or a training implementation.
 
+The [published upstream draft PR #27](https://github.com/deepseek-ai/Engram/pull/27)
+now has a [runnable factory quickstart](engram_quickstart.md) and six-case
+verification using real Python/native mapped backends. It remains unmerged as
+checked on 2026-10-19; this report still executes unchanged official main.
+
 ## Reproduce
 
 ```bash
