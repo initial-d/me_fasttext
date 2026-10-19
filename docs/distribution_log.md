@@ -1,5 +1,23 @@
 # Distribution log
 
+## Engram contribution and runnable artifact — 2026-10-19
+
+[DeepSeek Engram draft PR #27](https://github.com/deepseek-ai/Engram/pull/27)
+was submitted on 2026-10-18 for an optional embedding factory. Checked on
+2026-10-19: open/draft, no reviews or comments, not merged. The upstream change
+has no me_fasttext dependency or official-adoption claim.
+
+The [reader quickstart](engram_quickstart.md) connects this contribution to
+real mapped-backend construction, official CPU forward equality, trained
+character-ngram distortion curves and software/paper citations. Six proposal
+factory cases avoid default table allocation and preserve full module output;
+25 unit tests pass. Real Engram weights/GPU/task quality remain open.
+
+The traffic response checked on 2026-10-19 ends before the PR submission, so it
+cannot establish PR-attributed discovery, stars or citations. This update makes
+the reproduction/reuse path concrete; it does not record a measured conversion
+rate. No new third-party comment or social message is sent for this update.
+
 ## Engram storage entry — 2026-10-18
 
 Added an Engram-focused README entry, architecture/storage guide, byte-exact

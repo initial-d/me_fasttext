@@ -23,7 +23,9 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 [DeepSeek's Engram](https://github.com/deepseek-ai/Engram) highlights a concrete
 systems question: **how do we store and serve large n-gram memory tables?**
 This project makes that question inspectable through exact trie indexing,
-compact row layouts, and mmap lookup.
+compact row layouts, and mmap lookup. **[Run, evaluate and cite the Engram
+storage artifact](docs/engram_quickstart.md)** is the shortest path from the
+interface proposal to executable code and source-linked evidence.
 
 - [Engram storage guide](docs/engram_storage.md): architecture mapping,
   byte-preservation contract, and the adapter boundary for token/hash row IDs.

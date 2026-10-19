@@ -46,3 +46,29 @@ jobs:
           python-version: "3.12"
       - name: Check native ABI and malformed files
         run: python tools/check_native_sanitizers.py
+
+  engram-factory:
+    name: Engram factory integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install CPU demo dependencies
+        run: |
+          python -m pip install numpy sympy transformers tokenizers
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Build native row gather
+        run: make native
+      - name: Fetch source-pinned demo proposal
+        run: |
+          curl -fL https://raw.githubusercontent.com/initial-d/Engram/8b4155c2f8fc886ef27973d1164b798126f90c0d/engram_demo_v1.py -o /tmp/engram_factory_v1.py
+      - name: Verify factory through full CPU module output
+        run: |
+          python tools/demo_engram_factory.py --proposal-source /tmp/engram_factory_v1.py --native-library build/libmeft_rows.so --output-dir artifacts/engram-factory
+      - name: Preserve integration report
+        uses: actions/upload-artifact@v4
+        with:
+          name: engram-factory-report
+          path: artifacts/engram-factory/report.json
