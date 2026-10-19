@@ -149,6 +149,19 @@ class NativeRowsTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "predictor"):
                 pack_native(source, packed, 3, predictor="invalid")
 
+    def test_xor_decoder_handles_unaligned_rows_and_word_tails(self):
+        rng = random.Random(37)
+        for width in (127, 255, 257):
+            with self.subTest(width=width), tempfile.TemporaryDirectory() as tmp:
+                base = rng.randbytes(width)
+                rows = [base[:i] + bytes([base[i] ^ 1]) + base[i + 1:] for i in range(17)]
+                source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+                source.write_bytes(b"".join(rows))
+                result = pack_native(source, packed, width, 8, False, "xor")
+                self.assertGreater(result["xor_blocks"], 0)
+                with NativeRows(packed, self.library) as table:
+                    self.assertEqual(table.rows(range(17)), b"".join(rows))
+
     def test_xor_torch_reconstructs_nonfinite_bit_patterns(self):
         try:
             import torch

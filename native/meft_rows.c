@@ -141,8 +141,21 @@ int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
              * reconstructs original bits without floating-point arithmetic. */
             if (codec == 2) {
                 size_t width = (size_t)s->width;
-                for (size_t j = width; j < (size_t)raw; ++j)
-                    s->scratch[j] ^= s->scratch[j - width];
+                for (size_t start = width; start < (size_t)raw; start += width) {
+                    unsigned char *current = s->scratch + start;
+                    const unsigned char *previous = current - width;
+                    size_t j = 0;
+                    /* memcpy permits unaligned rows/odd widths without aliasing
+                     * or alignment UB, and compilers lower it to word loads. */
+                    for (; width - j >= sizeof(uint64_t); j += sizeof(uint64_t)) {
+                        uint64_t a, b;
+                        memcpy(&a, current + j, sizeof(a));
+                        memcpy(&b, previous + j, sizeof(b));
+                        a ^= b;
+                        memcpy(current + j, &a, sizeof(a));
+                    }
+                    for (; j < width; ++j) current[j] ^= previous[j];
+                }
             }
             bytes = s->scratch; ++s->last_decodes;
         }
