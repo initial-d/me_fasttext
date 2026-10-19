@@ -20,20 +20,25 @@ def main():
                         str(ROOT / "native/check_native.c"), str(ROOT / "native/meft_rows.c"),
                         "-lz", "-o", str(driver)], check=True)
         source, table = tmp / "raw", tmp / "table.men"
-        source.write_bytes(b"".join(bytes([i % 13]) * 256 for i in range(128)))
-        pack_native(source, table, 256, 8)
-        valid = table.read_bytes()
         rng = random.Random(7)
-        subprocess.run([str(driver), str(table)], check=True)
-        for i in range(64):
-            raw = bytearray(valid)
-            for _ in range(1 + i % 3):
-                raw[rng.randrange(len(raw))] ^= rng.randrange(1, 256)
-            if i % 4 == 0:
-                raw = raw[:rng.randrange(len(raw))]
-            table.write_bytes(raw)
+        base = rng.randbytes(256)
+        source.write_bytes(b"".join(base[:i] + bytes([base[i] ^ 1]) + base[i + 1:]
+                                  for i in range(128)))
+        for predictor in ("none", "xor"):
+            packed = pack_native(source, table, 256, 8, False, predictor)
+            if predictor == "xor" and not packed["xor_blocks"]:
+                raise AssertionError("sanitizer fixture must exercise native XOR decoding")
+            valid = table.read_bytes()
             subprocess.run([str(driver), str(table)], check=True)
-    print("ASan/UBSan: valid artifact and 64 mutated/truncated files checked.")
+            for i in range(64):
+                raw = bytearray(valid)
+                for _ in range(1 + i % 3):
+                    raw[rng.randrange(len(raw))] ^= rng.randrange(1, 256)
+                if i % 4 == 0:
+                    raw = raw[:rng.randrange(len(raw))]
+                table.write_bytes(raw)
+                subprocess.run([str(driver), str(table)], check=True)
+    print("ASan/UBSan: versions 1/2 and 128 mutated/truncated files checked.")
 
 
 if __name__ == "__main__":

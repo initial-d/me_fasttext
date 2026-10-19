@@ -11,6 +11,11 @@ increases the proportion of these signatures in the structural pair population.
 This supports studying learned structural redundancy; it does not establish that
 all prefix/suffix neighbors have cosine ≥0.99.
 
+**2026-10-20 follow-up:** the [native XOR codec](native_xor_compression_20261020.md)
+now writes and queries actual version 2 artifacts on these same hashed rows.
+The results below remain the original offline estimates; the follow-up reports
+actual file sizes, byte equality and CPU latency separately.
+
 Raw evidence: [all nine trained runs](native_ngram_evidence_20261018/trained-reference.json),
 [residual/layout runs](native_ngram_evidence_20261018/trained-residuals.json),
 [environment and source hashes](native_ngram_evidence_20261018/provenance.json).

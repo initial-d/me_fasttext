@@ -11,12 +11,17 @@ DESC = struct.Struct("<4Q")
 ROW = struct.Struct("<Q")
 
 
-def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True):
+def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
+                predictor="none", row_order=None):
     """Stream blocks into a spool; exact dedup index still grows with unique rows.
 
     deduplicate=False avoids the unbounded unique-row dictionary for large raw
     tables, while preserving the identity forwarding map. No numeric changes.
     Incompressible blocks are stored raw, avoiding codec expansion per block.
+    predictor="xor" tries previous-row XOR + zlib as a third block candidate
+    and writes format version 2. Version 1 remains the default. Optional
+    row_order is a full permutation of original IDs; its validation uses O(n)
+    memory and reading becomes nonsequential. Original query IDs stay unchanged.
     """
     source, output = Path(source), Path(output)
     if source.resolve() == output.resolve() or row_bytes <= 0 or block_rows <= 0:
@@ -24,6 +29,14 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True):
     nrows, remainder = divmod(source.stat().st_size, row_bytes)
     if remainder:
         raise ValueError("partial input row")
+    if predictor not in ("none", "xor"):
+        raise ValueError("predictor must be none or xor")
+    if row_order is not None:
+        row_order = list(row_order)
+        if (len(row_order) != nrows or
+                any(type(i) is not int or not 0 <= i < nrows for i in row_order) or
+                len(set(row_order)) != nrows):
+            raise ValueError("row_order must be a permutation of all original row IDs")
     unique, blocks, seen, pending = 0, [], {}, []
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryFile(dir=output.parent) as map_file, tempfile.TemporaryFile(dir=output.parent) as spool:
@@ -32,12 +45,22 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True):
             compressed = zlib.compress(raw)
             codec = int(len(compressed) < len(raw))
             encoded = compressed if codec else raw
+            if predictor == "xor" and len(pending) > 1:
+                residual = bytearray(raw)
+                previous = memoryview(raw)
+                for j in range(row_bytes, len(raw)):
+                    residual[j] ^= previous[j - row_bytes]
+                candidate = zlib.compress(residual)
+                if len(candidate) < len(encoded):
+                    encoded, codec = candidate, 2
             blocks.append((spool.tell(), len(encoded), len(raw), codec))
             spool.write(encoded)
             pending.clear()
 
         with source.open("rb") as stream:
-            for _ in range(nrows):
+            for original_id in range(nrows) if row_order is None else row_order:
+                if row_order is not None:
+                    stream.seek(original_id * row_bytes)
                 row = stream.read(row_bytes)
                 if len(row) != row_bytes:
                     raise ValueError("source changed or truncated while exporting")
@@ -50,14 +73,17 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True):
                     pending.append(row)
                     if len(pending) == block_rows:
                         flush()
+                if row_order is not None:
+                    map_file.seek(original_id * ROW.size)
                 map_file.write(ROW.pack(index))
-            if stream.read(1):
-                raise ValueError("source grew while exporting")
+            if os.fstat(stream.fileno()).st_size != nrows * row_bytes:
+                raise ValueError("source size changed while exporting")
         if pending:
             flush()
         payload_start = HEADER.size + nrows * ROW.size + len(blocks) * DESC.size
         with output.open("wb") as dest:
-            dest.write(HEADER.pack(b"MEFTNAT1", 1, nrows, row_bytes, unique, block_rows, len(blocks)))
+            version = 2 if predictor == "xor" else 1
+            dest.write(HEADER.pack(b"MEFTNAT1", version, nrows, row_bytes, unique, block_rows, len(blocks)))
             map_file.seek(0)
             for part in iter(lambda: map_file.read(1024 * 1024), b""):
                 dest.write(part)
@@ -66,13 +92,16 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True):
             spool.seek(0)
             for part in iter(lambda: spool.read(1024 * 1024), b""):
                 dest.write(part)
-    return {"format": "MEFTNAT1", "input_bytes": nrows * row_bytes,
+    return {"format": "MEFTNAT1", "format_version": version, "input_bytes": nrows * row_bytes,
             "artifact_bytes": output.stat().st_size, "unique_rows": unique,
             "row_map_bytes": nrows * ROW.size, "n_rows": nrows, "row_bytes": row_bytes,
             "block_rows": block_rows, "blocks": len(blocks),
             "raw_blocks": sum(codec == 0 for _, _, _, codec in blocks),
-            "compressed_blocks": sum(codec == 1 for _, _, _, codec in blocks),
-            "deduplicate": deduplicate}
+            "compressed_blocks": sum(codec != 0 for _, _, _, codec in blocks),
+            "zlib_blocks": sum(codec == 1 for _, _, _, codec in blocks),
+            "xor_blocks": sum(codec == 2 for _, _, _, codec in blocks),
+            "deduplicate": deduplicate, "predictor": predictor,
+            "reordered": row_order is not None}
 
 
 class NativeRows:

@@ -10,14 +10,14 @@ on trained character n-grams, with an explicit cosine/norm distortion budget.
 
 | What you want to do | Start here | Evidence |
 | --- | --- | --- |
-| Verify current official Engram module outputs | [Official CPU forward](engram_full_adapter_verification_20261018.md) | Six small random-weight cases preserve full gates/ShortConv output and all rows |
-| Open a frozen table without allocating the default table first | Factory example below | Proposed fork API; six Python/native × dtype cases, default allocation prevented |
+| Verify current official Engram module outputs | [Official CPU forward](engram_full_adapter_verification_20261018.md), [codec follow-up](native_xor_compression_20261020.md) | Nine cases with Python/native/native-XOR across three dtypes; tiny random weights |
+| Open a frozen table without allocating the default table first | Factory example below | Proposed fork API; nine cases including native-XOR, default allocation prevented |
 | Evaluate learned redundancy and compression | [Trained study](trained_ngram_similarity_20261018.md), [distortion curves](approximate_ngram_compression_20261018.md) | Nine trained character-ngram tables; 135 approximate cases, not trained Engram weights |
 | Integrate another model/runtime | [C ABI and model guide](native_ngram_memory.md) | CPU gather boundary; GPU/checkpoint/runtime work remains |
 
 The [upstream draft PR #27](https://github.com/deepseek-ai/Engram/pull/27)
 proposes an optional `embedding_factory`. It is **open and unmerged** as checked
-on 2026-10-19. Current official main can use post-construction replacement;
+on 2026-10-20. Current official main can use post-construction replacement;
 the factory example needs the pinned proposal source. This is a submitted
 contribution, not official adoption or endorsement.
 
@@ -44,7 +44,7 @@ constructs a second Engram module through the real mapped backend. Default table
 construction is patched to fail, so a successful run proves it was avoided.
 Original downstream weights are restored before comparing full module output.
 
-The harness runs six cases: float32/float16/bfloat16 × Python/native. It executes
+The harness runs nine cases: float32/float16/bfloat16 × Python/native/native-XOR. It executes
 original hash initialization, addressing, projections, gates and ShortConv.
 Tokenizer construction uses a tiny identity fixture; no tokenizer or checkpoint
 download is made. Use a fresh output directory. Results are integration checks,
@@ -58,6 +58,8 @@ sympy1.14.0, Apple M5/10 logical CPUs/32 GiB/macOS26.6.2 arm64, one torch/intero
 thread, Apple clang21.0.0 native build. Local CPU only, no paid API/rented compute
 or monetary/energy estimate. Avoided table allocation is a functional check;
 total process memory and serving speed were not measured.
+The [2026-10-20 follow-up](native_xor_compression_20261020.md) verifies all nine
+cases, including optional version 2 lossless encoding.
 
 ## Use your own immutable table
 
@@ -97,7 +99,7 @@ works without the proposal but initially allocates the original embedding table.
 | Mode | Learned character-ngram result | What it preserves |
 | --- | --- | --- |
 | Native exact block storage | About 5% size saving | Every original row byte |
-| Offline XOR/update-group prediction | Estimated 6.9–9.1% saving | Every original bit; predictor not in native reader |
+| [Native adaptive XOR/update-group layout](native_xor_compression_20261020.md) | Actual 6.9–9.1% saving; layout needs training signatures | Every original bit; C-readable files, query costs reported |
 | Approximate cosine + norm ≥0.99, max order12 | Actual 2.14–2.16× storage reduction | Original IDs; vectors change, mean ngram-component relative L2 about 0.48% |
 | Approximate cosine ≥0.98 + norm ≥0.99, max order12 | About 2.35× | Original IDs; vectors change, mean component relative L2 about 0.52%, worst about 3.79% |
 

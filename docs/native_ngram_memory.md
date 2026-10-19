@@ -50,6 +50,9 @@ not an ANN/nearest-neighbor engine.
 8-byte original-row-ID forwarding map, 32-byte block descriptors and block
 payloads. The schema lives beside the reader in `native/meft_rows.c`.
 Rows are opaque source bytes; dtype/endian reconstruction belongs to the caller.
+Version 1 uses raw/zlib blocks. Optional version 2 adds previous-row bitwise XOR
+followed by zlib. The new reader accepts both; old readers reject version 2.
+The C ABI and map/descriptor widths are unchanged.
 
 The exporter shares only byte-identical rows when `deduplicate=True`. With
 `deduplicate=False`, it streams the source using a block buffer and temporary
@@ -57,7 +60,11 @@ map/payload files, avoiding a dictionary of every unique row. Descriptor memory
 still grows with the number of blocks. It retains all rows for arbitrary future
 queries; it does not prune according to a sample query trace.
 
-Each block chooses zlib only when smaller than the raw block. Raw fallback
+Each block chooses zlib only when smaller than the raw block. With
+`predictor="xor"`, the exporter also tries zlib-compressed XOR residuals and
+keeps the smallest of all three candidates. The first row resets prediction
+inside each block; C reconstructs the full block before copying queried rows.
+This preserves all bits and adds decoding work. Raw fallback
 avoids codec expansion, but maps/descriptors/metadata can still make the whole
 artifact larger. This is a distinct format, not a reinterpretation of legacy
 `.z` or Python `MEFTROW1` files.
@@ -70,6 +77,15 @@ locations. Direct C opening does not verify a full-file cryptographic checksum;
 the PyTorch adapter does. Use trusted, immutable artifacts and external checksums
 for archival provenance. Structural checks and sanitizers are not a production
 artifact-security guarantee.
+
+To enable the optional codec, pass `predictor="xor"` to `pack_native`,
+`export_demo_embedding`, `export_multihead` or `export_embedding` with the native
+backend. Existing calls still write version 1. `pack_native(..., row_order=...)`
+accepts a full permutation of original IDs for locality experiments; the stored
+forwarding map restores original lookup IDs even across reordered/deduplicated
+rows. Permutation validation uses O(n) memory and export reads become
+nonsequential. Default sequential no-dedup export remains block-streamed.
+See [actual files and query measurements](native_xor_compression_20261020.md).
 
 ## PyTorch: two integration boundaries
 
@@ -144,8 +160,9 @@ Random rows are only interface/low-redundancy controls. The primary
 real-text SGNS across maxima 4/8/12 and three seeds. Identical-update structural
 pairs have median cosine about 0.996; their share increases at higher orders.
 Native ordinary block storage preserves all bytes and saves about 5%. A separate
-offline XOR/layout experiment estimates 6.9–9.1% savings; that predictor is not
-part of the native reader. Similarity and exact-byte equality are measured
+offline XOR/layout experiment estimated 6.9–9.1% savings. The
+[native follow-up](native_xor_compression_20261020.md) now writes and reads actual
+adaptive XOR files with comparable savings and disclosed query costs. Similarity and exact-byte equality are measured
 separately, with shuffled controls and all runs disclosed.
 
 ## Verification and next milestones

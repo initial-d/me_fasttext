@@ -1,0 +1,2766 @@
+{
+  "category": "public-text trained SGNS rows; native lossless storage/warm CPU gather only",
+  "commit": "af7e8dee343ef1f604998560aa8b79a69002316f",
+  "exact_command": "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/benchmark_native_residuals.py --training-dir artifacts/native-ngram-20261018/trained-reference --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --output-dir artifacts/native-xor-20261020 --block-rows 64 --repeat 40",
+  "source_sha256": {
+    "native/meft_rows.c": "d370c1c9b0161371f18cc7c6c33ea1947ab36a57b4c9a1415c1d537e219f7c6d",
+    "tools/native_row_store.py": "157950e2fdd9f5530ab6a7a8c039aff84f7c3c863f72cd64f9ed835bd88ff3e9",
+    "tools/benchmark_native_residuals.py": "5d4d6ad730ad07befa40c0e1c08617652446d2cf78dd6b88ef3c1a5ee32d565a"
+  },
+  "training_commit": "ba564539489c44ff2582a7d83039a57c7dde7b9e",
+  "training_report_sha256": "d555aa72c2e761488e41b50b472cdfc88fd32fc29b73136e9effa522be050f02",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "corpus_bytes": 1115394,
+  "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+  "native_library_sha256": "04d552b1c74393cc3008753d897257085ab0834c0cba723d4c04a493e9081690",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "numpy": "2.5.4",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "device": "CPU",
+  "threads": 1,
+  "block_rows": 64,
+  "repeat": 40,
+  "runs": [
+    {
+      "max_order": 4,
+      "seed": 3,
+      "input_bytes": 2730496,
+      "rows": 5333,
+      "source_sha256": "90831a04809658c42b56b37046b1ad7b6035c1d55bb5c3ab2f777c5ca66145b3",
+      "layouts": {
+        "lexical": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2594226,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": false,
+            "export_seconds": 0.042926792,
+            "artifact_sha256": "40ca3d5d7caee4f2454506eed9b8e675f1b42fedbf244440ade6f3ff7d18230a",
+            "permutation_sha256": "b87cb171f9ce05babadb9abe917f696021522d5fafe1c497d777370a59cf220d",
+            "artifact_to_raw_ratio": 0.9500933163791487,
+            "open_ms_after_export": 422.31975,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 56.458,
+                "p95_us": 56.6354,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "da46d57937253189b4c2d0babbeadb664db2aca40d8cae758b98c45888f15926"
+              },
+              "32": {
+                "p50_us": 1194.1664999999998,
+                "p95_us": 1212.1389499999998,
+                "block_reads": 22,
+                "decompressions": 22,
+                "ids_sha256": "3c700f5f9e48c92da10cc5f478a8736f13f7a4f1435f98878135ea657a7ac091"
+              },
+              "256": {
+                "p50_us": 4184.8544999999995,
+                "p95_us": 4230.829500000001,
+                "block_reads": 75,
+                "decompressions": 75,
+                "ids_sha256": "41b950ea5a9cd6fa6e959d88de660549f6827f440fa233cccb5ca5e1c724efc5"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2593776,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 78,
+            "xor_blocks": 6,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": false,
+            "export_seconds": 0.165618917,
+            "artifact_sha256": "0bc08c3c68ea96e8a7a78e113190a8b65d8d664ef3a03eb73446f30151c8f88f",
+            "permutation_sha256": "b87cb171f9ce05babadb9abe917f696021522d5fafe1c497d777370a59cf220d",
+            "artifact_to_raw_ratio": 0.9499285111569473,
+            "open_ms_after_export": 0.170084,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 56.5,
+                "p95_us": 58.29584999999998,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "da46d57937253189b4c2d0babbeadb664db2aca40d8cae758b98c45888f15926"
+              },
+              "32": {
+                "p50_us": 1201.9164999999998,
+                "p95_us": 1208.9270999999999,
+                "block_reads": 22,
+                "decompressions": 22,
+                "ids_sha256": "3c700f5f9e48c92da10cc5f478a8736f13f7a4f1435f98878135ea657a7ac091"
+              },
+              "256": {
+                "p50_us": 4230.3125,
+                "p95_us": 4289.70975,
+                "block_reads": 75,
+                "decompressions": 75,
+                "ids_sha256": "41b950ea5a9cd6fa6e959d88de660549f6827f440fa233cccb5ca5e1c724efc5"
+              }
+            }
+          }
+        },
+        "shuffled": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2594603,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.05328875,
+            "artifact_sha256": "78b733fbb3b2ef9bdeb3fb44f279054632149cad9e3199c894e0900537f73d9b",
+            "permutation_sha256": "9591a55812696d6da85dd3e9df845ef3a531dffb54dc764ef479e213810df013",
+            "artifact_to_raw_ratio": 0.9502313865319707,
+            "open_ms_after_export": 0.163667,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 56.292,
+                "p95_us": 56.542,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "da46d57937253189b4c2d0babbeadb664db2aca40d8cae758b98c45888f15926"
+              },
+              "32": {
+                "p50_us": 1137.417,
+                "p95_us": 1158.6577,
+                "block_reads": 21,
+                "decompressions": 21,
+                "ids_sha256": "3c700f5f9e48c92da10cc5f478a8736f13f7a4f1435f98878135ea657a7ac091"
+              },
+              "256": {
+                "p50_us": 4228.291499999999,
+                "p95_us": 4282.4101,
+                "block_reads": 76,
+                "decompressions": 76,
+                "ids_sha256": "41b950ea5a9cd6fa6e959d88de660549f6827f440fa233cccb5ca5e1c724efc5"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2594603,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.177018167,
+            "artifact_sha256": "490ef06318a30d0567ffa40d4383cdb28762696eb7db25efed234c30e72c1e33",
+            "permutation_sha256": "9591a55812696d6da85dd3e9df845ef3a531dffb54dc764ef479e213810df013",
+            "artifact_to_raw_ratio": 0.9502313865319707,
+            "open_ms_after_export": 0.148375,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 56.333,
+                "p95_us": 56.542,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "da46d57937253189b4c2d0babbeadb664db2aca40d8cae758b98c45888f15926"
+              },
+              "32": {
+                "p50_us": 1137.3125,
+                "p95_us": 1154.1649,
+                "block_reads": 21,
+                "decompressions": 21,
+                "ids_sha256": "3c700f5f9e48c92da10cc5f478a8736f13f7a4f1435f98878135ea657a7ac091"
+              },
+              "256": {
+                "p50_us": 4237.5,
+                "p95_us": 4289.09615,
+                "block_reads": 76,
+                "decompressions": 76,
+                "ids_sha256": "41b950ea5a9cd6fa6e959d88de660549f6827f440fa233cccb5ca5e1c724efc5"
+              }
+            }
+          }
+        },
+        "identical_update_group": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2583886,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.053749875,
+            "artifact_sha256": "9682af627a3466c09d8701c13ad688381d8f18b66a910cb244a8b5ae4247a31f",
+            "permutation_sha256": "04e21e3d49baacf2e6961e3e2707993280fe6ddf30ec7757aa133263eed4ca3f",
+            "artifact_to_raw_ratio": 0.946306458606788,
+            "open_ms_after_export": 0.147334,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 56.3335,
+                "p95_us": 57.64134999999998,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "da46d57937253189b4c2d0babbeadb664db2aca40d8cae758b98c45888f15926"
+              },
+              "32": {
+                "p50_us": 1231.708,
+                "p95_us": 1257.17675,
+                "block_reads": 22,
+                "decompressions": 22,
+                "ids_sha256": "3c700f5f9e48c92da10cc5f478a8736f13f7a4f1435f98878135ea657a7ac091"
+              },
+              "256": {
+                "p50_us": 4407.9375,
+                "p95_us": 4479.66045,
+                "block_reads": 79,
+                "decompressions": 79,
+                "ids_sha256": "41b950ea5a9cd6fa6e959d88de660549f6827f440fa233cccb5ca5e1c724efc5"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2541597,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 4,
+            "xor_blocks": 80,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.181412834,
+            "artifact_sha256": "4d941e6d29e8b5e5828d08951d2628cdb6d37cab502d06c674a4c1142cb4c48b",
+            "permutation_sha256": "04e21e3d49baacf2e6961e3e2707993280fe6ddf30ec7757aa133263eed4ca3f",
+            "artifact_to_raw_ratio": 0.9308187962919557,
+            "open_ms_after_export": 0.143208,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 65.021,
+                "p95_us": 68.79615,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "da46d57937253189b4c2d0babbeadb664db2aca40d8cae758b98c45888f15926"
+              },
+              "32": {
+                "p50_us": 1408.7505,
+                "p95_us": 1440.3413500000001,
+                "block_reads": 22,
+                "decompressions": 22,
+                "ids_sha256": "3c700f5f9e48c92da10cc5f478a8736f13f7a4f1435f98878135ea657a7ac091"
+              },
+              "256": {
+                "p50_us": 5098.25,
+                "p95_us": 5163.7774,
+                "block_reads": 79,
+                "decompressions": 79,
+                "ids_sha256": "41b950ea5a9cd6fa6e959d88de660549f6827f440fa233cccb5ca5e1c724efc5"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "max_order": 4,
+      "seed": 7,
+      "input_bytes": 2730496,
+      "rows": 5333,
+      "source_sha256": "8e02a804ab58387d46d2ffc3cf20b2e4afe2a2d05b24dca43ec60087753a574b",
+      "layouts": {
+        "lexical": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2593811,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": false,
+            "export_seconds": 0.042431333,
+            "artifact_sha256": "08360f79fb532b3bb0a9fa6853acaf70c855601687e5dcd21d03d034740cea2f",
+            "permutation_sha256": "b87cb171f9ce05babadb9abe917f696021522d5fafe1c497d777370a59cf220d",
+            "artifact_to_raw_ratio": 0.9499413293408963,
+            "open_ms_after_export": 0.153166,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 56.292,
+                "p95_us": 56.417,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "fc04b6a6c7379bd00def36bb0cbd5d1e42b339c43d4c4f28f2b2587bda139404"
+              },
+              "32": {
+                "p50_us": 1340.125,
+                "p95_us": 1362.42705,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "a11746b8f8df7b2be33ccd63a0d7934d10d8148efa5dd28d60cb01510c440899"
+              },
+              "256": {
+                "p50_us": 4043.9375,
+                "p95_us": 4116.378849999999,
+                "block_reads": 72,
+                "decompressions": 72,
+                "ids_sha256": "226aca86ae5fb5eeaf6695969a344e5ce169436540c6ec0b6d75e7ce239e87a7"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2593426,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 78,
+            "xor_blocks": 6,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": false,
+            "export_seconds": 0.178161375,
+            "artifact_sha256": "39d3ebab389376951a54990cd29cbaa3b2ba121a6060dcd3c31887b71d02beea",
+            "permutation_sha256": "b87cb171f9ce05babadb9abe917f696021522d5fafe1c497d777370a59cf220d",
+            "artifact_to_raw_ratio": 0.9498003293174574,
+            "open_ms_after_export": 0.217041,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 56.375,
+                "p95_us": 56.7316,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "fc04b6a6c7379bd00def36bb0cbd5d1e42b339c43d4c4f28f2b2587bda139404"
+              },
+              "32": {
+                "p50_us": 1349.8335000000002,
+                "p95_us": 1363.25595,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "a11746b8f8df7b2be33ccd63a0d7934d10d8148efa5dd28d60cb01510c440899"
+              },
+              "256": {
+                "p50_us": 3899.167,
+                "p95_us": 4123.2083,
+                "block_reads": 72,
+                "decompressions": 72,
+                "ids_sha256": "226aca86ae5fb5eeaf6695969a344e5ce169436540c6ec0b6d75e7ce239e87a7"
+              }
+            }
+          }
+        },
+        "shuffled": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2593944,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.052706958,
+            "artifact_sha256": "44c2ae2df95c880a3a973ffd1cdc53c162d93eef6b5fd2ad0669ea1dcda89286",
+            "permutation_sha256": "591c4effd0b430bc8ba7397a37fff2cfa1f8cef14c2e530206ee62baddaf8d44",
+            "artifact_to_raw_ratio": 0.9499900384399025,
+            "open_ms_after_export": 0.16625,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.75,
+                "p95_us": 54.38539999999999,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "fc04b6a6c7379bd00def36bb0cbd5d1e42b339c43d4c4f28f2b2587bda139404"
+              },
+              "32": {
+                "p50_us": 1067.563,
+                "p95_us": 1097.0,
+                "block_reads": 20,
+                "decompressions": 20,
+                "ids_sha256": "a11746b8f8df7b2be33ccd63a0d7934d10d8148efa5dd28d60cb01510c440899"
+              },
+              "256": {
+                "p50_us": 3958.1459999999997,
+                "p95_us": 3993.3417,
+                "block_reads": 74,
+                "decompressions": 74,
+                "ids_sha256": "226aca86ae5fb5eeaf6695969a344e5ce169436540c6ec0b6d75e7ce239e87a7"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2593944,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.180429125,
+            "artifact_sha256": "7a03c0a16676267f79df4237a2ce30e1179c3dbc1956d3b00bae4adc09c56bbb",
+            "permutation_sha256": "591c4effd0b430bc8ba7397a37fff2cfa1f8cef14c2e530206ee62baddaf8d44",
+            "artifact_to_raw_ratio": 0.9499900384399025,
+            "open_ms_after_export": 0.160958,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.75,
+                "p95_us": 54.12019999999999,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "fc04b6a6c7379bd00def36bb0cbd5d1e42b339c43d4c4f28f2b2587bda139404"
+              },
+              "32": {
+                "p50_us": 1064.0,
+                "p95_us": 1085.0896,
+                "block_reads": 20,
+                "decompressions": 20,
+                "ids_sha256": "a11746b8f8df7b2be33ccd63a0d7934d10d8148efa5dd28d60cb01510c440899"
+              },
+              "256": {
+                "p50_us": 3957.9795,
+                "p95_us": 3990.09615,
+                "block_reads": 74,
+                "decompressions": 74,
+                "ids_sha256": "226aca86ae5fb5eeaf6695969a344e5ce169436540c6ec0b6d75e7ce239e87a7"
+              }
+            }
+          }
+        },
+        "identical_update_group": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2583421,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.052480875,
+            "artifact_sha256": "991793487c7e8c43d619edc9de40e1c74157cd0ddb87fb708cb14242b601c3d3",
+            "permutation_sha256": "04e21e3d49baacf2e6961e3e2707993280fe6ddf30ec7757aa133263eed4ca3f",
+            "artifact_to_raw_ratio": 0.9461361598771798,
+            "open_ms_after_export": 0.149584,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.708,
+                "p95_us": 53.83715,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "fc04b6a6c7379bd00def36bb0cbd5d1e42b339c43d4c4f28f2b2587bda139404"
+              },
+              "32": {
+                "p50_us": 1224.833,
+                "p95_us": 1242.9479,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "a11746b8f8df7b2be33ccd63a0d7934d10d8148efa5dd28d60cb01510c440899"
+              },
+              "256": {
+                "p50_us": 3980.4795,
+                "p95_us": 4021.59375,
+                "block_reads": 75,
+                "decompressions": 75,
+                "ids_sha256": "226aca86ae5fb5eeaf6695969a344e5ce169436540c6ec0b6d75e7ce239e87a7"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2541114,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 4,
+            "xor_blocks": 80,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.182570375,
+            "artifact_sha256": "27894c827d4db9e21dc018ace25fdb771d6aa6db3a9c66256e16e6f5ecd72309",
+            "permutation_sha256": "04e21e3d49baacf2e6961e3e2707993280fe6ddf30ec7757aa133263eed4ca3f",
+            "artifact_to_raw_ratio": 0.9306419053534596,
+            "open_ms_after_export": 0.187584,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.833,
+                "p95_us": 61.9601,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "fc04b6a6c7379bd00def36bb0cbd5d1e42b339c43d4c4f28f2b2587bda139404"
+              },
+              "32": {
+                "p50_us": 1419.5215,
+                "p95_us": 1440.27435,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "a11746b8f8df7b2be33ccd63a0d7934d10d8148efa5dd28d60cb01510c440899"
+              },
+              "256": {
+                "p50_us": 4581.291499999999,
+                "p95_us": 4667.069399999999,
+                "block_reads": 75,
+                "decompressions": 75,
+                "ids_sha256": "226aca86ae5fb5eeaf6695969a344e5ce169436540c6ec0b6d75e7ce239e87a7"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "max_order": 4,
+      "seed": 11,
+      "input_bytes": 2730496,
+      "rows": 5333,
+      "source_sha256": "36ddfdc77bbd89e4a6d29ace0eb8d7434db7c6aea2f962b09a109ebd23d40966",
+      "layouts": {
+        "lexical": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2593867,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": false,
+            "export_seconds": 0.040990459,
+            "artifact_sha256": "bc0a267c41aef5b4590e26d7102263fac597105de82c16550cfc394505184b84",
+            "permutation_sha256": "b87cb171f9ce05babadb9abe917f696021522d5fafe1c497d777370a59cf220d",
+            "artifact_to_raw_ratio": 0.9499618384352148,
+            "open_ms_after_export": 0.156625,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.6455,
+                "p95_us": 53.75,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "c2e658dc24a0005043f0252e657f9425379a92cae17f10cf3a6850436ca2dcef"
+              },
+              "32": {
+                "p50_us": 1011.271,
+                "p95_us": 1031.1875,
+                "block_reads": 19,
+                "decompressions": 19,
+                "ids_sha256": "703e77cb43881d269ed3549e089ac712ae0dd01911d33a5e5f02ea97f10e1d87"
+              },
+              "256": {
+                "p50_us": 4130.833,
+                "p95_us": 4173.594050000001,
+                "block_reads": 78,
+                "decompressions": 78,
+                "ids_sha256": "6b87b666360c2b6236f79dffe355bc6a29eeb4c2af4ac886f6898d8e149e1107"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2593434,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 76,
+            "xor_blocks": 8,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": false,
+            "export_seconds": 0.178133917,
+            "artifact_sha256": "711f6656177d173a02738706d4013796be22da8a25b785df795063c4ad68bd34",
+            "permutation_sha256": "b87cb171f9ce05babadb9abe917f696021522d5fafe1c497d777370a59cf220d",
+            "artifact_to_raw_ratio": 0.9498032591880743,
+            "open_ms_after_export": 0.180458,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.625,
+                "p95_us": 53.87775,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "c2e658dc24a0005043f0252e657f9425379a92cae17f10cf3a6850436ca2dcef"
+              },
+              "32": {
+                "p50_us": 1018.7294999999999,
+                "p95_us": 1037.0913500000001,
+                "block_reads": 19,
+                "decompressions": 19,
+                "ids_sha256": "703e77cb43881d269ed3549e089ac712ae0dd01911d33a5e5f02ea97f10e1d87"
+              },
+              "256": {
+                "p50_us": 4194.2715,
+                "p95_us": 4232.892000000001,
+                "block_reads": 78,
+                "decompressions": 78,
+                "ids_sha256": "6b87b666360c2b6236f79dffe355bc6a29eeb4c2af4ac886f6898d8e149e1107"
+              }
+            }
+          }
+        },
+        "shuffled": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2594095,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.050951959,
+            "artifact_sha256": "6334ddd0c7ade5d2f7bef60bd25f4a6ac1d3064c882605ee76969089c6a8dafd",
+            "permutation_sha256": "e402fcbe21e13703d6732aac3cc526d01dc94e036813799f698a1d98923182f3",
+            "artifact_to_raw_ratio": 0.9500453397477967,
+            "open_ms_after_export": 0.149958,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.8545,
+                "p95_us": 53.963100000000004,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "c2e658dc24a0005043f0252e657f9425379a92cae17f10cf3a6850436ca2dcef"
+              },
+              "32": {
+                "p50_us": 1064.583,
+                "p95_us": 1080.4396,
+                "block_reads": 20,
+                "decompressions": 20,
+                "ids_sha256": "703e77cb43881d269ed3549e089ac712ae0dd01911d33a5e5f02ea97f10e1d87"
+              },
+              "256": {
+                "p50_us": 3844.3125,
+                "p95_us": 3879.6482,
+                "block_reads": 72,
+                "decompressions": 72,
+                "ids_sha256": "6b87b666360c2b6236f79dffe355bc6a29eeb4c2af4ac886f6898d8e149e1107"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2594095,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.183792667,
+            "artifact_sha256": "7fdce789092f9d0c750eb60823ad3d2b57e55b03dc08675e58130dc528450f71",
+            "permutation_sha256": "e402fcbe21e13703d6732aac3cc526d01dc94e036813799f698a1d98923182f3",
+            "artifact_to_raw_ratio": 0.9500453397477967,
+            "open_ms_after_export": 0.155333,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.6045,
+                "p95_us": 54.62739999999999,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "c2e658dc24a0005043f0252e657f9425379a92cae17f10cf3a6850436ca2dcef"
+              },
+              "32": {
+                "p50_us": 1065.4585000000002,
+                "p95_us": 1086.9,
+                "block_reads": 20,
+                "decompressions": 20,
+                "ids_sha256": "703e77cb43881d269ed3549e089ac712ae0dd01911d33a5e5f02ea97f10e1d87"
+              },
+              "256": {
+                "p50_us": 3843.8545,
+                "p95_us": 3876.05035,
+                "block_reads": 72,
+                "decompressions": 72,
+                "ids_sha256": "6b87b666360c2b6236f79dffe355bc6a29eeb4c2af4ac886f6898d8e149e1107"
+              }
+            }
+          }
+        },
+        "identical_update_group": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2583413,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 84,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.05162825,
+            "artifact_sha256": "d1557e641e152d11b1a883505f7d5420d5edb3867a3df2ddeb4c574c69303aa8",
+            "permutation_sha256": "04e21e3d49baacf2e6961e3e2707993280fe6ddf30ec7757aa133263eed4ca3f",
+            "artifact_to_raw_ratio": 0.9461332300065629,
+            "open_ms_after_export": 0.143375,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.667,
+                "p95_us": 53.833,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "c2e658dc24a0005043f0252e657f9425379a92cae17f10cf3a6850436ca2dcef"
+              },
+              "32": {
+                "p50_us": 1226.5,
+                "p95_us": 1242.3521,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "703e77cb43881d269ed3549e089ac712ae0dd01911d33a5e5f02ea97f10e1d87"
+              },
+              "256": {
+                "p50_us": 3973.125,
+                "p95_us": 4003.3223000000003,
+                "block_reads": 75,
+                "decompressions": 75,
+                "ids_sha256": "6b87b666360c2b6236f79dffe355bc6a29eeb4c2af4ac886f6898d8e149e1107"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2730496,
+            "artifact_bytes": 2541401,
+            "unique_rows": 5333,
+            "row_map_bytes": 42664,
+            "n_rows": 5333,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 84,
+            "raw_blocks": 0,
+            "compressed_blocks": 84,
+            "zlib_blocks": 4,
+            "xor_blocks": 80,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.19302775,
+            "artifact_sha256": "c2e0e6fa5f7d4441f97c8bbed87d9552da7c6b2459bc252dddf1ba09a3e5233e",
+            "permutation_sha256": "04e21e3d49baacf2e6961e3e2707993280fe6ddf30ec7757aa133263eed4ca3f",
+            "artifact_to_raw_ratio": 0.9307470144618414,
+            "open_ms_after_export": 0.164375,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.875,
+                "p95_us": 62.0021,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "c2e658dc24a0005043f0252e657f9425379a92cae17f10cf3a6850436ca2dcef"
+              },
+              "32": {
+                "p50_us": 1410.125,
+                "p95_us": 1433.2715,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "703e77cb43881d269ed3549e089ac712ae0dd01911d33a5e5f02ea97f10e1d87"
+              },
+              "256": {
+                "p50_us": 4579.104,
+                "p95_us": 4610.64135,
+                "block_reads": 75,
+                "decompressions": 75,
+                "ids_sha256": "6b87b666360c2b6236f79dffe355bc6a29eeb4c2af4ac886f6898d8e149e1107"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "max_order": 8,
+      "seed": 3,
+      "input_bytes": 6873088,
+      "rows": 13424,
+      "source_sha256": "88ef8b5ba65079c79087b3a393cdf85dea46b1782995d5a6bda1289c567d0a07",
+      "layouts": {
+        "lexical": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6518815,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": false,
+            "export_seconds": 0.104137,
+            "artifact_sha256": "f9c758da3b7030c436989e61c19ad8b207e19d3bfc978916076aa9ffd4085f46",
+            "permutation_sha256": "35888549e73e40bba1ad2e09fd530343fb49575b458c9b6a5a8768f1715dc97d",
+            "artifact_to_raw_ratio": 0.9484550466980781,
+            "open_ms_after_export": 0.205625,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.75,
+                "p95_us": 53.91905,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "4da7ef7d992282e56066686dbd32b4ddb83d9a761b5a50df198ab062ecfcd485"
+              },
+              "32": {
+                "p50_us": 1317.4165,
+                "p95_us": 1344.0833499999999,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "ebddbf9a2e5e27fcce9919aeeab14d3fe4aff85418f428b5cae90a4dde361b5f"
+              },
+              "256": {
+                "p50_us": 6745.8745,
+                "p95_us": 6803.40175,
+                "block_reads": 126,
+                "decompressions": 126,
+                "ids_sha256": "f53097c06a8988a2b271cb8011dcdd4258b8133c46b5a69e1daa01d35545e930"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6407009,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 0,
+            "xor_blocks": 210,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": false,
+            "export_seconds": 0.479161375,
+            "artifact_sha256": "1779fec5459d26fcc9d5935a8cf669fdc2d9964e97d6600623cd100659bf7f7c",
+            "permutation_sha256": "35888549e73e40bba1ad2e09fd530343fb49575b458c9b6a5a8768f1715dc97d",
+            "artifact_to_raw_ratio": 0.9321878317286204,
+            "open_ms_after_export": 0.170458,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.833,
+                "p95_us": 62.0524,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "4da7ef7d992282e56066686dbd32b4ddb83d9a761b5a50df198ab062ecfcd485"
+              },
+              "32": {
+                "p50_us": 1529.1455,
+                "p95_us": 1560.65625,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "ebddbf9a2e5e27fcce9919aeeab14d3fe4aff85418f428b5cae90a4dde361b5f"
+              },
+              "256": {
+                "p50_us": 7841.2915,
+                "p95_us": 7887.80835,
+                "block_reads": 126,
+                "decompressions": 126,
+                "ids_sha256": "f53097c06a8988a2b271cb8011dcdd4258b8133c46b5a69e1daa01d35545e930"
+              }
+            }
+          }
+        },
+        "shuffled": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6520997,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.137294,
+            "artifact_sha256": "54e79a9a30c0ed8ae964ecabbdcd029ecfdb44e7c73b98b0f28e221cfa6ffd9b",
+            "permutation_sha256": "7538c6a5da1babf75374b37c7df28a16ca082ed27c9ac31c2d6536b42ad7649b",
+            "artifact_to_raw_ratio": 0.9487725168075835,
+            "open_ms_after_export": 0.169292,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.708,
+                "p95_us": 61.84309999999999,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "4da7ef7d992282e56066686dbd32b4ddb83d9a761b5a50df198ab062ecfcd485"
+              },
+              "32": {
+                "p50_us": 1170.25,
+                "p95_us": 1192.5874999999999,
+                "block_reads": 22,
+                "decompressions": 22,
+                "ids_sha256": "ebddbf9a2e5e27fcce9919aeeab14d3fe4aff85418f428b5cae90a4dde361b5f"
+              },
+              "256": {
+                "p50_us": 6643.0830000000005,
+                "p95_us": 6709.43125,
+                "block_reads": 124,
+                "decompressions": 124,
+                "ids_sha256": "f53097c06a8988a2b271cb8011dcdd4258b8133c46b5a69e1daa01d35545e930"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6520997,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.467509667,
+            "artifact_sha256": "61863f6e3cc955f14e2fa134631bef0134ade69f7e43a2a137ddf912a232812a",
+            "permutation_sha256": "7538c6a5da1babf75374b37c7df28a16ca082ed27c9ac31c2d6536b42ad7649b",
+            "artifact_to_raw_ratio": 0.9487725168075835,
+            "open_ms_after_export": 0.178958,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.75,
+                "p95_us": 54.12705,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "4da7ef7d992282e56066686dbd32b4ddb83d9a761b5a50df198ab062ecfcd485"
+              },
+              "32": {
+                "p50_us": 1170.021,
+                "p95_us": 1188.5794999999998,
+                "block_reads": 22,
+                "decompressions": 22,
+                "ids_sha256": "ebddbf9a2e5e27fcce9919aeeab14d3fe4aff85418f428b5cae90a4dde361b5f"
+              },
+              "256": {
+                "p50_us": 6643.1875,
+                "p95_us": 6691.1521,
+                "block_reads": 124,
+                "decompressions": 124,
+                "ids_sha256": "f53097c06a8988a2b271cb8011dcdd4258b8133c46b5a69e1daa01d35545e930"
+              }
+            }
+          }
+        },
+        "identical_update_group": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6497103,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.126673833,
+            "artifact_sha256": "8d7f1510e6c3b1a87c6f2fa0e971d29c386e025dc8fd44ef0c73b2ed8b93fc9e",
+            "permutation_sha256": "785a2a6d32863e2d56e54d1e66e8b1757eafa57dd3d3738d142ab93a4f183100",
+            "artifact_to_raw_ratio": 0.9452960590639898,
+            "open_ms_after_export": 0.17525,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.75,
+                "p95_us": 53.91605,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "4da7ef7d992282e56066686dbd32b4ddb83d9a761b5a50df198ab062ecfcd485"
+              },
+              "32": {
+                "p50_us": 1224.604,
+                "p95_us": 1240.32705,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "ebddbf9a2e5e27fcce9919aeeab14d3fe4aff85418f428b5cae90a4dde361b5f"
+              },
+              "256": {
+                "p50_us": 6413.083,
+                "p95_us": 6684.92945,
+                "block_reads": 119,
+                "decompressions": 119,
+                "ids_sha256": "f53097c06a8988a2b271cb8011dcdd4258b8133c46b5a69e1daa01d35545e930"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6260055,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 2,
+            "xor_blocks": 208,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.509103875,
+            "artifact_sha256": "d9996c90a0b5aa86f6406fadb956b208eba190951c541e06d4aae53c076a0fdd",
+            "permutation_sha256": "785a2a6d32863e2d56e54d1e66e8b1757eafa57dd3d3738d142ab93a4f183100",
+            "artifact_to_raw_ratio": 0.9108067581849673,
+            "open_ms_after_export": 0.174917,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.667,
+                "p95_us": 61.792,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "4da7ef7d992282e56066686dbd32b4ddb83d9a761b5a50df198ab062ecfcd485"
+              },
+              "32": {
+                "p50_us": 1431.688,
+                "p95_us": 1473.85385,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "ebddbf9a2e5e27fcce9919aeeab14d3fe4aff85418f428b5cae90a4dde361b5f"
+              },
+              "256": {
+                "p50_us": 7447.417,
+                "p95_us": 7479.98925,
+                "block_reads": 119,
+                "decompressions": 119,
+                "ids_sha256": "f53097c06a8988a2b271cb8011dcdd4258b8133c46b5a69e1daa01d35545e930"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "max_order": 8,
+      "seed": 7,
+      "input_bytes": 6873088,
+      "rows": 13424,
+      "source_sha256": "00284f971f805571271cde5339ddc057c00eb8e6117ce037be95c658a9f03477",
+      "layouts": {
+        "lexical": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6521064,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": false,
+            "export_seconds": 0.10426475,
+            "artifact_sha256": "77acc9da56d7a6a3d417d319f68181f16eb78088f19dfcf4f2d846e89b35ddc7",
+            "permutation_sha256": "35888549e73e40bba1ad2e09fd530343fb49575b458c9b6a5a8768f1715dc97d",
+            "artifact_to_raw_ratio": 0.9487822649731824,
+            "open_ms_after_export": 0.18,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.708,
+                "p95_us": 53.8351,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "a770214b9fc39fd2064c0275317977e96d11a9a5f52cffa7171142ac5fa881f6"
+              },
+              "32": {
+                "p50_us": 1331.7085,
+                "p95_us": 1360.8607,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "dfd12b40a0cd9182bd0fe74fa3bc7cc3e6e17824e2a9e80aa110323bb8c5609c"
+              },
+              "256": {
+                "p50_us": 6538.958500000001,
+                "p95_us": 6597.09375,
+                "block_reads": 122,
+                "decompressions": 122,
+                "ids_sha256": "e303b648685c38ffa74655027997589eab85eaa0addd04121cd4afa77a99bbda"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6408792,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 0,
+            "xor_blocks": 210,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": false,
+            "export_seconds": 0.478546625,
+            "artifact_sha256": "24f07fc7d00533d3ef1783cfd364498fc69d92db6e1c952ae21e0bae0d4f05fd",
+            "permutation_sha256": "35888549e73e40bba1ad2e09fd530343fb49575b458c9b6a5a8768f1715dc97d",
+            "artifact_to_raw_ratio": 0.932447249329559,
+            "open_ms_after_export": 0.187,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.875,
+                "p95_us": 63.7521,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "a770214b9fc39fd2064c0275317977e96d11a9a5f52cffa7171142ac5fa881f6"
+              },
+              "32": {
+                "p50_us": 1547.729,
+                "p95_us": 1582.6702,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "dfd12b40a0cd9182bd0fe74fa3bc7cc3e6e17824e2a9e80aa110323bb8c5609c"
+              },
+              "256": {
+                "p50_us": 7601.8125,
+                "p95_us": 7696.9479,
+                "block_reads": 122,
+                "decompressions": 122,
+                "ids_sha256": "e303b648685c38ffa74655027997589eab85eaa0addd04121cd4afa77a99bbda"
+              }
+            }
+          }
+        },
+        "shuffled": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6523043,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.129303667,
+            "artifact_sha256": "cd2885d7e4058ba96ad322de207f69a6644af82f4512ac25972f6ac5c045a94f",
+            "permutation_sha256": "9dfc35580568e4dc9b9758d93e0c15801437ac78051691201760d8c10ffe9b8e",
+            "artifact_to_raw_ratio": 0.949070199595873,
+            "open_ms_after_export": 0.161625,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.667,
+                "p95_us": 53.792,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "a770214b9fc39fd2064c0275317977e96d11a9a5f52cffa7171142ac5fa881f6"
+              },
+              "32": {
+                "p50_us": 1329.854,
+                "p95_us": 1359.5419499999998,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "dfd12b40a0cd9182bd0fe74fa3bc7cc3e6e17824e2a9e80aa110323bb8c5609c"
+              },
+              "256": {
+                "p50_us": 6831.5005,
+                "p95_us": 6879.94105,
+                "block_reads": 128,
+                "decompressions": 128,
+                "ids_sha256": "e303b648685c38ffa74655027997589eab85eaa0addd04121cd4afa77a99bbda"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6523043,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.489211667,
+            "artifact_sha256": "f70410836bcdb02691014e1cec7ec845cbc9b6a1f6cf5ef7321e5cd698f86608",
+            "permutation_sha256": "9dfc35580568e4dc9b9758d93e0c15801437ac78051691201760d8c10ffe9b8e",
+            "artifact_to_raw_ratio": 0.949070199595873,
+            "open_ms_after_export": 0.1635,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.625,
+                "p95_us": 53.75415,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "a770214b9fc39fd2064c0275317977e96d11a9a5f52cffa7171142ac5fa881f6"
+              },
+              "32": {
+                "p50_us": 1330.042,
+                "p95_us": 1350.78125,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "dfd12b40a0cd9182bd0fe74fa3bc7cc3e6e17824e2a9e80aa110323bb8c5609c"
+              },
+              "256": {
+                "p50_us": 6854.603999999999,
+                "p95_us": 7061.7598,
+                "block_reads": 128,
+                "decompressions": 128,
+                "ids_sha256": "e303b648685c38ffa74655027997589eab85eaa0addd04121cd4afa77a99bbda"
+              }
+            }
+          }
+        },
+        "identical_update_group": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6499270,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.131191,
+            "artifact_sha256": "974139649c2337600788cfc898d37b1287d0e097be03309db12b90eddbdc4dbe",
+            "permutation_sha256": "785a2a6d32863e2d56e54d1e66e8b1757eafa57dd3d3738d142ab93a4f183100",
+            "artifact_to_raw_ratio": 0.9456113467483611,
+            "open_ms_after_export": 0.181667,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.7085,
+                "p95_us": 53.834,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "a770214b9fc39fd2064c0275317977e96d11a9a5f52cffa7171142ac5fa881f6"
+              },
+              "32": {
+                "p50_us": 1278.6665,
+                "p95_us": 1299.0774,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "dfd12b40a0cd9182bd0fe74fa3bc7cc3e6e17824e2a9e80aa110323bb8c5609c"
+              },
+              "256": {
+                "p50_us": 6815.25,
+                "p95_us": 6846.5104,
+                "block_reads": 127,
+                "decompressions": 127,
+                "ids_sha256": "e303b648685c38ffa74655027997589eab85eaa0addd04121cd4afa77a99bbda"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6262113,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 2,
+            "xor_blocks": 208,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.5164195,
+            "artifact_sha256": "58a0b65dc98e35c1048cb29fe8f46edb815785509ee0ee6b1863bf9590a403fa",
+            "permutation_sha256": "785a2a6d32863e2d56e54d1e66e8b1757eafa57dd3d3738d142ab93a4f183100",
+            "artifact_to_raw_ratio": 0.9111061869133641,
+            "open_ms_after_export": 0.173,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.833,
+                "p95_us": 64.71940000000001,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "a770214b9fc39fd2064c0275317977e96d11a9a5f52cffa7171142ac5fa881f6"
+              },
+              "32": {
+                "p50_us": 1488.417,
+                "p95_us": 1514.5473,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "dfd12b40a0cd9182bd0fe74fa3bc7cc3e6e17824e2a9e80aa110323bb8c5609c"
+              },
+              "256": {
+                "p50_us": 7941.5205000000005,
+                "p95_us": 7999.914900000001,
+                "block_reads": 127,
+                "decompressions": 127,
+                "ids_sha256": "e303b648685c38ffa74655027997589eab85eaa0addd04121cd4afa77a99bbda"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "max_order": 8,
+      "seed": 11,
+      "input_bytes": 6873088,
+      "rows": 13424,
+      "source_sha256": "2c882b270b22669d0de174b3941a1445e2f0dada1c2c346d1e5e0ee8d8063d05",
+      "layouts": {
+        "lexical": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6520773,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": false,
+            "export_seconds": 0.104522333,
+            "artifact_sha256": "bf56faf2ff02ba6a6004a115ac130f4fd12c569221d799399a216ff4a4fddb26",
+            "permutation_sha256": "35888549e73e40bba1ad2e09fd530343fb49575b458c9b6a5a8768f1715dc97d",
+            "artifact_to_raw_ratio": 0.9487399259255811,
+            "open_ms_after_export": 0.178458,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.5835,
+                "p95_us": 53.793099999999995,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8db0ab7d5cc13867257e7c49188c3e979b97668c04c0c19d7441cb0d62fe5ecf"
+              },
+              "32": {
+                "p50_us": 1230.4789999999998,
+                "p95_us": 1249.68365,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "172d929a3719bf5721bff9dba35f4543540056d72a466abdeda1adc0ca3e26be"
+              },
+              "256": {
+                "p50_us": 6513.625,
+                "p95_us": 6563.844050000001,
+                "block_reads": 122,
+                "decompressions": 122,
+                "ids_sha256": "11840bb8e3c3e9243b345b79fc5b67f4c5b4faceaa62ab3b11829cab54cb0215"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6409700,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 0,
+            "xor_blocks": 210,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": false,
+            "export_seconds": 0.506250917,
+            "artifact_sha256": "ad63bd8a433235f5df4fe3279128668fff0d17deb7f71ab7535714874061f00a",
+            "permutation_sha256": "35888549e73e40bba1ad2e09fd530343fb49575b458c9b6a5a8768f1715dc97d",
+            "artifact_to_raw_ratio": 0.9325793587976758,
+            "open_ms_after_export": 0.16975,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.708,
+                "p95_us": 63.48989999999999,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8db0ab7d5cc13867257e7c49188c3e979b97668c04c0c19d7441cb0d62fe5ecf"
+              },
+              "32": {
+                "p50_us": 1417.396,
+                "p95_us": 1440.6646,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "172d929a3719bf5721bff9dba35f4543540056d72a466abdeda1adc0ca3e26be"
+              },
+              "256": {
+                "p50_us": 7574.708500000001,
+                "p95_us": 7623.8277,
+                "block_reads": 122,
+                "decompressions": 122,
+                "ids_sha256": "11840bb8e3c3e9243b345b79fc5b67f4c5b4faceaa62ab3b11829cab54cb0215"
+              }
+            }
+          }
+        },
+        "shuffled": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6523252,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.128461666,
+            "artifact_sha256": "8d674da38dc90c9c79e5153691c0fb6de82398a3ef7099eba00343cf6608f010",
+            "permutation_sha256": "76b34c0155efe07f658bfbbca70f66d161faa2ccd4b7c681ee636ba8eca20d5b",
+            "artifact_to_raw_ratio": 0.9491006080527413,
+            "open_ms_after_export": 0.165292,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.666,
+                "p95_us": 53.91905,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8db0ab7d5cc13867257e7c49188c3e979b97668c04c0c19d7441cb0d62fe5ecf"
+              },
+              "32": {
+                "p50_us": 1317.1665,
+                "p95_us": 1330.4101,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "172d929a3719bf5721bff9dba35f4543540056d72a466abdeda1adc0ca3e26be"
+              },
+              "256": {
+                "p50_us": 7220.4995,
+                "p95_us": 7277.27295,
+                "block_reads": 135,
+                "decompressions": 135,
+                "ids_sha256": "11840bb8e3c3e9243b345b79fc5b67f4c5b4faceaa62ab3b11829cab54cb0215"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6523252,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.498078791,
+            "artifact_sha256": "c11da5bf902239672536e5a6ff264c1a0920aa41a1b41bd623896a9d51685553",
+            "permutation_sha256": "76b34c0155efe07f658bfbbca70f66d161faa2ccd4b7c681ee636ba8eca20d5b",
+            "artifact_to_raw_ratio": 0.9491006080527413,
+            "open_ms_after_export": 0.175083,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.708,
+                "p95_us": 53.958,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8db0ab7d5cc13867257e7c49188c3e979b97668c04c0c19d7441cb0d62fe5ecf"
+              },
+              "32": {
+                "p50_us": 1317.4585000000002,
+                "p95_us": 1329.65,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "172d929a3719bf5721bff9dba35f4543540056d72a466abdeda1adc0ca3e26be"
+              },
+              "256": {
+                "p50_us": 7224.0215,
+                "p95_us": 7252.38955,
+                "block_reads": 135,
+                "decompressions": 135,
+                "ids_sha256": "11840bb8e3c3e9243b345b79fc5b67f4c5b4faceaa62ab3b11829cab54cb0215"
+              }
+            }
+          }
+        },
+        "identical_update_group": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6498842,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 210,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.125238917,
+            "artifact_sha256": "4a005ec3945a7514873c737ef1e49f74b5429685859f8348901e0a30faa390ec",
+            "permutation_sha256": "785a2a6d32863e2d56e54d1e66e8b1757eafa57dd3d3738d142ab93a4f183100",
+            "artifact_to_raw_ratio": 0.9455490748845352,
+            "open_ms_after_export": 0.165458,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.708,
+                "p95_us": 55.33605,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8db0ab7d5cc13867257e7c49188c3e979b97668c04c0c19d7441cb0d62fe5ecf"
+              },
+              "32": {
+                "p50_us": 1286.6460000000002,
+                "p95_us": 1312.7044999999998,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "172d929a3719bf5721bff9dba35f4543540056d72a466abdeda1adc0ca3e26be"
+              },
+              "256": {
+                "p50_us": 6420.771000000001,
+                "p95_us": 6519.56905,
+                "block_reads": 120,
+                "decompressions": 120,
+                "ids_sha256": "11840bb8e3c3e9243b345b79fc5b67f4c5b4faceaa62ab3b11829cab54cb0215"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6873088,
+            "artifact_bytes": 6264530,
+            "unique_rows": 13424,
+            "row_map_bytes": 107392,
+            "n_rows": 13424,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 210,
+            "raw_blocks": 0,
+            "compressed_blocks": 210,
+            "zlib_blocks": 2,
+            "xor_blocks": 208,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.504553875,
+            "artifact_sha256": "af52ab5a758949fdfba782ad2542408184355f00473e486ed20fe79c31ac8459",
+            "permutation_sha256": "785a2a6d32863e2d56e54d1e66e8b1757eafa57dd3d3738d142ab93a4f183100",
+            "artifact_to_raw_ratio": 0.9114578483499702,
+            "open_ms_after_export": 0.176166,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.5625,
+                "p95_us": 61.833,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8db0ab7d5cc13867257e7c49188c3e979b97668c04c0c19d7441cb0d62fe5ecf"
+              },
+              "32": {
+                "p50_us": 1484.0205,
+                "p95_us": 1499.5288500000001,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "172d929a3719bf5721bff9dba35f4543540056d72a466abdeda1adc0ca3e26be"
+              },
+              "256": {
+                "p50_us": 7480.375,
+                "p95_us": 7607.0104,
+                "block_reads": 120,
+                "decompressions": 120,
+                "ids_sha256": "11840bb8e3c3e9243b345b79fc5b67f4c5b4faceaa62ab3b11829cab54cb0215"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "max_order": 12,
+      "seed": 3,
+      "input_bytes": 7235584,
+      "rows": 14132,
+      "source_sha256": "f52f97f6be5a5c643586efdc377a6b8e236e245f915abcc4e9dbfbb0558cd127",
+      "layouts": {
+        "lexical": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6860924,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": false,
+            "export_seconds": 0.10969475,
+            "artifact_sha256": "bab9d5179d76d412f82d268cd20bdf3d0c7ebb2d45d8613503ec45a0652852c8",
+            "permutation_sha256": "99f43c31125f55c54c27ed391ba505ce31e22821afc532165dd58cdc508f69fc",
+            "artifact_to_raw_ratio": 0.9482197981531276,
+            "open_ms_after_export": 0.18275,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.666,
+                "p95_us": 53.79105,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "aa132444c7ea2ffef0882c7478cce3841a9757d471199785e51eb1395b1bfa9f"
+              },
+              "32": {
+                "p50_us": 1269.1664999999998,
+                "p95_us": 1300.4606999999999,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "b35cab62d6ab2287b657bdfcde14b46cf9da0f6f02b088126daa0318e315b957"
+              },
+              "256": {
+                "p50_us": 6959.1669999999995,
+                "p95_us": 7018.20625,
+                "block_reads": 130,
+                "decompressions": 130,
+                "ids_sha256": "a831e7a5b6f0e233e60fb636d3477fcfcad81187e394fe2634248b1ca91cd560"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6732317,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 0,
+            "xor_blocks": 221,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": false,
+            "export_seconds": 0.46910975,
+            "artifact_sha256": "1639f09608cb698aad858c64c68dea1aed9897cb9e4532b34c9b2602edd587ac",
+            "permutation_sha256": "99f43c31125f55c54c27ed391ba505ce31e22821afc532165dd58cdc508f69fc",
+            "artifact_to_raw_ratio": 0.9304455590592273,
+            "open_ms_after_export": 0.167417,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.75,
+                "p95_us": 62.00415,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "aa132444c7ea2ffef0882c7478cce3841a9757d471199785e51eb1395b1bfa9f"
+              },
+              "32": {
+                "p50_us": 1470.125,
+                "p95_us": 1494.6604,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "b35cab62d6ab2287b657bdfcde14b46cf9da0f6f02b088126daa0318e315b957"
+              },
+              "256": {
+                "p50_us": 8098.5,
+                "p95_us": 8152.4702,
+                "block_reads": 130,
+                "decompressions": 130,
+                "ids_sha256": "a831e7a5b6f0e233e60fb636d3477fcfcad81187e394fe2634248b1ca91cd560"
+              }
+            }
+          }
+        },
+        "shuffled": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6863750,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.135966041,
+            "artifact_sha256": "d67adcf478e0cf983f076ce12c78d39b100eeb14cce33741a2a729a5f1dfcf93",
+            "permutation_sha256": "98a504cf85d387cd0391a067b42bf434285c016a3f03dd7a0efe551aaa0002a0",
+            "artifact_to_raw_ratio": 0.9486103678707897,
+            "open_ms_after_export": 0.165959,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.75,
+                "p95_us": 54.1476,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "aa132444c7ea2ffef0882c7478cce3841a9757d471199785e51eb1395b1bfa9f"
+              },
+              "32": {
+                "p50_us": 1330.0,
+                "p95_us": 1347.6181,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "b35cab62d6ab2287b657bdfcde14b46cf9da0f6f02b088126daa0318e315b957"
+              },
+              "256": {
+                "p50_us": 6581.166499999999,
+                "p95_us": 6624.241349999999,
+                "block_reads": 123,
+                "decompressions": 123,
+                "ids_sha256": "a831e7a5b6f0e233e60fb636d3477fcfcad81187e394fe2634248b1ca91cd560"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6863750,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.556116084,
+            "artifact_sha256": "23707be367c1e0479f31921d820ae9f1782c8b8d106bce5f57ead76d24b41cc5",
+            "permutation_sha256": "98a504cf85d387cd0391a067b42bf434285c016a3f03dd7a0efe551aaa0002a0",
+            "artifact_to_raw_ratio": 0.9486103678707897,
+            "open_ms_after_export": 0.164208,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.75,
+                "p95_us": 53.87705,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "aa132444c7ea2ffef0882c7478cce3841a9757d471199785e51eb1395b1bfa9f"
+              },
+              "32": {
+                "p50_us": 1331.1665,
+                "p95_us": 1346.95415,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "b35cab62d6ab2287b657bdfcde14b46cf9da0f6f02b088126daa0318e315b957"
+              },
+              "256": {
+                "p50_us": 6579.833500000001,
+                "p95_us": 6620.61455,
+                "block_reads": 123,
+                "decompressions": 123,
+                "ids_sha256": "a831e7a5b6f0e233e60fb636d3477fcfcad81187e394fe2634248b1ca91cd560"
+              }
+            }
+          }
+        },
+        "identical_update_group": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6838577,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.131633292,
+            "artifact_sha256": "d1eb2706121c4445c75f6522083c6dd22c845a2d0a036ef49aa441275949b268",
+            "permutation_sha256": "69d1492c25270a8b87a91c20cfa3075d9943a3f632689068a1733effa01b1090",
+            "artifact_to_raw_ratio": 0.9451313121373479,
+            "open_ms_after_export": 0.172958,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.583,
+                "p95_us": 53.70805,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "aa132444c7ea2ffef0882c7478cce3841a9757d471199785e51eb1395b1bfa9f"
+              },
+              "32": {
+                "p50_us": 1331.3125,
+                "p95_us": 1354.04135,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "b35cab62d6ab2287b657bdfcde14b46cf9da0f6f02b088126daa0318e315b957"
+              },
+              "256": {
+                "p50_us": 6805.0205000000005,
+                "p95_us": 6841.84165,
+                "block_reads": 127,
+                "decompressions": 127,
+                "ids_sha256": "a831e7a5b6f0e233e60fb636d3477fcfcad81187e394fe2634248b1ca91cd560"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6580595,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 2,
+            "xor_blocks": 219,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.533157167,
+            "artifact_sha256": "5627aa3164eefd179d68e7e230789de3b111b43ea5c137cbf51ff1c8548b8114",
+            "permutation_sha256": "69d1492c25270a8b87a91c20cfa3075d9943a3f632689068a1733effa01b1090",
+            "artifact_to_raw_ratio": 0.9094766918606708,
+            "open_ms_after_export": 0.169584,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.5,
+                "p95_us": 61.71105,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "aa132444c7ea2ffef0882c7478cce3841a9757d471199785e51eb1395b1bfa9f"
+              },
+              "32": {
+                "p50_us": 1547.8125,
+                "p95_us": 1568.4024,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "b35cab62d6ab2287b657bdfcde14b46cf9da0f6f02b088126daa0318e315b957"
+              },
+              "256": {
+                "p50_us": 7936.875,
+                "p95_us": 8017.4149,
+                "block_reads": 127,
+                "decompressions": 127,
+                "ids_sha256": "a831e7a5b6f0e233e60fb636d3477fcfcad81187e394fe2634248b1ca91cd560"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "max_order": 12,
+      "seed": 7,
+      "input_bytes": 7235584,
+      "rows": 14132,
+      "source_sha256": "c57dd713d91fb69fec6853aa0b34ca8b479f86acffb9aca5ab48614b45217178",
+      "layouts": {
+        "lexical": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6862329,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": false,
+            "export_seconds": 0.1096475,
+            "artifact_sha256": "98e918cbeed227cac4e08890b537d52301040c0ca131edb215edf29401f617a5",
+            "permutation_sha256": "99f43c31125f55c54c27ed391ba505ce31e22821afc532165dd58cdc508f69fc",
+            "artifact_to_raw_ratio": 0.9484139773651995,
+            "open_ms_after_export": 0.175083,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.708,
+                "p95_us": 53.8351,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8c2caa3f6ebef94f0bad7902598b88a937dd4e5a2b438167f9b7432c082d4077"
+              },
+              "32": {
+                "p50_us": 1330.729,
+                "p95_us": 1352.075,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "a57ed35366dee22fcddcf727724c94d11e8c032d961e95f9b8c8040ad93dcc40"
+              },
+              "256": {
+                "p50_us": 6695.875,
+                "p95_us": 6747.18955,
+                "block_reads": 125,
+                "decompressions": 125,
+                "ids_sha256": "8c60b408d9906abdc1996ef8167024491c4be065ff73e595366ecc2c15977cfb"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6732719,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 0,
+            "xor_blocks": 221,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": false,
+            "export_seconds": 0.5281515,
+            "artifact_sha256": "4c11fd6d5f5feb4f22c471fc9f751321edd2b6c33cc474a3c42fe08e26199ed1",
+            "permutation_sha256": "99f43c31125f55c54c27ed391ba505ce31e22821afc532165dd58cdc508f69fc",
+            "artifact_to_raw_ratio": 0.9305011178088735,
+            "open_ms_after_export": 0.172459,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 62.042,
+                "p95_us": 63.614249999999984,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8c2caa3f6ebef94f0bad7902598b88a937dd4e5a2b438167f9b7432c082d4077"
+              },
+              "32": {
+                "p50_us": 1544.979,
+                "p95_us": 1579.57645,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "a57ed35366dee22fcddcf727724c94d11e8c032d961e95f9b8c8040ad93dcc40"
+              },
+              "256": {
+                "p50_us": 7809.958,
+                "p95_us": 8165.439249999999,
+                "block_reads": 125,
+                "decompressions": 125,
+                "ids_sha256": "8c60b408d9906abdc1996ef8167024491c4be065ff73e595366ecc2c15977cfb"
+              }
+            }
+          }
+        },
+        "shuffled": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6865194,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.158097958,
+            "artifact_sha256": "ca08266e4fe1a404221728e9e3a1984c0a952bc7d0214d3801e756be0c4ae9e5",
+            "permutation_sha256": "a851f81bb59010a667bdbda2beb08525a6cfff2561c158c620c834a9254ca560",
+            "artifact_to_raw_ratio": 0.9488099371108123,
+            "open_ms_after_export": 0.180833,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.583,
+                "p95_us": 53.66905,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8c2caa3f6ebef94f0bad7902598b88a937dd4e5a2b438167f9b7432c082d4077"
+              },
+              "32": {
+                "p50_us": 1277.625,
+                "p95_us": 1295.7125,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "a57ed35366dee22fcddcf727724c94d11e8c032d961e95f9b8c8040ad93dcc40"
+              },
+              "256": {
+                "p50_us": 7181.646000000001,
+                "p95_us": 7403.93125,
+                "block_reads": 133,
+                "decompressions": 133,
+                "ids_sha256": "8c60b408d9906abdc1996ef8167024491c4be065ff73e595366ecc2c15977cfb"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6865194,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.499226875,
+            "artifact_sha256": "37fd6189140a533e8c8b0d62da7c33c2eabb81c435273dd539a153a0fc8ad58f",
+            "permutation_sha256": "a851f81bb59010a667bdbda2beb08525a6cfff2561c158c620c834a9254ca560",
+            "artifact_to_raw_ratio": 0.9488099371108123,
+            "open_ms_after_export": 0.182375,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.584,
+                "p95_us": 53.76875,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8c2caa3f6ebef94f0bad7902598b88a937dd4e5a2b438167f9b7432c082d4077"
+              },
+              "32": {
+                "p50_us": 1277.8125,
+                "p95_us": 1293.2066,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "a57ed35366dee22fcddcf727724c94d11e8c032d961e95f9b8c8040ad93dcc40"
+              },
+              "256": {
+                "p50_us": 7120.021000000001,
+                "p95_us": 7164.4881,
+                "block_reads": 133,
+                "decompressions": 133,
+                "ids_sha256": "8c60b408d9906abdc1996ef8167024491c4be065ff73e595366ecc2c15977cfb"
+              }
+            }
+          }
+        },
+        "identical_update_group": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6840211,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.134666291,
+            "artifact_sha256": "7010eaefb5b30df32dc6fc173fb0eb373e152298d09bca853b5abc9ce7b2ea92",
+            "permutation_sha256": "69d1492c25270a8b87a91c20cfa3075d9943a3f632689068a1733effa01b1090",
+            "artifact_to_raw_ratio": 0.9453571404878998,
+            "open_ms_after_export": 0.165917,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.584,
+                "p95_us": 53.98095,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8c2caa3f6ebef94f0bad7902598b88a937dd4e5a2b438167f9b7432c082d4077"
+              },
+              "32": {
+                "p50_us": 1225.2705,
+                "p95_us": 1241.50445,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "a57ed35366dee22fcddcf727724c94d11e8c032d961e95f9b8c8040ad93dcc40"
+              },
+              "256": {
+                "p50_us": 7270.416499999999,
+                "p95_us": 7302.5479,
+                "block_reads": 136,
+                "decompressions": 136,
+                "ids_sha256": "8c60b408d9906abdc1996ef8167024491c4be065ff73e595366ecc2c15977cfb"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6580629,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 2,
+            "xor_blocks": 219,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.494903083,
+            "artifact_sha256": "eda6c778fd8b6fce5fa26139eebe85942bfacb833f959164a2a300d031c5b703",
+            "permutation_sha256": "69d1492c25270a8b87a91c20cfa3075d9943a3f632689068a1733effa01b1090",
+            "artifact_to_raw_ratio": 0.9094813908593972,
+            "open_ms_after_export": 0.163125,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.8125,
+                "p95_us": 61.96105,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "8c2caa3f6ebef94f0bad7902598b88a937dd4e5a2b438167f9b7432c082d4077"
+              },
+              "32": {
+                "p50_us": 1426.208,
+                "p95_us": 1453.6627999999998,
+                "block_reads": 23,
+                "decompressions": 23,
+                "ids_sha256": "a57ed35366dee22fcddcf727724c94d11e8c032d961e95f9b8c8040ad93dcc40"
+              },
+              "256": {
+                "p50_us": 8497.3335,
+                "p95_us": 8559.6104,
+                "block_reads": 136,
+                "decompressions": 136,
+                "ids_sha256": "8c60b408d9906abdc1996ef8167024491c4be065ff73e595366ecc2c15977cfb"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "max_order": 12,
+      "seed": 11,
+      "input_bytes": 7235584,
+      "rows": 14132,
+      "source_sha256": "d0f54618325a4f2c9ffa3ab5779125a3b6d0c7192249f54dad23a6ea5e81304c",
+      "layouts": {
+        "lexical": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6862332,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": false,
+            "export_seconds": 0.109904042,
+            "artifact_sha256": "7a90aa624f3cbcb02d789cd77fc91109cee9b8143b82645548b442e7132945a4",
+            "permutation_sha256": "99f43c31125f55c54c27ed391ba505ce31e22821afc532165dd58cdc508f69fc",
+            "artifact_to_raw_ratio": 0.9484143919827343,
+            "open_ms_after_export": 0.179292,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.583,
+                "p95_us": 54.9316,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "15bcfa8e1078321b1909a3b3948f2e3275e00bfce4d5404d24862e62fa005ca0"
+              },
+              "32": {
+                "p50_us": 1277.208,
+                "p95_us": 1295.51395,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "12b81d7e5eeddc62a4920be8110d6e1adc98abff9430feb48143fee56e9acdd5"
+              },
+              "256": {
+                "p50_us": 6843.375,
+                "p95_us": 6916.687199999999,
+                "block_reads": 128,
+                "decompressions": 128,
+                "ids_sha256": "04d57bca19fda968bfed86fe9d10269f13143a32044dd53ea0591f6fb0f30185"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6733960,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 0,
+            "xor_blocks": 221,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": false,
+            "export_seconds": 0.504865625,
+            "artifact_sha256": "7e057676ea731eb4d209f59619597abd6cd6d291c74d1051fa8159851a82e429",
+            "permutation_sha256": "99f43c31125f55c54c27ed391ba505ce31e22821afc532165dd58cdc508f69fc",
+            "artifact_to_raw_ratio": 0.9306726312623832,
+            "open_ms_after_export": 0.184125,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 62.6455,
+                "p95_us": 68.95594999999999,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "15bcfa8e1078321b1909a3b3948f2e3275e00bfce4d5404d24862e62fa005ca0"
+              },
+              "32": {
+                "p50_us": 1481.167,
+                "p95_us": 1509.3753499999998,
+                "block_reads": 24,
+                "decompressions": 24,
+                "ids_sha256": "12b81d7e5eeddc62a4920be8110d6e1adc98abff9430feb48143fee56e9acdd5"
+              },
+              "256": {
+                "p50_us": 7968.4795,
+                "p95_us": 8086.2625,
+                "block_reads": 128,
+                "decompressions": 128,
+                "ids_sha256": "04d57bca19fda968bfed86fe9d10269f13143a32044dd53ea0591f6fb0f30185"
+              }
+            }
+          }
+        },
+        "shuffled": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6865087,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.135191417,
+            "artifact_sha256": "c73d2ac1f21b848165cbd0f165cfe2405f3317098935d672df023d1b08c2a21e",
+            "permutation_sha256": "e4f95eaba9c7e2d0927629df45bcb8483bbbd700db24d759084b193808e88d28",
+            "artifact_to_raw_ratio": 0.948795149085409,
+            "open_ms_after_export": 0.177208,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.916,
+                "p95_us": 54.0441,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "15bcfa8e1078321b1909a3b3948f2e3275e00bfce4d5404d24862e62fa005ca0"
+              },
+              "32": {
+                "p50_us": 1330.834,
+                "p95_us": 1344.40625,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "12b81d7e5eeddc62a4920be8110d6e1adc98abff9430feb48143fee56e9acdd5"
+              },
+              "256": {
+                "p50_us": 7596.166499999999,
+                "p95_us": 7650.3021,
+                "block_reads": 142,
+                "decompressions": 142,
+                "ids_sha256": "04d57bca19fda968bfed86fe9d10269f13143a32044dd53ea0591f6fb0f30185"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6865087,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.515173459,
+            "artifact_sha256": "b2dd9811cd9c12ec30270a633aac447ac44ca97946e997a84ffe65ab942a205f",
+            "permutation_sha256": "e4f95eaba9c7e2d0927629df45bcb8483bbbd700db24d759084b193808e88d28",
+            "artifact_to_raw_ratio": 0.948795149085409,
+            "open_ms_after_export": 0.176083,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.708,
+                "p95_us": 53.91905,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "15bcfa8e1078321b1909a3b3948f2e3275e00bfce4d5404d24862e62fa005ca0"
+              },
+              "32": {
+                "p50_us": 1329.854,
+                "p95_us": 1351.58785,
+                "block_reads": 25,
+                "decompressions": 25,
+                "ids_sha256": "12b81d7e5eeddc62a4920be8110d6e1adc98abff9430feb48143fee56e9acdd5"
+              },
+              "256": {
+                "p50_us": 7608.021000000001,
+                "p95_us": 7784.666950000001,
+                "block_reads": 142,
+                "decompressions": 142,
+                "ids_sha256": "04d57bca19fda968bfed86fe9d10269f13143a32044dd53ea0591f6fb0f30185"
+              }
+            }
+          }
+        },
+        "identical_update_group": {
+          "none": {
+            "format": "MEFTNAT1",
+            "format_version": 1,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6840639,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 221,
+            "xor_blocks": 0,
+            "deduplicate": false,
+            "predictor": "none",
+            "reordered": true,
+            "export_seconds": 0.131781167,
+            "artifact_sha256": "bd11d1b0abee183ba7566c2073a3b084a67d8bc86d38123c53082989288851fc",
+            "permutation_sha256": "69d1492c25270a8b87a91c20cfa3075d9943a3f632689068a1733effa01b1090",
+            "artifact_to_raw_ratio": 0.9454162925895132,
+            "open_ms_after_export": 0.189959,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 53.666,
+                "p95_us": 58.949999999999996,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "15bcfa8e1078321b1909a3b3948f2e3275e00bfce4d5404d24862e62fa005ca0"
+              },
+              "32": {
+                "p50_us": 1064.3335,
+                "p95_us": 1078.2351,
+                "block_reads": 20,
+                "decompressions": 20,
+                "ids_sha256": "12b81d7e5eeddc62a4920be8110d6e1adc98abff9430feb48143fee56e9acdd5"
+              },
+              "256": {
+                "p50_us": 6862.521,
+                "p95_us": 6906.2372,
+                "block_reads": 128,
+                "decompressions": 128,
+                "ids_sha256": "04d57bca19fda968bfed86fe9d10269f13143a32044dd53ea0591f6fb0f30185"
+              }
+            }
+          },
+          "xor": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7235584,
+            "artifact_bytes": 6583180,
+            "unique_rows": 14132,
+            "row_map_bytes": 113056,
+            "n_rows": 14132,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 221,
+            "raw_blocks": 0,
+            "compressed_blocks": 221,
+            "zlib_blocks": 3,
+            "xor_blocks": 218,
+            "deduplicate": false,
+            "predictor": "xor",
+            "reordered": true,
+            "export_seconds": 0.5429915,
+            "artifact_sha256": "42c97b4f5bd2ce7a175463a0c8e45352c0ddfd107b77a176af89ee31a7d14228",
+            "permutation_sha256": "69d1492c25270a8b87a91c20cfa3075d9943a3f632689068a1733effa01b1090",
+            "artifact_to_raw_ratio": 0.9098339539697141,
+            "open_ms_after_export": 0.186958,
+            "all_rows_byte_exact": true,
+            "warm_queries": {
+              "1": {
+                "p50_us": 61.8335,
+                "p95_us": 62.0441,
+                "block_reads": 1,
+                "decompressions": 1,
+                "ids_sha256": "15bcfa8e1078321b1909a3b3948f2e3275e00bfce4d5404d24862e62fa005ca0"
+              },
+              "32": {
+                "p50_us": 1239.1455,
+                "p95_us": 1258.42355,
+                "block_reads": 20,
+                "decompressions": 20,
+                "ids_sha256": "12b81d7e5eeddc62a4920be8110d6e1adc98abff9430feb48143fee56e9acdd5"
+              },
+              "256": {
+                "p50_us": 8007.791499999999,
+                "p95_us": 8051.4125,
+                "block_reads": 128,
+                "decompressions": 128,
+                "ids_sha256": "04d57bca19fda968bfed86fe9d10269f13143a32044dd53ea0591f6fb0f30185"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "cost": "Local CPU; no paid API or rented compute. Monetary/energy cost not measured.",
+  "limitations": [
+    "One small English SGNS reference, not trained Engram or paper reproduction.",
+    "Update-group ordering requires corpus/training signatures; lexical ordering requires an external key-to-row mapping.",
+    "Corpus license not established; raw corpus/weights are not redistributed.",
+    "Latency includes ctypes call and C gather; IDs/output are preallocated. No tensor or direct mmap latency baseline.",
+    "Data are warmed by full row verification; opening follows export, without checksum scanning or page-cache reset.",
+    "No RSS, cold disk I/O, GPU transfer, concurrency or model-quality measurement."
+  ],
+  "machdep.cpu.brand_string": "Apple M5",
+  "hw.memsize": "34359738368",
+  "hw.logicalcpu": "10",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)"
+}

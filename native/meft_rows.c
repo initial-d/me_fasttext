@@ -11,9 +11,10 @@
 #include <zlib.h>
 
 /* MEFTNAT1 + six little-endian uint64 fields:
- * version, nrows, rowbytes, unique_rows, block_rows, nblocks.
+ * version (1 or 2), nrows, rowbytes, unique_rows, block_rows, nblocks.
  * Followed by nrows uint64 forwarding IDs and nblocks descriptors:
- * absolute offset, stored bytes, raw bytes, codec (0=raw, 1=zlib).
+ * absolute offset, stored bytes, raw bytes, codec (0=raw, 1=zlib,
+ * 2=zlib over previous-row XOR residuals, version 2 only).
  */
 #define HEADER 56u
 #define DESC 32u
@@ -59,7 +60,8 @@ meft_rows *meft_rows_open(const char *path, char *err, size_t cap) {
     if (mapping == MAP_FAILED) { free(s); fail(err, cap, "mmap failed"); return NULL; }
     s->data = mapping;
     const char *reason = "invalid native row header";
-    if (memcmp(s->data, "MEFTNAT1", 8) || le64(s->data + 8) != 1) goto invalid;
+    uint64_t version = le64(s->data + 8);
+    if (memcmp(s->data, "MEFTNAT1", 8) || (version != 1 && version != 2)) goto invalid;
     s->nrows = le64(s->data + 16); s->width = le64(s->data + 24);
     s->unique = le64(s->data + 32); s->block_rows = le64(s->data + 40);
     s->nblocks = le64(s->data + 48);
@@ -78,7 +80,8 @@ meft_rows *meft_rows_open(const char *path, char *err, size_t cap) {
         reason = "invalid block descriptor";
         if (rows > UINT64_MAX / s->width || raw != rows * s->width ||
             raw > SIZE_MAX || raw > ULONG_MAX || stored > ULONG_MAX ||
-            off != previous_end || !span(off, stored, s->size) || !stored || codec > 1 ||
+            off != previous_end || !span(off, stored, s->size) || !stored ||
+            codec > (version == 1 ? 1u : 2u) ||
             (!codec && stored != raw)) goto invalid;
         previous_end = off + stored;
     }
@@ -133,6 +136,26 @@ int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
             uLongf actual = (uLongf)raw;
             if (uncompress(s->scratch, &actual, bytes, (uLong)stored) != Z_OK || actual != raw) {
                 reason = "block decompression failed"; goto done;
+            }
+            /* Prediction resets at each block's first row. Bytewise XOR
+             * reconstructs original bits without floating-point arithmetic. */
+            if (codec == 2) {
+                size_t width = (size_t)s->width;
+                for (size_t start = width; start < (size_t)raw; start += width) {
+                    unsigned char *current = s->scratch + start;
+                    const unsigned char *previous = current - width;
+                    size_t j = 0;
+                    /* memcpy permits unaligned rows/odd widths without aliasing
+                     * or alignment UB, and compilers lower it to word loads. */
+                    for (; width - j >= sizeof(uint64_t); j += sizeof(uint64_t)) {
+                        uint64_t a, b;
+                        memcpy(&a, current + j, sizeof(a));
+                        memcpy(&b, previous + j, sizeof(b));
+                        a ^= b;
+                        memcpy(current + j, &a, sizeof(a));
+                    }
+                    for (; j < width; ++j) current[j] ^= previous[j];
+                }
             }
             bytes = s->scratch; ++s->last_decodes;
         }

@@ -46,6 +46,10 @@ interface proposal to executable code and source-linked evidence.
   have median cosine about 0.996; offline byte-exact residual prediction tests
   how to exploit that redundancy. This is a FastText-style reference, not Engram
   training or a model-quality result.
+- [Native lossless XOR codec](docs/native_xor_compression_20261020.md): actual
+  C-readable artifacts on nine trained tables. Adaptive block encoding and
+  original-ID forwarding save 6.9–9.1% with training-signature grouping;
+  storage gains and measured CPU query costs are reported separately.
 - [High-order memory research plan](docs/ngram_memory_research_plan.md): trained
   structural redundancy, lossless codecs, indexing and serving experiments.
 - [Approximate compression curves](docs/approximate_ngram_compression_20261018.md):
