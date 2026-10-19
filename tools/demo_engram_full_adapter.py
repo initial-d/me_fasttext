@@ -78,15 +78,15 @@ def main():
     with patch.object(official, "engram_cfg", config), patch.object(official, "backbone_config", backbone), \
             patch.object(official, "CompressedTokenizer", IdentityTokenizer), torch.inference_mode():
         for dtype in (torch.float32, torch.float16, torch.bfloat16):
-            for backend in ("python", "native"):
+            for backend, predictor in (("python", "none"), ("native", "none"), ("native", "xor")):
                 torch.manual_seed(7)
                 model = official.Engram(layer_id=1).to(dtype=dtype).eval()
                 hidden = torch.randn(2, 5, 2, 8, dtype=dtype)
                 before = model(hidden, ids)
                 original = model.multi_head_embedding
                 sizes = [n for group in model.hash_mapping.vocab_size_across_layers[1] for n in group]
-                directory = args.output_dir / (str(dtype).split(".")[-1] + "-" + backend)
-                meta = export_demo_embedding(original, sizes, directory, 8, backend=backend)
+                directory = args.output_dir / (str(dtype).split(".")[-1] + "-" + backend + "-" + predictor)
+                meta = export_demo_embedding(original, sizes, directory, 8, backend=backend, predictor=predictor)
                 hashes = model.hash_mapping.hash(ids)[1]
                 with MappedMultiHeadEmbedding(directory, native_library=args.native_library) as mapped:
                     model.multi_head_embedding = mapped
@@ -96,7 +96,8 @@ def main():
                         raise AssertionError("full gated output differs after replacement")
                     if mapped.table.rows(range(sum(sizes))) != tensor_bytes(original.embedding.weight):
                         raise AssertionError("source row mismatch")
-                    report["cases"].append({"dtype": str(dtype), "backend": backend, "head_sizes": sizes,
+                    report["cases"].append({"dtype": str(dtype), "backend": backend, "predictor": predictor,
+                                            "head_sizes": sizes,
                                             "full_output_byte_exact": exact, "all_rows_byte_exact": True,
                                             "shape": list(after.shape), "output_sha256": hashlib.sha256(tensor_bytes(after)).hexdigest(),
                                             "head_ids_sha256": hashlib.sha256(hashes.tobytes()).hexdigest(),

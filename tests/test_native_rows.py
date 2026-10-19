@@ -88,6 +88,96 @@ class NativeRowsTest(unittest.TestCase):
             with NativeRows(packed, self.library) as table, self.assertRaisesRegex(ValueError, "decompression"):
                 table.row(0)
 
+    def test_xor_codec_adapts_and_preserves_reordered_original_ids(self):
+        rng = random.Random(23)
+        width = 256
+        base = rng.randbytes(width)
+        # Individually high-entropy rows share most bits; XOR residuals compress.
+        related = [base[:i] + bytes([base[i] ^ 1]) + base[i + 1:] for i in range(8)]
+        rows = related + [b"\0" * width] * 8 + [rng.randbytes(width) for _ in range(8)]
+        for dedup in (False, True):
+            with self.subTest(dedup=dedup), tempfile.TemporaryDirectory() as tmp:
+                source, packed, plain = (Path(tmp) / name for name in ("raw", "xor.men", "plain.men"))
+                source.write_bytes(b"".join(rows))
+                # Reverse within groups to exercise original-ID forwarding.
+                permutation = [i for start in range(0, len(rows), 8)
+                               for i in reversed(range(start, start + 8))]
+                result = pack_native(source, packed, width, 8, dedup, "xor", permutation)
+                control = pack_native(source, plain, width, 8, dedup, row_order=permutation)
+                self.assertLessEqual(result["artifact_bytes"], control["artifact_bytes"])
+                self.assertGreater(result["xor_blocks"], 0)
+                self.assertGreater(result["raw_blocks"], 0)
+                if not dedup:
+                    self.assertGreater(result["zlib_blocks"], 0)
+                with NativeRows(packed, self.library) as table:
+                    self.assertEqual(table.rows(range(len(rows))), b"".join(rows))
+                    ids = [23, 0, 7, 8, 0, 16, 1, 23]
+                    self.assertEqual(table.rows(ids), b"".join(rows[i] for i in ids))
+                    self.assertEqual(table.last_block_reads, 3)
+                data = packed.read_bytes()
+                # Version 1 must reject a version 2 codec rather than misdecode it.
+                changed = bytearray(data)
+                struct.pack_into("<Q", changed, 8, 1)
+                packed.write_bytes(changed)
+                with self.assertRaisesRegex(ValueError, "descriptor"):
+                    NativeRows(packed, self.library)
+                changed = bytearray(data)
+                struct.pack_into("<Q", changed, 8, 3)
+                packed.write_bytes(changed)
+                with self.assertRaisesRegex(ValueError, "header"):
+                    NativeRows(packed, self.library)
+                # Corrupt the XOR zlib stream, keeping descriptor offsets valid.
+                changed = bytearray(data)
+                offset = struct.unpack_from("<Q", data, 56 + len(rows) * 8)[0]
+                changed[offset] ^= 255
+                packed.write_bytes(changed)
+                with NativeRows(packed, self.library) as table:
+                    with self.assertRaisesRegex(ValueError, "decompression"):
+                        table.row(0)
+
+    def test_xor_empty_partial_blocks_and_invalid_permutations(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            for rows in ([], [b"abc"], [b"abc", b"abd", b"abe"]):
+                source.write_bytes(b"".join(rows))
+                pack_native(source, packed, 3, 2, False, "xor", list(reversed(range(len(rows)))))
+                with NativeRows(packed, self.library) as table:
+                    self.assertEqual(table.rows(range(len(rows))), b"".join(rows))
+            for permutation in ([0, 1], [0, 0, 2], [0, 1, 3], [0, 1, -1], [0, 1, True]):
+                with self.assertRaisesRegex(ValueError, "permutation"):
+                    pack_native(source, packed, 3, row_order=permutation)
+            with self.assertRaisesRegex(ValueError, "predictor"):
+                pack_native(source, packed, 3, predictor="invalid")
+
+    def test_xor_torch_reconstructs_nonfinite_bit_patterns(self):
+        try:
+            import torch
+        except ImportError:
+            self.skipTest("optional PyTorch unavailable")
+        from tools.engram_row_adapter import export_multihead, MappedMultiHeadEmbedding
+        for dtype in (torch.float32, torch.float16, torch.bfloat16):
+            with self.subTest(dtype=dtype), tempfile.TemporaryDirectory() as tmp:
+                torch.manual_seed(19)
+                # Include NaN payloads, signed zero and infinities as opaque bits.
+                bits = torch.randint(0, 256, (1, 512), dtype=torch.uint8).repeat(8, 1)
+                special = {torch.float32: "000000800000807f0100c07f",
+                           torch.float16: "0080007c017e", torch.bfloat16: "0080807f817f"}[dtype]
+                prefix = bytes.fromhex(special)
+                bits[:, :len(prefix)] = torch.tensor(list(prefix), dtype=torch.uint8)
+                for i in range(8):
+                    bits[i, 64 + i] ^= 1
+                weight = bits.view(dtype)
+                meta = export_multihead(weight, [3, 5], tmp, 8, backend="native", predictor="xor")
+                table = Path(tmp) / "table.men"
+                descriptor = 56 + 8 * len(weight)
+                self.assertEqual(struct.unpack_from("<Q", table.read_bytes(), descriptor + 24)[0], 2)
+                with MappedMultiHeadEmbedding(tmp, native_library=self.library) as mapped:
+                    ids = torch.tensor([[2, 4], [0, 0], [2, 4]])
+                    expected = weight[ids + torch.tensor([0, 3])]
+                    self.assertTrue(torch.equal(mapped(ids).view(torch.uint8), expected.view(torch.uint8)))
+                    self.assertEqual(mapped.table.last_decompressions, 1)
+                self.assertEqual(meta["predictor"], "xor")
+
     def test_native_torch_adapter_direct_output(self):
         try:
             import torch
@@ -100,7 +190,7 @@ class NativeRowsTest(unittest.TestCase):
                 weight = torch.randn(10, 9, dtype=dtype)
                 weight[8] = weight[0]
                 weight[1, 0] = -0.0
-                export_multihead(weight, [3, 5, 2], tmp, 2, backend="native")
+                export_multihead(weight, [3, 5, 2], tmp, 2, backend="native", predictor="xor")
                 ids = torch.tensor([[[2, 4, 1], [0, 0, 0]], [[1, 2, 0], [2, 4, 1]]])
                 with MappedMultiHeadEmbedding(tmp, native_library=self.library) as mapped:
                     for query in (ids, ids.transpose(0, 1), ids.to(torch.int32), ids[:0]):

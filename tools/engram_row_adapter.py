@@ -40,7 +40,8 @@ def head_offsets(head_sizes):
     return offsets
 
 
-def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="python", deduplicate=True):
+def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="python", deduplicate=True,
+                     predictor="none"):
     """Preserve every row, including unseen/unused rows, and the source dtype."""
     offsets = head_offsets(head_sizes)
     if weight.layout != torch.strided or weight.ndim != 2 or weight.shape[1] <= 0:
@@ -51,6 +52,8 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="py
     output_dir.mkdir(parents=True, exist_ok=True)
     if backend not in ("python", "native"):
         raise ValueError("backend must be python or native")
+    if predictor not in ("none", "xor") or (predictor != "none" and backend != "native"):
+        raise ValueError("xor predictor requires the native backend")
     table = output_dir / ("table.men" if backend == "native" else "table.mer")
     manifest = output_dir / "embedding.json"
     if table.exists() or manifest.exists():
@@ -62,7 +65,7 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="py
         source.write_bytes(raw)
         width = frozen.shape[1] * frozen.element_size()
         if backend == "native":
-            packed = pack_native(source, table, width, block_rows, deduplicate)
+            packed = pack_native(source, table, width, block_rows, deduplicate, predictor)
         else:
             if not deduplicate:
                 raise ValueError("non-deduplicating export requires the native backend")
@@ -77,18 +80,21 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="py
         "unique_rows": packed["unique_rows"], "row_map_bytes": packed["row_map_bytes"],
         "block_rows": block_rows,
         "backend": backend,
+        "predictor": predictor,
         "contract": "unchanged local-head IDs plus original offsets; byte-exact CPU gather",
     }
     manifest.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
     return metadata
 
 
-def export_demo_embedding(module, head_sizes, output_dir, block_rows=256, backend="python", deduplicate=True):
+def export_demo_embedding(module, head_sizes, output_dir, block_rows=256, backend="python", deduplicate=True,
+                          predictor="none"):
     """Accept the official demo's .embedding.weight / .offsets interface."""
     expected = torch.tensor(head_offsets(head_sizes), dtype=torch.int64)
     if not torch.equal(module.offsets.detach().cpu(), expected):
         raise ValueError("source offsets differ from declared head sizes")
-    return export_multihead(module.embedding.weight, head_sizes, output_dir, block_rows, backend, deduplicate)
+    return export_multihead(module.embedding.weight, head_sizes, output_dir, block_rows, backend, deduplicate,
+                            predictor)
 
 
 class MappedMultiHeadEmbedding(nn.Module):
@@ -180,12 +186,13 @@ def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library
     return mapped
 
 
-def export_embedding(module, output_dir, block_rows=256, backend="native", deduplicate=True):
+def export_embedding(module, output_dir, block_rows=256, backend="native", deduplicate=True,
+                     predictor="none"):
     """Export ordinary nn.Embedding without forward-time max_norm mutation."""
     if not isinstance(module, nn.Embedding) or module.max_norm is not None:
         raise ValueError("requires nn.Embedding without forward-time max_norm mutation")
     return export_multihead(module.weight, [module.num_embeddings], output_dir,
-                            block_rows, backend, deduplicate)
+                            block_rows, backend, deduplicate, predictor)
 
 
 class MappedEmbedding(nn.Module):

@@ -66,13 +66,14 @@ def main():
     with patch.object(demo, "engram_cfg", config), patch.object(demo, "backbone_config", backbone), \
             patch.object(demo, "CompressedTokenizer", IdentityTokenizer), torch.inference_mode():
         for dtype in (torch.float32, torch.float16, torch.bfloat16):
-            for backend in ("python", "native"):
+            for backend, predictor in (("python", "none"), ("native", "none"), ("native", "xor")):
                 torch.manual_seed(7)
                 baseline = demo.Engram(layer_id=1).to(dtype=dtype).eval()
                 hidden = torch.randn(2, 5, 2, 8, dtype=dtype)
                 sizes = [n for group in baseline.hash_mapping.vocab_size_across_layers[1] for n in group]
-                directory = args.output_dir / (str(dtype).split(".")[-1] + "-" + backend)
-                export_demo_embedding(baseline.multi_head_embedding, sizes, directory, 8, backend=backend)
+                directory = args.output_dir / (str(dtype).split(".")[-1] + "-" + backend + "-" + predictor)
+                export_demo_embedding(baseline.multi_head_embedding, sizes, directory, 8,
+                                      backend=backend, predictor=predictor)
                 factory = partial(open_demo_embedding, directory, native_library=args.native_library)
                 mapped = factory(list_of_N=sizes, D=4)
                 try:
@@ -89,7 +90,7 @@ def main():
                     before, after = baseline(hidden, ids), candidate(hidden, ids)
                     if tensor_bytes(before) != tensor_bytes(after):
                         raise AssertionError("full Engram output changed")
-                    report["cases"].append({"dtype": str(dtype), "backend": backend,
+                    report["cases"].append({"dtype": str(dtype), "backend": backend, "predictor": predictor,
                                             "default_table_allocation_avoided": True, "full_output_byte_exact": True,
                                             "head_sizes": sizes, "shape": list(after.shape),
                                             "output_sha256": hashlib.sha256(tensor_bytes(after)).hexdigest()})
