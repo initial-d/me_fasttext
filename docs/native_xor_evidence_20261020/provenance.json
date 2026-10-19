@@ -1,0 +1,45 @@
+{
+  "commit": "a69dbe3103d0fb53b9a434b016d9107fbedd8b29",
+  "source_sha256": {
+    "native/meft_rows.c": "ea8e71fe848f019da491b2457c57158c64f926553eb5c1849c3f20aeb1c3920f",
+    "tools/native_row_store.py": "157950e2fdd9f5530ab6a7a8c039aff84f7c3c863f72cd64f9ed835bd88ff3e9",
+    "tools/benchmark_native_residuals.py": "5d4d6ad730ad07befa40c0e1c08617652446d2cf78dd6b88ef3c1a5ee32d565a"
+  },
+  "native_library_sha256": "34f78420903d5f5e34f845cf4b2ae3daf8b90db40e7257681c165ecda4f0d972",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "numpy": "2.5.4",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "device": "CPU",
+  "threads": 1,
+  "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "training_commit": "ba564539489c44ff2582a7d83039a57c7dde7b9e",
+  "training_report_sha256": "d555aa72c2e761488e41b50b472cdfc88fd32fc29b73136e9effa522be050f02",
+  "cost": "Local CPU; no paid API or rented compute. Monetary/energy cost not measured.",
+  "machdep.cpu.brand_string": "Apple M5",
+  "hw.memsize": "34359738368",
+  "hw.logicalcpu": "10",
+  "date": "2026-10-20",
+  "native_build_command": "make native NATIVE_SHARED=-dynamiclib NATIVE_EXT=dylib",
+  "commands": [
+    "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/benchmark_native_residuals.py --training-dir artifacts/native-ngram-20261018/trained-reference --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --output-dir artifacts/native-xor-word-20261020 --block-rows 64 --repeat 40",
+    "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/demo_engram_full_adapter.py --official-source /tmp/me-fasttext-engram-20261018/engram_demo_v1.py --native-library build/libmeft_rows.dylib --output-dir artifacts/engram-full-xor-word-20261020",
+    "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/demo_engram_factory.py --proposal-source /tmp/engram-meft-upstream-20261018/engram_demo_v1.py --native-library build/libmeft_rows.dylib --output-dir artifacts/engram-factory-xor-word-20261020",
+    "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python -m unittest discover -s tests",
+    "python3 -m unittest discover -s tests",
+    "python3 tools/check_native_sanitizers.py"
+  ],
+  "raw_file_sha256": {
+    "byte-decoder-pilot.json": "93abb2de18e859f9b4ccacb08c20c23a4f73ddf5195378210ea757ae1ce21628",
+    "factory-forward.json": "5120b5f3983422c3d1c8e14f9fde61496cff9806b78032acfcf4424ea441606f",
+    "official-forward.json": "34781d17c052c4501619cf374828695266d2bebc0c487fe238c430f106972262",
+    "sanitizers.txt": "7c06306240b465839a7a5e199d648fb226a52443a1e548c100278f8f7a7efae0",
+    "stdlib-tests.txt": "d0c9992db94851e91f5f233ec7c386c9d816aacc5327bdd04daa4e413eaedf81",
+    "tests.txt": "c9c91888f1257f46a859c2e6fdec903cb5963744364bf662c81a833cfa2b844e",
+    "trained-native.json": "228fa2d5c390a8ba42ecee0fe8da18e177e8328a315a29b9955f2ca77f13ada5"
+  },
+  "pilot_note": "Bytewise decoder retained separately; final word decoder preserves artifact sizes. No speed comparison across machines.",
+  "data_note": "Same original public-text SGNS files; no external download or retraining. Corpus license not established; corpus/weights omitted."
+}

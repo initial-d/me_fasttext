@@ -27,7 +27,8 @@ starting evidence for shared updates, including all nine runs and frequency
 strata. Median cosine is about 0.996 for identical-update structural pairs;
 random weights are initialization/interface controls only. Native zlib saves
 about 5%; offline shared-update-group XOR estimates save 6.9–9.1%, with every
-byte verified. Next implement a versioned predictor codec and test grouping
+byte verified. The [native version 2 codec](native_xor_compression_20261020.md)
+now implements adaptive XOR with actual file/query measurements. Next test grouping
 that does not require source training signatures. High cosine does not itself
 establish exact duplicates or a universal compression ratio.
 
