@@ -46,10 +46,13 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
             codec = int(len(compressed) < len(raw))
             encoded = compressed if codec else raw
             if predictor == "xor" and len(pending) > 1:
-                residual = bytearray(raw)
-                previous = memoryview(raw)
-                for j in range(row_bytes, len(raw)):
-                    residual[j] ^= previous[j - row_bytes]
+                # Python integers perform the same bytewise operation in C.
+                # A little-endian shift places the previous row at the current
+                # row's position, leaving the first row unchanged. All buffers
+                # remain bounded by this block; no dtype/float conversion occurs.
+                residual = (int.from_bytes(raw, "little") ^
+                            (int.from_bytes(raw[:-row_bytes], "little") << (8 * row_bytes)))
+                residual = residual.to_bytes(len(raw), "little")
                 candidate = zlib.compress(residual)
                 if len(candidate) < len(encoded):
                     encoded, codec = candidate, 2

@@ -6,6 +6,7 @@ import struct
 import subprocess
 import tempfile
 import unittest
+import zlib
 
 from tools.native_row_store import NativeRows, pack_native
 
@@ -161,6 +162,29 @@ class NativeRowsTest(unittest.TestCase):
                 self.assertGreater(result["xor_blocks"], 0)
                 with NativeRows(packed, self.library) as table:
                     self.assertEqual(table.rows(range(17)), b"".join(rows))
+
+    def test_integer_xor_matches_reference_bytes_with_leading_and_trailing_zeros(self):
+        rng = random.Random(43)
+        for width in (1, 3, 127, 512):
+            with self.subTest(width=width), tempfile.TemporaryDirectory() as tmp:
+                base = b"\0" + rng.randbytes(width - 1)
+                rows = [base] * 8 + [b"\0" * width]
+                source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+                source.write_bytes(b"".join(rows))
+                pack_native(source, packed, width, 8, False, "xor")
+                data = packed.read_bytes()
+                for block in range(2):
+                    offset, stored, raw_size, codec = struct.unpack_from("<4Q", data, 56 + 8 * len(rows) + block * 32)
+                    raw = b"".join(rows[block * 8:(block + 1) * 8])
+                    residual = bytearray(raw)
+                    for i in range(width, len(raw)):
+                        residual[i] ^= raw[i - width]
+                    candidates = [raw, zlib.compress(raw), zlib.compress(residual)]
+                    # A one-row block does not need a predictor; ordinary ties win.
+                    expected_codec = min(range(3), key=lambda i: len(candidates[i]))
+                    self.assertEqual(codec, expected_codec)
+                    self.assertEqual(data[offset:offset + stored], candidates[expected_codec])
+                    self.assertEqual(raw_size, len(raw))
 
     def test_xor_torch_reconstructs_nonfinite_bit_patterns(self):
         try:

@@ -15,6 +15,10 @@ Raw evidence: [all trained file/query measurements](native_xor_evidence_20261020
 [sanitizers](native_xor_evidence_20261020/sanitizers.txt), and
 [commands/environment/hashes](native_xor_evidence_20261020/provenance.json).
 
+The [2026-10-21 export follow-up](streaming_export_20261021.md) reduces XOR
+packing/staging costs while preserving these artifact bytes. Timings below
+remain the original 2026-10-20 results.
+
 ## What changed
 
 `pack_native(..., predictor="xor")` writes `MEFTNAT1` version 2, adding one

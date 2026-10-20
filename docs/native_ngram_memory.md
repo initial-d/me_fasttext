@@ -86,6 +86,10 @@ forwarding map restores original lookup IDs even across reordered/deduplicated
 rows. Permutation validation uses O(n) memory and export reads become
 nonsequential. Default sequential no-dedup export remains block-streamed.
 See [actual files and query measurements](native_xor_compression_20261020.md).
+The [streaming export follow-up](streaming_export_20261021.md) accelerates XOR
+packing and stages embedding bytes in bounded row slices. The caller must freeze
+source weights throughout export; deduplication and Python-builder memory limits
+still apply. Artifact formats and native queries are unchanged.
 
 ## PyTorch: two integration boundaries
 

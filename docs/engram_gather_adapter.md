@@ -39,8 +39,10 @@ when serving ends. `.train()` is rejected because no optimizer updates or
 embedding gradients are supported.
 
 `export_multihead(weight, head_sizes, output_dir)` also accepts a dense table
-directly. Export preserves float32, float16 and bfloat16 bytes, detaches a
-contiguous CPU copy and writes `table.mer` plus `embedding.json`. It records
+directly. Export preserves float32, float16 and bfloat16 bytes, stages contiguous
+CPU row slices and writes `table.mer` plus `embedding.json`. Slices contain at
+most `block_rows` rows, and source SHA-256 is updated incrementally. Freeze the
+source table for the entire export; concurrent updates are unsupported. It records
 shape, dtype, byte order, head offsets and raw/packed SHA-256 fingerprints.
 It refuses to overwrite an existing adapter. Reader startup validates the full
 artifact checksum and shape, so startup is O(file size), not lazy mmap loading.

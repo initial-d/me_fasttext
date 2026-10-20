@@ -58,25 +58,34 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="py
     manifest = output_dir / "embedding.json"
     if table.exists() or manifest.exists():
         raise FileExistsError("adapter artifacts already exist; use a fresh output directory")
-    frozen = weight.detach().to("cpu").contiguous()
-    raw = frozen.view(torch.uint8).numpy().tobytes()
+    if type(block_rows) is not int or block_rows <= 0:
+        raise ValueError("block rows must be a positive integer")
+    if backend == "python" and not deduplicate:
+        raise ValueError("non-deduplicating export requires the native backend")
+    width = weight.shape[1] * weight.element_size()
     with tempfile.TemporaryDirectory(dir=output_dir) as tmp:
         source = Path(tmp) / "table.raw"
-        source.write_bytes(raw)
-        width = frozen.shape[1] * frozen.element_size()
+        # Copy/transfer at most one block instead of materializing another CPU
+        # table and a table-sized Python bytes object. Caller must freeze weight
+        # for the entire export; detach is not a snapshot of concurrent updates.
+        digest = hashlib.sha256()
+        with source.open("wb") as stream:
+            for start in range(0, weight.shape[0], block_rows):
+                chunk = weight[start:start + block_rows].detach().to("cpu").contiguous()
+                raw = chunk.view(torch.uint8).numpy().tobytes()
+                digest.update(raw)
+                stream.write(raw)
         if backend == "native":
             packed = pack_native(source, table, width, block_rows, deduplicate, predictor)
         else:
-            if not deduplicate:
-                raise ValueError("non-deduplicating export requires the native backend")
             packed = pack_rows(source, table, width, block_rows)
     metadata = {
         "schema_version": 1, "table_file": table.name,
-        "shape": list(frozen.shape), "dtype": str(frozen.dtype), "byteorder": sys.byteorder,
+        "shape": list(weight.shape), "dtype": str(weight.dtype), "byteorder": sys.byteorder,
         "head_sizes": list(head_sizes), "offsets": offsets,
-        "weight_sha256": hashlib.sha256(raw).hexdigest(),
+        "weight_sha256": digest.hexdigest(),
         "artifact_sha256": file_sha256(table),
-        "input_bytes": len(raw), "artifact_bytes": table.stat().st_size,
+        "input_bytes": weight.shape[0] * width, "artifact_bytes": table.stat().st_size,
         "unique_rows": packed["unique_rows"], "row_map_bytes": packed["row_map_bytes"],
         "block_rows": block_rows,
         "backend": backend,
