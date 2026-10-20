@@ -39,7 +39,7 @@ when serving ends. `.train()` is rejected because no optimizer updates or
 embedding gradients are supported.
 
 `export_multihead(weight, head_sizes, output_dir)` also accepts a dense table
-directly. Export preserves float32, float16 and bfloat16 bytes, detaches a
+directly. Export preserves float32, float16 and bfloat16 bytes, stages contiguous
 CPU row slices and writes `table.mer` plus `embedding.json`. Slices contain at
 most `block_rows` rows, and source SHA-256 is updated incrementally. Freeze the
 source table for the entire export; concurrent updates are unsupported. It records
