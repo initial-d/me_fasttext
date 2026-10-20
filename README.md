@@ -50,6 +50,9 @@ interface proposal to executable code and source-linked evidence.
   C-readable artifacts on nine trained tables. Adaptive block encoding and
   original-ID forwarding save 6.9–9.1% with training-signature grouping;
   storage gains and measured CPU query costs are reported separately.
+- [Streaming export follow-up](docs/streaming_export_20261021.md): about 1.9×
+  faster XOR packing on the same trained rows, identical files, and block-sized
+  embedding staging with a separate process-memory measurement.
 - [High-order memory research plan](docs/ngram_memory_research_plan.md): trained
   structural redundancy, lossless codecs, indexing and serving experiments.
 - [Approximate compression curves](docs/approximate_ngram_compression_20261018.md):
