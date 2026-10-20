@@ -1,6 +1,7 @@
 import json
 import tempfile
 import unittest
+import hashlib
 from pathlib import Path
 
 try:
@@ -11,6 +12,40 @@ except ImportError:
 
 @unittest.skipUnless(torch is not None, "optional PyTorch adapter tests; install torch")
 class EngramGatherTest(unittest.TestCase):
+    def test_streamed_export_bounds_chunks_and_preserves_noncontiguous_weights(self):
+        from unittest.mock import patch
+        from tools.engram_row_adapter import export_multihead, MappedMultiHeadEmbedding
+        from tools.native_row_store import pack_native
+        from tools.lossless_row_store import pack_rows
+
+        for dtype in (torch.float32, torch.float16, torch.bfloat16):
+            for backend in ("python", "native"):
+                with self.subTest(dtype=dtype, backend=backend), tempfile.TemporaryDirectory() as tmp:
+                    torch.manual_seed(47)
+                    # Slicing both axes requires a compact copy for each block.
+                    source = torch.randn(38, 10, dtype=dtype)[::2, ::2]
+                    expected = source.contiguous().view(torch.uint8).numpy().tobytes()
+                    chunk_sizes = []
+                    original_numpy = torch.Tensor.numpy
+                    def observed_numpy(tensor, *args, **kwargs):
+                        chunk_sizes.append(tensor.numel() * tensor.element_size())
+                        return original_numpy(tensor, *args, **kwargs)
+                    directory = Path(tmp) / "export"
+                    with patch.object(torch.Tensor, "numpy", observed_numpy):
+                        meta = export_multihead(source, [7, 12], directory, block_rows=4, backend=backend)
+                    width = source.shape[1] * source.element_size()
+                    self.assertEqual(chunk_sizes, [4 * width] * 4 + [3 * width])
+                    self.assertEqual(meta["weight_sha256"], hashlib.sha256(expected).hexdigest())
+                    self.assertEqual(meta["input_bytes"], len(expected))
+                    raw, reference = Path(tmp) / "raw", Path(tmp) / "reference"
+                    raw.write_bytes(expected)
+                    (pack_native if backend == "native" else pack_rows)(raw, reference, width, 4)
+                    self.assertEqual(reference.read_bytes(), (directory / meta["table_file"]).read_bytes())
+                    self.assertEqual(source.contiguous().view(torch.uint8).numpy().tobytes(), expected)
+                    if backend == "python":
+                        with MappedMultiHeadEmbedding(directory) as mapped:
+                            self.assertEqual(mapped.table.rows(range(19)), expected)
+
     def test_gather_preserves_head_offsets_shape_dtype_and_all_bytes(self):
         from tools.engram_row_adapter import MappedMultiHeadEmbedding, export_multihead
 
