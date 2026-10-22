@@ -160,6 +160,26 @@ class NativeRowsTest(unittest.TestCase):
                 self.assertEqual(table.last_cache_hits, 1)
                 table.rows([0]); self.assertEqual(table.last_decompressions, 1)
 
+    def test_cache_preserves_older_library_loading_when_disabled(self):
+        from unittest.mock import patch
+        class LegacyLibrary:
+            def __init__(self, library):
+                self.library = library
+            def __getattr__(self, name):
+                if name == "meft_rows_set_cache_bytes":
+                    raise AttributeError(name)
+                return getattr(self.library, name)
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            source.write_bytes(b"abcabc")
+            pack_native(source, packed, 3, 2)
+            legacy = LegacyLibrary(ctypes.CDLL(str(self.library)))
+            with patch("tools.native_row_store.ctypes.CDLL", return_value=legacy):
+                with NativeRows(packed, self.library) as store:
+                    self.assertEqual(store.rows([0, 1]), b"abcabc")
+                with self.assertRaisesRegex(ValueError, "rebuilding"):
+                    NativeRows(packed, self.library, cache_bytes=64)
+
     def test_xor_codec_adapts_and_preserves_reordered_original_ids(self):
         rng = random.Random(23)
         width = 256
