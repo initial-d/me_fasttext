@@ -1,0 +1,287 @@
+{
+  "category": "outreach figures redrawn from aggregate public-text SGNS evidence",
+  "command": [
+    "tools/plot_engram_launch.py",
+    "--output-dir",
+    "docs/engram_launch_20261022",
+    "--font",
+    "/System/Library/Fonts/Supplemental/Arial Unicode.ttf"
+  ],
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "matplotlib": "3.11.2",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "font": "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+  "inputs": {
+    "docs/native_xor_evidence_20261020/trained-native.json": "228fa2d5c390a8ba42ecee0fe8da18e177e8328a315a29b9955f2ca77f13ada5",
+    "docs/cosine_merge_evidence_20261018/report.json": "4777cf33fda0405c39b79761c9495bdc64924ab61cc873c94e2915ce87a24211"
+  },
+  "outputs": {
+    "approximate_tradeoff_zh.png": "acebb88e817fa2e5f6c828d0e9e3eb5dab3044bfeb8851716a1326c365d7e8c4",
+    "lossless_structure_zh.png": "4e014dc5d28c57d3565f5c489290c5944741411804cf6dff6ac5cfd054361886",
+    "approximate_tradeoff_zh.svg": "37aca03919c0b5c3eef9a7599a1a40bb26cc881c4456c145cfb0c0e675441f13",
+    "lossless_structure_zh.svg": "3b7f19ec88b9150551d0c9418199758c1aca384d1a781fe2dda46c7e1e58cbc0"
+  },
+  "lossless": [
+    {
+      "order": 4,
+      "layout": "shuffled",
+      "saving_mean_percent": 4.99110784267767,
+      "seed_values_percent": [
+        4.97686134680293,
+        5.000996156009752,
+        4.995466025220329
+      ]
+    },
+    {
+      "order": 8,
+      "layout": "shuffled",
+      "saving_mean_percent": 5.101889184793407,
+      "seed_values_percent": [
+        5.122748319241655,
+        5.092980040412698,
+        5.089939194725868
+      ]
+    },
+    {
+      "order": 12,
+      "layout": "shuffled",
+      "saving_mean_percent": 5.1261515310996355,
+      "seed_values_percent": [
+        5.138963212921032,
+        5.11900628891877,
+        5.120485091459104
+      ]
+    },
+    {
+      "order": 4,
+      "layout": "lexical",
+      "saving_mean_percent": 5.015596677917366,
+      "seed_values_percent": [
+        5.007148884305268,
+        5.01996706825426,
+        5.019674081192571
+      ]
+    },
+    {
+      "order": 8,
+      "layout": "lexical",
+      "saving_mean_percent": 6.759518671471491,
+      "seed_values_percent": [
+        6.781216827137959,
+        6.7552750670440975,
+        6.742064120232416
+      ]
+    },
+    {
+      "order": 12,
+      "layout": "lexical",
+      "saving_mean_percent": 6.946023062317201,
+      "seed_values_percent": [
+        6.955444094077268,
+        6.949888219112655,
+        6.93273687376168
+      ]
+    },
+    {
+      "order": 4,
+      "layout": "identical_update_group",
+      "saving_mean_percent": 6.926409463091443,
+      "seed_values_percent": [
+        6.918120370804425,
+        6.935809464654041,
+        6.925298553815862
+      ]
+    },
+    {
+      "order": 8,
+      "layout": "identical_update_group",
+      "saving_mean_percent": 8.887640218389947,
+      "seed_values_percent": [
+        8.919324181503274,
+        8.88938130866359,
+        8.854215165002977
+      ]
+    },
+    {
+      "order": 12,
+      "layout": "identical_update_group",
+      "saving_mean_percent": 9.04026544367393,
+      "seed_values_percent": [
+        9.052330813932919,
+        9.051860914060283,
+        9.016604603028588
+      ]
+    }
+  ],
+  "approximate": [
+    {
+      "order": 4,
+      "cosine_threshold": 0.999,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.1000969930290139,
+      "component_error_mean_percent": 0.10576519478601086,
+      "component_max_percent": 0.8724948280427931
+    },
+    {
+      "order": 4,
+      "cosine_threshold": 0.995,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.3080408656247837,
+      "component_error_mean_percent": 0.25631378185355896,
+      "component_max_percent": 1.2251036983470416
+    },
+    {
+      "order": 4,
+      "cosine_threshold": 0.99,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.4009177800160828,
+      "component_error_mean_percent": 0.29471265309930356,
+      "component_max_percent": 1.2251036983470416
+    },
+    {
+      "order": 4,
+      "cosine_threshold": 0.98,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.437281257106292,
+      "component_error_mean_percent": 0.3278028831248824,
+      "component_max_percent": 3.0513658100772063
+    },
+    {
+      "order": 4,
+      "cosine_threshold": 0.97,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.4426677749282646,
+      "component_error_mean_percent": 0.3409399984903322,
+      "component_max_percent": 3.373502111712802
+    },
+    {
+      "order": 4,
+      "cosine_threshold": 0.95,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.4453870425266735,
+      "component_error_mean_percent": 0.35189972544256437,
+      "component_max_percent": 4.760418549737171
+    },
+    {
+      "order": 4,
+      "cosine_threshold": 0.9,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.4481577006138937,
+      "component_error_mean_percent": 0.3951541169842229,
+      "component_max_percent": 7.295109811794181
+    },
+    {
+      "order": 8,
+      "cosine_threshold": 0.999,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.1138157022948632,
+      "component_error_mean_percent": 0.11633774643094785,
+      "component_max_percent": 0.788308344055463
+    },
+    {
+      "order": 8,
+      "cosine_threshold": 0.995,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.6572486733221836,
+      "component_error_mean_percent": 0.3821779937700397,
+      "component_max_percent": 1.2075337391045966
+    },
+    {
+      "order": 8,
+      "cosine_threshold": 0.99,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.056326084346186,
+      "component_error_mean_percent": 0.4731219286841273,
+      "component_max_percent": 2.1011969696878694
+    },
+    {
+      "order": 8,
+      "cosine_threshold": 0.98,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.2573300790418167,
+      "component_error_mean_percent": 0.516826441768242,
+      "component_max_percent": 3.727986192500853
+    },
+    {
+      "order": 8,
+      "cosine_threshold": 0.97,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.2873874290583442,
+      "component_error_mean_percent": 0.5222420609222708,
+      "component_max_percent": 3.727986192500853
+    },
+    {
+      "order": 8,
+      "cosine_threshold": 0.95,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.2938047390968896,
+      "component_error_mean_percent": 0.5374269379686418,
+      "component_max_percent": 4.475164266680202
+    },
+    {
+      "order": 8,
+      "cosine_threshold": 0.9,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.2975623389928352,
+      "component_error_mean_percent": 0.5749795278005086,
+      "component_max_percent": 7.3388364270074185
+    },
+    {
+      "order": 12,
+      "cosine_threshold": 0.999,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.1156414819818892,
+      "component_error_mean_percent": 0.1141687093675569,
+      "component_max_percent": 0.8088993887061238
+    },
+    {
+      "order": 12,
+      "cosine_threshold": 0.995,
+      "norm_ratio": 0.99,
+      "compression_mean": 1.7246911928121664,
+      "component_error_mean_percent": 0.3864221558576611,
+      "component_max_percent": 1.2884524883839243
+    },
+    {
+      "order": 12,
+      "cosine_threshold": 0.99,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.1482058000528266,
+      "component_error_mean_percent": 0.47806527883902555,
+      "component_max_percent": 1.2884524883839243
+    },
+    {
+      "order": 12,
+      "cosine_threshold": 0.98,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.3502107383122177,
+      "component_error_mean_percent": 0.5219207133316243,
+      "component_max_percent": 3.7914254721016625
+    },
+    {
+      "order": 12,
+      "cosine_threshold": 0.97,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.381425287174459,
+      "component_error_mean_percent": 0.5348362007718462,
+      "component_max_percent": 3.7914254721016625
+    },
+    {
+      "order": 12,
+      "cosine_threshold": 0.95,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.390663427995533,
+      "component_error_mean_percent": 0.5469875621654701,
+      "component_max_percent": 5.341108285679697
+    },
+    {
+      "order": 12,
+      "cosine_threshold": 0.9,
+      "norm_ratio": 0.99,
+      "compression_mean": 2.393465331518977,
+      "component_error_mean_percent": 0.5718242355364569,
+      "component_max_percent": 5.341108285679697
+    }
+  ],
+  "note": "No new training, corpus download, weights redistribution or performance measurement."
+}

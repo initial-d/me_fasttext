@@ -1,5 +1,18 @@
 # Distribution log
 
+## Chinese Engram article and figures — 2026-10-22
+
+Prepared [a complete Chinese technical article](zhihu_engram_article_20261022.md),
+two [data-derived figures](engram_launch_20261022/figure_manifest.json), runnable
+factory commands and refreshed [sharing copy](engram_promotion.md). The figures
+reuse checked-in aggregate trained SGNS reports; no new compression/model-quality
+measurement or corpus/weights redistribution is claimed.
+
+The reader selected Zhihu. External publication status will be recorded with the
+verified article permalink after publishing; repository materials alone are not
+an external post. No paid promotion or maintainer message is part of this entry.
+Upstream Engram PR #27 remains open/draft/unmerged on 2026-10-22.
+
 ## Engram contribution and runnable artifact — 2026-10-19
 
 [DeepSeek Engram draft PR #27](https://github.com/deepseek-ai/Engram/pull/27)

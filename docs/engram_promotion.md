@@ -1,109 +1,73 @@
-# Engram-focused technical launch copy
+# Engram-focused article and sharing copy — 2026-10-22
 
-Repository publication makes these materials reviewable. No social post or
-third-party message is sent by creating this page. Results and limits link to
-[trained evidence](trained_ngram_similarity_20261018.md) and the
-[C ABI/model guide](native_ngram_memory.md).
+**Compact n-gram memory: structural indexing, byte-exact storage, and native
+batched gather for Engram-style systems.**
 
-## One-line positioning
+The completed Chinese technical article is
+[Engram 之后，高阶 n-gram 记忆还能压缩多少？一次可复现的存储实验](zhihu_engram_article_20261022.md).
+It provides the mechanism, trained controls, exact/approximate separation,
+row-level tail errors, C/PyTorch boundary and runnable factory demo.
+Repository publication and external platform publication are recorded separately
+in the [distribution log](distribution_log.md).
 
-**Compact high-order n-gram memory: structural indexing, byte-exact storage,
-and native batched gather for Engram-style systems.**
+## Figures
 
-## English technical post
+- [Chinese lossless structure figure](engram_launch_20261022/lossless_structure_zh.png)
+- [Chinese approximation/distortion figure](engram_launch_20261022/approximate_tradeoff_zh.png)
+- [Source hashes and plotted values](engram_launch_20261022/figure_manifest.json)
+- [Plotting script](../tools/plot_engram_launch.py); these are aggregate evidence
+  redraws, with no new vectors, corpus download or training.
+
+## Chinese short introduction
 
 ```text
-Engram puts a practical systems question on the table: as n-gram memory grows,
-how do we store and query it efficiently while keeping original lookup results?
+Engram 把 n-gram 记忆表的存储和查询问题重新带到大模型面前。
+我在 me_fasttext 中实现了独立 C 行查询后端和 PyTorch CPU 适配器，并用真实文本
+训练的字符 n-gram 测了两条路线：无损存储节省约 6.9–9.1%；最高 12 阶、余弦和
+模长比都 ≥0.99 时，实际向量存储缩小约 2.15 倍。
+后者是近似：n-gram 均值分量平均 L2 变化约 0.48%，单行平均约 4.2%、最大约
+14.2%。这些不是 Engram 训练权重、完整模型压缩倍数或任务质量结果。
+文章有两张数据图、全部报告链接和可运行接入示例，欢迎复现或提交负面结果。
+代码：https://github.com/initial-d/me_fasttext
+文章：https://github.com/initial-d/me_fasttext/blob/main/docs/zhihu_engram_article_20261022.md
+```
 
-me_fasttext studies that boundary through exact n-gram indexing, compact row
-layouts and mmap access. It now has a standalone C row-gather ABI and immutable
-CPU PyTorch adapters. The native path writes directly into the output tensor,
-preserving original row IDs, head offsets, dtype and every stored byte.
+## English technical introduction
 
-The interesting compression hypothesis concerns trained structure. Prefix/suffix
-n-grams that share their training updates can become highly similar; independent
-random vectors are useful interface controls but do not represent that mechanism.
+```text
+How much trained structure can we exploit in high-order n-gram memory?
 
-We trained an exact character-ngram SGNS reference on public English text at
-max orders 4/8/12 with three seeds. Identical-update structural pairs have median
-cosine around 0.996, with 85.9–89.4% reaching 0.99. Their share of structural
-pairs rises from 21.8% to 59.4% as the max order rises from 4 to 12.
+me_fasttext now has a C-readable adaptive lossless XOR codec, original-ID
+forwarding, and immutable CPU PyTorch gather adapters for Engram-style tables.
+On nine public-text trained character-ngram SGNS tables (max orders 4/8/12,
+three seeds), identical-update grouping saves 6.9–9.1% of raw vector bytes,
+including native maps/headers/descriptors. Every original row is recovered.
+The layout needs training signatures; hashed buckets do not supply them.
 
-High cosine is not byte equality. All trained rows remain distinct. Ordinary
-native block compression saves about 5%; a separate reversible bitwise-XOR
-experiment with shared-update row grouping estimates 6.9–9.1% savings including
-map/descriptor overhead. Shuffling rows weakens the effect. All original bytes
-are recovered, and all runs/settings are public. The predictor is not yet a
-native query codec, and update-signature grouping requires training metadata.
+A separate approximate prefix/suffix row-sharing experiment combines direct
+cosine and norm-ratio constraints. At max order 12, both ≥0.99 give about 2.15×
+raw-vector / artifact bytes. Mean word-ngram-component relative L2 is ~0.48%,
+but all-row mean is ~4.2% and maximum ~14.2%. No task-quality claim follows.
 
-This is a FastText-style reference, not a trained Engram/model-quality result.
-Native gathers beat our Python reference in a small warm control but remain
-slower than resident tensor gather. GPU/runtime integrations need further work.
-
-Next: trained token-ngram tables, structure-aware lossless predictors, native
-query scheduling and matched-cost model/serving evaluations. A licensed frozen
-memory table or reproducible gather trace would make a useful comparison.
+Python/native/native-XOR paths preserve full pinned official demo CPU outputs
+across float32/float16/bfloat16 on tiny random fixtures (interface tests only).
+No trained Engram checkpoint or GPU workload was evaluated. Upstream draft
+PR #27 remains unmerged as checked on 2026-10-22; there is no adoption claim.
 
 Code: https://github.com/initial-d/me_fasttext
-Evidence: https://github.com/initial-d/me_fasttext/blob/main/docs/trained_ngram_similarity_20261018.md
-C/PyTorch integration: https://github.com/initial-d/me_fasttext/blob/main/docs/native_ngram_memory.md
+Run/evaluate/cite: https://github.com/initial-d/me_fasttext/blob/main/docs/engram_quickstart.md
+Evidence: https://github.com/initial-d/me_fasttext/blob/main/docs/native_xor_compression_20261020.md
+Distortion: https://github.com/initial-d/me_fasttext/blob/main/docs/approximate_ngram_compression_20261018.md
+
+A licensed frozen token-ngram table or public gather trace would be a useful
+next comparison. Independent reproductions and negative results are welcome.
 ```
 
-## 中文技术帖
+## Publication interpretation
 
-```text
-Engram 让 n-gram 记忆重新进入大模型视野。me_fasttext 想深入其中一个具体问题：
-记忆表越做越大，怎样利用训练形成的结构，把它存得更紧凑、查得更有效？
-
-项目从 FastText 的精确 n-gram 索引、紧凑行布局和 mmap 查询出发，现在补上了
-真正的 C 行查询 ABI，以及直接写入 PyTorch 输出张量的 CPU 适配器。原始 row ID、
-head 偏移、dtype 和每一行的原始字节都保持一致。
-
-压缩实验应当研究训练过的向量。前后缀相关的 n-gram 往往一起更新，随机向量
-只能验证接口和低冗余边界，不能代表这种机制。
-
-这次用公开英文文本训练精确字符 n-gram SGNS，在最高 4/8/12 阶、三个种子下
-做了 9 组实验。更新来源和次数完全相同的结构组合，相似度中位数约为 0.996，
-85.9–89.4% 达到 0.99。随着最高阶数从 4 到 12，这类组合在结构组合中的占比
-从 21.8% 增到 59.4%。这支持进一步研究高阶 n-gram 的训练冗余。
-
-高相似度仍然保留各行的独立细节。直接分块压缩节省约 5%；进一步把共享更新
-的行分组、做可逆的按位 XOR 差异编码，估算节省约 6.9–9.1%，包含行映射和块
-描述开销。打乱行序后收益减弱；恢复时每一位都保持原样，不做近似合并。
-
-全部实验、种子、命令、哈希和限制都已公开。这是 FastText 风格训练参考，还
-没有真实 Engram 权重或大模型质量结果；差异编码目前是离线实验，尚未接入 C
-查询。现有 C 查询在小型热访问对照中快于 Python 参考，仍慢于内存张量 gather。
-
-接下来应当用训练好的 token n-gram 表，验证结构预测压缩、原生查询调度，以及
-同预算下的模型质量和实际存储/RSS/延迟。欢迎有公开记忆表或查询轨迹的研究者复现。
-
-代码：https://github.com/initial-d/me_fasttext
-训练证据：https://github.com/initial-d/me_fasttext/blob/main/docs/trained_ngram_similarity_20261018.md
-接入说明：https://github.com/initial-d/me_fasttext/blob/main/docs/native_ngram_memory.md
-```
-
-## Article outline and follow-up
-
-Additional result: [approximate row-sharing curves](approximate_ngram_compression_20261018.md)
-now compare cosine 0.999/0.995/0.99/0.98/0.97/0.95/0.90 with a norm-ratio guard.
-At max order 12, cosine/norm ≥0.99 produces 2.14–2.16× actual n-gram storage
-reduction; loosening cosine to 0.98 produces about 2.35×. Mean relative change
-of the word n-gram component is about 0.48% and 0.52%, respectively. Approximate
-sharing changes original vectors; these are not held-out model-quality results.
-Cosine-only and norm-only controls retain the larger tail errors in the report.
-
-Suggested title: **《Engram 之后：利用高阶 n-gram 的共同训练结构做无损存储》**.
-
-1. The scaling problem: exact key identity, table storage and query fan-out.
-2. Why shared training matters: structural pairs versus identical update sources.
-3. All nine trained results and shuffled controls, including weaker cases.
-4. Byte-exact XOR prediction versus approximate row sharing; source audit of
-   the legacy norm-ratio criterion and the paper's different cosine rule.
-5. C ABI → FFI → PyTorch gather; tested boundaries and remaining GPU/runtime work.
-6. A concrete licensed-table benchmark request and the next reproducible experiment.
-
-The [research plan](ngram_memory_research_plan.md) defines the paper follow-up.
-Current evidence supports a structural compression research direction; it does
-not establish universal compression, model quality or production speedups.
+File ratios cover n-gram vector rows, not complete models or measured RSS.
+Approximate sharing changes original vectors; cosine thresholds are not task
+loss percentages. Character prefix/suffix and update-signature evidence does not
+automatically transfer to trained Engram hash buckets. Original paper results
+and these later software experiments must be cited separately. See the
+[citation guide](citation_guide.md#cite-the-native-ngram-artifact).
