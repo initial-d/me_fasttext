@@ -22,6 +22,7 @@ This repository accompanies the paper [Memory-Efficient FastText: A Comprehensiv
 
 **中文入门：[Engram 之后，高阶 n-gram 记忆还能压缩多少？](docs/zhihu_engram_article_20261022.md)**
 — trained evidence, two figures, and a runnable integration example.
+[知乎文章](https://zhuanlan.zhihu.com/p/2096640222452781097)
 
 [DeepSeek's Engram](https://github.com/deepseek-ai/Engram) highlights a concrete
 systems question: **how do we store and serve large n-gram memory tables?**
