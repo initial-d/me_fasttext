@@ -17,7 +17,7 @@ on trained character n-grams, with an explicit cosine/norm distortion budget.
 
 The [upstream draft PR #27](https://github.com/deepseek-ai/Engram/pull/27)
 proposes an optional `embedding_factory`. It is **open and unmerged** as checked
-on 2026-10-20. Current official main can use post-construction replacement;
+on 2026-10-22. Current official main can use post-construction replacement;
 the factory example needs the pinned proposal source. This is a submitted
 contribution, not official adoption or endorsement.
 

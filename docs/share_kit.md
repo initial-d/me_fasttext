@@ -19,6 +19,10 @@ goal is discoverability with accurate scope, not hype.
 
 ## Engram-focused positioning
 
+Chinese long-form article: [Engram 之后，高阶 n-gram 记忆还能压缩多少？](zhihu_engram_article_20261022.md).
+The current [launch copy and figure links](engram_promotion.md) describe the
+C-readable XOR codec and joint cosine/norm sharing, with scope and tail errors.
+
 Use [engram_promotion.md](engram_promotion.md) for the current technical post:
 compact n-gram memory storage and lookup, with a runnable byte-exact row store.
 Keep the experimental reference separate from the legacy `.z` exporter and
