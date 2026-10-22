@@ -18,13 +18,17 @@
  */
 #define HEADER 56u
 #define DESC 32u
+#define CACHE_ENTRIES 64u
+struct cached_block { uint64_t block; size_t size; unsigned char *bytes; };
 struct meft_rows {
     unsigned char *data;
     size_t size;
     uint64_t nrows, width, unique, block_rows, nblocks, desc_start;
     unsigned char *scratch;
     size_t scratch_capacity;
-    uint64_t last_blocks, last_decodes;
+    uint64_t last_blocks, last_decodes, last_hits;
+    size_t cache_budget, cache_used, cache_count;
+    struct cached_block cache[CACHE_ENTRIES]; /* Most recently used first. */
 };
 struct request { uint64_t block, within; size_t position; };
 static uint64_t le64(const unsigned char *p) {
@@ -43,6 +47,7 @@ void meft_rows_close(meft_rows *s) {
     if (!s) return;
     if (s->data) munmap(s->data, s->size);
     free(s->scratch);
+    meft_rows_set_cache_bytes(s, 0);
     free(s);
 }
 meft_rows *meft_rows_open(const char *path, char *err, size_t cap) {
@@ -97,6 +102,45 @@ uint64_t meft_rows_count(const meft_rows *s) { return s ? s->nrows : 0; }
 uint64_t meft_rows_width(const meft_rows *s) { return s ? s->width : 0; }
 uint64_t meft_rows_last_block_reads(const meft_rows *s) { return s ? s->last_blocks : 0; }
 uint64_t meft_rows_last_decompressions(const meft_rows *s) { return s ? s->last_decodes : 0; }
+uint64_t meft_rows_last_cache_hits(const meft_rows *s) { return s ? s->last_hits : 0; }
+uint64_t meft_rows_cache_bytes(const meft_rows *s) { return s ? s->cache_used : 0; }
+int meft_rows_set_cache_bytes(meft_rows *s, size_t budget) {
+    if (!s) return -1;
+    for (size_t i = 0; i < s->cache_count; ++i) free(s->cache[i].bytes);
+    s->cache_count = s->cache_used = 0;
+    s->cache_budget = budget;
+    return 0;
+}
+static const unsigned char *cache_find(meft_rows *s, uint64_t block) {
+    for (size_t i = 0; i < s->cache_count; ++i) {
+        if (s->cache[i].block == block) {
+            struct cached_block hit = s->cache[i];
+            memmove(s->cache + 1, s->cache, i * sizeof(hit));
+            s->cache[0] = hit;
+            ++s->last_hits;
+            return hit.bytes;
+        }
+    }
+    return NULL;
+}
+static void cache_insert(meft_rows *s, uint64_t block, size_t size) {
+    if (size > s->cache_budget) return;
+    while (s->cache_count && (s->cache_used > s->cache_budget - size ||
+                             s->cache_count == CACHE_ENTRIES)) {
+        struct cached_block *old = s->cache + --s->cache_count;
+        s->cache_used -= old->size;
+        free(old->bytes);
+    }
+    /* Evict before allocation to respect the payload budget even transiently.
+     * Cache allocation is optional; failure leaves a valid scratch result. */
+    unsigned char *copy = malloc(size);
+    if (!copy) return;
+    memcpy(copy, s->scratch, size);
+    memmove(s->cache + 1, s->cache, s->cache_count * sizeof(s->cache[0]));
+    s->cache[0] = (struct cached_block){block, size, copy};
+    ++s->cache_count;
+    s->cache_used += size;
+}
 static int order(const void *a, const void *b) {
     const struct request *x = a, *y = b;
     return x->block < y->block ? -1 : x->block > y->block;
@@ -104,7 +148,7 @@ static int order(const void *a, const void *b) {
 int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
                      void *out, size_t outbytes, char *err, size_t cap) {
     if (!s) return fail(err, cap, "null store");
-    s->last_blocks = s->last_decodes = 0;
+    s->last_blocks = s->last_decodes = s->last_hits = 0;
     if (count > SIZE_MAX / s->width || count * s->width > outbytes ||
         count > SIZE_MAX / sizeof(struct request) || (count && (!ids || !out)))
         return fail(err, cap, "invalid output capacity or query size");
@@ -126,38 +170,44 @@ int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
         const unsigned char *d = s->data + s->desc_start + block * DESC;
         uint64_t off = le64(d), stored = le64(d + 8), raw = le64(d + 16), codec = le64(d + 24);
         const unsigned char *bytes = s->data + off;
-        ++s->last_blocks;
-        if (codec) {
-            if (s->scratch_capacity < raw) {
-                void *next = realloc(s->scratch, (size_t)raw);
-                if (!next) { reason = "allocation failed"; goto done; }
-                s->scratch = next; s->scratch_capacity = (size_t)raw;
-            }
-            uLongf actual = (uLongf)raw;
-            if (uncompress(s->scratch, &actual, bytes, (uLong)stored) != Z_OK || actual != raw) {
-                reason = "block decompression failed"; goto done;
-            }
-            /* Prediction resets at each block's first row. Bytewise XOR
-             * reconstructs original bits without floating-point arithmetic. */
-            if (codec == 2) {
-                size_t width = (size_t)s->width;
-                for (size_t start = width; start < (size_t)raw; start += width) {
-                    unsigned char *current = s->scratch + start;
-                    const unsigned char *previous = current - width;
-                    size_t j = 0;
-                    /* memcpy permits unaligned rows/odd widths without aliasing
-                     * or alignment UB, and compilers lower it to word loads. */
-                    for (; width - j >= sizeof(uint64_t); j += sizeof(uint64_t)) {
-                        uint64_t a, b;
-                        memcpy(&a, current + j, sizeof(a));
-                        memcpy(&b, previous + j, sizeof(b));
-                        a ^= b;
-                        memcpy(current + j, &a, sizeof(a));
-                    }
-                    for (; j < width; ++j) current[j] ^= previous[j];
+        const unsigned char *cached = codec ? cache_find(s, block) : NULL;
+        if (cached) {
+            bytes = cached;
+        } else {
+            ++s->last_blocks;
+            if (codec) {
+                if (s->scratch_capacity < raw) {
+                    void *next = realloc(s->scratch, (size_t)raw);
+                    if (!next) { reason = "allocation failed"; goto done; }
+                    s->scratch = next; s->scratch_capacity = (size_t)raw;
                 }
+                uLongf actual = (uLongf)raw;
+                if (uncompress(s->scratch, &actual, bytes, (uLong)stored) != Z_OK || actual != raw) {
+                    reason = "block decompression failed"; goto done;
+                }
+                /* Prediction resets at each block's first row. Bytewise XOR
+                 * reconstructs original bits without floating-point arithmetic. */
+                if (codec == 2) {
+                    size_t width = (size_t)s->width;
+                    for (size_t start = width; start < (size_t)raw; start += width) {
+                        unsigned char *current = s->scratch + start;
+                        const unsigned char *previous = current - width;
+                        size_t j = 0;
+                        /* memcpy permits unaligned rows/odd widths without aliasing
+                         * or alignment UB, and compilers lower it to word loads. */
+                        for (; width - j >= sizeof(uint64_t); j += sizeof(uint64_t)) {
+                            uint64_t a, b;
+                            memcpy(&a, current + j, sizeof(a));
+                            memcpy(&b, previous + j, sizeof(b));
+                            a ^= b;
+                            memcpy(current + j, &a, sizeof(a));
+                        }
+                        for (; j < width; ++j) current[j] ^= previous[j];
+                    }
+                }
+                bytes = s->scratch; ++s->last_decodes;
+                cache_insert(s, block, (size_t)raw);
             }
-            bytes = s->scratch; ++s->last_decodes;
         }
         do {
             memcpy((unsigned char *)out + requests[i].position * s->width,

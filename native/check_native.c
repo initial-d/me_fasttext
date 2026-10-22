@@ -13,7 +13,12 @@ int main(int argc, char **argv) {
     unsigned char *out = malloc((size_t)width * 4);
     if (!out) { meft_rows_close(s); return 1; }
     uint64_t ids[4] = {0, n ? n - 1 : 0, 0, n};
+    (void)meft_rows_set_cache_bytes(s, 65536);
+    (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_gather(s, ids, 4, out, (size_t)width * 4, error, sizeof(error));
+    (void)meft_rows_set_cache_bytes(s, 1);
+    (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
+    (void)meft_rows_set_cache_bytes(s, 0);
     free(out); meft_rows_close(s); return 0;
 }

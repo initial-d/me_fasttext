@@ -113,7 +113,7 @@ class MappedMultiHeadEmbedding(nn.Module):
     [..., heads, embedding_dim] preserve the official gather's layout.
     """
 
-    def __init__(self, output_dir, cache_blocks=4, native_library=None):
+    def __init__(self, output_dir, cache_blocks=4, native_library=None, native_cache_bytes=0):
         super().__init__()
         output_dir = Path(output_dir)
         meta = json.loads((output_dir / "embedding.json").read_text())
@@ -135,7 +135,7 @@ class MappedMultiHeadEmbedding(nn.Module):
         self.backend = backend
         self.register_buffer("offsets", torch.tensor(offsets, dtype=torch.int64))
         self.register_buffer("head_sizes", torch.tensor(meta["head_sizes"], dtype=torch.int64))
-        self.table = NativeRows(path, native_library) if backend == "native" else MappedRows(path, cache_blocks)
+        self.table = NativeRows(path, native_library, native_cache_bytes) if backend == "native" else MappedRows(path, cache_blocks)
         width = self.embedding_dim * torch.empty((), dtype=self.dtype).element_size()
         if self.table.header["n_rows"] != meta["shape"][0] or self.table.header["row_bytes"] != width:
             self.table.close()
@@ -179,7 +179,7 @@ class MappedMultiHeadEmbedding(nn.Module):
         self.close()
 
 
-def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library=None):
+def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library=None, native_cache_bytes=0):
     """Factory-compatible loader for one exported immutable CPU layer.
 
     Bind output_dir with functools.partial for Engram's proposed factory hook.
@@ -188,7 +188,7 @@ def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library
     head_offsets(list_of_N)
     if type(D) is not int or D <= 0:
         raise ValueError("embedding dimension must be a positive integer")
-    mapped = MappedMultiHeadEmbedding(output_dir, cache_blocks, native_library)
+    mapped = MappedMultiHeadEmbedding(output_dir, cache_blocks, native_library, native_cache_bytes)
     if list(list_of_N) != mapped.metadata["head_sizes"] or D != mapped.embedding_dim:
         mapped.close()
         raise ValueError("exported head sizes/dimension differ from requesting Engram layer")
@@ -210,9 +210,10 @@ class MappedEmbedding(nn.Module):
     Compatible with callers that only invoke embedding(ids); model-specific
     wrappers that inspect .weight or perform training need separate integration.
     """
-    def __init__(self, output_dir, native_library=None):
+    def __init__(self, output_dir, native_library=None, native_cache_bytes=0):
         super().__init__()
-        self.gather = MappedMultiHeadEmbedding(output_dir, native_library=native_library)
+        self.gather = MappedMultiHeadEmbedding(output_dir, native_library=native_library,
+                                             native_cache_bytes=native_cache_bytes)
         if self.gather.num_heads != 1:
             self.gather.close()
             raise ValueError("ordinary embedding needs a single global-ID table")
