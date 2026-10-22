@@ -1,0 +1,249 @@
+{
+  "category": "full official Engram CPU forward integration on random weights, local normalized-token fixture",
+  "commit": "de91c5e0d4c95007c551f6977c76ce97f67bf397",
+  "exact_command": "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/demo_engram_full_adapter.py --official-source /tmp/me-fasttext-engram-20261018/engram_demo_v1.py --native-library build/libmeft_rows.dylib --output-dir artifacts/engram-cache-full-20261022",
+  "official_commit": "fb7f84a21f91223715394a33a1dc24bbfb7f788e",
+  "official_source_sha256": "9d082070654df217e21bbca9926a4267bdf2cce7777aa6739747c24de30d2044",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "numpy": "2.5.4",
+  "transformers": "5.20.1",
+  "tokenizers": "0.23.3",
+  "sympy": "1.14.0",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "device": "CPU",
+  "threads": 1,
+  "seed": 7,
+  "native_library_sha256": "aa1d4c1284b45b5638baa6b330f31d736fff8c69834fafab38d6b0de72d1da1e",
+  "token_ids_sha256": "0a5f28cb4c16e9f569683619a4e946c6c90d9d3d4e8e81734018950a132ec030",
+  "executed": [
+    "NgramHashMapping.__init__ and hash",
+    "Engram.forward",
+    "key/value projections",
+    "RMSNorm gates",
+    "ShortConv"
+  ],
+  "limitations": [
+    "Random small weights and local normalized tokens, not trained Engram weights or tokenizer fidelity.",
+    "No backbone/LM logits, held-out task quality, model-sized memory, latency or GPU measurements.",
+    "CPU inference only; complete checkpoint loading/lifecycle is caller responsibility."
+  ],
+  "cases": [
+    {
+      "dtype": "torch.float32",
+      "backend": "python",
+      "predictor": "none",
+      "native_cache_budget": 0,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "full_output_byte_exact": true,
+      "all_rows_byte_exact": true,
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "d20ae740766207aba52be6adec7ca54885037708b0dc173e266c08b8b315f2e2",
+      "head_ids_sha256": "1af243a3d7d62b6486c50bbc9cbdce03070c6867946a04299bd405a61657b489",
+      "artifact_bytes": 2248,
+      "input_bytes": 1056
+    },
+    {
+      "dtype": "torch.float32",
+      "backend": "native",
+      "predictor": "none",
+      "native_cache_budget": 4096,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "full_output_byte_exact": true,
+      "all_rows_byte_exact": true,
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "d20ae740766207aba52be6adec7ca54885037708b0dc173e266c08b8b315f2e2",
+      "head_ids_sha256": "1af243a3d7d62b6486c50bbc9cbdce03070c6867946a04299bd405a61657b489",
+      "artifact_bytes": 1928,
+      "input_bytes": 1056
+    },
+    {
+      "dtype": "torch.float32",
+      "backend": "native",
+      "predictor": "xor",
+      "native_cache_budget": 4096,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "full_output_byte_exact": true,
+      "all_rows_byte_exact": true,
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "d20ae740766207aba52be6adec7ca54885037708b0dc173e266c08b8b315f2e2",
+      "head_ids_sha256": "1af243a3d7d62b6486c50bbc9cbdce03070c6867946a04299bd405a61657b489",
+      "artifact_bytes": 1928,
+      "input_bytes": 1056
+    },
+    {
+      "dtype": "torch.float16",
+      "backend": "python",
+      "predictor": "none",
+      "native_cache_budget": 0,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "full_output_byte_exact": true,
+      "all_rows_byte_exact": true,
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "0cc6a119760f959af654d59d881000f38f933b1cd5c1dfbf42171323adc74aa3",
+      "head_ids_sha256": "1af243a3d7d62b6486c50bbc9cbdce03070c6867946a04299bd405a61657b489",
+      "artifact_bytes": 1700,
+      "input_bytes": 528
+    },
+    {
+      "dtype": "torch.float16",
+      "backend": "native",
+      "predictor": "none",
+      "native_cache_budget": 4096,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "full_output_byte_exact": true,
+      "all_rows_byte_exact": true,
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "0cc6a119760f959af654d59d881000f38f933b1cd5c1dfbf42171323adc74aa3",
+      "head_ids_sha256": "1af243a3d7d62b6486c50bbc9cbdce03070c6867946a04299bd405a61657b489",
+      "artifact_bytes": 1400,
+      "input_bytes": 528
+    },
+    {
+      "dtype": "torch.float16",
+      "backend": "native",
+      "predictor": "xor",
+      "native_cache_budget": 4096,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "full_output_byte_exact": true,
+      "all_rows_byte_exact": true,
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "0cc6a119760f959af654d59d881000f38f933b1cd5c1dfbf42171323adc74aa3",
+      "head_ids_sha256": "1af243a3d7d62b6486c50bbc9cbdce03070c6867946a04299bd405a61657b489",
+      "artifact_bytes": 1400,
+      "input_bytes": 528
+    },
+    {
+      "dtype": "torch.bfloat16",
+      "backend": "python",
+      "predictor": "none",
+      "native_cache_budget": 0,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "full_output_byte_exact": true,
+      "all_rows_byte_exact": true,
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "cbdc9e4f92fa28e7b1443c6c92ab04c905b08f83dec9531f62eab31289bed782",
+      "head_ids_sha256": "1af243a3d7d62b6486c50bbc9cbdce03070c6867946a04299bd405a61657b489",
+      "artifact_bytes": 1699,
+      "input_bytes": 528
+    },
+    {
+      "dtype": "torch.bfloat16",
+      "backend": "native",
+      "predictor": "none",
+      "native_cache_budget": 4096,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "full_output_byte_exact": true,
+      "all_rows_byte_exact": true,
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "cbdc9e4f92fa28e7b1443c6c92ab04c905b08f83dec9531f62eab31289bed782",
+      "head_ids_sha256": "1af243a3d7d62b6486c50bbc9cbdce03070c6867946a04299bd405a61657b489",
+      "artifact_bytes": 1400,
+      "input_bytes": 528
+    },
+    {
+      "dtype": "torch.bfloat16",
+      "backend": "native",
+      "predictor": "xor",
+      "native_cache_budget": 4096,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "full_output_byte_exact": true,
+      "all_rows_byte_exact": true,
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "cbdc9e4f92fa28e7b1443c6c92ab04c905b08f83dec9531f62eab31289bed782",
+      "head_ids_sha256": "1af243a3d7d62b6486c50bbc9cbdce03070c6867946a04299bd405a61657b489",
+      "artifact_bytes": 1400,
+      "input_bytes": 528
+    }
+  ]
+}

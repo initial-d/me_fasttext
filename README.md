@@ -53,6 +53,9 @@ interface proposal to executable code and source-linked evidence.
 - [Streaming export follow-up](docs/streaming_export_20261021.md): about 1.9×
   faster XOR packing on the same trained rows, identical files, and block-sized
   embedding staging with a separate process-memory measurement.
+- [Bounded native query cache](docs/native_cache_20261022.md): optional decoded
+  block reuse with a byte budget, original-byte output and measured hotspot,
+  corpus-replay and no-benefit cases. Disabled by default.
 - [High-order memory research plan](docs/ngram_memory_research_plan.md): trained
   structural redundancy, lossless codecs, indexing and serving experiments.
 - [Approximate compression curves](docs/approximate_ngram_compression_20261018.md):
