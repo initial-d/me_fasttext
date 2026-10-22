@@ -1,5 +1,52 @@
 # Distribution log
 
+## Current-topic technical answers — 2026-10-22
+
+Published three additional, distinct answers on the maintainer's Zhihu `initial`
+account after the user requested related topics actively discussed in the last
+few days. Selection used visible dates and discussion activity in addition to
+historical question audience; search AI summaries were not used as technical
+evidence.
+
+| Answer | Question audience before publication | Recency/activity observed | Published (Asia/Shanghai) | Source |
+| --- | --- | --- | --- | --- |
+| [Flash 1017: task quality, latency and cost](https://www.zhihu.com/question/2094773240036061683/answer/2096653258941011832) | 11,132,401 cumulative views; 2,201 followers; 628 answers | Model-update topic dated October 17; search showed October 19 discussion, and the inspected answer had subsequent multi-day updates | 17:24 | [Text](zhihu_flash1017_evaluation_answer_20261022.txt) |
+| [DeepInfer: storage, read amplification and deployment](https://www.zhihu.com/question/2095922064804636469/answer/2096653346241361509) | 1,749,840 cumulative views; 994 followers; 236 answers | October 20 release topic; an existing answer was edited October 21 at 19:34, and search showed discussion October 21 at 13:36 | 17:25 | [Text](zhihu_deepinfer_answer_20261022.txt) |
+| [Model naming: immutable snapshots and reproducible export](https://www.zhihu.com/question/2095476625228019430/answer/2096653401366991109) | 2,125,480 cumulative views; 687 followers; 341 answers | Existing answers dated October 19; search showed a new answer one hour before inspection on October 22 | 17:25 | [Text](zhihu_model_naming_answer_20261022.txt) |
+
+The editor counted 1,683 / 2,096 / 1,428 characters respectively. Each answer
+discloses maintainer affiliation and AI assistance and sets the platform's
+AI-assisted-creation declaration. Publication-success UI, dated public
+permalinks and screenshots of the question with the maintainer's answer were
+verified. The first topic began October 17 and remains active; the other two
+began October 19–20. No current hot-list rank or recent view-growth rate was
+established. Search and detail answer counts differed on the naming question;
+the table retains the directly inspected detail-page count.
+
+Technical primary source: the verified DeepSeek organization account's
+[October 20 deployment article](https://zhuanlan.zhihu.com/p/2095560295930508953),
+edited at 19:30; it explicitly says KVCache management and load-balancing code
+are not yet fully open. Third-party estimates of model quality, hardware,
+revenue, profit or adoption were not repeated as established facts. The naming
+ranking is treated as the question's framing, not an independently verified
+benchmark or an official version policy.
+
+The Flash answer provides a task-level comparison protocol rather than a
+personal model-test claim. The DeepInfer answer explains phase separation,
+cache reuse and a clearly hypothetical 512-byte-row/32-KiB-block read-amplification
+example. It reuses the trained-character-ngram lossless size/query report with
+its denominator and baseline limitations. The naming answer connects snapshots
+to export manifests and the distinction between byte equality and cosine/norm
+distortion. All project evidence links pin software commit
+`5c5ce139049cfbed47dfa36a5eca69acd3cf648e`.
+
+No Flash 1017 checkpoint evaluation, DeepInfer integration, production-cluster
+reproduction or new compression benchmark was performed. Question totals are
+audience context, not views of these answers. Publication does not establish
+attributed repository visits, stars, citations, official adoption or a future
+recommendation boost. No private message, paid promotion or automatic cross-post
+was sent.
+
 ## Three additional technical answers — 2026-10-22
 
 Published three distinct answers on the maintainer's Zhihu `initial` account,
