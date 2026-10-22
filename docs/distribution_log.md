@@ -8,9 +8,33 @@ factory commands and refreshed [sharing copy](engram_promotion.md). The figures
 reuse checked-in aggregate trained SGNS reports; no new compression/model-quality
 measurement or corpus/weights redistribution is claimed.
 
-The reader selected Zhihu. External publication status will be recorded with the
-verified article permalink after publishing; repository materials alone are not
-an external post. No paid promotion or maintainer message is part of this entry.
+Published on the maintainer's Zhihu `initial` account on 2026-10-22:
+
+- [Technical article](https://zhuanlan.zhihu.com/p/2096640222452781097):
+  5,443 editor-counted characters, two trained-evidence figures, source links,
+  factory commands and paper/software citation boundaries. Topics: DeepSeek,
+  model compression and NLP. The UI showed publication success and the public
+  article page was inspected.
+- [Companion introduction](https://www.zhihu.com/pin/2096642168534348240):
+  205-character introduction linking the article, with exact/approximate and
+  row-error limits. Publication success and public detail page verified.
+
+- [Storage-cost answer](https://www.zhihu.com/question/2087854646002037757/answer/2096644241111962030):
+  published at 16:49 Asia/Shanghai to a directly relevant DRAM/cost question,
+  with 1,551 editor-counted characters. It explains relocation versus lossless
+  encoding versus approximation, prefetch limits and measured codec costs,
+  discloses maintainer affiliation and links the article/code. The question
+  showed 10,657 historical views and five existing answers before publication;
+  that is audience context, not this answer's reach or an attributed conversion.
+  Publication success and the answer permalink were verified. The
+  [answer source](zhihu_engram_storage_answer_20261022.md) is retained.
+
+[Repository PR #12](https://github.com/initial-d/me_fasttext/pull/12) merged as
+`18202b4195f56e62c2114929611b59a14039ce32`; all CI checks passed. The documented
+factory command was rerun locally: all nine dtype/backend cases preserve full
+output bytes and avoid default table allocation. Publication is not evidence of
+attributed visits, stars, citations or Engram adoption. No paid promotion or
+private maintainer message is part of this entry.
 Upstream Engram PR #27 remains open/draft/unmerged on 2026-10-22.
 
 ## Engram contribution and runnable artifact — 2026-10-19

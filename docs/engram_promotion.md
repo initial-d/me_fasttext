@@ -7,6 +7,9 @@ The completed Chinese technical article is
 [Engram 之后，高阶 n-gram 记忆还能压缩多少？一次可复现的存储实验](zhihu_engram_article_20261022.md).
 It provides the mechanism, trained controls, exact/approximate separation,
 row-level tail errors, C/PyTorch boundary and runnable factory demo.
+Published on Zhihu: [article](https://zhuanlan.zhihu.com/p/2096640222452781097) ·
+[companion introduction](https://www.zhihu.com/pin/2096642168534348240) ·
+[DRAM/storage-cost answer](https://www.zhihu.com/question/2087854646002037757/answer/2096644241111962030).
 Repository publication and external platform publication are recorded separately
 in the [distribution log](distribution_log.md).
 
