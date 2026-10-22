@@ -16,6 +16,11 @@ meft_rows *meft_rows_open(const char *path, char *error, size_t error_capacity);
 void meft_rows_close(meft_rows *store);
 uint64_t meft_rows_count(const meft_rows *store);
 uint64_t meft_rows_width(const meft_rows *store);
+/* Optional decoded-block LRU cache, disabled at open. Setting a budget clears
+ * all entries; payload bytes never exceed budget. At most 64 entries per handle.
+ * Scratch and query locations are additional memory. Single-worker only. */
+int meft_rows_set_cache_bytes(meft_rows *store, size_t budget);
+uint64_t meft_rows_cache_bytes(const meft_rows *store);
 /* output must contain count * width bytes and must not overlap ids.
  * Failure may leave partial output; ignore it unless return value is zero.
  * Reads are grouped by block and returned in original query order.
@@ -24,6 +29,7 @@ int meft_rows_gather(meft_rows *store, const uint64_t *ids, size_t count,
                      void *output, size_t output_bytes, char *error, size_t error_capacity);
 uint64_t meft_rows_last_block_reads(const meft_rows *store);
 uint64_t meft_rows_last_decompressions(const meft_rows *store);
+uint64_t meft_rows_last_cache_hits(const meft_rows *store);
 #ifdef __cplusplus
 }
 #endif

@@ -74,7 +74,8 @@ def main():
                 directory = args.output_dir / (str(dtype).split(".")[-1] + "-" + backend + "-" + predictor)
                 export_demo_embedding(baseline.multi_head_embedding, sizes, directory, 8,
                                       backend=backend, predictor=predictor)
-                factory = partial(open_demo_embedding, directory, native_library=args.native_library)
+                factory = partial(open_demo_embedding, directory, native_library=args.native_library,
+                                  native_cache_bytes=4096 if backend == "native" else 0)
                 mapped = factory(list_of_N=sizes, D=4)
                 try:
                     def recorded_factory(list_of_N, D, expected_sizes=sizes, opened=mapped):
@@ -90,7 +91,10 @@ def main():
                     before, after = baseline(hidden, ids), candidate(hidden, ids)
                     if tensor_bytes(before) != tensor_bytes(after):
                         raise AssertionError("full Engram output changed")
+                    if tensor_bytes(candidate(hidden, ids)) != tensor_bytes(before):
+                        raise AssertionError("cached full Engram output changed")
                     report["cases"].append({"dtype": str(dtype), "backend": backend, "predictor": predictor,
+                                            "native_cache_budget": 4096 if backend == "native" else 0,
                                             "default_table_allocation_avoided": True, "full_output_byte_exact": True,
                                             "head_sizes": sizes, "shape": list(after.shape),
                                             "output_sha256": hashlib.sha256(tensor_bytes(after)).hexdigest()})

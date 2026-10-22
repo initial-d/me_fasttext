@@ -89,6 +89,97 @@ class NativeRowsTest(unittest.TestCase):
             with NativeRows(packed, self.library) as table, self.assertRaisesRegex(ValueError, "decompression"):
                 table.row(0)
 
+    def test_cache_reuses_exact_blocks_and_respects_lru_byte_budget(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            rows = [bytes([i]) * 128 for i in range(19)]
+            source.write_bytes(b"".join(rows))
+            pack_native(source, packed, 128, 4, False, "xor")
+            with NativeRows(packed, self.library, cache_bytes=1024) as table:
+                for ids, hits, decodes in (([0, 4, 0], 0, 2), ([0], 1, 0),
+                                          ([8], 0, 1), ([0], 1, 0), ([4], 0, 1)):
+                    self.assertEqual(table.rows(ids), b"".join(rows[i] for i in ids))
+                    self.assertEqual(table.last_cache_hits, hits)
+                    self.assertEqual(table.last_decompressions, decodes)
+                    self.assertLessEqual(table.cache_bytes, 1024)
+                # Tail block occupies actual decoded size, not max block size.
+                table.set_cache_bytes(384)
+                table.rows([16]); self.assertEqual(table.cache_bytes, 384)
+                table.rows([16]); self.assertEqual(table.last_cache_hits, 1)
+                table.rows([0]); self.assertEqual(table.cache_bytes, 384)
+                self.assertEqual(table.last_decompressions, 1)  # Oversized block bypasses cache.
+                table.set_cache_bytes(0)
+                self.assertEqual(table.cache_bytes, 0)
+                table.rows([16]); table.rows([16])
+                self.assertEqual(table.last_decompressions, 1)
+                for invalid in (-1, True, 1.0, ctypes.c_size_t(-1).value + 1):
+                    with self.assertRaises(ValueError):
+                        table.set_cache_bytes(invalid)
+            with self.assertRaisesRegex(ValueError, "closed"):
+                table.set_cache_bytes(0)
+
+    def test_cache_raw_bypass_and_failed_decode_are_not_cached(self):
+        rng = random.Random(53)
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            source.write_bytes(rng.randbytes(256))
+            pack_native(source, packed, 64, 4, False)
+            with NativeRows(packed, self.library, 1024) as table:
+                table.rows([0]); table.rows([0])
+                self.assertEqual(table.cache_bytes, 0)
+                self.assertEqual(table.last_decompressions, 0)
+                self.assertEqual(table.last_cache_hits, 0)
+            source.write_bytes(b"\0" * 256)
+            pack_native(source, packed, 64, 4, False)
+            data = bytearray(packed.read_bytes())
+            offset = struct.unpack_from("<Q", data, 56 + 4 * 8)[0]
+            data[offset] ^= 255
+            packed.write_bytes(data)
+            with NativeRows(packed, self.library, 1024) as table:
+                for _ in range(2):
+                    with self.assertRaisesRegex(ValueError, "decompression"):
+                        table.rows([0])
+                    self.assertEqual(table.cache_bytes, 0)
+                    self.assertEqual(table.last_cache_hits, 0)
+
+    def test_cache_entry_cap_and_invalid_query_do_not_corrupt_cached_rows(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            rows = [bytes([i]) * 128 for i in range(70)]
+            source.write_bytes(b"".join(rows))
+            pack_native(source, packed, 128, 1, False)
+            with NativeRows(packed, self.library, 1024 * 1024) as table:
+                self.assertEqual(table.rows(range(70)), b"".join(rows))
+                self.assertEqual(table.cache_bytes, 64 * 128)
+                table.rows([69]); self.assertEqual(table.last_cache_hits, 1)
+                ids = (ctypes.c_uint64 * 2)(69, 70)
+                out = ctypes.create_string_buffer(256)
+                with self.assertRaisesRegex(ValueError, "row ID"):
+                    table.gather_into(ctypes.addressof(ids), 2, ctypes.addressof(out), 256)
+                self.assertEqual(table.rows([69]), rows[69])
+                self.assertEqual(table.last_cache_hits, 1)
+                table.rows([0]); self.assertEqual(table.last_decompressions, 1)
+
+    def test_cache_preserves_older_library_loading_when_disabled(self):
+        from unittest.mock import patch
+        class LegacyLibrary:
+            def __init__(self, library):
+                self.library = library
+            def __getattr__(self, name):
+                if name == "meft_rows_set_cache_bytes":
+                    raise AttributeError(name)
+                return getattr(self.library, name)
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            source.write_bytes(b"abcabc")
+            pack_native(source, packed, 3, 2)
+            legacy = LegacyLibrary(ctypes.CDLL(str(self.library)))
+            with patch("tools.native_row_store.ctypes.CDLL", return_value=legacy):
+                with NativeRows(packed, self.library) as store:
+                    self.assertEqual(store.rows([0, 1]), b"abcabc")
+                with self.assertRaisesRegex(ValueError, "rebuilding"):
+                    NativeRows(packed, self.library, cache_bytes=64)
+
     def test_xor_codec_adapts_and_preserves_reordered_original_ids(self):
         rng = random.Random(23)
         width = 256
@@ -208,11 +299,14 @@ class NativeRowsTest(unittest.TestCase):
                 table = Path(tmp) / "table.men"
                 descriptor = 56 + 8 * len(weight)
                 self.assertEqual(struct.unpack_from("<Q", table.read_bytes(), descriptor + 24)[0], 2)
-                with MappedMultiHeadEmbedding(tmp, native_library=self.library) as mapped:
+                with MappedMultiHeadEmbedding(tmp, native_library=self.library, native_cache_bytes=4096) as mapped:
                     ids = torch.tensor([[2, 4], [0, 0], [2, 4]])
                     expected = weight[ids + torch.tensor([0, 3])]
                     self.assertTrue(torch.equal(mapped(ids).view(torch.uint8), expected.view(torch.uint8)))
                     self.assertEqual(mapped.table.last_decompressions, 1)
+                    self.assertTrue(torch.equal(mapped(ids).view(torch.uint8), expected.view(torch.uint8)))
+                    self.assertEqual(mapped.table.last_decompressions, 0)
+                    self.assertEqual(mapped.table.last_cache_hits, 1)
                 self.assertEqual(meta["predictor"], "xor")
 
     def test_native_torch_adapter_direct_output(self):

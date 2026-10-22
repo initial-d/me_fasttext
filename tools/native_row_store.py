@@ -109,10 +109,12 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
 
 class NativeRows:
     """Single-worker C handle. Library path is explicit or MEFT_ROWS_LIBRARY."""
-    def __init__(self, path, library=None):
+    def __init__(self, path, library=None, cache_bytes=0):
         library = library or os.environ.get("MEFT_ROWS_LIBRARY")
         if not library:
             raise ValueError("set MEFT_ROWS_LIBRARY or pass a compiled library path")
+        if type(cache_bytes) is not int or not 0 <= cache_bytes <= ctypes.c_size_t(-1).value:
+            raise ValueError("cache bytes must fit a nonnegative size_t")
         self.lib = ctypes.CDLL(str(Path(library).resolve()))
         self.lib.meft_rows_open.argtypes = [ctypes.c_char_p, ctypes.c_void_p, ctypes.c_size_t]
         self.lib.meft_rows_open.restype = ctypes.c_void_p
@@ -131,6 +133,43 @@ class NativeRows:
             raise ValueError(error.value.decode())
         self.header = {"n_rows": self.lib.meft_rows_count(self.handle),
                        "row_bytes": self.lib.meft_rows_width(self.handle)}
+        # Keep zero-budget loading compatible with older compiled libraries.
+        if cache_bytes:
+            try:
+                self.set_cache_bytes(cache_bytes)
+            except Exception:
+                self.close()
+                raise
+
+    def set_cache_bytes(self, budget):
+        if not self.handle:
+            raise ValueError("row store is closed")
+        if type(budget) is not int or not 0 <= budget <= ctypes.c_size_t(-1).value:
+            raise ValueError("cache bytes must fit a nonnegative size_t")
+        try:
+            setter = self.lib.meft_rows_set_cache_bytes
+        except AttributeError as error:
+            raise ValueError("native cache requires rebuilding the row library") from error
+        setter.argtypes = [ctypes.c_void_p, ctypes.c_size_t]
+        setter.restype = ctypes.c_int
+        if setter(self.handle, budget):
+            raise ValueError("cannot configure native cache")
+
+    def _counter(self, name):
+        if not self.handle:
+            raise ValueError("row store is closed")
+        method = getattr(self.lib, "meft_rows_" + name)
+        method.argtypes = [ctypes.c_void_p]
+        method.restype = ctypes.c_uint64
+        return method(self.handle)
+
+    @property
+    def cache_bytes(self):
+        return self._counter("cache_bytes")
+
+    @property
+    def last_cache_hits(self):
+        return self._counter("last_cache_hits")
 
     def gather_into(self, ids_address, count, output_address, output_bytes):
         if not self.handle:

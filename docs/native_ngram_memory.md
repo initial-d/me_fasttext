@@ -71,8 +71,10 @@ artifact larger. This is a distinct format, not a reinterpretation of legacy
 
 The reader bounds-checks file structure, descriptors and queried row IDs. It
 maps bytes lazily and groups a batch's requests by block, decodes once per block
-and restores original order. There is no persistent decoded-block cache in this
-version; scratch retains up to one maximum decoded block plus per-batch request
+and restores original order. An optional [byte-budgeted decoded-block cache](native_cache_20261022.md)
+reuses compressed blocks between calls and is disabled by default. Cached payload
+bytes are bounded by the chosen budget, with a separate cap of 64 entries.
+Scratch retains up to one maximum decoded block plus per-batch request
 locations. Direct C opening does not verify a full-file cryptographic checksum;
 the PyTorch adapter does. Use trusted, immutable artifacts and external checksums
 for archival provenance. Structural checks and sanitizers are not a production

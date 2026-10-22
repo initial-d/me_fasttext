@@ -62,6 +62,12 @@ three dtypes (including signed zero and NaN bits). They reject wrong offsets,
 out-of-head IDs, invalid shapes/dtypes, modified artifacts and training mode.
 A disabled-cache test confirms one decode per requested block.
 
+For native artifacts, `native_cache_bytes` optionally enables the
+[bounded C decoded-block cache](native_cache_20261022.md). It defaults to zero;
+the Python backend's `cache_blocks` setting is independent. Cache hits preserve
+all bytes but trade additional memory for fewer decompressions. Measure capacity
+and hit rate on your trace: small caches can provide no benefit.
+
 The copied output tensor owns its data; modifying it does not change stored
 weights. There are no embedding parameters or whole-table tensor in the adapter.
 This alone does not establish an RSS saving: builder memory, forwarding IDs,

@@ -1,0 +1,213 @@
+{
+  "category": "draft-PR factory integration, tiny random CPU weights, no tokenizer/checkpoint download",
+  "commit": "de91c5e0d4c95007c551f6977c76ce97f67bf397",
+  "exact_command": "/Users/duyimin/.codex/worktrees/visibility-refresh/ml-quant-trading/.venv/bin/python tools/demo_engram_factory.py --proposal-source /tmp/engram-meft-upstream-20261018/engram_demo_v1.py --native-library build/libmeft_rows.dylib --output-dir artifacts/engram-cache-factory-20261022",
+  "upstream_pr": "https://github.com/deepseek-ai/Engram/pull/27",
+  "proposal_commit": "8b4155c2f8fc886ef27973d1164b798126f90c0d",
+  "proposal_source_sha256": "f536d39f229d6352828709960593b7fcc9b5a3ca1025e5c5c785e78660d2a041",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "numpy": "2.5.4",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "device": "CPU",
+  "threads": 1,
+  "seed": 7,
+  "native_library_sha256": "aa1d4c1284b45b5638baa6b330f31d736fff8c69834fafab38d6b0de72d1da1e",
+  "limitations": [
+    "Proposed fork API, not merged official main.",
+    "Tiny random weights verify integration only.",
+    "No tokenizer fidelity, trained Engram compression, logits, GPU or task-quality result.",
+    "Default allocation is checked, but total process memory/serving speed is not measured."
+  ],
+  "cases": [
+    {
+      "dtype": "torch.float32",
+      "backend": "python",
+      "predictor": "none",
+      "native_cache_budget": 0,
+      "default_table_allocation_avoided": true,
+      "full_output_byte_exact": true,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "d20ae740766207aba52be6adec7ca54885037708b0dc173e266c08b8b315f2e2"
+    },
+    {
+      "dtype": "torch.float32",
+      "backend": "native",
+      "predictor": "none",
+      "native_cache_budget": 4096,
+      "default_table_allocation_avoided": true,
+      "full_output_byte_exact": true,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "d20ae740766207aba52be6adec7ca54885037708b0dc173e266c08b8b315f2e2"
+    },
+    {
+      "dtype": "torch.float32",
+      "backend": "native",
+      "predictor": "xor",
+      "native_cache_budget": 4096,
+      "default_table_allocation_avoided": true,
+      "full_output_byte_exact": true,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "d20ae740766207aba52be6adec7ca54885037708b0dc173e266c08b8b315f2e2"
+    },
+    {
+      "dtype": "torch.float16",
+      "backend": "python",
+      "predictor": "none",
+      "native_cache_budget": 0,
+      "default_table_allocation_avoided": true,
+      "full_output_byte_exact": true,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "0cc6a119760f959af654d59d881000f38f933b1cd5c1dfbf42171323adc74aa3"
+    },
+    {
+      "dtype": "torch.float16",
+      "backend": "native",
+      "predictor": "none",
+      "native_cache_budget": 4096,
+      "default_table_allocation_avoided": true,
+      "full_output_byte_exact": true,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "0cc6a119760f959af654d59d881000f38f933b1cd5c1dfbf42171323adc74aa3"
+    },
+    {
+      "dtype": "torch.float16",
+      "backend": "native",
+      "predictor": "xor",
+      "native_cache_budget": 4096,
+      "default_table_allocation_avoided": true,
+      "full_output_byte_exact": true,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "0cc6a119760f959af654d59d881000f38f933b1cd5c1dfbf42171323adc74aa3"
+    },
+    {
+      "dtype": "torch.bfloat16",
+      "backend": "python",
+      "predictor": "none",
+      "native_cache_budget": 0,
+      "default_table_allocation_avoided": true,
+      "full_output_byte_exact": true,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "cbdc9e4f92fa28e7b1443c6c92ab04c905b08f83dec9531f62eab31289bed782"
+    },
+    {
+      "dtype": "torch.bfloat16",
+      "backend": "native",
+      "predictor": "none",
+      "native_cache_budget": 4096,
+      "default_table_allocation_avoided": true,
+      "full_output_byte_exact": true,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "cbdc9e4f92fa28e7b1443c6c92ab04c905b08f83dec9531f62eab31289bed782"
+    },
+    {
+      "dtype": "torch.bfloat16",
+      "backend": "native",
+      "predictor": "xor",
+      "native_cache_budget": 4096,
+      "default_table_allocation_avoided": true,
+      "full_output_byte_exact": true,
+      "head_sizes": [
+        11,
+        13,
+        19,
+        23
+      ],
+      "shape": [
+        2,
+        5,
+        2,
+        8
+      ],
+      "output_sha256": "cbdc9e4f92fa28e7b1443c6c92ab04c905b08f83dec9531f62eab31289bed782"
+    }
+  ]
+}

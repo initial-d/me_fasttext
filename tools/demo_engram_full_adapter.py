@@ -88,15 +88,19 @@ def main():
                 directory = args.output_dir / (str(dtype).split(".")[-1] + "-" + backend + "-" + predictor)
                 meta = export_demo_embedding(original, sizes, directory, 8, backend=backend, predictor=predictor)
                 hashes = model.hash_mapping.hash(ids)[1]
-                with MappedMultiHeadEmbedding(directory, native_library=args.native_library) as mapped:
+                with MappedMultiHeadEmbedding(directory, native_library=args.native_library,
+                                              native_cache_bytes=4096 if backend == "native" else 0) as mapped:
                     model.multi_head_embedding = mapped
                     after = model(hidden, ids)
                     exact = tensor_bytes(before) == tensor_bytes(after)
                     if not exact:
                         raise AssertionError("full gated output differs after replacement")
+                    if tensor_bytes(model(hidden, ids)) != tensor_bytes(before):
+                        raise AssertionError("cached full gated output differs")
                     if mapped.table.rows(range(sum(sizes))) != tensor_bytes(original.embedding.weight):
                         raise AssertionError("source row mismatch")
                     report["cases"].append({"dtype": str(dtype), "backend": backend, "predictor": predictor,
+                                            "native_cache_budget": 4096 if backend == "native" else 0,
                                             "head_sizes": sizes,
                                             "full_output_byte_exact": exact, "all_rows_byte_exact": True,
                                             "shape": list(after.shape), "output_sha256": hashlib.sha256(tensor_bytes(after)).hexdigest(),
