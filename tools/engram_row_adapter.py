@@ -118,6 +118,8 @@ class MappedMultiHeadEmbedding(nn.Module):
         output_dir = Path(output_dir)
         meta = json.loads((output_dir / "embedding.json").read_text())
         backend = meta.get("backend", "python")
+        if backend != "native" and native_cache_bytes:
+            raise ValueError("native_cache_bytes requires a native artifact")
         table_name = {"python": "table.mer", "native": "table.men"}.get(backend)
         if (meta["schema_version"] != 1 or meta["dtype"] not in DTYPES
                 or meta["byteorder"] != sys.byteorder or meta["table_file"] != table_name):

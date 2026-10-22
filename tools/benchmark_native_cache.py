@@ -72,8 +72,9 @@ def main():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--repeat", type=int, default=5)
     parser.add_argument("--cache-bytes", type=int, default=262144)
+    parser.add_argument("--larger-cache-bytes", type=int, default=2097152)
     args = parser.parse_args()
-    if args.repeat <= 0 or args.cache_bytes <= 0:
+    if args.repeat <= 0 or args.cache_bytes <= 0 or args.larger_cache_bytes <= args.cache_bytes:
         parser.error("repeat and cache bytes must be positive")
     if args.output_dir.exists():
         raise FileExistsError("use a fresh output directory")
@@ -90,6 +91,7 @@ def main():
               "python": sys.version, "pytorch": torch.__version__, "numpy": np.__version__,
               "platform": platform.platform(), "device": "CPU", "threads": 1,
               "repeat": args.repeat, "cache_budget": args.cache_bytes, "cache_entry_cap": 64,
+              "cache_budgets": [0, args.cache_bytes, args.larger_cache_bytes],
               "training_commit": training["commit"], "training_report_sha256": file_sha256(args.training_dir / "report.json"),
               "corpus_sha256": training["corpus_sha256"], "corpus_bytes": len(corpus),
               "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
@@ -132,7 +134,8 @@ def main():
         for name, batches in trace.items():
             variants = {}
             # Reverse mode order across seeds to reduce a fixed ordering bias.
-            for budget in ((0, args.cache_bytes) if seed != 7 else (args.cache_bytes, 0)):
+            budgets = [0, args.cache_bytes, args.larger_cache_bytes]
+            for budget in (budgets if seed != 7 else list(reversed(budgets))):
                 variants[str(budget)] = measure(table, args.native_library, raw, batches, budget, args.repeat)
             result["traces"][name] = {"batch_sizes": [len(x) for x in batches],
                                       "trace_sha256": hashlib.sha256(json.dumps(batches).encode()).hexdigest(),
