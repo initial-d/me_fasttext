@@ -1,5 +1,40 @@
 # Distribution log
 
+## Three additional technical answers — 2026-10-22
+
+Published three distinct answers on the maintainer's Zhihu `initial` account,
+following an explicit request for additional answers on questions with larger
+existing audiences:
+
+| Answer | Question audience before publication | Published (Asia/Shanghai) | Source |
+| --- | --- | --- | --- |
+| [Engram architecture and storage boundary](https://www.zhihu.com/question/1994233409871050526/answer/2096647218841260122) | 1,503,083 historical views; 1,854 followers; 202 answers | 17:00 | [Text](zhihu_engram_architecture_answer_20261022.txt) |
+| [Low-VRAM inference: capacity, access and scheduling](https://www.zhihu.com/question/2090845638498042646/answer/2096647356443897859) | 142,059 historical views; 224 followers; 32 answers | 17:01 | [Text](zhihu_low_vram_answer_20261022.txt) |
+| [Quantization methods and distortion evaluation](https://www.zhihu.com/question/627484732/answer/2096647525356810483) | 180,728 historical views; 311 followers; 52 answers | 17:02; citation corrected 17:03 | [Text](zhihu_quantization_answer_20261022.txt) |
+
+The editor counted 1,821 / 1,702 / 2,074 characters at initial publication;
+the quantization answer counted 2,089 after the corrected QuaRot citation was
+resolved to its paper title. All three link the published Chinese article and
+repository, disclose maintainer affiliation and AI assistance, and set the
+platform's AI-assisted-creation declaration. Publication-success UI and each
+public answer permalink were inspected. The initially mistaken QuaRot URL was
+corrected to [arXiv:2404.00456](https://arxiv.org/abs/2404.00456), with its title
+verified on arXiv and in the updated answer.
+
+The Engram answer explains deterministic addressing, prefill/decode limits,
+original-row-ID preservation and the C/PyTorch interface. The low-VRAM answer
+explains capacity versus per-step access, CPU/GPU placement, block read
+amplification and comparable serving measurements; it does not claim a Strata
+reproduction or integration. The quantization answer explains PTQ/QAT,
+GPTQ/AWQ/SmoothQuant/QLoRA/rotation distinctions and the cosine-plus-norm error
+contract. Existing trained-character-ngram evidence is reused with its row-tail
+and full-model limitations; no new benchmark was run.
+
+Question views are **historical audience context**, not views received by these
+answers. No attributed repository visits, stars, citations, adoption or future
+recommendation boost is established. No private message, paid promotion or
+automatic cross-post was sent for this entry.
+
 ## Chinese Engram article and figures — 2026-10-22
 
 Prepared [a complete Chinese technical article](zhihu_engram_article_20261022.md),
