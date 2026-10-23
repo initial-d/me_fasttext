@@ -37,7 +37,9 @@ The artifact supports these narrow claims:
 
 For Engram-style storage experiments, start with the
 [byte-exact row-store guide](engram_storage.md). It documents the new Python
-reference, its limitations and a legacy-export mismatch with the paper. Report
+reference, its limitations and the historical legacy-export mismatch. The
+[current legacy merge contract](legacy_merge_contract.md) maps the corrected
+criterion to executable checks and outstanding reproduction work. Report
 row-level byte equality separately from model quality and query performance.
 
 For citable reports, pair deployment metrics with task quality:
