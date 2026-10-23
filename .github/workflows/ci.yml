@@ -49,6 +49,26 @@ jobs:
       - name: Check native ABI and malformed files
         run: python tools/check_native_sanitizers.py
 
+  legacy-roundtrip:
+    name: Legacy artifact roundtrip
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Export and mmap real .z fixtures with sanitizers
+        run: python tools/check_legacy_roundtrip.py --output-dir artifacts/legacy-roundtrip
+      - name: Preserve build and roundtrip evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: legacy-roundtrip-report
+          path: |
+            artifacts/legacy-roundtrip/report.json
+            artifacts/legacy-roundtrip/build.txt
+            artifacts/legacy-roundtrip/run.txt
+
   engram-factory:
     name: Engram factory integration
     runs-on: ubuntu-latest

@@ -445,7 +445,9 @@ void getPosBiasVector(FTIndex* fti, const std::string& sentence, real* o_vec, fl
 
 void ftindex_delete_unsafe(FTIndex* fti)
 {
+	if (!fti) return;
 	dastrie_delete(fti->words2id);
+	dastrie_delete(fti->ngrams2id);
 	pub_free(fti);
 }
 
