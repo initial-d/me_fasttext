@@ -8,6 +8,7 @@
  */
 
 #include "fasttext.h"
+#include "legacy_merge.h"
 #include "pub/pub.h"
 
 #include <math.h>
@@ -275,79 +276,6 @@ void FastText::saveOutput() {
   ofs.close();
 }
 
-struct U {
-    string pq;
-    size_t pid;
-    float* cur;
-    DATrie* pngramdat;
-};
-
-string reverse(string word) {
-    string str;
-    std::string ngram;
-    if(word.size() == 0) return str;
-    //if((word[0] & 0xC0) == 0x80) return str;
-    for (size_t j = 0; j < word.size();) {
-        ngram.push_back(word[j++]);
-        while (j < word.size() && (word[j] & 0xC0) == 0x80) {
-            ngram.push_back(word[j++]);
-        }
-        str = ngram + str;
-        ngram = "";
-    }
-    return str;
-}
-
-int datrie_foreach_cal(const char* key, size_t value, void* udata) {
-    real* pos = ((U*)(udata))->cur;
-    //cout << key << " " << value << " " << ((U*)udata)->pq << " " << ((U*)udata)->pid << endl;
-    string pq = ((U*)udata)->pq;
-    size_t pid = ((U*)udata)->pid;
-    //cout << pq << " " << pid << endl;
-    DATrie* pngramdat = ((U*)udata)->pngramdat;
-    
-    real* pcur = pos + pid * 128;
-    real pnorm = 0.0;
-	for (int j = 0; j < 128; ++ j) {
-        //cout << j << " " << pcur[j] << endl;
-        pnorm += pcur[j] * pcur[j];
-    }
-    pnorm = sqrt(pnorm);
-    //cout << "pnorm " << pnorm << endl;
-
-    real* cur = (real*)(pos + value * 128);
-    real norm = 0.0;
-	for (int j = 0; j < 128; ++ j) {
-        //cout << j << " " << cur[j] << endl;
-        norm += cur[j] * cur[j];
-    }
-    norm = sqrt(norm);
-    //cout << "norm " << norm << endl;
-    
-    real sim = 0.0;
-    if(pnorm > norm)
-        sim = norm / pnorm;
-    else
-        sim = pnorm / norm;
-    
-    string rkey = reverse(key);
-    //cout << sim << endl;
-    //cout << rkey << " " << pid << endl;
-
-    if(sim >= 0.99) {
-        datrie_insert_key(pngramdat, rkey.c_str(), pid);
-        ((U*)udata)->pq = key;
-        ((U*)udata)->pid = pid;
-        //((U*)udata)->pngramdat = pngramdat;
-    } else {
-        datrie_insert_key(pngramdat, rkey.c_str(), value);
-        ((U*)udata)->pq = key;
-        ((U*)udata)->pid = value;
-        //((U*)udata)->pngramdat = pngramdat;
-    }
-    //std::cout << key << "\t" << norm << std::endl;
-    return 1;
-}
 
 struct ID {
     int32_t id;
@@ -385,7 +313,10 @@ void FastText::saveIndex() {
     DATrie* pngramdat = datrie_new();
     DATrie* qngramdat = datrie_new();
     DATrie* ongramdat = datrie_new();
-    U s;
+    map<size_t, string> original_keys;
+    LegacyMergeState s;
+    s.dim = args_->dim;
+    s.original_keys = &original_keys;
     s.cur = rcur;
     s.pid = 0;
     s.pq = "";
@@ -400,7 +331,8 @@ void FastText::saveIndex() {
 	//datrie_delete(ngramdat);
 
     ngramdat = s.pngramdat;
-    U t;
+    LegacyMergeState t;
+    t.dim = args_->dim;
     t.cur = rcur;
     t.pid = 0;
     t.pq = "";
@@ -408,6 +340,8 @@ void FastText::saveIndex() {
     datrie_foreach_keys(ngramdat, datrie_foreach_cal, &t);
 	datrie_delete(ngramdat);
     ngramdat = t.pngramdat;
+    FinalMergeGuard guard{rcur, args_->dim, ngramdat, &original_keys};
+    datrie_foreach_keys(dict_->ngramdat, datrie_foreach_guard, &guard);
     
 
     ID o;
@@ -438,7 +372,7 @@ void FastText::saveIndex() {
     cout << (o.ids)->size() << endl;
     for(int32_t i = 0; i < (o.ids)->size(); i++) {
         Vector m_vec(args_->dim);
-        for(int32_t j = 0; j < 128; j++) {
+        for(int32_t j = 0; j < args_->dim; j++) {
             m_vec[j] = (rcur + (*(o.ids))[i] * args_->dim)[j];
         }
 	    ofs.write((char*)m_vec.data_, m_vec.size() * sizeof(*m_vec.data_));
@@ -501,7 +435,10 @@ void FastText::saveIndex(std::string path) {
     DATrie* pngramdat = datrie_new();
     DATrie* qngramdat = datrie_new();
     DATrie* ongramdat = datrie_new();
-    U s;
+    map<size_t, string> original_keys;
+    LegacyMergeState s;
+    s.dim = args_->dim;
+    s.original_keys = &original_keys;
     s.cur = rcur;
     s.pid = 0;
     s.pq = "";
@@ -517,7 +454,8 @@ void FastText::saveIndex(std::string path) {
 	//datrie_delete(ngramdat);
 
     ngramdat = s.pngramdat;
-    U t;
+    LegacyMergeState t;
+    t.dim = args_->dim;
     t.cur = rcur;
     t.pid = 0;
     t.pq = "";
@@ -525,6 +463,8 @@ void FastText::saveIndex(std::string path) {
     datrie_foreach_keys(ngramdat, datrie_foreach_cal, &t);
 	datrie_delete(ngramdat);
     ngramdat = t.pngramdat;
+    FinalMergeGuard guard{rcur, args_->dim, ngramdat, &original_keys};
+    datrie_foreach_keys(dict_->ngramdat, datrie_foreach_guard, &guard);
     
 
     ID o;
@@ -554,7 +494,7 @@ void FastText::saveIndex(std::string path) {
     cout << (o.ids)->size() << endl;
     for(int32_t i = 0; i < (o.ids)->size(); i++) {
         Vector m_vec(args_->dim);
-        for(int32_t j = 0; j < 128; j++) {
+        for(int32_t j = 0; j < args_->dim; j++) {
             m_vec[j] = (rcur + (*(o.ids))[i] * args_->dim)[j];
         }
 	    ofs.write((char*)m_vec.data_, m_vec.size() * sizeof(*m_vec.data_));

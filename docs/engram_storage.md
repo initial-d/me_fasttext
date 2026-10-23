@@ -128,10 +128,13 @@ come from source inspection, not a new large-corpus run. The paper describes
 structurally constrained cosine merging; that is not implemented by the
 published callback as inspected.
 
-Accordingly, the legacy `.z` export is approximate and requires correction and
-separate reproduction before claims about preservation can be made. The new
-byte-exact reference is independent and does not repair or silently reinterpret
-legacy exports. Pure row renumbering/layout can preserve retained bytes;
+The current exporter now applies explicit structural checks and the joint
+cosine/norm-ratio criterion, then checks each original row against its final
+representative. See the [implementation and evidence map](legacy_merge_contract.md)
+for regressions and build limitations. This corrects the inspected criterion;
+large-corpus savings and downstream quality still require separate reproduction.
+Previously exported files retain their old content. The byte-exact reference
+remains independent. Pure row renumbering/layout can preserve retained bytes;
 approximate row merging cannot be called lossless.
 
 ## Next reading
