@@ -23,8 +23,10 @@ Nonfinite vectors are not merged. Threshold checks use double accumulation over
 stored float rows. These are row-level constraints, not a downstream quality
 guarantee. Thresholds remain fixed at 0.99 in the legacy exporter.
 
-Each traversal keeps one current representative; the implementation does not
-search all structural ancestors for maximal compression. The final guard adds
+Each traversal retains the current visited prefix-ancestor chain and checks its
+representatives from nearest to shortest. A mismatching sibling therefore does
+not discard a valid shorter ancestor. This is not a global search for maximal
+compression. The ancestry stack is bounded by key depth; the final guard adds
 an original row-ID-to-key map during export, requiring O(number of rows + total
 key bytes) extra builder memory and another traversal. Large-corpus construction
 memory, artifact size, latency and downstream quality require fresh measurement.
