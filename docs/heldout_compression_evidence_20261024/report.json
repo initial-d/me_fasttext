@@ -1,0 +1,4261 @@
+{
+  "category": "public-text trained SGNS reference, native compression and held-out objective",
+  "commit": "f691bf08e3e524f890915e2fb37b7ef2ce6b8d8c",
+  "command": "/tmp/projects-push-20261023-venv/bin/python tools/benchmark_heldout_compression.py --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --corpus-source https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt --native-library build/libmeft_rows.dylib --output-dir artifacts/heldout-compression-20261024 --max-orders 4,8,12 --seeds 3,7,11 --thresholds 0.99,0.98,0.97,0.95,0.90 --min-norm-ratio 0.99 --dim 128 --vocab-limit 1200 --min-count 5 --steps 2000 --batch-size 256 --negatives 5 --lr 0.05 --eval-pairs 20000 --eval-seed 42 --max-loss-increase 0.005 --max-discrimination-drop 0.005",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "numpy": "2.5.4",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "cpu": "Apple M5",
+  "logical_cpus": 10,
+  "device": "cpu",
+  "gpu": "not used",
+  "threads": 1,
+  "interop_threads": 1,
+  "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "corpus_bytes": 1115394,
+  "native_library_sha256": "aa1d4c1284b45b5638baa6b330f31d736fff8c69834fafab38d6b0de72d1da1e",
+  "split": {
+    "train": {
+      "tokens": 163071,
+      "sha256": "dbc9b7ecc9d265b292bbe263491d08e9531d86338e64664c1f63cecf19da61dc"
+    },
+    "validation": {
+      "tokens": 20384,
+      "sha256": "85312347c4cfd72644038c561afc2ecdb32ad679fe344e1790b66ddc8db6cef5"
+    },
+    "test": {
+      "tokens": 20384,
+      "sha256": "e80a735e5a3aa730626d7341b8d4e4f22fd630c62b5715a58974ed7ec4fe774b"
+    }
+  },
+  "settings": {
+    "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+    "max_orders": "4,8,12",
+    "seeds": "3,7,11",
+    "thresholds": "0.99,0.98,0.97,0.95,0.90",
+    "min_norm_ratio": 0.99,
+    "dim": 128,
+    "vocab_limit": 1200,
+    "min_count": 5,
+    "steps": 2000,
+    "batch_size": 256,
+    "negatives": 5,
+    "lr": 0.05,
+    "eval_pairs": 20000,
+    "eval_seed": 42,
+    "max_loss_increase": 0.005,
+    "max_discrimination_drop": 0.005
+  },
+  "cost_assumptions": "local CPU, cached public text, no paid service; no latency/energy/RSS claim",
+  "training_protocol": "train-only vocabulary/counts, +/-2 original-token context; exact char-ngrams and word row; average forward, unscaled input gradient; summed sparse SGD, unigram exponent 0.5 negatives",
+  "limitations": [
+    "One small English corpus, contiguous split, in-vocabulary context pairs only; coverage is reported.",
+    "Reference SGNS, not original C++ reproduction or trained Engram weights; no downstream LM quality/perplexity claim.",
+    "Finite training and fixed settings; no convergence claim. Negative samples can include the positive target.",
+    "Native decode feeds full averaged input embeddings with unchanged word/output rows; no training through mapped storage.",
+    "Ngram ratio includes native metadata/manifest; full vector payload ratio excludes key index, tokenizer and model architecture.",
+    "Approximate variants change original vectors; lossless native storage is bit exact to its input bytes.",
+    "Cosine/norm acceptance is direct to immutable structural representatives; no monotonicity or global optimum guarantee.",
+    "Corpus license/provenance has not been independently established; corpus and weights are not redistributed."
+  ],
+  "runs": [
+    {
+      "max_order": 4,
+      "seed": 3,
+      "vocabulary": 1200,
+      "ngram_rows": 5244,
+      "training": {
+        "seconds": 1.1230041251983494,
+        "loss_samples": [
+          {
+            "step": 0,
+            "sgns_loss_per_pair": 4.1588826179504395
+          },
+          {
+            "step": 200,
+            "sgns_loss_per_pair": 2.397310733795166
+          },
+          {
+            "step": 400,
+            "sgns_loss_per_pair": 2.4913318157196045
+          },
+          {
+            "step": 600,
+            "sgns_loss_per_pair": 2.439436435699463
+          },
+          {
+            "step": 800,
+            "sgns_loss_per_pair": 2.3681652545928955
+          },
+          {
+            "step": 1000,
+            "sgns_loss_per_pair": 2.3655829429626465
+          },
+          {
+            "step": 1200,
+            "sgns_loss_per_pair": 2.425363540649414
+          },
+          {
+            "step": 1400,
+            "sgns_loss_per_pair": 2.3628807067871094
+          },
+          {
+            "step": 1600,
+            "sgns_loss_per_pair": 2.3350956439971924
+          },
+          {
+            "step": 1800,
+            "sgns_loss_per_pair": 2.425738573074341
+          },
+          {
+            "step": 1999,
+            "sgns_loss_per_pair": 2.3944945335388184
+          }
+        ],
+        "sampled_pairs": 512000,
+        "training_pool_pairs": 463676,
+        "training_pool_sha256": "3eaf3669036cc0534bb448b5f71122f8da6eb7e1a2832408c8390436141e9094"
+      },
+      "full_input_sha256": "f3f9862abb36748dd605001800850bb9b76443025877dcc4fcfeba2bdcd1cd1a",
+      "output_sha256": "e204251492652915096763dc2bd7b39f8269a6fc425073cb84a54d5d91578d87",
+      "word_ngram_layout_sha256": "67c10cabc74b6d63d63b62ddec9292bc454cf90ce0e55abdcc8c81d52ca411b8",
+      "checkpoint_sha256": "3f973b84bc7b03c54f3a38de9e88bb408fcdf9aa63d697a3839222ffe20632e0",
+      "ngram_raw_bytes": 2684928,
+      "unchanged_word_padding_output_bytes": 1229312,
+      "original_full_vector_payload_bytes": 3914240,
+      "baseline": {
+        "validation": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3514331170588734,
+          "context_vs_negative_discrimination": 0.746355005940795
+        },
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3117261726230383,
+          "context_vs_negative_discrimination": 0.7602100059360266
+        }
+      },
+      "evaluation": {
+        "validation": {
+          "sha256": "9d94ee57b19f06271501457a6130eef0b4a8ca180998478fa82a73845585093d",
+          "pool_pairs": 54214,
+          "token_coverage": 0.8148547880690737,
+          "negative_target_collision_fraction": 0.00285
+        },
+        "test": {
+          "sha256": "7117f2e9254b9cbc71a93f3275966aee7f3bcd58445d672c1e36f8cd2d7a9a14",
+          "pool_pairs": 47324,
+          "token_coverage": 0.7647174254317112,
+          "negative_target_collision_fraction": 0.00302
+        }
+      },
+      "variants": [
+        {
+          "name": "lossless",
+          "approximate": false,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "retained_representatives": 5244,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 2549517,
+            "unique_rows": 5244,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 82,
+            "raw_blocks": 0,
+            "compressed_blocks": 82,
+            "zlib_blocks": 74,
+            "xor_blocks": 8,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2550030,
+          "ngram_raw_to_artifact_factor": 1.052900554111128,
+          "native_artifact_sha256": "35120e54b362a9e627f2c51ddfc1fcd675cfa426ed5d26ceaade7fd5589319ef",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9999999999999998,
+            "mean_cosine": 1.0,
+            "p05_cosine": 0.9999999999999998,
+            "relative_l2_mean": 0.0,
+            "relative_l2_p95": 0.0,
+            "relative_l2_max": 0.0,
+            "weighted_relative_l2_mean": 0.0,
+            "weighted_relative_frobenius": 0.0,
+            "weighted_mean_cosine": 1.0,
+            "max_relative_norm_change": 0.0
+          },
+          "source_sha256": "4f38d14cfe2762ec1284702b0709142043528995d1fc522ff642c1253ac45b9a",
+          "mapping_sha256": "d18bef3a3890c1ff4329ae52c83ebf950b691bee75947d5f3bb0bc811e61c85a",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3514331170588734,
+            "context_vs_negative_discrimination": 0.746355005940795
+          },
+          "validation_delta": {
+            "loss_relative_change": 0.0,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.0356935149028588,
+          "full_compressed_vector_payload_bytes": 3779342,
+          "full_embedding_and_both_split_outputs_bit_identical": true
+        },
+        {
+          "name": "cos-0.99-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.99,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3883,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1901008,
+            "unique_rows": 3883,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 61,
+            "raw_blocks": 0,
+            "compressed_blocks": 61,
+            "zlib_blocks": 61,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1901520,
+          "ngram_raw_to_artifact_factor": 1.411990407673861,
+          "native_artifact_sha256": "ac747277f053cfa23df340aa7b14d6c3705cc887db546dd40df04fd29dd715fd",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.990020130711727,
+            "mean_cosine": 0.9991943845281134,
+            "p05_cosine": 0.9948708342950928,
+            "relative_l2_mean": 0.019048035683418185,
+            "relative_l2_p95": 0.10142231169086185,
+            "relative_l2_max": 0.14181487934372702,
+            "weighted_relative_l2_mean": 0.019048035683418185,
+            "weighted_relative_frobenius": 0.02189416819323738,
+            "weighted_mean_cosine": 0.9991943845281134,
+            "max_relative_norm_change": 0.010072903753456671
+          },
+          "source_sha256": "4f38d14cfe2762ec1284702b0709142043528995d1fc522ff642c1253ac45b9a",
+          "mapping_sha256": "f80cc491b160d59437554a7652410d1532e6627e2001aa2dbeed9a26218e27f5",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3514215930104254,
+            "context_vs_negative_discrimination": 0.7463350059397519
+          },
+          "validation_delta": {
+            "loss_relative_change": -4.900861676371271e-06,
+            "discrimination_change": -2.0000001043074533e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.2502235827409456,
+          "full_compressed_vector_payload_bytes": 3130832
+        },
+        {
+          "name": "cos-0.98-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.98,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3791,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1856652,
+            "unique_rows": 3791,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1857164,
+          "ngram_raw_to_artifact_factor": 1.4457140026405852,
+          "native_artifact_sha256": "432204df5cf2b8db00ed50fd0c975ff90c8a170f5a1dbebfbb92d16ad228f931",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9800477844089874,
+            "mean_cosine": 0.9989679928914512,
+            "p05_cosine": 0.9938170976534589,
+            "relative_l2_mean": 0.02186023082340586,
+            "relative_l2_p95": 0.11105640406368976,
+            "relative_l2_max": 0.19949871178290085,
+            "weighted_relative_l2_mean": 0.02186023082340586,
+            "weighted_relative_frobenius": 0.024256737890769115,
+            "weighted_mean_cosine": 0.9989679928914512,
+            "max_relative_norm_change": 0.010072903753456671
+          },
+          "source_sha256": "4f38d14cfe2762ec1284702b0709142043528995d1fc522ff642c1253ac45b9a",
+          "mapping_sha256": "ab47f8606f292c0b030cb08b30ec9fd17a21c79bdb027b096e5a6078a71fe50f",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.351395705272257,
+            "context_vs_negative_discrimination": 0.7463550059385597
+          },
+          "validation_delta": {
+            "loss_relative_change": -1.59102065649952e-05,
+            "discrimination_change": -2.2352120154778277e-12
+          },
+          "full_vector_payload_to_compressed_factor": 1.2681906484936218,
+          "full_compressed_vector_payload_bytes": 3086476
+        },
+        {
+          "name": "cos-0.97-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.97,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3779,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1851007,
+            "unique_rows": 3779,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1851519,
+          "ngram_raw_to_artifact_factor": 1.4501217648860205,
+          "native_artifact_sha256": "a20f843fb666f676dc590b2b196a2d1a43409b088b8892439e644f215e7ba9af",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9702218286132981,
+            "mean_cosine": 0.9989134108174527,
+            "p05_cosine": 0.9935669702669244,
+            "relative_l2_mean": 0.022359967767208496,
+            "relative_l2_p95": 0.11349966985486878,
+            "relative_l2_max": 0.2453695527769277,
+            "weighted_relative_l2_mean": 0.022359967767208496,
+            "weighted_relative_frobenius": 0.02452643503175818,
+            "weighted_mean_cosine": 0.9989134108174527,
+            "max_relative_norm_change": 0.010072903753456671
+          },
+          "source_sha256": "4f38d14cfe2762ec1284702b0709142043528995d1fc522ff642c1253ac45b9a",
+          "mapping_sha256": "9c279dfe70a3d222a465510a9b3c64927712a5da2d914f4610aa213b30e32ac4",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.351396176446974,
+            "context_vs_negative_discrimination": 0.7463650059379637
+          },
+          "validation_delta": {
+            "loss_relative_change": -1.5709828883103683e-05,
+            "discrimination_change": 9.999997168774755e-06
+          },
+          "full_vector_payload_to_compressed_factor": 1.2705143514850377,
+          "full_compressed_vector_payload_bytes": 3080831
+        },
+        {
+          "name": "cos-0.95-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.95,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3767,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1845046,
+            "unique_rows": 3767,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 59,
+            "raw_blocks": 0,
+            "compressed_blocks": 59,
+            "zlib_blocks": 59,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1845558,
+          "ngram_raw_to_artifact_factor": 1.454805538487547,
+          "native_artifact_sha256": "a9178b4e1dd559cc17af6b0c1bda6d334f8978d00c886f6ed4efa7bcc4a90233",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9507164053238156,
+            "mean_cosine": 0.9988219621475932,
+            "p05_cosine": 0.9933842415115519,
+            "relative_l2_mean": 0.023004842762918178,
+            "relative_l2_p95": 0.11506482929526109,
+            "relative_l2_max": 0.31406164283953036,
+            "weighted_relative_l2_mean": 0.023004842762918178,
+            "weighted_relative_frobenius": 0.02799966658721905,
+            "weighted_mean_cosine": 0.9988219621475932,
+            "max_relative_norm_change": 0.010072903753456671
+          },
+          "source_sha256": "4f38d14cfe2762ec1284702b0709142043528995d1fc522ff642c1253ac45b9a",
+          "mapping_sha256": "cd1c16ee237b7bdfb3adee4446d35841ef65706f233b9ade5a8cff8a659b053c",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3513843892559407,
+            "context_vs_negative_discrimination": 0.7463550059393048
+          },
+          "validation_delta": {
+            "loss_relative_change": -2.072259788254982e-05,
+            "discrimination_change": -1.4901413436518851e-12
+          },
+          "full_vector_payload_to_compressed_factor": 1.2729773941662574,
+          "full_compressed_vector_payload_bytes": 3074870
+        },
+        {
+          "name": "cos-0.9-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.9,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3756,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1839765,
+            "unique_rows": 3756,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 59,
+            "raw_blocks": 0,
+            "compressed_blocks": 59,
+            "zlib_blocks": 59,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 511,
+          "total_ngram_artifact_bytes": 1840276,
+          "ngram_raw_to_artifact_factor": 1.458981152827076,
+          "native_artifact_sha256": "7a5927ad46b4ef92b5d3ddd6a449d5aff1c46ada1dec3366c1bc5c23490d2cd1",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9023235457908196,
+            "mean_cosine": 0.9986309759420514,
+            "p05_cosine": 0.9932010787101336,
+            "relative_l2_mean": 0.023982568518632046,
+            "relative_l2_p95": 0.11674549530249875,
+            "relative_l2_max": 0.4401568591003202,
+            "weighted_relative_l2_mean": 0.023982568518632046,
+            "weighted_relative_frobenius": 0.03538079369680529,
+            "weighted_mean_cosine": 0.9986309759420514,
+            "max_relative_norm_change": 0.010072903753456671
+          },
+          "source_sha256": "4f38d14cfe2762ec1284702b0709142043528995d1fc522ff642c1253ac45b9a",
+          "mapping_sha256": "4d4a8595264adb19283b0d040049e8c5999c9665346068f18aa20f858d47927a",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3514666598126293,
+            "context_vs_negative_discrimination": 0.7463750059403479
+          },
+          "validation_delta": {
+            "loss_relative_change": 1.426481302502225e-05,
+            "discrimination_change": 1.999999955293319e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.2751678726917097,
+          "full_compressed_vector_payload_bytes": 3069588
+        }
+      ],
+      "selection": {
+        "name": "cos-0.9-norm-0.99",
+        "validation_max_loss_relative_increase": 0.005,
+        "validation_max_discrimination_drop": 0.005,
+        "rule": "largest ngram artifact compression among validation-feasible variants; no test metrics used",
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3118088699012995,
+          "context_vs_negative_discrimination": 0.7602200059279799
+        },
+        "test_delta": {
+          "loss_relative_change": 3.577295582868345e-05,
+          "discrimination_change": 9.999991953280052e-06
+        },
+        "test_paired_token_block_bootstrap": {
+          "block_tokens": 128,
+          "observed_blocks": 160,
+          "repeats": 1000,
+          "seed": 42,
+          "loss_relative_change_95_percent_interval": [
+            -3.447428363202165e-05,
+            0.00010617509574516458
+          ],
+          "discrimination_change_95_percent_interval": [
+            -0.00016025522348761794,
+            0.00017418349678815067
+          ],
+          "limitation": "Within one text split; blocks are a correlation approximation, not independent corpora."
+        }
+      }
+    },
+    {
+      "max_order": 4,
+      "seed": 7,
+      "vocabulary": 1200,
+      "ngram_rows": 5244,
+      "training": {
+        "seconds": 1.1194124170579016,
+        "loss_samples": [
+          {
+            "step": 0,
+            "sgns_loss_per_pair": 4.1588826179504395
+          },
+          {
+            "step": 200,
+            "sgns_loss_per_pair": 2.4581942558288574
+          },
+          {
+            "step": 400,
+            "sgns_loss_per_pair": 2.534879446029663
+          },
+          {
+            "step": 600,
+            "sgns_loss_per_pair": 2.3847270011901855
+          },
+          {
+            "step": 800,
+            "sgns_loss_per_pair": 2.384145736694336
+          },
+          {
+            "step": 1000,
+            "sgns_loss_per_pair": 2.436955451965332
+          },
+          {
+            "step": 1200,
+            "sgns_loss_per_pair": 2.352583169937134
+          },
+          {
+            "step": 1400,
+            "sgns_loss_per_pair": 2.4044840335845947
+          },
+          {
+            "step": 1600,
+            "sgns_loss_per_pair": 2.345958948135376
+          },
+          {
+            "step": 1800,
+            "sgns_loss_per_pair": 2.3833084106445312
+          },
+          {
+            "step": 1999,
+            "sgns_loss_per_pair": 2.3820648193359375
+          }
+        ],
+        "sampled_pairs": 512000,
+        "training_pool_pairs": 463676,
+        "training_pool_sha256": "3eaf3669036cc0534bb448b5f71122f8da6eb7e1a2832408c8390436141e9094"
+      },
+      "full_input_sha256": "e102eab5848dd2205f5faea28225f6c4cd5c5bf3bb6366fd0d70faa1cb3fea3a",
+      "output_sha256": "81f5225ccce065a0dd09ea3c141ab11b98c1c14c59b9784c7136d480725a47e1",
+      "word_ngram_layout_sha256": "67c10cabc74b6d63d63b62ddec9292bc454cf90ce0e55abdcc8c81d52ca411b8",
+      "checkpoint_sha256": "3882d321a3560e8dab0bf1c4693574f082d82480949e2b1b9e3be439dc57cd4e",
+      "ngram_raw_bytes": 2684928,
+      "unchanged_word_padding_output_bytes": 1229312,
+      "original_full_vector_payload_bytes": 3914240,
+      "baseline": {
+        "validation": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.364363315629214,
+          "context_vs_negative_discrimination": 0.7450250060841441
+        },
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3175292899131774,
+          "context_vs_negative_discrimination": 0.760670005928725
+        }
+      },
+      "evaluation": {
+        "validation": {
+          "sha256": "9d94ee57b19f06271501457a6130eef0b4a8ca180998478fa82a73845585093d",
+          "pool_pairs": 54214,
+          "token_coverage": 0.8148547880690737,
+          "negative_target_collision_fraction": 0.00285
+        },
+        "test": {
+          "sha256": "7117f2e9254b9cbc71a93f3275966aee7f3bcd58445d672c1e36f8cd2d7a9a14",
+          "pool_pairs": 47324,
+          "token_coverage": 0.7647174254317112,
+          "negative_target_collision_fraction": 0.00302
+        }
+      },
+      "variants": [
+        {
+          "name": "lossless",
+          "approximate": false,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "retained_representatives": 5244,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 2550014,
+            "unique_rows": 5244,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 82,
+            "raw_blocks": 0,
+            "compressed_blocks": 82,
+            "zlib_blocks": 75,
+            "xor_blocks": 7,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2550527,
+          "ngram_raw_to_artifact_factor": 1.052695384130417,
+          "native_artifact_sha256": "5a37ff6761daa4b8dd6108e7929ecf41447c57a5e1a066ee74f4c77056df5e82",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9999999999999998,
+            "mean_cosine": 1.0,
+            "p05_cosine": 0.9999999999999998,
+            "relative_l2_mean": 0.0,
+            "relative_l2_p95": 0.0,
+            "relative_l2_max": 0.0,
+            "weighted_relative_l2_mean": 0.0,
+            "weighted_relative_frobenius": 0.0,
+            "weighted_mean_cosine": 1.0,
+            "max_relative_norm_change": 0.0
+          },
+          "source_sha256": "259537b23e77d9fc6cd6528477ef12f6aed5f027510053023d816f237ef4e775",
+          "mapping_sha256": "d18bef3a3890c1ff4329ae52c83ebf950b691bee75947d5f3bb0bc811e61c85a",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.364363315629214,
+            "context_vs_negative_discrimination": 0.7450250060841441
+          },
+          "validation_delta": {
+            "loss_relative_change": 0.0,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.0355573345848859,
+          "full_compressed_vector_payload_bytes": 3779839,
+          "full_embedding_and_both_split_outputs_bit_identical": true
+        },
+        {
+          "name": "cos-0.99-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.99,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3933,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1924822,
+            "unique_rows": 3933,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 62,
+            "raw_blocks": 0,
+            "compressed_blocks": 62,
+            "zlib_blocks": 62,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1925334,
+          "ngram_raw_to_artifact_factor": 1.394525832920418,
+          "native_artifact_sha256": "931fa26ce455b0c5e7d2e308447cbc341b90906d9ee1f310af4dac6d0ce3ca8f",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9900104269652025,
+            "mean_cosine": 0.9992222369734337,
+            "p05_cosine": 0.9950247827076747,
+            "relative_l2_mean": 0.018343092674145738,
+            "relative_l2_p95": 0.09986042059881994,
+            "relative_l2_max": 0.14233489622139142,
+            "weighted_relative_l2_mean": 0.018343092674145738,
+            "weighted_relative_frobenius": 0.021653596567917596,
+            "weighted_mean_cosine": 0.9992222369734337,
+            "max_relative_norm_change": 0.010045742745589396
+          },
+          "source_sha256": "259537b23e77d9fc6cd6528477ef12f6aed5f027510053023d816f237ef4e775",
+          "mapping_sha256": "384c418cbec4e9b6575a9ed35c03acb2d5732f48555ec3330540eb6537b4715f",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.364333214392513,
+            "context_vs_negative_discrimination": 0.74501500608325
+          },
+          "validation_delta": {
+            "loss_relative_change": -1.273122303246943e-05,
+            "discrimination_change": -1.0000000894128114e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.2407858124176214,
+          "full_compressed_vector_payload_bytes": 3154646
+        },
+        {
+          "name": "cos-0.98-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.98,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3817,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1869106,
+            "unique_rows": 3817,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1869618,
+          "ngram_raw_to_artifact_factor": 1.4360837347522328,
+          "native_artifact_sha256": "59e935a5f770e7fd0e7a71fc94b43235a8716a9eb8b4e85ef05c23a289f5fc5f",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9804926896472981,
+            "mean_cosine": 0.9989312401819348,
+            "p05_cosine": 0.9934061859432908,
+            "relative_l2_mean": 0.02192043143919175,
+            "relative_l2_p95": 0.11513874835435327,
+            "relative_l2_max": 0.1968350433554361,
+            "weighted_relative_l2_mean": 0.02192043143919175,
+            "weighted_relative_frobenius": 0.022891844215361834,
+            "weighted_mean_cosine": 0.9989312401819348,
+            "max_relative_norm_change": 0.010045742745589396
+          },
+          "source_sha256": "259537b23e77d9fc6cd6528477ef12f6aed5f027510053023d816f237ef4e775",
+          "mapping_sha256": "cb7de53d2b2a9d38aebf51c39685a59d3d7499a4a924fdbc6d92b69600d63c75",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3643239652447403,
+            "context_vs_negative_discrimination": 0.745025006083399
+          },
+          "validation_delta": {
+            "loss_relative_change": -1.66431208831197e-05,
+            "discrimination_change": -7.450706718259426e-13
+          },
+          "full_vector_payload_to_compressed_factor": 1.2630940356832843,
+          "full_compressed_vector_payload_bytes": 3098930
+        },
+        {
+          "name": "cos-0.97-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.97,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3805,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1863323,
+            "unique_rows": 3805,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1863835,
+          "ngram_raw_to_artifact_factor": 1.4405395327376083,
+          "native_artifact_sha256": "a249551ada1b64446870b57e97e05776333b235ec48e002db87918f811340094",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9719744038848253,
+            "mean_cosine": 0.9988792564946625,
+            "p05_cosine": 0.993189983557196,
+            "relative_l2_mean": 0.02240762757401376,
+            "relative_l2_p95": 0.11681665136623504,
+            "relative_l2_max": 0.2375975555823642,
+            "weighted_relative_l2_mean": 0.02240762757401376,
+            "weighted_relative_frobenius": 0.02335760745984196,
+            "weighted_mean_cosine": 0.9988792564946625,
+            "max_relative_norm_change": 0.010045742745589396
+          },
+          "source_sha256": "259537b23e77d9fc6cd6528477ef12f6aed5f027510053023d816f237ef4e775",
+          "mapping_sha256": "7f11a1132d7b40ec9f8fca20c2555a4a5b54c6ff9da859b7fb437df710ef62a4",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.36432469002828,
+            "context_vs_negative_discrimination": 0.745025006083399
+          },
+          "validation_delta": {
+            "loss_relative_change": -1.6336575973108225e-05,
+            "discrimination_change": -7.450706718259426e-13
+          },
+          "full_vector_payload_to_compressed_factor": 1.2654555376773235,
+          "full_compressed_vector_payload_bytes": 3093147
+        },
+        {
+          "name": "cos-0.95-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.95,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3798,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1859969,
+            "unique_rows": 3798,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1860481,
+          "ngram_raw_to_artifact_factor": 1.4431364792223087,
+          "native_artifact_sha256": "78c23ef40d1546b27be83ea2a9064baa6b827af6fd64db424b07dc63082020ae",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9528611006810174,
+            "mean_cosine": 0.9988260028094543,
+            "p05_cosine": 0.9931102325234313,
+            "relative_l2_mean": 0.022784624272698714,
+            "relative_l2_p95": 0.11756214132786612,
+            "relative_l2_max": 0.3082942800846294,
+            "weighted_relative_l2_mean": 0.022784624272698714,
+            "weighted_relative_frobenius": 0.02548665181296759,
+            "weighted_mean_cosine": 0.9988260028094543,
+            "max_relative_norm_change": 0.010045742745589396
+          },
+          "source_sha256": "259537b23e77d9fc6cd6528477ef12f6aed5f027510053023d816f237ef4e775",
+          "mapping_sha256": "c510436f1c16dbfa0b489ace8e849ea75e9baba381d33b3b75d0ac4ef5c7f76c",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3643242054454983,
+            "context_vs_negative_discrimination": 0.7449950060814619
+          },
+          "validation_delta": {
+            "loss_relative_change": -1.6541528730873445e-05,
+            "discrimination_change": -3.000000268227332e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.266829201826789,
+          "full_compressed_vector_payload_bytes": 3089793
+        },
+        {
+          "name": "cos-0.9-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.9,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3788,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1855263,
+            "unique_rows": 3788,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 511,
+          "total_ngram_artifact_bytes": 1855774,
+          "ngram_raw_to_artifact_factor": 1.4467968621179088,
+          "native_artifact_sha256": "45a417f2d39396c091337b9e2427ea1655adc6fbfbb39f39f70a0f95bcab091c",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9028447963456693,
+            "mean_cosine": 0.9986774266431565,
+            "p05_cosine": 0.9930077917100099,
+            "relative_l2_mean": 0.02353602725502024,
+            "relative_l2_p95": 0.11850126098371536,
+            "relative_l2_max": 0.44266844137633043,
+            "weighted_relative_l2_mean": 0.02353602725502024,
+            "weighted_relative_frobenius": 0.03254228592276677,
+            "weighted_mean_cosine": 0.9986774266431565,
+            "max_relative_norm_change": 0.010045742745589396
+          },
+          "source_sha256": "259537b23e77d9fc6cd6528477ef12f6aed5f027510053023d816f237ef4e775",
+          "mapping_sha256": "5a3d5b6ec12b93ddcb9e47b9a82cba26767988ad217e6a8a94f3243b89510b42",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3643406268171967,
+            "context_vs_negative_discrimination": 0.7449750060841441
+          },
+          "validation_delta": {
+            "loss_relative_change": -9.596161413605309e-06,
+            "discrimination_change": -4.999999999999449e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.268762037751946,
+          "full_compressed_vector_payload_bytes": 3085086
+        }
+      ],
+      "selection": {
+        "name": "cos-0.9-norm-0.99",
+        "validation_max_loss_relative_increase": 0.005,
+        "validation_max_discrimination_drop": 0.005,
+        "rule": "largest ngram artifact compression among validation-feasible variants; no test metrics used",
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3175117286756635,
+          "context_vs_negative_discrimination": 0.7607100059241056
+        },
+        "test_delta": {
+          "loss_relative_change": -7.577568745475993e-06,
+          "discrimination_change": 3.999999538062404e-05
+        },
+        "test_paired_token_block_bootstrap": {
+          "block_tokens": 128,
+          "observed_blocks": 160,
+          "repeats": 1000,
+          "seed": 42,
+          "loss_relative_change_95_percent_interval": [
+            -4.4254074759711436e-05,
+            2.5090147581391385e-05
+          ],
+          "discrimination_change_95_percent_interval": [
+            -6.912726324180618e-05,
+            0.00016042534297067187
+          ],
+          "limitation": "Within one text split; blocks are a correlation approximation, not independent corpora."
+        }
+      }
+    },
+    {
+      "max_order": 4,
+      "seed": 11,
+      "vocabulary": 1200,
+      "ngram_rows": 5244,
+      "training": {
+        "seconds": 1.122449625050649,
+        "loss_samples": [
+          {
+            "step": 0,
+            "sgns_loss_per_pair": 4.1588826179504395
+          },
+          {
+            "step": 200,
+            "sgns_loss_per_pair": 2.4805679321289062
+          },
+          {
+            "step": 400,
+            "sgns_loss_per_pair": 2.5205483436584473
+          },
+          {
+            "step": 600,
+            "sgns_loss_per_pair": 2.432371139526367
+          },
+          {
+            "step": 800,
+            "sgns_loss_per_pair": 2.378962516784668
+          },
+          {
+            "step": 1000,
+            "sgns_loss_per_pair": 2.4120938777923584
+          },
+          {
+            "step": 1200,
+            "sgns_loss_per_pair": 2.3491783142089844
+          },
+          {
+            "step": 1400,
+            "sgns_loss_per_pair": 2.3475213050842285
+          },
+          {
+            "step": 1600,
+            "sgns_loss_per_pair": 2.387174129486084
+          },
+          {
+            "step": 1800,
+            "sgns_loss_per_pair": 2.3997747898101807
+          },
+          {
+            "step": 1999,
+            "sgns_loss_per_pair": 2.3127224445343018
+          }
+        ],
+        "sampled_pairs": 512000,
+        "training_pool_pairs": 463676,
+        "training_pool_sha256": "3eaf3669036cc0534bb448b5f71122f8da6eb7e1a2832408c8390436141e9094"
+      },
+      "full_input_sha256": "0442f3d60fa8655c54bf842922958446fdd2bc09341d893fb3d1e0de987f1677",
+      "output_sha256": "d8ff18f9b3e546565a9163a08e575298e5d14e1beef144659b6082d1f1b5a98d",
+      "word_ngram_layout_sha256": "67c10cabc74b6d63d63b62ddec9292bc454cf90ce0e55abdcc8c81d52ca411b8",
+      "checkpoint_sha256": "63037d17958c7ef5cf74ef8ef7501ee8c247a4b2a26d6d14acd52cad3e44f9db",
+      "ngram_raw_bytes": 2684928,
+      "unchanged_word_padding_output_bytes": 1229312,
+      "original_full_vector_payload_bytes": 3914240,
+      "baseline": {
+        "validation": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.355404519765079,
+          "context_vs_negative_discrimination": 0.7445650059688836
+        },
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3088951226323844,
+          "context_vs_negative_discrimination": 0.7632900059521198
+        }
+      },
+      "evaluation": {
+        "validation": {
+          "sha256": "9d94ee57b19f06271501457a6130eef0b4a8ca180998478fa82a73845585093d",
+          "pool_pairs": 54214,
+          "token_coverage": 0.8148547880690737,
+          "negative_target_collision_fraction": 0.00285
+        },
+        "test": {
+          "sha256": "7117f2e9254b9cbc71a93f3275966aee7f3bcd58445d672c1e36f8cd2d7a9a14",
+          "pool_pairs": 47324,
+          "token_coverage": 0.7647174254317112,
+          "negative_target_collision_fraction": 0.00302
+        }
+      },
+      "variants": [
+        {
+          "name": "lossless",
+          "approximate": false,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "retained_representatives": 5244,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 2549478,
+            "unique_rows": 5244,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 82,
+            "raw_blocks": 0,
+            "compressed_blocks": 82,
+            "zlib_blocks": 73,
+            "xor_blocks": 9,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2549991,
+          "ngram_raw_to_artifact_factor": 1.0529166573529083,
+          "native_artifact_sha256": "5a6eb1e827327485fd8da4ca597751e83274e32579f775a67063c2220d3432d2",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9999999999999998,
+            "mean_cosine": 1.0,
+            "p05_cosine": 0.9999999999999998,
+            "relative_l2_mean": 0.0,
+            "relative_l2_p95": 0.0,
+            "relative_l2_max": 0.0,
+            "weighted_relative_l2_mean": 0.0,
+            "weighted_relative_frobenius": 0.0,
+            "weighted_mean_cosine": 1.0,
+            "max_relative_norm_change": 0.0
+          },
+          "source_sha256": "c5d427408d5040b0d2bcac742344f65f2c0ec41583259ec8e0ccc885aaf8d995",
+          "mapping_sha256": "d18bef3a3890c1ff4329ae52c83ebf950b691bee75947d5f3bb0bc811e61c85a",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.355404519765079,
+            "context_vs_negative_discrimination": 0.7445650059688836
+          },
+          "validation_delta": {
+            "loss_relative_change": 0.0,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.0357042026003207,
+          "full_compressed_vector_payload_bytes": 3779303,
+          "full_embedding_and_both_split_outputs_bit_identical": true
+        },
+        {
+          "name": "cos-0.99-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.99,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3889,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1903536,
+            "unique_rows": 3889,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 61,
+            "raw_blocks": 0,
+            "compressed_blocks": 61,
+            "zlib_blocks": 61,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1904048,
+          "ngram_raw_to_artifact_factor": 1.410115711368621,
+          "native_artifact_sha256": "077ee9342ca0f29c4c4560d1be8ff032804bd80355b74d3eac35fa0957faf3a7",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.990137857308481,
+            "mean_cosine": 0.9991743600192353,
+            "p05_cosine": 0.9947361122941458,
+            "relative_l2_mean": 0.019215626656947097,
+            "relative_l2_p95": 0.10284702765089007,
+            "relative_l2_max": 0.1405337155840906,
+            "weighted_relative_l2_mean": 0.019215626656947097,
+            "weighted_relative_frobenius": 0.02183974788850437,
+            "weighted_mean_cosine": 0.9991743600192353,
+            "max_relative_norm_change": 0.010093389109864888
+          },
+          "source_sha256": "c5d427408d5040b0d2bcac742344f65f2c0ec41583259ec8e0ccc885aaf8d995",
+          "mapping_sha256": "56ae6a8528d6b640081cbe58ec5e4848697cd59c19f37102cefe8ec3519caf2b",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.355394359727204,
+            "context_vs_negative_discrimination": 0.7445950059648603
+          },
+          "validation_delta": {
+            "loss_relative_change": -4.313500203356746e-06,
+            "discrimination_change": 2.9999995976637273e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.249214900298721,
+          "full_compressed_vector_payload_bytes": 3133360
+        },
+        {
+          "name": "cos-0.98-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.98,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3802,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1861716,
+            "unique_rows": 3802,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1862228,
+          "ngram_raw_to_artifact_factor": 1.4417826388605477,
+          "native_artifact_sha256": "d65eb0ae283877880edd2e04654ef4b775ce3aceeadba701471f4470545cba55",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9802593310140257,
+            "mean_cosine": 0.9989524987167845,
+            "p05_cosine": 0.9936390151069616,
+            "relative_l2_mean": 0.02191862732016354,
+            "relative_l2_p95": 0.11315442361448776,
+            "relative_l2_max": 0.1979713350182132,
+            "weighted_relative_l2_mean": 0.02191862732016354,
+            "weighted_relative_frobenius": 0.023301042549424833,
+            "weighted_mean_cosine": 0.9989524987167845,
+            "max_relative_norm_change": 0.010093389109864888
+          },
+          "source_sha256": "c5d427408d5040b0d2bcac742344f65f2c0ec41583259ec8e0ccc885aaf8d995",
+          "mapping_sha256": "72277507b442fedf1df9312d4f3d95d07964f751bd544d690b5c5d8441877c56",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.355355690841377,
+            "context_vs_negative_discrimination": 0.7446350059676915
+          },
+          "validation_delta": {
+            "loss_relative_change": -2.0730589286199752e-05,
+            "discrimination_change": 6.999999880785701e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.266113328632332,
+          "full_compressed_vector_payload_bytes": 3091540
+        },
+        {
+          "name": "cos-0.97-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.97,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3791,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1856507,
+            "unique_rows": 3791,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1857019,
+          "ngram_raw_to_artifact_factor": 1.4458268870700839,
+          "native_artifact_sha256": "1cbe21dfa7fa5296286edcf7a71c784b220a1294f4d621d42e47e7cbfbd0990e",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.971868312185484,
+            "mean_cosine": 0.9989018614405895,
+            "p05_cosine": 0.9934732927733511,
+            "relative_l2_mean": 0.02237939939912199,
+            "relative_l2_p95": 0.11418843944501195,
+            "relative_l2_max": 0.23657642437122353,
+            "weighted_relative_l2_mean": 0.02237939939912199,
+            "weighted_relative_frobenius": 0.025074601692194623,
+            "weighted_mean_cosine": 0.9989018614405895,
+            "max_relative_norm_change": 0.010093389109864888
+          },
+          "source_sha256": "c5d427408d5040b0d2bcac742344f65f2c0ec41583259ec8e0ccc885aaf8d995",
+          "mapping_sha256": "9de462948b3e0849b5f0e93d7386d4a167be2a2afba655f59b9fe331d6127e79",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3553656083360313,
+            "context_vs_negative_discrimination": 0.7446250059660524
+          },
+          "validation_delta": {
+            "loss_relative_change": -1.652006214691859e-05,
+            "discrimination_change": 5.999999716876925e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.2682502298036082,
+          "full_compressed_vector_payload_bytes": 3086331
+        },
+        {
+          "name": "cos-0.95-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.95,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3786,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1854058,
+            "unique_rows": 3786,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 1854570,
+          "ngram_raw_to_artifact_factor": 1.4477361329041234,
+          "native_artifact_sha256": "644782039f9ee508e41cca17c398fc475396ef3ce07f3e2c5d927cbb2eaeee99",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.9611096868601341,
+            "mean_cosine": 0.998868018139813,
+            "p05_cosine": 0.9934068153914799,
+            "relative_l2_mean": 0.022633522904556863,
+            "relative_l2_p95": 0.11489968442400494,
+            "relative_l2_max": 0.2795124385660071,
+            "weighted_relative_l2_mean": 0.022633522904556863,
+            "weighted_relative_frobenius": 0.026199758449033727,
+            "weighted_mean_cosine": 0.998868018139813,
+            "max_relative_norm_change": 0.010093389109864888
+          },
+          "source_sha256": "c5d427408d5040b0d2bcac742344f65f2c0ec41583259ec8e0ccc885aaf8d995",
+          "mapping_sha256": "4fc6d09f618b815fb1cbfb9f1c8cb277efc12077592510435fd9ed48d7d40807",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.355388202790916,
+            "context_vs_negative_discrimination": 0.7446350059647113
+          },
+          "validation_delta": {
+            "loss_relative_change": -6.927461514982802e-06,
+            "discrimination_change": 6.999999582768535e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.2692573840373917,
+          "full_compressed_vector_payload_bytes": 3083882
+        },
+        {
+          "name": "cos-0.9-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.9,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 3778,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 2684928,
+            "artifact_bytes": 1850270,
+            "unique_rows": 3778,
+            "row_map_bytes": 41952,
+            "n_rows": 5244,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 60,
+            "raw_blocks": 0,
+            "compressed_blocks": 60,
+            "zlib_blocks": 60,
+            "xor_blocks": 0,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 511,
+          "total_ngram_artifact_bytes": 1850781,
+          "ngram_raw_to_artifact_factor": 1.4507000017830312,
+          "native_artifact_sha256": "d7409e85b821485288ff194bc70c38d22edb9f71e15f01ce09ebfafb3c1d0126",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 5244,
+            "minimum_cosine": 0.90344800892335,
+            "mean_cosine": 0.9987518241606412,
+            "p05_cosine": 0.9933140302338097,
+            "relative_l2_mean": 0.023226019810963894,
+            "relative_l2_p95": 0.11554130825773058,
+            "relative_l2_max": 0.4384046505222467,
+            "weighted_relative_l2_mean": 0.023226019810963894,
+            "weighted_relative_frobenius": 0.03301778334991815,
+            "weighted_mean_cosine": 0.9987518241606412,
+            "max_relative_norm_change": 0.010093389109864888
+          },
+          "source_sha256": "c5d427408d5040b0d2bcac742344f65f2c0ec41583259ec8e0ccc885aaf8d995",
+          "mapping_sha256": "b333ccf3d56f6f3b60a3687440c90a36a1873d12961bc028ff82dd04e888555c",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3553205001100896,
+            "context_vs_negative_discrimination": 0.7446150059651584
+          },
+          "validation_delta": {
+            "loss_relative_change": -3.567100864598771e-05,
+            "discrimination_change": 4.9999996274752156e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.2708187707319227,
+          "full_compressed_vector_payload_bytes": 3080093
+        }
+      ],
+      "selection": {
+        "name": "cos-0.9-norm-0.99",
+        "validation_max_loss_relative_increase": 0.005,
+        "validation_max_discrimination_drop": 0.005,
+        "rule": "largest ngram artifact compression among validation-feasible variants; no test metrics used",
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3087711074739694,
+          "context_vs_negative_discrimination": 0.7633600059479475
+        },
+        "test_delta": {
+          "loss_relative_change": -5.3711906270348386e-05,
+          "discrimination_change": 6.999999582768535e-05
+        },
+        "test_paired_token_block_bootstrap": {
+          "block_tokens": 128,
+          "observed_blocks": 160,
+          "repeats": 1000,
+          "seed": 42,
+          "loss_relative_change_95_percent_interval": [
+            -8.98736844591741e-05,
+            -1.903497324275416e-05
+          ],
+          "discrimination_change_95_percent_interval": [
+            -8.012499496995733e-05,
+            0.00019058773019417843
+          ],
+          "limitation": "Within one text split; blocks are a correlation approximation, not independent corpora."
+        }
+      }
+    },
+    {
+      "max_order": 8,
+      "seed": 3,
+      "vocabulary": 1200,
+      "ngram_rows": 13286,
+      "training": {
+        "seconds": 1.4986368329264224,
+        "loss_samples": [
+          {
+            "step": 0,
+            "sgns_loss_per_pair": 4.1588826179504395
+          },
+          {
+            "step": 200,
+            "sgns_loss_per_pair": 2.467195987701416
+          },
+          {
+            "step": 400,
+            "sgns_loss_per_pair": 2.519609212875366
+          },
+          {
+            "step": 600,
+            "sgns_loss_per_pair": 2.411865234375
+          },
+          {
+            "step": 800,
+            "sgns_loss_per_pair": 2.3996195793151855
+          },
+          {
+            "step": 1000,
+            "sgns_loss_per_pair": 2.3717832565307617
+          },
+          {
+            "step": 1200,
+            "sgns_loss_per_pair": 2.443035364151001
+          },
+          {
+            "step": 1400,
+            "sgns_loss_per_pair": 2.3728713989257812
+          },
+          {
+            "step": 1600,
+            "sgns_loss_per_pair": 2.3269433975219727
+          },
+          {
+            "step": 1800,
+            "sgns_loss_per_pair": 2.428270101547241
+          },
+          {
+            "step": 1999,
+            "sgns_loss_per_pair": 2.37624454498291
+          }
+        ],
+        "sampled_pairs": 512000,
+        "training_pool_pairs": 463676,
+        "training_pool_sha256": "3eaf3669036cc0534bb448b5f71122f8da6eb7e1a2832408c8390436141e9094"
+      },
+      "full_input_sha256": "737fbcc1e9d48fa1acc45f63c2facf5e01e2ab69db344fa6842bbcc14ceacdba",
+      "output_sha256": "77cab5d908af48a4c4b200fa47c732f1c425db222125e7e66bdf3323cb718f23",
+      "word_ngram_layout_sha256": "11c6a72a07670fa6e2d34d9c48f000dd748efbd57ce0c14938d9bf0518b71a8c",
+      "checkpoint_sha256": "d4abf76ed3f1d22185e017a8f59304fd30ff6a1f988e7ede5373507c075f8338",
+      "ngram_raw_bytes": 6802432,
+      "unchanged_word_padding_output_bytes": 1229312,
+      "original_full_vector_payload_bytes": 8031744,
+      "baseline": {
+        "validation": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3596514039963483,
+          "context_vs_negative_discrimination": 0.7438750059302897
+        },
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3152804510951044,
+          "context_vs_negative_discrimination": 0.760200005922094
+        }
+      },
+      "evaluation": {
+        "validation": {
+          "sha256": "9d94ee57b19f06271501457a6130eef0b4a8ca180998478fa82a73845585093d",
+          "pool_pairs": 54214,
+          "token_coverage": 0.8148547880690737,
+          "negative_target_collision_fraction": 0.00285
+        },
+        "test": {
+          "sha256": "7117f2e9254b9cbc71a93f3275966aee7f3bcd58445d672c1e36f8cd2d7a9a14",
+          "pool_pairs": 47324,
+          "token_coverage": 0.7647174254317112,
+          "negative_target_collision_fraction": 0.00302
+        }
+      },
+      "variants": [
+        {
+          "name": "lossless",
+          "approximate": false,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "retained_representatives": 13286,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 6343286,
+            "unique_rows": 13286,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 208,
+            "raw_blocks": 0,
+            "compressed_blocks": 208,
+            "zlib_blocks": 0,
+            "xor_blocks": 208,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 514,
+          "total_ngram_artifact_bytes": 6343800,
+          "ngram_raw_to_artifact_factor": 1.0722961001292601,
+          "native_artifact_sha256": "f7af643a8b3253576768d22abd651fd234e3488e40d44b4c8b74d94a7a0290d7",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9999999999999998,
+            "mean_cosine": 1.0,
+            "p05_cosine": 0.9999999999999998,
+            "relative_l2_mean": 0.0,
+            "relative_l2_p95": 0.0,
+            "relative_l2_max": 0.0,
+            "weighted_relative_l2_mean": 0.0,
+            "weighted_relative_frobenius": 0.0,
+            "weighted_mean_cosine": 1.0,
+            "max_relative_norm_change": 0.0
+          },
+          "source_sha256": "ef9bca038213cc4f7adccf9cc7b5ff6fe4db01056592192a6a05e2e885aa4ee3",
+          "mapping_sha256": "615b142bfd4003b4e163373fb2a9b1608055a5f663d636b236ff5b4d27ec63dc",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3596514039963483,
+            "context_vs_negative_discrimination": 0.7438750059302897
+          },
+          "validation_delta": {
+            "loss_relative_change": 0.0,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.0605605727209633,
+          "full_compressed_vector_payload_bytes": 7573112,
+          "full_embedding_and_both_split_outputs_bit_identical": true
+        },
+        {
+          "name": "cos-0.99-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.99,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6663,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 3279407,
+            "unique_rows": 6663,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 105,
+            "raw_blocks": 0,
+            "compressed_blocks": 105,
+            "zlib_blocks": 44,
+            "xor_blocks": 61,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3279920,
+          "ngram_raw_to_artifact_factor": 2.0739627795799898,
+          "native_artifact_sha256": "b530bd618bac205e5bb2f0f6b5569e9794547566faa8834b67e5873520c5399c",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9900194770968302,
+            "mean_cosine": 0.9982192741804677,
+            "p05_cosine": 0.9925672147224354,
+            "relative_l2_mean": 0.03973205214526457,
+            "relative_l2_p95": 0.1220496685772872,
+            "relative_l2_max": 0.14183176236637912,
+            "weighted_relative_l2_mean": 0.03973205214526457,
+            "weighted_relative_frobenius": 0.036379308465139475,
+            "weighted_mean_cosine": 0.9982192741804677,
+            "max_relative_norm_change": 0.010100277416588027
+          },
+          "source_sha256": "ef9bca038213cc4f7adccf9cc7b5ff6fe4db01056592192a6a05e2e885aa4ee3",
+          "mapping_sha256": "0524c059ce6b1c5e4252916879aae2395d551c2011fea5cab33c9f050d9aadca",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3596604827582834,
+            "context_vs_negative_discrimination": 0.7439150059323758
+          },
+          "validation_delta": {
+            "loss_relative_change": 3.8475013384164924e-06,
+            "discrimination_change": 4.000000208614907e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.7811778147586994,
+          "full_compressed_vector_payload_bytes": 4509232
+        },
+        {
+          "name": "cos-0.98-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.98,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6092,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 3007273,
+            "unique_rows": 6092,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 96,
+            "raw_blocks": 0,
+            "compressed_blocks": 96,
+            "zlib_blocks": 45,
+            "xor_blocks": 51,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3007786,
+          "ngram_raw_to_artifact_factor": 2.2616077074632304,
+          "native_artifact_sha256": "a790b15b5586c8825757273ddc0309716e5e8d5208acbf794aa92a96910bb694",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9800708776122105,
+            "mean_cosine": 0.9976193313319787,
+            "p05_cosine": 0.990390280321402,
+            "relative_l2_mean": 0.04688636090687455,
+            "relative_l2_p95": 0.13872551393298227,
+            "relative_l2_max": 0.1999140530026302,
+            "weighted_relative_l2_mean": 0.04688636090687455,
+            "weighted_relative_frobenius": 0.038030715413107354,
+            "weighted_mean_cosine": 0.9976193313319787,
+            "max_relative_norm_change": 0.010100277416588027
+          },
+          "source_sha256": "ef9bca038213cc4f7adccf9cc7b5ff6fe4db01056592192a6a05e2e885aa4ee3",
+          "mapping_sha256": "e9d95621ab9077f2f703d01f784d54a9498caafb1c3dc965fa7a1e1d8096c98c",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3596549655348062,
+            "context_vs_negative_discrimination": 0.7439250059325248
+          },
+          "validation_delta": {
+            "loss_relative_change": 1.5093494114548633e-06,
+            "discrimination_change": 5.0000002235095486e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.895576642315094,
+          "full_compressed_vector_payload_bytes": 4237098
+        },
+        {
+          "name": "cos-0.97-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.97,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6005,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2965269,
+            "unique_rows": 6005,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 94,
+            "raw_blocks": 0,
+            "compressed_blocks": 94,
+            "zlib_blocks": 43,
+            "xor_blocks": 51,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2965782,
+          "ngram_raw_to_artifact_factor": 2.293638574918858,
+          "native_artifact_sha256": "7a3da247bc611fb3af23d827a4ae4d8f5260b154e7f954103b90a7dd2c558414",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9703828213152084,
+            "mean_cosine": 0.9974625118963422,
+            "p05_cosine": 0.9897910271191441,
+            "relative_l2_mean": 0.048325689265274856,
+            "relative_l2_p95": 0.1431310432180192,
+            "relative_l2_max": 0.24463430094353147,
+            "weighted_relative_l2_mean": 0.048325689265274856,
+            "weighted_relative_frobenius": 0.03838720118756555,
+            "weighted_mean_cosine": 0.9974625118963422,
+            "max_relative_norm_change": 0.010100277416588027
+          },
+          "source_sha256": "ef9bca038213cc4f7adccf9cc7b5ff6fe4db01056592192a6a05e2e885aa4ee3",
+          "mapping_sha256": "27f8c916fbf5307b6ab0e25dbcf757d1e1036b61604e039d55915ebfde2972b8",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3596538992613554,
+            "context_vs_negative_discrimination": 0.7439250059325248
+          },
+          "validation_delta": {
+            "loss_relative_change": 1.0574718802836003e-06,
+            "discrimination_change": 5.0000002235095486e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9145563841954436,
+          "full_compressed_vector_payload_bytes": 4195094
+        },
+        {
+          "name": "cos-0.95-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.95,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 5975,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2950834,
+            "unique_rows": 5975,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 94,
+            "raw_blocks": 0,
+            "compressed_blocks": 94,
+            "zlib_blocks": 43,
+            "xor_blocks": 51,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2951347,
+          "ngram_raw_to_artifact_factor": 2.30485673151954,
+          "native_artifact_sha256": "9d79d24c9db20b7e72578ee60accaa885ecd4c6cccfcd0f2e648dad40481b301",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9509039147432167,
+            "mean_cosine": 0.9973605192227932,
+            "p05_cosine": 0.9895154882122774,
+            "relative_l2_mean": 0.0490353135281369,
+            "relative_l2_p95": 0.14500700903181363,
+            "relative_l2_max": 0.31418973704994513,
+            "weighted_relative_l2_mean": 0.0490353135281369,
+            "weighted_relative_frobenius": 0.039943478497411804,
+            "weighted_mean_cosine": 0.9973605192227932,
+            "max_relative_norm_change": 0.010100277416588027
+          },
+          "source_sha256": "ef9bca038213cc4f7adccf9cc7b5ff6fe4db01056592192a6a05e2e885aa4ee3",
+          "mapping_sha256": "2819a1097826383bbf2c24a63d2426e0c47a1d29b7b93d6bae6aee871ff51d64",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.359700746206939,
+            "context_vs_negative_discrimination": 0.743945005935058
+          },
+          "validation_delta": {
+            "loss_relative_change": 2.09108050905904e-05,
+            "discrimination_change": 7.000000476831136e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.921166973914878,
+          "full_compressed_vector_payload_bytes": 4180659
+        },
+        {
+          "name": "cos-0.9-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.9,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 5963,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2944995,
+            "unique_rows": 5963,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 94,
+            "raw_blocks": 0,
+            "compressed_blocks": 94,
+            "zlib_blocks": 45,
+            "xor_blocks": 49,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 2945507,
+          "ngram_raw_to_artifact_factor": 2.3094265265708076,
+          "native_artifact_sha256": "27659ed2e91a07e986bc0fe4d7d8d4b5e72b76d79ccd1ef6e32625c26e4f2d53",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9021739642538567,
+            "mean_cosine": 0.9972791089181379,
+            "p05_cosine": 0.9893853003402693,
+            "relative_l2_mean": 0.049459670350773866,
+            "relative_l2_p95": 0.14565126392083064,
+            "relative_l2_max": 0.44291088185077826,
+            "weighted_relative_l2_mean": 0.049459670350773866,
+            "weighted_relative_frobenius": 0.04257302489183066,
+            "weighted_mean_cosine": 0.9972791089181379,
+            "max_relative_norm_change": 0.010100277416588027
+          },
+          "source_sha256": "ef9bca038213cc4f7adccf9cc7b5ff6fe4db01056592192a6a05e2e885aa4ee3",
+          "mapping_sha256": "b30d59cabcb54fd69d3edca7c4de27cf6065527914d1027117a73654007375a9",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3596859186664223,
+            "context_vs_negative_discrimination": 0.743935005934909
+          },
+          "validation_delta": {
+            "loss_relative_change": 1.4627020760604736e-05,
+            "discrimination_change": 6.0000004619364944e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9238544233893733,
+          "full_compressed_vector_payload_bytes": 4174819
+        }
+      ],
+      "selection": {
+        "name": "cos-0.9-norm-0.99",
+        "validation_max_loss_relative_increase": 0.005,
+        "validation_max_discrimination_drop": 0.005,
+        "rule": "largest ngram artifact compression among validation-feasible variants; no test metrics used",
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3152090813472865,
+          "context_vs_negative_discrimination": 0.7601100059214979
+        },
+        "test_delta": {
+          "loss_relative_change": -3.082553035171909e-05,
+          "discrimination_change": -9.000000059611324e-05
+        },
+        "test_paired_token_block_bootstrap": {
+          "block_tokens": 128,
+          "observed_blocks": 160,
+          "repeats": 1000,
+          "seed": 42,
+          "loss_relative_change_95_percent_interval": [
+            -8.456577089734906e-05,
+            2.758520950707499e-05
+          ],
+          "discrimination_change_95_percent_interval": [
+            -0.00022164078592783193,
+            4.0333283575926916e-05
+          ],
+          "limitation": "Within one text split; blocks are a correlation approximation, not independent corpora."
+        }
+      }
+    },
+    {
+      "max_order": 8,
+      "seed": 7,
+      "vocabulary": 1200,
+      "ngram_rows": 13286,
+      "training": {
+        "seconds": 1.4998088330030441,
+        "loss_samples": [
+          {
+            "step": 0,
+            "sgns_loss_per_pair": 4.1588826179504395
+          },
+          {
+            "step": 200,
+            "sgns_loss_per_pair": 2.436001777648926
+          },
+          {
+            "step": 400,
+            "sgns_loss_per_pair": 2.5588419437408447
+          },
+          {
+            "step": 600,
+            "sgns_loss_per_pair": 2.4112067222595215
+          },
+          {
+            "step": 800,
+            "sgns_loss_per_pair": 2.436622142791748
+          },
+          {
+            "step": 1000,
+            "sgns_loss_per_pair": 2.4428186416625977
+          },
+          {
+            "step": 1200,
+            "sgns_loss_per_pair": 2.3759841918945312
+          },
+          {
+            "step": 1400,
+            "sgns_loss_per_pair": 2.4222593307495117
+          },
+          {
+            "step": 1600,
+            "sgns_loss_per_pair": 2.3215789794921875
+          },
+          {
+            "step": 1800,
+            "sgns_loss_per_pair": 2.350581645965576
+          },
+          {
+            "step": 1999,
+            "sgns_loss_per_pair": 2.36605167388916
+          }
+        ],
+        "sampled_pairs": 512000,
+        "training_pool_pairs": 463676,
+        "training_pool_sha256": "3eaf3669036cc0534bb448b5f71122f8da6eb7e1a2832408c8390436141e9094"
+      },
+      "full_input_sha256": "5a03dde6600570fb7779778867478babd3ff60f214ef60154367ec35a018f29d",
+      "output_sha256": "1fce90d61a920281acdd2258e1505a8e642720bee35c17b503f87258d2bebc28",
+      "word_ngram_layout_sha256": "11c6a72a07670fa6e2d34d9c48f000dd748efbd57ce0c14938d9bf0518b71a8c",
+      "checkpoint_sha256": "c811d142236e55794044dc2cce2cadca3e22d0eb6a56e0354ed56b74c81e1578",
+      "ngram_raw_bytes": 6802432,
+      "unchanged_word_padding_output_bytes": 1229312,
+      "original_full_vector_payload_bytes": 8031744,
+      "baseline": {
+        "validation": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.356809322154522,
+          "context_vs_negative_discrimination": 0.7464250059630722
+        },
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.31016846100539,
+          "context_vs_negative_discrimination": 0.7612300058353693
+        }
+      },
+      "evaluation": {
+        "validation": {
+          "sha256": "9d94ee57b19f06271501457a6130eef0b4a8ca180998478fa82a73845585093d",
+          "pool_pairs": 54214,
+          "token_coverage": 0.8148547880690737,
+          "negative_target_collision_fraction": 0.00285
+        },
+        "test": {
+          "sha256": "7117f2e9254b9cbc71a93f3275966aee7f3bcd58445d672c1e36f8cd2d7a9a14",
+          "pool_pairs": 47324,
+          "token_coverage": 0.7647174254317112,
+          "negative_target_collision_fraction": 0.00302
+        }
+      },
+      "variants": [
+        {
+          "name": "lossless",
+          "approximate": false,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "retained_representatives": 13286,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 6343446,
+            "unique_rows": 13286,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 208,
+            "raw_blocks": 0,
+            "compressed_blocks": 208,
+            "zlib_blocks": 0,
+            "xor_blocks": 208,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 514,
+          "total_ngram_artifact_bytes": 6343960,
+          "ngram_raw_to_artifact_factor": 1.0722690559209074,
+          "native_artifact_sha256": "308e0ff13144af4eac55d3bf599674e886a9c33838695c49979c791852202592",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9999999999999998,
+            "mean_cosine": 1.0,
+            "p05_cosine": 0.9999999999999998,
+            "relative_l2_mean": 0.0,
+            "relative_l2_p95": 0.0,
+            "relative_l2_max": 0.0,
+            "weighted_relative_l2_mean": 0.0,
+            "weighted_relative_frobenius": 0.0,
+            "weighted_mean_cosine": 1.0,
+            "max_relative_norm_change": 0.0
+          },
+          "source_sha256": "3ed6c927f0e74430a8cb3f76bb1fa90d7248b540393fd8ea78ee94878874c0a6",
+          "mapping_sha256": "615b142bfd4003b4e163373fb2a9b1608055a5f663d636b236ff5b4d27ec63dc",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.356809322154522,
+            "context_vs_negative_discrimination": 0.7464250059630722
+          },
+          "validation_delta": {
+            "loss_relative_change": 0.0,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.0605381663302202,
+          "full_compressed_vector_payload_bytes": 7573272,
+          "full_embedding_and_both_split_outputs_bit_identical": true
+        },
+        {
+          "name": "cos-0.99-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.99,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6697,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 3296246,
+            "unique_rows": 6697,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 105,
+            "raw_blocks": 0,
+            "compressed_blocks": 105,
+            "zlib_blocks": 43,
+            "xor_blocks": 62,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3296759,
+          "ngram_raw_to_artifact_factor": 2.063369509266525,
+          "native_artifact_sha256": "659bdda7347c16ee908597de8fe53dd142aa3355cdb1209041cfeecf56a0d360",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9900010704887134,
+            "mean_cosine": 0.9982436577626487,
+            "p05_cosine": 0.9928194036131468,
+            "relative_l2_mean": 0.03937555371350468,
+            "relative_l2_p95": 0.12002621806874855,
+            "relative_l2_max": 0.14185177122198064,
+            "weighted_relative_l2_mean": 0.03937555371350468,
+            "weighted_relative_frobenius": 0.03617758271355461,
+            "weighted_mean_cosine": 0.9982436577626487,
+            "max_relative_norm_change": 0.010093516682938238
+          },
+          "source_sha256": "3ed6c927f0e74430a8cb3f76bb1fa90d7248b540393fd8ea78ee94878874c0a6",
+          "mapping_sha256": "3acc11449e80afbed3c48efa842bf4e7f2d4ee2f6411173c70191348a06bffb6",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3567895450755953,
+            "context_vs_negative_discrimination": 0.7464250059630722
+          },
+          "validation_delta": {
+            "loss_relative_change": -8.391463297674484e-06,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.774551039963801,
+          "full_compressed_vector_payload_bytes": 4526071
+        },
+        {
+          "name": "cos-0.98-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.98,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6056,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2990353,
+            "unique_rows": 6056,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 95,
+            "raw_blocks": 0,
+            "compressed_blocks": 95,
+            "zlib_blocks": 45,
+            "xor_blocks": 50,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2990866,
+          "ngram_raw_to_artifact_factor": 2.2744021296841783,
+          "native_artifact_sha256": "5383000858cd107ed732719f5c8e6116cc5f691d4c0b75b38ce2f1b1298902de",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9800549934325242,
+            "mean_cosine": 0.9975830592831909,
+            "p05_cosine": 0.9898453094595833,
+            "relative_l2_mean": 0.047337051939112224,
+            "relative_l2_p95": 0.14255210698913143,
+            "relative_l2_max": 0.20036626696359278,
+            "weighted_relative_l2_mean": 0.047337051939112224,
+            "weighted_relative_frobenius": 0.037956008092477796,
+            "weighted_mean_cosine": 0.9975830592831909,
+            "max_relative_norm_change": 0.010093516682938238
+          },
+          "source_sha256": "3ed6c927f0e74430a8cb3f76bb1fa90d7248b540393fd8ea78ee94878874c0a6",
+          "mapping_sha256": "822a03666bb5b604290c93618b634dc6697916103ac1a3a15dc1a05bdfa4666b",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3567888792082665,
+            "context_vs_negative_discrimination": 0.7464250059630722
+          },
+          "validation_delta": {
+            "loss_relative_change": -8.6739924453072e-06,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.903176595868705,
+          "full_compressed_vector_payload_bytes": 4220178
+        },
+        {
+          "name": "cos-0.97-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.97,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 5973,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2950412,
+            "unique_rows": 5973,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 94,
+            "raw_blocks": 0,
+            "compressed_blocks": 94,
+            "zlib_blocks": 44,
+            "xor_blocks": 50,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2950925,
+          "ngram_raw_to_artifact_factor": 2.3051863398764794,
+          "native_artifact_sha256": "94ba1e2a60c69287fe27264975a9e63a0056a8f9502bb65eba94525a5444e7a2",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9700340974014162,
+            "mean_cosine": 0.9974195908022142,
+            "p05_cosine": 0.9892181223801384,
+            "relative_l2_mean": 0.04878889370082364,
+            "relative_l2_p95": 0.14686159013238737,
+            "relative_l2_max": 0.2453798146203176,
+            "weighted_relative_l2_mean": 0.04878889370082364,
+            "weighted_relative_frobenius": 0.03859796177858973,
+            "weighted_mean_cosine": 0.9974195908022142,
+            "max_relative_norm_change": 0.010093516682938238
+          },
+          "source_sha256": "3ed6c927f0e74430a8cb3f76bb1fa90d7248b540393fd8ea78ee94878874c0a6",
+          "mapping_sha256": "d2c822b2158e32a342eb6f6b613a1f35bb186173621a94f296721a825e44dcc6",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.356789629505575,
+            "context_vs_negative_discrimination": 0.7464250059630722
+          },
+          "validation_delta": {
+            "loss_relative_change": -8.355639449453278e-06,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.921360918053211,
+          "full_compressed_vector_payload_bytes": 4180237
+        },
+        {
+          "name": "cos-0.95-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.95,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 5946,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2937293,
+            "unique_rows": 5946,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 93,
+            "raw_blocks": 0,
+            "compressed_blocks": 93,
+            "zlib_blocks": 43,
+            "xor_blocks": 50,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2937806,
+          "ngram_raw_to_artifact_factor": 2.3154803278364877,
+          "native_artifact_sha256": "36de9343fe98161724b516950aa17d8290a5de68e03904425b12cd1ec52ef816",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9538651957987506,
+            "mean_cosine": 0.9973220151462785,
+            "p05_cosine": 0.989008007735029,
+            "relative_l2_mean": 0.04948015290453414,
+            "relative_l2_p95": 0.14854401687051488,
+            "relative_l2_max": 0.3031868416027643,
+            "weighted_relative_l2_mean": 0.04948015290453414,
+            "weighted_relative_frobenius": 0.04052849070321234,
+            "weighted_mean_cosine": 0.9973220151462785,
+            "max_relative_norm_change": 0.010093516682938238
+          },
+          "source_sha256": "3ed6c927f0e74430a8cb3f76bb1fa90d7248b540393fd8ea78ee94878874c0a6",
+          "mapping_sha256": "51e50bccbd81c74d070c0ebfb1330bfe98386dfeb71dbf06940455de1000d81a",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.356905925323069,
+            "context_vs_negative_discrimination": 0.7463150059666485
+          },
+          "validation_delta": {
+            "loss_relative_change": 4.0988962339616464e-05,
+            "discrimination_change": -0.00010999999642369307
+          },
+          "full_vector_payload_to_compressed_factor": 1.9274097829723085,
+          "full_compressed_vector_payload_bytes": 4167118
+        },
+        {
+          "name": "cos-0.9-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.9,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 5937,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2933132,
+            "unique_rows": 5937,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 93,
+            "raw_blocks": 0,
+            "compressed_blocks": 93,
+            "zlib_blocks": 43,
+            "xor_blocks": 50,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 2933644,
+          "ngram_raw_to_artifact_factor": 2.3187653307626963,
+          "native_artifact_sha256": "803c2fcb9bd1dadfcfa221bdffa9c272ca5ec99154c0960ea15fb9418e759d8d",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9166881518872794,
+            "mean_cosine": 0.9972342320574696,
+            "p05_cosine": 0.9888936830451198,
+            "relative_l2_mean": 0.04992943442629168,
+            "relative_l2_p95": 0.14909541539211246,
+            "relative_l2_max": 0.40941483766597925,
+            "weighted_relative_l2_mean": 0.04992943442629168,
+            "weighted_relative_frobenius": 0.04537226022314012,
+            "weighted_mean_cosine": 0.9972342320574696,
+            "max_relative_norm_change": 0.010093516682938238
+          },
+          "source_sha256": "3ed6c927f0e74430a8cb3f76bb1fa90d7248b540393fd8ea78ee94878874c0a6",
+          "mapping_sha256": "5fec8b0dfb41737a25a005b997b50a80b71ab2131559efdb6fe844c05be909da",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.357015360921621,
+            "context_vs_negative_discrimination": 0.7462850059706718
+          },
+          "validation_delta": {
+            "loss_relative_change": 8.742275633522034e-05,
+            "discrimination_change": -0.00013999999240033034
+          },
+          "full_vector_payload_to_compressed_factor": 1.9293367501362013,
+          "full_compressed_vector_payload_bytes": 4162956
+        }
+      ],
+      "selection": {
+        "name": "cos-0.9-norm-0.99",
+        "validation_max_loss_relative_increase": 0.005,
+        "validation_max_discrimination_drop": 0.005,
+        "rule": "largest ngram artifact compression among validation-feasible variants; no test metrics used",
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3100504363477232,
+          "context_vs_negative_discrimination": 0.7613400058377534
+        },
+        "test_delta": {
+          "loss_relative_change": -5.1089199622822434e-05,
+          "discrimination_change": 0.00011000000238414742
+        },
+        "test_paired_token_block_bootstrap": {
+          "block_tokens": 128,
+          "observed_blocks": 160,
+          "repeats": 1000,
+          "seed": 42,
+          "loss_relative_change_95_percent_interval": [
+            -0.00013257038110841556,
+            3.5024082672607796e-05
+          ],
+          "discrimination_change_95_percent_interval": [
+            -6.885691092737046e-05,
+            0.00028861851812401335
+          ],
+          "limitation": "Within one text split; blocks are a correlation approximation, not independent corpora."
+        }
+      }
+    },
+    {
+      "max_order": 8,
+      "seed": 11,
+      "vocabulary": 1200,
+      "ngram_rows": 13286,
+      "training": {
+        "seconds": 1.505442707799375,
+        "loss_samples": [
+          {
+            "step": 0,
+            "sgns_loss_per_pair": 4.1588826179504395
+          },
+          {
+            "step": 200,
+            "sgns_loss_per_pair": 2.48687481880188
+          },
+          {
+            "step": 400,
+            "sgns_loss_per_pair": 2.5745346546173096
+          },
+          {
+            "step": 600,
+            "sgns_loss_per_pair": 2.4571564197540283
+          },
+          {
+            "step": 800,
+            "sgns_loss_per_pair": 2.3828072547912598
+          },
+          {
+            "step": 1000,
+            "sgns_loss_per_pair": 2.433274745941162
+          },
+          {
+            "step": 1200,
+            "sgns_loss_per_pair": 2.2912378311157227
+          },
+          {
+            "step": 1400,
+            "sgns_loss_per_pair": 2.334993839263916
+          },
+          {
+            "step": 1600,
+            "sgns_loss_per_pair": 2.434352159500122
+          },
+          {
+            "step": 1800,
+            "sgns_loss_per_pair": 2.3545961380004883
+          },
+          {
+            "step": 1999,
+            "sgns_loss_per_pair": 2.2866804599761963
+          }
+        ],
+        "sampled_pairs": 512000,
+        "training_pool_pairs": 463676,
+        "training_pool_sha256": "3eaf3669036cc0534bb448b5f71122f8da6eb7e1a2832408c8390436141e9094"
+      },
+      "full_input_sha256": "db5a68f33c1ae8aa1ae50af07ec01e091ed634804fc1b0b01dcd88099a633646",
+      "output_sha256": "425a1d01fffc6701b240d163a68cafedf91d715abf01c914f951f9d4f7acafd6",
+      "word_ngram_layout_sha256": "11c6a72a07670fa6e2d34d9c48f000dd748efbd57ce0c14938d9bf0518b71a8c",
+      "checkpoint_sha256": "71127fbc8423dc0b549e7a870961cee6ace20301e03b9688b9430c0e304f5b68",
+      "ngram_raw_bytes": 6802432,
+      "unchanged_word_padding_output_bytes": 1229312,
+      "original_full_vector_payload_bytes": 8031744,
+      "baseline": {
+        "validation": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3470872590661047,
+          "context_vs_negative_discrimination": 0.7470450058888644
+        },
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.30501352006644,
+          "context_vs_negative_discrimination": 0.7632600059002638
+        }
+      },
+      "evaluation": {
+        "validation": {
+          "sha256": "9d94ee57b19f06271501457a6130eef0b4a8ca180998478fa82a73845585093d",
+          "pool_pairs": 54214,
+          "token_coverage": 0.8148547880690737,
+          "negative_target_collision_fraction": 0.00285
+        },
+        "test": {
+          "sha256": "7117f2e9254b9cbc71a93f3275966aee7f3bcd58445d672c1e36f8cd2d7a9a14",
+          "pool_pairs": 47324,
+          "token_coverage": 0.7647174254317112,
+          "negative_target_collision_fraction": 0.00302
+        }
+      },
+      "variants": [
+        {
+          "name": "lossless",
+          "approximate": false,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "retained_representatives": 13286,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 6343342,
+            "unique_rows": 13286,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 208,
+            "raw_blocks": 0,
+            "compressed_blocks": 208,
+            "zlib_blocks": 0,
+            "xor_blocks": 208,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 514,
+          "total_ngram_artifact_bytes": 6343856,
+          "ngram_raw_to_artifact_factor": 1.0722866345011615,
+          "native_artifact_sha256": "883585313cd8174d4470ac0c32e36198a6daba0928506eab4537511bb152cd1e",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9999999999999998,
+            "mean_cosine": 1.0,
+            "p05_cosine": 0.9999999999999998,
+            "relative_l2_mean": 0.0,
+            "relative_l2_p95": 0.0,
+            "relative_l2_max": 0.0,
+            "weighted_relative_l2_mean": 0.0,
+            "weighted_relative_frobenius": 0.0,
+            "weighted_mean_cosine": 1.0,
+            "max_relative_norm_change": 0.0
+          },
+          "source_sha256": "5124a8a29fc8c4460a98e41c2f920da7e5010ccf2b807dbf938ecbd4ea40b6c4",
+          "mapping_sha256": "615b142bfd4003b4e163373fb2a9b1608055a5f663d636b236ff5b4d27ec63dc",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3470872590661047,
+            "context_vs_negative_discrimination": 0.7470450058888644
+          },
+          "validation_delta": {
+            "loss_relative_change": 0.0,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.0605527303765083,
+          "full_compressed_vector_payload_bytes": 7573168,
+          "full_embedding_and_both_split_outputs_bit_identical": true
+        },
+        {
+          "name": "cos-0.99-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.99,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6657,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 3276928,
+            "unique_rows": 6657,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 105,
+            "raw_blocks": 1,
+            "compressed_blocks": 104,
+            "zlib_blocks": 45,
+            "xor_blocks": 59,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3277441,
+          "ngram_raw_to_artifact_factor": 2.075531489354042,
+          "native_artifact_sha256": "3761853e2dedfcb5ada21beccdcc116431abd19b2fab27e5bb3f4310c2686176",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9900005563749297,
+            "mean_cosine": 0.9982339963053533,
+            "p05_cosine": 0.992719023193538,
+            "relative_l2_mean": 0.039646939472022996,
+            "relative_l2_p95": 0.12083648486241273,
+            "relative_l2_max": 0.1424355801787385,
+            "weighted_relative_l2_mean": 0.039646939472022996,
+            "weighted_relative_frobenius": 0.0361157586634634,
+            "weighted_mean_cosine": 0.9982339963053533,
+            "max_relative_norm_change": 0.010098904799328354
+          },
+          "source_sha256": "5124a8a29fc8c4460a98e41c2f920da7e5010ccf2b807dbf938ecbd4ea40b6c4",
+          "mapping_sha256": "7e000cfdcbba40e3083fb29907f66dcd0a3968626606c879240af4cee97aff04",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.347096873894334,
+            "context_vs_negative_discrimination": 0.7470450058881193
+          },
+          "validation_delta": {
+            "loss_relative_change": 4.0964937251253275e-06,
+            "discrimination_change": -7.450706718259426e-13
+          },
+          "full_vector_payload_to_compressed_factor": 1.782157575531652,
+          "full_compressed_vector_payload_bytes": 4506753
+        },
+        {
+          "name": "cos-0.98-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.98,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6059,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2991377,
+            "unique_rows": 6059,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 95,
+            "raw_blocks": 0,
+            "compressed_blocks": 95,
+            "zlib_blocks": 43,
+            "xor_blocks": 52,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2991890,
+          "ngram_raw_to_artifact_factor": 2.2736236960583445,
+          "native_artifact_sha256": "8d132ae0248b0ee21415adb1e30ef84994047bf56174b0ee2d9416c7f007209f",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.980031268963137,
+            "mean_cosine": 0.9976107377134481,
+            "p05_cosine": 0.9901501012542864,
+            "relative_l2_mean": 0.047110545898705405,
+            "relative_l2_p95": 0.14040985313555418,
+            "relative_l2_max": 0.2005362678740775,
+            "weighted_relative_l2_mean": 0.047110545898705405,
+            "weighted_relative_frobenius": 0.03813663134144058,
+            "weighted_mean_cosine": 0.9976107377134481,
+            "max_relative_norm_change": 0.010098904799328354
+          },
+          "source_sha256": "5124a8a29fc8c4460a98e41c2f920da7e5010ccf2b807dbf938ecbd4ea40b6c4",
+          "mapping_sha256": "1dcd2ca7f74b855d051b5a8ecc050f81dfdb02c37cabee47240d4db46438eddc",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3469916211247446,
+            "context_vs_negative_discrimination": 0.7471250058855862
+          },
+          "validation_delta": {
+            "loss_relative_change": -4.0747501393822994e-05,
+            "discrimination_change": 7.999999672181346e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.90271491390367,
+          "full_compressed_vector_payload_bytes": 4221202
+        },
+        {
+          "name": "cos-0.97-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.97,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 5999,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2962596,
+            "unique_rows": 5999,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 94,
+            "raw_blocks": 0,
+            "compressed_blocks": 94,
+            "zlib_blocks": 43,
+            "xor_blocks": 51,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2963109,
+          "ngram_raw_to_artifact_factor": 2.2957076503091853,
+          "native_artifact_sha256": "46feaa27d2981b6ba53d4f480b1ff677c7cc683576e16e6200dcecdb4e1d4b66",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9714845440032499,
+            "mean_cosine": 0.9975029469302698,
+            "p05_cosine": 0.9898136679808964,
+            "relative_l2_mean": 0.04809651610259021,
+            "relative_l2_p95": 0.14291917998296427,
+            "relative_l2_max": 0.2385866209638773,
+            "weighted_relative_l2_mean": 0.04809651610259021,
+            "weighted_relative_frobenius": 0.03839229792549484,
+            "weighted_mean_cosine": 0.9975029469302698,
+            "max_relative_norm_change": 0.010098904799328354
+          },
+          "source_sha256": "5124a8a29fc8c4460a98e41c2f920da7e5010ccf2b807dbf938ecbd4ea40b6c4",
+          "mapping_sha256": "43d1f286695cb0bf09719862cf2cd9c46262808f2ac13146e50516455b36cd9a",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3469917379170657,
+            "context_vs_negative_discrimination": 0.7471250058855862
+          },
+          "validation_delta": {
+            "loss_relative_change": -4.069774085735389e-05,
+            "discrimination_change": 7.999999672181346e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9157770653281243,
+          "full_compressed_vector_payload_bytes": 4192421
+        },
+        {
+          "name": "cos-0.95-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.95,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 5977,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2951886,
+            "unique_rows": 5977,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 94,
+            "raw_blocks": 0,
+            "compressed_blocks": 94,
+            "zlib_blocks": 44,
+            "xor_blocks": 50,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2952399,
+          "ngram_raw_to_artifact_factor": 2.3040354640412763,
+          "native_artifact_sha256": "7a88247066e5914bea3bf677ea69f2673bd71e9576907cf6f3d8a9c99f32d743",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9552403464361766,
+            "mean_cosine": 0.9974424103376767,
+            "p05_cosine": 0.9897395883484441,
+            "relative_l2_mean": 0.04854384114152679,
+            "relative_l2_p95": 0.14356043026528492,
+            "relative_l2_max": 0.2989898198473272,
+            "weighted_relative_l2_mean": 0.04854384114152679,
+            "weighted_relative_frobenius": 0.038617296585668384,
+            "weighted_mean_cosine": 0.9974424103376767,
+            "max_relative_norm_change": 0.010098904799328354
+          },
+          "source_sha256": "5124a8a29fc8c4460a98e41c2f920da7e5010ccf2b807dbf938ecbd4ea40b6c4",
+          "mapping_sha256": "454330201fcb15934ef4cac9b6d7b6c8bdd60c89eff3d7fc73280289ade6cda1",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.346951016506553,
+            "context_vs_negative_discrimination": 0.7471350058868528
+          },
+          "validation_delta": {
+            "loss_relative_change": -5.804750506210876e-05,
+            "discrimination_change": 8.99999979884214e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9206836627399646,
+          "full_compressed_vector_payload_bytes": 4181711
+        },
+        {
+          "name": "cos-0.9-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.9,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 5973,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 6802432,
+            "artifact_bytes": 2950103,
+            "unique_rows": 5973,
+            "row_map_bytes": 106288,
+            "n_rows": 13286,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 94,
+            "raw_blocks": 0,
+            "compressed_blocks": 94,
+            "zlib_blocks": 45,
+            "xor_blocks": 49,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 2950615,
+          "ngram_raw_to_artifact_factor": 2.305428529306602,
+          "native_artifact_sha256": "5a0ce6f66ffabaa32c9a1b15d059591d1ca99212151e656dbfa553b1f3406b4a",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13286,
+            "minimum_cosine": 0.9175923548551094,
+            "mean_cosine": 0.9973983870780226,
+            "p05_cosine": 0.9896888897428985,
+            "relative_l2_mean": 0.04875912515065973,
+            "relative_l2_p95": 0.14372839042715815,
+            "relative_l2_max": 0.4056975324078957,
+            "weighted_relative_l2_mean": 0.04875912515065973,
+            "weighted_relative_frobenius": 0.04015968660263317,
+            "weighted_mean_cosine": 0.9973983870780226,
+            "max_relative_norm_change": 0.010098904799328354
+          },
+          "source_sha256": "5124a8a29fc8c4460a98e41c2f920da7e5010ccf2b807dbf938ecbd4ea40b6c4",
+          "mapping_sha256": "0ea704edc129ab4fd78931245aecb6541b1c320a4ac1c137b8d37071d768b0a6",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3470776527673007,
+            "context_vs_negative_discrimination": 0.7471450058810413
+          },
+          "validation_delta": {
+            "loss_relative_change": -4.0928596782841e-06,
+            "discrimination_change": 9.999999217691347e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9215034138156002,
+          "full_compressed_vector_payload_bytes": 4179927
+        }
+      ],
+      "selection": {
+        "name": "cos-0.9-norm-0.99",
+        "validation_max_loss_relative_increase": 0.005,
+        "validation_max_discrimination_drop": 0.005,
+        "rule": "largest ngram artifact compression among validation-feasible variants; no test metrics used",
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3048333735078574,
+          "context_vs_negative_discrimination": 0.7632400058969855
+        },
+        "test_delta": {
+          "loss_relative_change": -7.815423077317529e-05,
+          "discrimination_change": -2.000000327828655e-05
+        },
+        "test_paired_token_block_bootstrap": {
+          "block_tokens": 128,
+          "observed_blocks": 160,
+          "repeats": 1000,
+          "seed": 42,
+          "loss_relative_change_95_percent_interval": [
+            -0.0001417993582264604,
+            -1.0859467001408961e-05
+          ],
+          "discrimination_change_95_percent_interval": [
+            -0.000160247007382143,
+            0.00012045819881503836
+          ],
+          "limitation": "Within one text split; blocks are a correlation approximation, not independent corpora."
+        }
+      }
+    },
+    {
+      "max_order": 12,
+      "seed": 3,
+      "vocabulary": 1200,
+      "ngram_rows": 13988,
+      "training": {
+        "seconds": 1.6755779997911304,
+        "loss_samples": [
+          {
+            "step": 0,
+            "sgns_loss_per_pair": 4.1588826179504395
+          },
+          {
+            "step": 200,
+            "sgns_loss_per_pair": 2.5012104511260986
+          },
+          {
+            "step": 400,
+            "sgns_loss_per_pair": 2.488008737564087
+          },
+          {
+            "step": 600,
+            "sgns_loss_per_pair": 2.4359261989593506
+          },
+          {
+            "step": 800,
+            "sgns_loss_per_pair": 2.414179801940918
+          },
+          {
+            "step": 1000,
+            "sgns_loss_per_pair": 2.3696815967559814
+          },
+          {
+            "step": 1200,
+            "sgns_loss_per_pair": 2.421757936477661
+          },
+          {
+            "step": 1400,
+            "sgns_loss_per_pair": 2.334624767303467
+          },
+          {
+            "step": 1600,
+            "sgns_loss_per_pair": 2.3438949584960938
+          },
+          {
+            "step": 1800,
+            "sgns_loss_per_pair": 2.4508025646209717
+          },
+          {
+            "step": 1999,
+            "sgns_loss_per_pair": 2.315964698791504
+          }
+        ],
+        "sampled_pairs": 512000,
+        "training_pool_pairs": 463676,
+        "training_pool_sha256": "3eaf3669036cc0534bb448b5f71122f8da6eb7e1a2832408c8390436141e9094"
+      },
+      "full_input_sha256": "c1abb48f36247b86c96f70b52a921aee5a43ddf918fbd745c796a14b43984b34",
+      "output_sha256": "9e6299e25a05cd4dc066cfc3fec110337cddc4df4fa63edd0f0b17740f132396",
+      "word_ngram_layout_sha256": "f5a210102357781a30de0d16428005d2019f076068b603ceb0fb0cd1a25e1c0e",
+      "checkpoint_sha256": "a57b06f51bcab49f06a470f997d1a2e3476a3cd82a3569989bd80e4366a80ef8",
+      "ngram_raw_bytes": 7161856,
+      "unchanged_word_padding_output_bytes": 1229312,
+      "original_full_vector_payload_bytes": 8391168,
+      "baseline": {
+        "validation": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3640756443455815,
+          "context_vs_negative_discrimination": 0.7431050059735775
+        },
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3119324128195644,
+          "context_vs_negative_discrimination": 0.7604000059377402
+        }
+      },
+      "evaluation": {
+        "validation": {
+          "sha256": "9d94ee57b19f06271501457a6130eef0b4a8ca180998478fa82a73845585093d",
+          "pool_pairs": 54214,
+          "token_coverage": 0.8148547880690737,
+          "negative_target_collision_fraction": 0.00285
+        },
+        "test": {
+          "sha256": "7117f2e9254b9cbc71a93f3275966aee7f3bcd58445d672c1e36f8cd2d7a9a14",
+          "pool_pairs": 47324,
+          "token_coverage": 0.7647174254317112,
+          "negative_target_collision_fraction": 0.00302
+        }
+      },
+      "variants": [
+        {
+          "name": "lossless",
+          "approximate": false,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "retained_representatives": 13988,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 6666132,
+            "unique_rows": 13988,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 219,
+            "raw_blocks": 0,
+            "compressed_blocks": 219,
+            "zlib_blocks": 0,
+            "xor_blocks": 219,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 514,
+          "total_ngram_artifact_bytes": 6666646,
+          "ngram_raw_to_artifact_factor": 1.0742817302733638,
+          "native_artifact_sha256": "add6bedf0fa2355d56a6e1f0caf19c5c4fc57e43d1d1aba0a48ea601c0ed8273",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9999999999999998,
+            "mean_cosine": 1.0,
+            "p05_cosine": 0.9999999999999998,
+            "relative_l2_mean": 0.0,
+            "relative_l2_p95": 0.0,
+            "relative_l2_max": 0.0,
+            "weighted_relative_l2_mean": 0.0,
+            "weighted_relative_frobenius": 0.0,
+            "weighted_mean_cosine": 1.0,
+            "max_relative_norm_change": 0.0
+          },
+          "source_sha256": "fd343c69d2cb8eda0c67cd9edd1d82289839913235e34548bb91356802846329",
+          "mapping_sha256": "a348ba788fb8a9c108500d9ff2eb96971fc71e20f6c47cf7ca270d07ccb1f048",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3640756443455815,
+            "context_vs_negative_discrimination": 0.7431050059735775
+          },
+          "validation_delta": {
+            "loss_relative_change": 0.0,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.0627168989500704,
+          "full_compressed_vector_payload_bytes": 7895958,
+          "full_embedding_and_both_split_outputs_bit_identical": true
+        },
+        {
+          "name": "cos-0.99-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.99,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6773,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3331629,
+            "unique_rows": 6773,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 106,
+            "raw_blocks": 0,
+            "compressed_blocks": 106,
+            "zlib_blocks": 40,
+            "xor_blocks": 66,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3332142,
+          "ngram_raw_to_artifact_factor": 2.149324968743829,
+          "native_artifact_sha256": "0f82fcaf68f618eeb621cf6110aa9883a44504327ad1a150b73361f2eb70f425",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9900055875358584,
+            "mean_cosine": 0.9982147498689834,
+            "p05_cosine": 0.9928359852442058,
+            "relative_l2_mean": 0.0404582482730277,
+            "relative_l2_p95": 0.11974204311257698,
+            "relative_l2_max": 0.14212923504462052,
+            "weighted_relative_l2_mean": 0.0404582482730277,
+            "weighted_relative_frobenius": 0.036708906114108875,
+            "weighted_mean_cosine": 0.9982147498689834,
+            "max_relative_norm_change": 0.010089305466345441
+          },
+          "source_sha256": "fd343c69d2cb8eda0c67cd9edd1d82289839913235e34548bb91356802846329",
+          "mapping_sha256": "b3cd317191a9fc7ba3711996f48fc6de2f3ecbe84802c8c5d1419af723bd1422",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.364069908627868,
+            "context_vs_negative_discrimination": 0.7431850059725345
+          },
+          "validation_delta": {
+            "loss_relative_change": -2.426198894012188e-06,
+            "discrimination_change": 7.999999895691445e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.8395818526285697,
+          "full_compressed_vector_payload_bytes": 4561454
+        },
+        {
+          "name": "cos-0.98-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.98,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6162,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3040446,
+            "unique_rows": 6162,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 97,
+            "raw_blocks": 0,
+            "compressed_blocks": 97,
+            "zlib_blocks": 43,
+            "xor_blocks": 54,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3040959,
+          "ngram_raw_to_artifact_factor": 2.355130733429816,
+          "native_artifact_sha256": "7c96b104fbab3b7018d3d3e58c9c3c6d0e84884affd0418e6aea2d6aa49a2557",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9800721161653995,
+            "mean_cosine": 0.9976124776327245,
+            "p05_cosine": 0.9902731043648308,
+            "relative_l2_mean": 0.04769313690788561,
+            "relative_l2_p95": 0.13961429398139164,
+            "relative_l2_max": 0.19984298326096608,
+            "weighted_relative_l2_mean": 0.04769313690788561,
+            "weighted_relative_frobenius": 0.03868524020921405,
+            "weighted_mean_cosine": 0.9976124776327245,
+            "max_relative_norm_change": 0.010089305466345441
+          },
+          "source_sha256": "fd343c69d2cb8eda0c67cd9edd1d82289839913235e34548bb91356802846329",
+          "mapping_sha256": "6b8cba1c3ba8a9a18babeaab7e0f44f9e9d8bed92278753fbccefd595609b895",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3640528262764215,
+            "context_vs_negative_discrimination": 0.7432050059720874
+          },
+          "validation_delta": {
+            "loss_relative_change": -9.652004670179792e-06,
+            "discrimination_change": 9.999999850984764e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9650200186358195,
+          "full_compressed_vector_payload_bytes": 4270271
+        },
+        {
+          "name": "cos-0.97-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.97,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6083,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3002806,
+            "unique_rows": 6083,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 96,
+            "raw_blocks": 0,
+            "compressed_blocks": 96,
+            "zlib_blocks": 42,
+            "xor_blocks": 54,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3003319,
+          "ngram_raw_to_artifact_factor": 2.384647118737637,
+          "native_artifact_sha256": "836953b998136ea97cd7c7c6e2d58c2c0e6e0db69ef226cce499d52aeca0ecc6",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9702399622859412,
+            "mean_cosine": 0.9974743476167578,
+            "p05_cosine": 0.9897082307882241,
+            "relative_l2_mean": 0.04894128441187954,
+            "relative_l2_p95": 0.14344891402449816,
+            "relative_l2_max": 0.24539027720613696,
+            "weighted_relative_l2_mean": 0.04894128441187954,
+            "weighted_relative_frobenius": 0.03927963442581678,
+            "weighted_mean_cosine": 0.9974743476167578,
+            "max_relative_norm_change": 0.010089305466345441
+          },
+          "source_sha256": "fd343c69d2cb8eda0c67cd9edd1d82289839913235e34548bb91356802846329",
+          "mapping_sha256": "884acab9bf06819718a809e05e404cd2ce3a3b2926a2b2e5912027225d25137d",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3640637509793043,
+            "context_vs_negative_discrimination": 0.7432250059723854
+          },
+          "validation_delta": {
+            "loss_relative_change": -5.030873823974602e-06,
+            "discrimination_change": 0.0001199999988078515
+          },
+          "full_vector_payload_to_compressed_factor": 1.9824945760686439,
+          "full_compressed_vector_payload_bytes": 4232631
+        },
+        {
+          "name": "cos-0.95-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.95,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6046,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 2984605,
+            "unique_rows": 6046,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 95,
+            "raw_blocks": 0,
+            "compressed_blocks": 95,
+            "zlib_blocks": 40,
+            "xor_blocks": 55,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2985118,
+          "ngram_raw_to_artifact_factor": 2.3991868998143455,
+          "native_artifact_sha256": "3a5fbb47eff621b8b125855d5fdd38ca2a4f47e22c2c3e26807f28fd16792279",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9507022149367893,
+            "mean_cosine": 0.9973565391541873,
+            "p05_cosine": 0.9894464412194165,
+            "relative_l2_mean": 0.04978224647089267,
+            "relative_l2_p95": 0.1452213186994753,
+            "relative_l2_max": 0.3137215772648778,
+            "weighted_relative_l2_mean": 0.04978224647089267,
+            "weighted_relative_frobenius": 0.040823906221139496,
+            "weighted_mean_cosine": 0.9973565391541873,
+            "max_relative_norm_change": 0.010089305466345441
+          },
+          "source_sha256": "fd343c69d2cb8eda0c67cd9edd1d82289839913235e34548bb91356802846329",
+          "mapping_sha256": "31947b837acdf60e21abb9ffb191b27b96ed4cdbb9900a7aaeb46bd5a304a7e5",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3640599620610474,
+            "context_vs_negative_discrimination": 0.7431950059726834
+          },
+          "validation_delta": {
+            "loss_relative_change": -6.6335798397654244e-06,
+            "discrimination_change": 8.999999910586087e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9910564417963996,
+          "full_compressed_vector_payload_bytes": 4214430
+        },
+        {
+          "name": "cos-0.9-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.9,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6029,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 2976532,
+            "unique_rows": 6029,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 95,
+            "raw_blocks": 0,
+            "compressed_blocks": 95,
+            "zlib_blocks": 40,
+            "xor_blocks": 55,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 2977044,
+          "ngram_raw_to_artifact_factor": 2.405693701537498,
+          "native_artifact_sha256": "0d270fb7b9bea72d077ba858a31c6b080861d06359b708c1dacd4fcd568787ed",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9065779744055059,
+            "mean_cosine": 0.9972091036866022,
+            "p05_cosine": 0.9892483695571741,
+            "relative_l2_mean": 0.05052178133991337,
+            "relative_l2_p95": 0.14662836361110665,
+            "relative_l2_max": 0.4303641531111482,
+            "weighted_relative_l2_mean": 0.05052178133991337,
+            "weighted_relative_frobenius": 0.04611115327067012,
+            "weighted_mean_cosine": 0.9972091036866022,
+            "max_relative_norm_change": 0.010089305466345441
+          },
+          "source_sha256": "fd343c69d2cb8eda0c67cd9edd1d82289839913235e34548bb91356802846329",
+          "mapping_sha256": "f92693e5550611fe6594fb3db5d60dcae650a7bd73d866b0dbcf191f812fc424",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3640135274857283,
+            "context_vs_negative_discrimination": 0.7431550059780478
+          },
+          "validation_delta": {
+            "loss_relative_change": -2.627532668075805e-05,
+            "discrimination_change": 5.00000044703075e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.994878227140071,
+          "full_compressed_vector_payload_bytes": 4206356
+        }
+      ],
+      "selection": {
+        "name": "cos-0.9-norm-0.99",
+        "validation_max_loss_relative_increase": 0.005,
+        "validation_max_discrimination_drop": 0.005,
+        "rule": "largest ngram artifact compression among validation-feasible variants; no test metrics used",
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.311740056236088,
+          "context_vs_negative_discrimination": 0.760430005935207
+        },
+        "test_delta": {
+          "loss_relative_change": -8.320164655750695e-05,
+          "discrimination_change": 2.999999746688964e-05
+        },
+        "test_paired_token_block_bootstrap": {
+          "block_tokens": 128,
+          "observed_blocks": 160,
+          "repeats": 1000,
+          "seed": 42,
+          "loss_relative_change_95_percent_interval": [
+            -0.0001332893190995388,
+            -3.863744745429554e-05
+          ],
+          "discrimination_change_95_percent_interval": [
+            -7.929448561212357e-05,
+            0.00016070052388016365
+          ],
+          "limitation": "Within one text split; blocks are a correlation approximation, not independent corpora."
+        }
+      }
+    },
+    {
+      "max_order": 12,
+      "seed": 7,
+      "vocabulary": 1200,
+      "ngram_rows": 13988,
+      "training": {
+        "seconds": 1.7499410409945995,
+        "loss_samples": [
+          {
+            "step": 0,
+            "sgns_loss_per_pair": 4.1588826179504395
+          },
+          {
+            "step": 200,
+            "sgns_loss_per_pair": 2.4791650772094727
+          },
+          {
+            "step": 400,
+            "sgns_loss_per_pair": 2.571782112121582
+          },
+          {
+            "step": 600,
+            "sgns_loss_per_pair": 2.3974626064300537
+          },
+          {
+            "step": 800,
+            "sgns_loss_per_pair": 2.396698474884033
+          },
+          {
+            "step": 1000,
+            "sgns_loss_per_pair": 2.4333419799804688
+          },
+          {
+            "step": 1200,
+            "sgns_loss_per_pair": 2.4081835746765137
+          },
+          {
+            "step": 1400,
+            "sgns_loss_per_pair": 2.462769031524658
+          },
+          {
+            "step": 1600,
+            "sgns_loss_per_pair": 2.3335604667663574
+          },
+          {
+            "step": 1800,
+            "sgns_loss_per_pair": 2.338456630706787
+          },
+          {
+            "step": 1999,
+            "sgns_loss_per_pair": 2.351531982421875
+          }
+        ],
+        "sampled_pairs": 512000,
+        "training_pool_pairs": 463676,
+        "training_pool_sha256": "3eaf3669036cc0534bb448b5f71122f8da6eb7e1a2832408c8390436141e9094"
+      },
+      "full_input_sha256": "3aadb946a527935297624f91294e310e4dad639c7dac061b6d5ea7c298744ebf",
+      "output_sha256": "6a453502e648c7354a0e9388cacedd80c7737e8242c5fdd67d418b6eaf877688",
+      "word_ngram_layout_sha256": "f5a210102357781a30de0d16428005d2019f076068b603ceb0fb0cd1a25e1c0e",
+      "checkpoint_sha256": "040a58c47131fd3bbfe27f44ebfac1a3ad8d549eda3295adb853a66148868fe2",
+      "ngram_raw_bytes": 7161856,
+      "unchanged_word_padding_output_bytes": 1229312,
+      "original_full_vector_payload_bytes": 8391168,
+      "baseline": {
+        "validation": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.358041070573032,
+          "context_vs_negative_discrimination": 0.747365005999431
+        },
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3121460776105525,
+          "context_vs_negative_discrimination": 0.7609900059442967
+        }
+      },
+      "evaluation": {
+        "validation": {
+          "sha256": "9d94ee57b19f06271501457a6130eef0b4a8ca180998478fa82a73845585093d",
+          "pool_pairs": 54214,
+          "token_coverage": 0.8148547880690737,
+          "negative_target_collision_fraction": 0.00285
+        },
+        "test": {
+          "sha256": "7117f2e9254b9cbc71a93f3275966aee7f3bcd58445d672c1e36f8cd2d7a9a14",
+          "pool_pairs": 47324,
+          "token_coverage": 0.7647174254317112,
+          "negative_target_collision_fraction": 0.00302
+        }
+      },
+      "variants": [
+        {
+          "name": "lossless",
+          "approximate": false,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "retained_representatives": 13988,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 6667755,
+            "unique_rows": 13988,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 219,
+            "raw_blocks": 0,
+            "compressed_blocks": 219,
+            "zlib_blocks": 0,
+            "xor_blocks": 219,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 514,
+          "total_ngram_artifact_bytes": 6668269,
+          "ngram_raw_to_artifact_factor": 1.074020259230694,
+          "native_artifact_sha256": "1572ffcec44705b9abeec32e9916bb206178f9c2cb66ce2d45a7b3ef08973607",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9999999999999998,
+            "mean_cosine": 1.0,
+            "p05_cosine": 0.9999999999999998,
+            "relative_l2_mean": 0.0,
+            "relative_l2_p95": 0.0,
+            "relative_l2_max": 0.0,
+            "weighted_relative_l2_mean": 0.0,
+            "weighted_relative_frobenius": 0.0,
+            "weighted_mean_cosine": 1.0,
+            "max_relative_norm_change": 0.0
+          },
+          "source_sha256": "9753cf029af114a42ff20aa54a007700d942cfb3eba8212cb3e1c8dec48c093c",
+          "mapping_sha256": "a348ba788fb8a9c108500d9ff2eb96971fc71e20f6c47cf7ca270d07ccb1f048",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.358041070573032,
+            "context_vs_negative_discrimination": 0.747365005999431
+          },
+          "validation_delta": {
+            "loss_relative_change": 0.0,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.0624985042888448,
+          "full_compressed_vector_payload_bytes": 7897581,
+          "full_embedding_and_both_split_outputs_bit_identical": true
+        },
+        {
+          "name": "cos-0.99-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.99,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6820,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3353770,
+            "unique_rows": 6820,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 107,
+            "raw_blocks": 0,
+            "compressed_blocks": 107,
+            "zlib_blocks": 44,
+            "xor_blocks": 63,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3354283,
+          "ngram_raw_to_artifact_factor": 2.1351376732374696,
+          "native_artifact_sha256": "f23a2da1d49463f553ecbd6ce3fa1f467b30d6307bfc83727d7da6fa990bfa06",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9900049358902251,
+            "mean_cosine": 0.9982160236314,
+            "p05_cosine": 0.9927601481234365,
+            "relative_l2_mean": 0.04030622924412543,
+            "relative_l2_p95": 0.12041209859749126,
+            "relative_l2_max": 0.14186730175782974,
+            "weighted_relative_l2_mean": 0.04030622924412543,
+            "weighted_relative_frobenius": 0.036777454567386174,
+            "weighted_mean_cosine": 0.9982160236314,
+            "max_relative_norm_change": 0.010100337150802562
+          },
+          "source_sha256": "9753cf029af114a42ff20aa54a007700d942cfb3eba8212cb3e1c8dec48c093c",
+          "mapping_sha256": "f274edafbc82cef8a965efe158a022d7b15bcd3c96aeb416a07ef6570b29b2de",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3580514854729175,
+            "context_vs_negative_discrimination": 0.7473050059955567
+          },
+          "validation_delta": {
+            "loss_relative_change": 4.4167593242772085e-06,
+            "discrimination_change": -6.000000387429427e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.8306957748230375,
+          "full_compressed_vector_payload_bytes": 4583595
+        },
+        {
+          "name": "cos-0.98-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.98,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6200,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3058430,
+            "unique_rows": 6200,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 97,
+            "raw_blocks": 0,
+            "compressed_blocks": 97,
+            "zlib_blocks": 41,
+            "xor_blocks": 56,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3058943,
+          "ngram_raw_to_artifact_factor": 2.3412845548282526,
+          "native_artifact_sha256": "fe6cd48639c8b422f24a150292b4ab02b82a9695addbc457a9e7f49da1a89706",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9800430809373504,
+            "mean_cosine": 0.9976116545848737,
+            "p05_cosine": 0.990158256254161,
+            "relative_l2_mean": 0.047606025322441306,
+            "relative_l2_p95": 0.14045498258231587,
+            "relative_l2_max": 0.2010414467073298,
+            "weighted_relative_l2_mean": 0.047606025322441306,
+            "weighted_relative_frobenius": 0.03863975468308584,
+            "weighted_mean_cosine": 0.9976116545848737,
+            "max_relative_norm_change": 0.010100337150802562
+          },
+          "source_sha256": "9753cf029af114a42ff20aa54a007700d942cfb3eba8212cb3e1c8dec48c093c",
+          "mapping_sha256": "9c1450de7c529ec081a74a0f4db819daf4c8036b345d6d4fe1bd58cf290d6ffb",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3581030669391154,
+            "context_vs_negative_discrimination": 0.7472650059949607
+          },
+          "validation_delta": {
+            "loss_relative_change": 2.6291470007544504e-05,
+            "discrimination_change": -0.000100000004470302
+          },
+          "full_vector_payload_to_compressed_factor": 1.9567791560902978,
+          "full_compressed_vector_payload_bytes": 4288255
+        },
+        {
+          "name": "cos-0.97-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.97,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6113,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3016626,
+            "unique_rows": 6113,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 96,
+            "raw_blocks": 0,
+            "compressed_blocks": 96,
+            "zlib_blocks": 42,
+            "xor_blocks": 54,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3017139,
+          "ngram_raw_to_artifact_factor": 2.3737242467118684,
+          "native_artifact_sha256": "8c6c73cfadcb54921c05c3b6c0ae04fd175dd67aba6204fea863bd4bdd555f6c",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.97005661793848,
+            "mean_cosine": 0.9974562132747331,
+            "p05_cosine": 0.989706951372264,
+            "relative_l2_mean": 0.0490023283664999,
+            "relative_l2_p95": 0.14354080431027214,
+            "relative_l2_max": 0.24541223229418782,
+            "weighted_relative_l2_mean": 0.0490023283664999,
+            "weighted_relative_frobenius": 0.03953566862772832,
+            "weighted_mean_cosine": 0.9974562132747331,
+            "max_relative_norm_change": 0.010100337150802562
+          },
+          "source_sha256": "9753cf029af114a42ff20aa54a007700d942cfb3eba8212cb3e1c8dec48c093c",
+          "mapping_sha256": "e43f069787e12d871178c9ce6d5570d61d599c273e664ada6722939bb48e2a87",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.358103869733214,
+            "context_vs_negative_discrimination": 0.7472650059949607
+          },
+          "validation_delta": {
+            "loss_relative_change": 2.6631919590291986e-05,
+            "discrimination_change": -0.000100000004470302
+          },
+          "full_vector_payload_to_compressed_factor": 1.9760425823823236,
+          "full_compressed_vector_payload_bytes": 4246451
+        },
+        {
+          "name": "cos-0.95-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.95,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6089,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3005069,
+            "unique_rows": 6089,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 96,
+            "raw_blocks": 0,
+            "compressed_blocks": 96,
+            "zlib_blocks": 41,
+            "xor_blocks": 55,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3005582,
+          "ngram_raw_to_artifact_factor": 2.382851640713845,
+          "native_artifact_sha256": "b8fbca03fd5049f943dcdedae02951604621a0e0da04fd061645655c59d5ba3c",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9520766359827182,
+            "mean_cosine": 0.9973859946485173,
+            "p05_cosine": 0.9895709168204945,
+            "relative_l2_mean": 0.049507734135043384,
+            "relative_l2_p95": 0.14459957394403514,
+            "relative_l2_max": 0.3095864836231294,
+            "weighted_relative_l2_mean": 0.049507734135043384,
+            "weighted_relative_frobenius": 0.04037917174281325,
+            "weighted_mean_cosine": 0.9973859946485173,
+            "max_relative_norm_change": 0.010100337150802562
+          },
+          "source_sha256": "9753cf029af114a42ff20aa54a007700d942cfb3eba8212cb3e1c8dec48c093c",
+          "mapping_sha256": "e83f77f1aba78101021e45bf358567b8ab9deabc4c97e8efea20339f0adc18fd",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3580992218971253,
+            "context_vs_negative_discrimination": 0.7472650059949607
+          },
+          "validation_delta": {
+            "loss_relative_change": 2.4660861432490577e-05,
+            "discrimination_change": -0.000100000004470302
+          },
+          "full_vector_payload_to_compressed_factor": 1.981435190585644,
+          "full_compressed_vector_payload_bytes": 4234894
+        },
+        {
+          "name": "cos-0.9-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.9,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6080,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3000708,
+            "unique_rows": 6080,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 95,
+            "raw_blocks": 0,
+            "compressed_blocks": 95,
+            "zlib_blocks": 39,
+            "xor_blocks": 56,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 3001220,
+          "ngram_raw_to_artifact_factor": 2.3863148986078992,
+          "native_artifact_sha256": "934303f705b53f5f106a396e77f930b9d7d58245daa9b83078c98a4741d2335a",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9030600204563451,
+            "mean_cosine": 0.9973022496808231,
+            "p05_cosine": 0.9894704069853885,
+            "relative_l2_mean": 0.049917716301567466,
+            "relative_l2_p95": 0.14511742040885237,
+            "relative_l2_max": 0.44103013898744087,
+            "weighted_relative_l2_mean": 0.049917716301567466,
+            "weighted_relative_frobenius": 0.043712683301423666,
+            "weighted_mean_cosine": 0.9973022496808231,
+            "max_relative_norm_change": 0.010100337150802562
+          },
+          "source_sha256": "9753cf029af114a42ff20aa54a007700d942cfb3eba8212cb3e1c8dec48c093c",
+          "mapping_sha256": "549e5f69e3d7af5ddec5fbbe81072c80969e808f9734bab69d4c2fd055ab845e",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.358125602868199,
+            "context_vs_negative_discrimination": 0.7472950059968978
+          },
+          "validation_delta": {
+            "loss_relative_change": 3.584852538063288e-05,
+            "discrimination_change": -7.000000253321037e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9834782008503895,
+          "full_compressed_vector_payload_bytes": 4230532
+        }
+      ],
+      "selection": {
+        "name": "cos-0.9-norm-0.99",
+        "validation_max_loss_relative_increase": 0.005,
+        "validation_max_discrimination_drop": 0.005,
+        "rule": "largest ngram artifact compression among validation-feasible variants; no test metrics used",
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3122245084375144,
+          "context_vs_negative_discrimination": 0.7609200059484691
+        },
+        "test_delta": {
+          "loss_relative_change": 3.392122484013882e-05,
+          "discrimination_change": -6.999999582757432e-05
+        },
+        "test_paired_token_block_bootstrap": {
+          "block_tokens": 128,
+          "observed_blocks": 160,
+          "repeats": 1000,
+          "seed": 42,
+          "loss_relative_change_95_percent_interval": [
+            4.961225722893703e-06,
+            6.31409648096548e-05
+          ],
+          "discrimination_change_95_percent_interval": [
+            -0.0001877073916564286,
+            3.998680914925217e-05
+          ],
+          "limitation": "Within one text split; blocks are a correlation approximation, not independent corpora."
+        }
+      }
+    },
+    {
+      "max_order": 12,
+      "seed": 11,
+      "vocabulary": 1200,
+      "ngram_rows": 13988,
+      "training": {
+        "seconds": 1.6992607079446316,
+        "loss_samples": [
+          {
+            "step": 0,
+            "sgns_loss_per_pair": 4.1588826179504395
+          },
+          {
+            "step": 200,
+            "sgns_loss_per_pair": 2.5902984142303467
+          },
+          {
+            "step": 400,
+            "sgns_loss_per_pair": 2.507777452468872
+          },
+          {
+            "step": 600,
+            "sgns_loss_per_pair": 2.430361032485962
+          },
+          {
+            "step": 800,
+            "sgns_loss_per_pair": 2.3916282653808594
+          },
+          {
+            "step": 1000,
+            "sgns_loss_per_pair": 2.4192802906036377
+          },
+          {
+            "step": 1200,
+            "sgns_loss_per_pair": 2.341090202331543
+          },
+          {
+            "step": 1400,
+            "sgns_loss_per_pair": 2.274792194366455
+          },
+          {
+            "step": 1600,
+            "sgns_loss_per_pair": 2.4274535179138184
+          },
+          {
+            "step": 1800,
+            "sgns_loss_per_pair": 2.371432304382324
+          },
+          {
+            "step": 1999,
+            "sgns_loss_per_pair": 2.2972002029418945
+          }
+        ],
+        "sampled_pairs": 512000,
+        "training_pool_pairs": 463676,
+        "training_pool_sha256": "3eaf3669036cc0534bb448b5f71122f8da6eb7e1a2832408c8390436141e9094"
+      },
+      "full_input_sha256": "fd83c0852cf7d56fc83529e1d8c0a0deb4d42ad81b42697600f981936dc84a7c",
+      "output_sha256": "427382c58d33649aea961e4630d40a54ac6e730447e60bc928934ba97adb8c87",
+      "word_ngram_layout_sha256": "f5a210102357781a30de0d16428005d2019f076068b603ceb0fb0cd1a25e1c0e",
+      "checkpoint_sha256": "a2fe0de3d4561913b724c5e6e5208e9bf2163effbdb318dc0672d72618c659d7",
+      "ngram_raw_bytes": 7161856,
+      "unchanged_word_padding_output_bytes": 1229312,
+      "original_full_vector_payload_bytes": 8391168,
+      "baseline": {
+        "validation": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3514175255447625,
+          "context_vs_negative_discrimination": 0.7461950059194118
+        },
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.3117724480345845,
+          "context_vs_negative_discrimination": 0.7624800060041249
+        }
+      },
+      "evaluation": {
+        "validation": {
+          "sha256": "9d94ee57b19f06271501457a6130eef0b4a8ca180998478fa82a73845585093d",
+          "pool_pairs": 54214,
+          "token_coverage": 0.8148547880690737,
+          "negative_target_collision_fraction": 0.00285
+        },
+        "test": {
+          "sha256": "7117f2e9254b9cbc71a93f3275966aee7f3bcd58445d672c1e36f8cd2d7a9a14",
+          "pool_pairs": 47324,
+          "token_coverage": 0.7647174254317112,
+          "negative_target_collision_fraction": 0.00302
+        }
+      },
+      "variants": [
+        {
+          "name": "lossless",
+          "approximate": false,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "retained_representatives": 13988,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 6667616,
+            "unique_rows": 13988,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 219,
+            "raw_blocks": 0,
+            "compressed_blocks": 219,
+            "zlib_blocks": 0,
+            "xor_blocks": 219,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 514,
+          "total_ngram_artifact_bytes": 6668130,
+          "ngram_raw_to_artifact_factor": 1.0740426476388434,
+          "native_artifact_sha256": "8676245e2b658cb8249188808fdfe5676561ec0a3acabb42212a4f698e3099f2",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9999999999999998,
+            "mean_cosine": 1.0,
+            "p05_cosine": 0.9999999999999998,
+            "relative_l2_mean": 0.0,
+            "relative_l2_p95": 0.0,
+            "relative_l2_max": 0.0,
+            "weighted_relative_l2_mean": 0.0,
+            "weighted_relative_frobenius": 0.0,
+            "weighted_mean_cosine": 1.0,
+            "max_relative_norm_change": 0.0
+          },
+          "source_sha256": "74e9db2e541deaeca1c62eb4cfd5cbc6ebbcf12deb8fafd021bb57a8ace928f9",
+          "mapping_sha256": "a348ba788fb8a9c108500d9ff2eb96971fc71e20f6c47cf7ca270d07ccb1f048",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3514175255447625,
+            "context_vs_negative_discrimination": 0.7461950059194118
+          },
+          "validation_delta": {
+            "loss_relative_change": 0.0,
+            "discrimination_change": 0.0
+          },
+          "full_vector_payload_to_compressed_factor": 1.062517204938004,
+          "full_compressed_vector_payload_bytes": 7897442,
+          "full_embedding_and_both_split_outputs_bit_identical": true
+        },
+        {
+          "name": "cos-0.99-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.99,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6756,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3323086,
+            "unique_rows": 6756,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 106,
+            "raw_blocks": 0,
+            "compressed_blocks": 106,
+            "zlib_blocks": 38,
+            "xor_blocks": 68,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3323599,
+          "ngram_raw_to_artifact_factor": 2.1548496073082224,
+          "native_artifact_sha256": "d204f111d9753b5f4244b2dae46aa61dcee1eead797c556a3b1bb5784d2782f9",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9900071148278496,
+            "mean_cosine": 0.9981799903530023,
+            "p05_cosine": 0.9926592688366788,
+            "relative_l2_mean": 0.04095451716108759,
+            "relative_l2_p95": 0.12123077750507112,
+            "relative_l2_max": 0.14239496274227953,
+            "weighted_relative_l2_mean": 0.04095451716108759,
+            "weighted_relative_frobenius": 0.03687770205792912,
+            "weighted_mean_cosine": 0.9981799903530023,
+            "max_relative_norm_change": 0.010098300798979528
+          },
+          "source_sha256": "74e9db2e541deaeca1c62eb4cfd5cbc6ebbcf12deb8fafd021bb57a8ace928f9",
+          "mapping_sha256": "98007315a1ceffae2f09db5a1bac6010e34bab45e2ab261de0549f10a8c90fde",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3514216588407755,
+            "context_vs_negative_discrimination": 0.7462450059186667
+          },
+          "validation_delta": {
+            "loss_relative_change": 1.7577890647491046e-06,
+            "discrimination_change": 4.999999925492382e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.8430336108041647,
+          "full_compressed_vector_payload_bytes": 4552911
+        },
+        {
+          "name": "cos-0.98-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.98,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6179,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3047777,
+            "unique_rows": 6179,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 97,
+            "raw_blocks": 0,
+            "compressed_blocks": 97,
+            "zlib_blocks": 42,
+            "xor_blocks": 55,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3048290,
+          "ngram_raw_to_artifact_factor": 2.349466750210774,
+          "native_artifact_sha256": "4ee021cd228171953d7b0008e5ddacaab71392fe3f6391ec6060f8e0fd18318b",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9800005685626074,
+            "mean_cosine": 0.9976110035756894,
+            "p05_cosine": 0.9904292088902048,
+            "relative_l2_mean": 0.04778927441523047,
+            "relative_l2_p95": 0.1386481150172205,
+            "relative_l2_max": 0.20000615156991502,
+            "weighted_relative_l2_mean": 0.04778927441523047,
+            "weighted_relative_frobenius": 0.038590169467669785,
+            "weighted_mean_cosine": 0.9976110035756894,
+            "max_relative_norm_change": 0.010098300798979528
+          },
+          "source_sha256": "74e9db2e541deaeca1c62eb4cfd5cbc6ebbcf12deb8fafd021bb57a8ace928f9",
+          "mapping_sha256": "4fca6ed8f4b2d6f7e7737a4a229fd271cbc7e9b7e794771f4cb84cd3628269a3",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3514253041774036,
+            "context_vs_negative_discrimination": 0.7462350059177727
+          },
+          "validation_delta": {
+            "loss_relative_change": 3.3080610128966015e-06,
+            "discrimination_change": 3.999999836090673e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9616523463379716,
+          "full_compressed_vector_payload_bytes": 4277602
+        },
+        {
+          "name": "cos-0.97-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.97,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6091,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 3005133,
+            "unique_rows": 6091,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 96,
+            "raw_blocks": 0,
+            "compressed_blocks": 96,
+            "zlib_blocks": 41,
+            "xor_blocks": 55,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 3005646,
+          "ngram_raw_to_artifact_factor": 2.382800902035702,
+          "native_artifact_sha256": "1b8b8ac06213d73cc720806409fe07c8b852036f519712e59a0e69c840359b38",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9702878765745034,
+            "mean_cosine": 0.9974596328007103,
+            "p05_cosine": 0.9899314592230644,
+            "relative_l2_mean": 0.04916987058103176,
+            "relative_l2_p95": 0.14190752377444227,
+            "relative_l2_max": 0.24329699798063473,
+            "weighted_relative_l2_mean": 0.04916987058103176,
+            "weighted_relative_frobenius": 0.03916597090320157,
+            "weighted_mean_cosine": 0.9974596328007103,
+            "max_relative_norm_change": 0.010098300798979528
+          },
+          "source_sha256": "74e9db2e541deaeca1c62eb4cfd5cbc6ebbcf12deb8fafd021bb57a8ace928f9",
+          "mapping_sha256": "b959e336c7e588f95cfe691d57f3a589eccd678970455857b3cf5ff9e7d3efad",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3513036187320946,
+            "context_vs_negative_discrimination": 0.7462450059179216
+          },
+          "validation_delta": {
+            "loss_relative_change": -4.844176392770905e-05,
+            "discrimination_change": 4.999999850985315e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9814052465219254,
+          "full_compressed_vector_payload_bytes": 4234958
+        },
+        {
+          "name": "cos-0.95-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.95,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6069,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 2994618,
+            "unique_rows": 6069,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 95,
+            "raw_blocks": 0,
+            "compressed_blocks": 95,
+            "zlib_blocks": 40,
+            "xor_blocks": 55,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 513,
+          "total_ngram_artifact_bytes": 2995131,
+          "ngram_raw_to_artifact_factor": 2.391166196069554,
+          "native_artifact_sha256": "25a6caec6de2c04ab3de39bfa8fd68140e65d830a6bbc5adab36c1ba4f41f85b",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9524821913384445,
+            "mean_cosine": 0.9974002325614881,
+            "p05_cosine": 0.9898271888233048,
+            "relative_l2_mean": 0.049602771544681366,
+            "relative_l2_p95": 0.14283955126193398,
+            "relative_l2_max": 0.3080607222133797,
+            "weighted_relative_l2_mean": 0.049602771544681366,
+            "weighted_relative_frobenius": 0.03972737084082888,
+            "weighted_mean_cosine": 0.9974002325614881,
+            "max_relative_norm_change": 0.010098300798979528
+          },
+          "source_sha256": "74e9db2e541deaeca1c62eb4cfd5cbc6ebbcf12deb8fafd021bb57a8ace928f9",
+          "mapping_sha256": "8aab489014a63d2edf903b301a5b7dff0ae5ec44b84f795ce5ec56e16c7a4c4d",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3512759827643634,
+            "context_vs_negative_discrimination": 0.7462250059176236
+          },
+          "validation_delta": {
+            "loss_relative_change": -6.019466082107794e-05,
+            "discrimination_change": 2.9999998211849288e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.986337133676558,
+          "full_compressed_vector_payload_bytes": 4224443
+        },
+        {
+          "name": "cos-0.9-norm-0.99",
+          "approximate": true,
+          "minimum_cosine": 0.9,
+          "minimum_norm_ratio": 0.99,
+          "retained_representatives": 6064,
+          "storage": {
+            "format": "MEFTNAT1",
+            "format_version": 2,
+            "input_bytes": 7161856,
+            "artifact_bytes": 2992285,
+            "unique_rows": 6064,
+            "row_map_bytes": 111904,
+            "n_rows": 13988,
+            "row_bytes": 512,
+            "block_rows": 64,
+            "blocks": 95,
+            "raw_blocks": 0,
+            "compressed_blocks": 95,
+            "zlib_blocks": 40,
+            "xor_blocks": 55,
+            "deduplicate": true,
+            "predictor": "xor",
+            "reordered": false
+          },
+          "manifest_bytes": 512,
+          "total_ngram_artifact_bytes": 2992797,
+          "ngram_raw_to_artifact_factor": 2.393031000766173,
+          "native_artifact_sha256": "aeb182a33e629e339ded2ae4e31594b093eef5ab12c86257abc3417bd01fc55b",
+          "native_rows_byte_exact_to_reconstruction": true,
+          "row_fidelity": {
+            "rows": 13988,
+            "minimum_cosine": 0.9029318187346435,
+            "mean_cosine": 0.997338090367522,
+            "p05_cosine": 0.989741981246224,
+            "relative_l2_mean": 0.049903839389347844,
+            "relative_l2_p95": 0.14339629856170347,
+            "relative_l2_max": 0.44230682025828905,
+            "weighted_relative_l2_mean": 0.049903839389347844,
+            "weighted_relative_frobenius": 0.042280825795102325,
+            "weighted_mean_cosine": 0.997338090367522,
+            "max_relative_norm_change": 0.010098300798979528
+          },
+          "source_sha256": "74e9db2e541deaeca1c62eb4cfd5cbc6ebbcf12deb8fafd021bb57a8ace928f9",
+          "mapping_sha256": "cc59b0f40874133ef86a314a373ebe7247aa5c02a6e8cf841346fb8d439b5c39",
+          "validation": {
+            "pairs": 20000,
+            "sgns_loss_per_pair": 2.3513068784743547,
+            "context_vs_negative_discrimination": 0.7462150059174746
+          },
+          "validation_delta": {
+            "loss_relative_change": -4.705547577399383e-05,
+            "discrimination_change": 1.9999998062791846e-05
+          },
+          "full_vector_payload_to_compressed_factor": 1.9874351893804731,
+          "full_compressed_vector_payload_bytes": 4222109
+        }
+      ],
+      "selection": {
+        "name": "cos-0.9-norm-0.99",
+        "validation_max_loss_relative_increase": 0.005,
+        "validation_max_discrimination_drop": 0.005,
+        "rule": "largest ngram artifact compression among validation-feasible variants; no test metrics used",
+        "test": {
+          "pairs": 20000,
+          "sgns_loss_per_pair": 2.311579910226166,
+          "context_vs_negative_discrimination": 0.7624400060065091
+        },
+        "test_delta": {
+          "loss_relative_change": -8.32857959623956e-05,
+          "discrimination_change": -3.999999761583606e-05
+        },
+        "test_paired_token_block_bootstrap": {
+          "block_tokens": 128,
+          "observed_blocks": 160,
+          "repeats": 1000,
+          "seed": 42,
+          "loss_relative_change_95_percent_interval": [
+            -0.00013210572044345393,
+            -3.7336713069593996e-05
+          ],
+          "discrimination_change_95_percent_interval": [
+            -0.00018842435102978334,
+            0.00011704734388403365
+          ],
+          "limitation": "Within one text split; blocks are a correlation approximation, not independent corpora."
+        }
+      }
+    }
+  ],
+  "failures": [],
+  "total_seconds": 25.675056874984875
+}
