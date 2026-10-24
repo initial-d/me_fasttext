@@ -4,6 +4,8 @@
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "real.h"
 #include "row_merge.h"
@@ -21,6 +23,7 @@ struct LegacyMergeState {
     int32_t dim;
     bool initialized = false;
     map<size_t, string>* original_keys = nullptr;
+    std::vector<std::pair<string, size_t>> ancestors;
 };
 
 inline string reverse(string word) {
@@ -39,30 +42,29 @@ inline string reverse(string word) {
 }
 
 inline int datrie_foreach_cal(const char* key, size_t value, void* udata) {
-    real* pos = ((LegacyMergeState*)(udata))->cur;
-    string pq = ((LegacyMergeState*)udata)->pq;
-    size_t pid = ((LegacyMergeState*)udata)->pid;
-    DATrie* pngramdat = ((LegacyMergeState*)udata)->pngramdat;
-    
     LegacyMergeState* state = static_cast<LegacyMergeState*>(udata);
+    real* pos = state->cur;
     if (state->original_keys) (*state->original_keys)[value] = key;
-    bool merge = state->initialized && prefix_related(pq, key)
-        && joint_row_similarity(pos + pid * state->dim,
-                                pos + value * state->dim, state->dim);
-    string rkey = reverse(key);
-
-    if(merge) {
-        datrie_insert_key(pngramdat, rkey.c_str(), pid);
-        // Keep the representative key and row fixed; never compare only
-        // against the preceding member of an approximate merge chain.
-        ((LegacyMergeState*)udata)->pid = pid;
-        //((LegacyMergeState*)udata)->pngramdat = pngramdat;
-    } else {
-        datrie_insert_key(pngramdat, rkey.c_str(), value);
-        ((LegacyMergeState*)udata)->pq = key;
-        ((LegacyMergeState*)udata)->pid = value;
-        //((LegacyMergeState*)udata)->pngramdat = pngramdat;
+    const string current(key);
+    // Keep the visited prefix ancestry across sibling branches. Remembering
+    // only the preceding key loses a valid shorter ancestor after a mismatch.
+    while (!state->ancestors.empty() &&
+           current.compare(0, state->ancestors.back().first.size(),
+                           state->ancestors.back().first) != 0) {
+        state->ancestors.pop_back();
     }
+    size_t representative = value;
+    for (auto entry = state->ancestors.rbegin(); entry != state->ancestors.rend(); ++entry) {
+        if (joint_row_similarity(pos + entry->second * state->dim,
+                                 pos + value * state->dim, state->dim)) {
+            representative = entry->second;
+            break;
+        }
+    }
+    datrie_insert_key(state->pngramdat, reverse(current).c_str(), representative);
+    state->ancestors.emplace_back(current, representative);
+    state->pq = current;
+    state->pid = representative;
     state->initialized = true;
     return 1;
 }

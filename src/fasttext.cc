@@ -398,6 +398,7 @@ void FastText::saveIndex() {
     std::cout << "nwords_size: " << (int32_t)dastrie_get_key_num(dasworddat) << std::endl;
 	datrie_delete(worddat);
 	dastrie_delete(dasworddat);
+	pub_free(buffer);
 
 	DASTrie* dasngramdat = dastrie_new();
 	dastrie_build_convert(dasngramdat, ngramdat);
@@ -520,6 +521,7 @@ void FastText::saveIndex(std::string path) {
     std::cout << "nwords_size: " << (int32_t)dastrie_get_key_num(dasworddat) << std::endl;
 	datrie_delete(worddat);
 	dastrie_delete(dasworddat);
+	pub_free(buffer);
     
 	DASTrie* dasngramdat = dastrie_new();
     std::cout<< "2" << std::endl;

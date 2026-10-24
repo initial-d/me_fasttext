@@ -54,6 +54,18 @@ int main() {
     assert(trie.values.at("zyx") == 3);
   }
 
+  // A mismatching sibling must not discard a shorter, still-valid ancestor.
+  float branching_rows[] = {1, 0, -1, 0, 1, 0};
+  DATrie branching;
+  LegacyMergeState branch_state;
+  branch_state.cur = branching_rows; branch_state.dim = 2;
+  branch_state.pngramdat = &branching;
+  datrie_foreach_cal("ab", 0, &branch_state);
+  datrie_foreach_cal("abc", 1, &branch_state);
+  datrie_foreach_cal("abd", 2, &branch_state);
+  assert(branching.values.at("cba") == 1);
+  assert(branching.values.at("dba") == 0);
+
   // Two individually acceptable 7-degree steps must not become a 14-degree
   // replacement after prefix + suffix passes. Check original -> final row.
   const double pi = std::acos(-1.0);

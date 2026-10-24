@@ -1,0 +1,37 @@
+{
+  "commit": "26c49136b3fb6ef6c2dbc3a3761cef9ba8854f27",
+  "exact_command": "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python tools/check_legacy_roundtrip.py --output-dir artifacts/legacy-roundtrip",
+  "compile_command": "c++ -std=c++11 -O1 -g -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -I/home/runner/work/me_fasttext/me_fasttext/src -I/home/runner/work/me_fasttext/me_fasttext/mylib/include /home/runner/work/me_fasttext/me_fasttext/tests/legacy_roundtrip_test.cc /home/runner/work/me_fasttext/me_fasttext/src/args.cc /home/runner/work/me_fasttext/me_fasttext/src/dictionary.cc /home/runner/work/me_fasttext/me_fasttext/src/productquantizer.cc /home/runner/work/me_fasttext/me_fasttext/src/matrix.cc /home/runner/work/me_fasttext/me_fasttext/src/qmatrix.cc /home/runner/work/me_fasttext/me_fasttext/src/vector.cc /home/runner/work/me_fasttext/me_fasttext/src/model.cc /home/runner/work/me_fasttext/me_fasttext/src/utils.cc /home/runner/work/me_fasttext/me_fasttext/src/fasttext.cc /home/runner/work/me_fasttext/me_fasttext/src/ftindex.cc -L/home/runner/work/me_fasttext/me_fasttext/mylib/lib -ltrie -lpub -o /home/runner/work/me_fasttext/me_fasttext/artifacts/legacy-roundtrip/legacy-roundtrip",
+  "run_command": "/home/runner/work/me_fasttext/me_fasttext/artifacts/legacy-roundtrip/legacy-roundtrip /home/runner/work/me_fasttext/me_fasttext/artifacts/legacy-roundtrip",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "compiler": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "category": "deterministic synthetic correctness / serialization / serving regression",
+  "data_source": "hard-coded mathematical row and vocabulary fixtures; no external data",
+  "dimensions": [
+    64,
+    128,
+    256
+  ],
+  "export_overloads": 2,
+  "device": "CPU",
+  "sanitizers": [
+    "AddressSanitizer",
+    "UndefinedBehaviorSanitizer",
+    "LeakSanitizer"
+  ],
+  "limitations": [
+    "Not trained rows or a paper/Engram quality/compression benchmark.",
+    "Bundled trie archives are linked but not sanitizer-instrumented.",
+    "Tests valid self-produced files, not malformed-file reader hardening.",
+    "Checks word/OOV/ngram APIs; legacy sentence helpers still assume dimension 128."
+  ],
+  "status": "failed",
+  "library_sha256": {
+    "libtrie.a": "79429fd72f12ab2883ebbaa45f2411cde12f92fae57173af551c090bfd2a6a2b",
+    "libpub.a": "0e0d6d654caf1bd98405dae3af978d1fd329df0688414a373ea49b9e5f0bae65"
+  },
+  "build_exit_code": 0,
+  "run_exit_code": -6
+}

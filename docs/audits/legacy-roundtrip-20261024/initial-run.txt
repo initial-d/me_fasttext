@@ -1,0 +1,4 @@
+10
+nwords_size: 1
+nngrams_size: 14
+legacy-roundtrip: /home/runner/work/me_fasttext/me_fasttext/tests/legacy_roundtrip_test.cc:91: void verify(const std::string&, const FixtureModel&, int): Assertion `getNgramId(index, "bc") == getNgramId(index, "xbc")' failed.
