@@ -1,0 +1,30 @@
+9
+nwords_size: 1
+nngrams_size: 14
+9
+nwords_size: 1
+2
+3
+nngrams_size: 14
+nngrams_size: 14
+roundtrip dim=64 overloads=2 ngrams=14 word/OOV/row checks passed
+9
+nwords_size: 1
+nngrams_size: 14
+9
+nwords_size: 1
+2
+3
+nngrams_size: 14
+nngrams_size: 14
+roundtrip dim=128 overloads=2 ngrams=14 word/OOV/row checks passed
+9
+nwords_size: 1
+nngrams_size: 14
+9
+nwords_size: 1
+2
+3
+nngrams_size: 14
+nngrams_size: 14
+roundtrip dim=256 overloads=2 ngrams=14 word/OOV/row checks passed
