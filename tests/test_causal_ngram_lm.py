@@ -94,6 +94,25 @@ class CausalMemoryTest(unittest.TestCase):
         self.assertEqual(result["perplexity_relative_change_95_percent_interval"], [0, 0])
         self.assertEqual(result["observed_blocks"], 2)
 
+    def test_test_budget_audit_preserves_validation_choice(self):
+        from copy import deepcopy
+        from tools.analyze_causal_lm_compression import analyze
+        chosen = {"name": "validation-choice", "memory_raw_to_artifact_factor": 1.5,
+                  "full_parameter_payload_to_compressed_factor": 1.4,
+                  "parameter_and_registry_to_compressed_factor": 1.3}
+        report = {"failures": [], "runs": [{"max_order": 4, "seed": 3, "variants": [chosen],
+                 "selection": {"name": chosen["name"], "test_delta": {"perplexity_relative_change": 0,
+                                 "mean_prediction_kl_nats": .01, "top1_changed_fraction": 0},
+                               "validation_ppl_budget": .005, "validation_mean_kl_budget": .0001,
+                               "validation_top1_flip_budget": .01, "test": {}, "test_paired_block_interval": {}},
+                 "baseline": {"test": {}}, "inference_memory_ablation": {"test": {"metrics": {"character_perplexity": 10}}}}]}
+        before = deepcopy(report)
+        audit = analyze(report)
+        self.assertEqual(report, before)
+        self.assertEqual(audit["models"][0]["chosen_variant"], chosen["name"])
+        self.assertFalse(audit["models"][0]["test_all_budgets_passed"])
+        self.assertEqual(audit["test_budget_exceedances"][0]["metrics"], ["mean_prediction_kl"])
+
 
 @unittest.skipUnless(torch is not None and shutil.which("cc"), "native LM test needs torch/numpy and C compiler")
 class CausalNativeTest(unittest.TestCase):
