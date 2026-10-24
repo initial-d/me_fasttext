@@ -1,0 +1,6 @@
+Rebuild command: make native NATIVE_SHARED=-dynamiclib NATIVE_EXT=dylib
+Current compiler (measured library hash is in report.json):
+Apple clang version 21.0.0 (clang-2100.1.1.101)
+Target: arm64-apple-darwin25.6.0
+Thread model: posix
+InstalledDir: /Library/Developer/CommandLineTools/usr/bin
