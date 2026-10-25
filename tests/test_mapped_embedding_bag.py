@@ -106,6 +106,7 @@ class MappedBagTest(unittest.TestCase):
 
     def test_unique_queries_preserve_dense_bag_results_and_original_ids(self):
         from tools.mapped_embedding_bag import export_embedding_bag, open_embedding_bag
+        from unittest.mock import patch
         for dtype in (torch.float32, torch.float16, torch.bfloat16):
             for mode in ("sum", "mean"):
                 for padding in (None, 7):
@@ -119,7 +120,14 @@ class MappedBagTest(unittest.TestCase):
                             self.assertEqual(mapped.last_unique_rows, 3)
                             # The padding row need not occur in the current query.
                             other = torch.tensor([[2, 19, 2]])
-                            self.assertTrue(torch.equal(mapped(other), source(other)))
+                            # Keeping a configured but unused padding ID selects
+                            # the same reduction kernel, including x86 BF16.
+                            with patch("tools.mapped_embedding_bag.F.embedding_bag",
+                                       wraps=torch.nn.functional.embedding_bag) as reduce:
+                                other_actual = mapped(other)
+                                used_padding = reduce.call_args.kwargs["padding_idx"]
+                                self.assertEqual(used_padding, 2 if padding is not None else None)
+                            self.assertTrue(torch.equal(other_actual, source(other)))
                             self.assertEqual(mapped.last_unique_rows, 2)
                             # Ragged bags include an empty bag and an all-padding bag.
                             ragged = torch.tensor([19, 2, 19, 7, 7])

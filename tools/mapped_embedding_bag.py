@@ -100,14 +100,21 @@ class MappedEmbeddingBag(nn.Module):
                 # Validate the handle and reset last-query counters for empty input.
                 self.gather.table.gather_into(ids.data_ptr(), 0, 0, 0)
                 return torch.zeros((bags, self.embedding_dim), dtype=self.dtype)
-            rows = torch.empty((unique.numel(), self.embedding_dim), dtype=self.dtype)
-            self.gather.table.gather_into(unique.data_ptr(), unique.numel(), rows.data_ptr(),
-                                         rows.numel() * rows.element_size())
             padding = None
+            unused_padding = 0
             if self.padding_idx is not None:
                 positions = (unique == self.padding_idx).nonzero().reshape(-1)
                 if positions.numel():
                     padding = int(positions[0])
+                else:
+                    # Keep PyTorch's padding-aware reduction kernel even when
+                    # this query never references padding (BF16 rounding differs).
+                    padding, unused_padding = unique.numel(), 1
+            rows = torch.empty((unique.numel() + unused_padding, self.embedding_dim), dtype=self.dtype)
+            if unused_padding:
+                rows[-1].zero_()
+            self.gather.table.gather_into(unique.data_ptr(), unique.numel(), rows.data_ptr(),
+                                         rows.numel() * rows.element_size())
             return F.embedding_bag(inverse, rows, boundary, mode=self.mode,
                                    include_last_offset=True, padding_idx=padding)
         self.last_unique_rows = None
