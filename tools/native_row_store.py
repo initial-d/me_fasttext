@@ -180,6 +180,27 @@ class NativeRows:
         if status:
             raise ValueError(error.value.decode())
 
+    def embedding_bag_into(self, ids_address, count, offsets_address, bags, dtype,
+                           mean, padding_id, chunk_rows, output_address, output_floats):
+        """Reduce original row IDs into float32 output with bounded row staging."""
+        if not self.handle:
+            raise ValueError("row store is closed")
+        try:
+            function = self.lib.meft_rows_embedding_bag
+        except AttributeError as error:
+            raise ValueError("embedding bags require rebuilding the native row library") from error
+        function.argtypes = [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t,
+                             ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int, ctypes.c_int,
+                             ctypes.c_uint64, ctypes.c_size_t, ctypes.c_void_p, ctypes.c_size_t,
+                             ctypes.c_void_p, ctypes.c_size_t]
+        function.restype = ctypes.c_int
+        error = ctypes.create_string_buffer(256)
+        status = function(self.handle, ids_address, count, offsets_address, bags, dtype,
+                          int(mean), padding_id, chunk_rows, output_address, output_floats,
+                          error, len(error))
+        if status:
+            raise ValueError(error.value.decode())
+
     def rows(self, ids):
         ids = list(ids)
         if any(type(i) is not int or not 0 <= i < self.header["n_rows"] for i in ids):
