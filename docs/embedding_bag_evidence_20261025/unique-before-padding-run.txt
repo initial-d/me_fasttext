@@ -1,0 +1,15 @@
+{"mode": "resident-bag", "order": 4, "chunk_rows": null, "median_seconds": 0.0010652909986674786, "query_peak_rss_bytes": 224935936}
+{"mode": "mapped-gather", "order": 4, "chunk_rows": null, "median_seconds": 0.009923959150910378, "query_peak_rss_bytes": 263159808}
+{"mode": "mapped-unique", "order": 4, "chunk_rows": null, "median_seconds": 0.008958917111158371, "query_peak_rss_bytes": 236355584}
+{"mode": "mapped-bag", "order": 4, "chunk_rows": 1024, "median_seconds": 0.4143583751283586, "query_peak_rss_bytes": 229310464}
+{"mode": "mapped-bag", "order": 4, "chunk_rows": 16384, "median_seconds": 0.035133040975779295, "query_peak_rss_bytes": 233357312}
+{"mode": "resident-bag", "order": 8, "chunk_rows": null, "median_seconds": 0.0016077496111392975, "query_peak_rss_bytes": 238878720}
+{"mode": "mapped-gather", "order": 8, "chunk_rows": null, "median_seconds": 0.02563616679981351, "query_peak_rss_bytes": 314458112}
+{"mode": "mapped-unique", "order": 8, "chunk_rows": null, "median_seconds": 0.027644749730825424, "query_peak_rss_bytes": 257146880}
+{"mode": "mapped-bag", "order": 8, "chunk_rows": 1024, "median_seconds": 1.1736598750576377, "query_peak_rss_bytes": 245661696}
+{"mode": "mapped-bag", "order": 8, "chunk_rows": 16384, "median_seconds": 0.22593679185956717, "query_peak_rss_bytes": 249315328}
+{"mode": "resident-bag", "order": 12, "chunk_rows": null, "median_seconds": 0.0018687089905142784, "query_peak_rss_bytes": 246923264}
+{"mode": "mapped-gather", "order": 12, "chunk_rows": null, "median_seconds": 0.030415792018175125, "query_peak_rss_bytes": 357482496}
+{"mode": "mapped-unique", "order": 12, "chunk_rows": null, "median_seconds": 0.04163970844820142, "query_peak_rss_bytes": 272318464}
+{"mode": "mapped-bag", "order": 12, "chunk_rows": 1024, "median_seconds": 1.361473500262946, "query_peak_rss_bytes": 252772352}
+{"mode": "mapped-bag", "order": 12, "chunk_rows": 16384, "median_seconds": 0.38224274991080165, "query_peak_rss_bytes": 257081344}

@@ -1,0 +1,25 @@
+PyTorch gather adapter	Verify adapter and row storage	﻿2026-10-25T01:00:58.0202085Z ##[group]Run python -m unittest discover -s tests
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0202511Z ^[[36;1mpython -m unittest discover -s tests^[[0m
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0269888Z shell: /usr/bin/bash -e {0}
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0270149Z env:
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0270432Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0270875Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0271308Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0271697Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0272082Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0272477Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:00:58.0272803Z ##[endgroup]
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2817355Z ....................................F.....................
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2818232Z ======================================================================
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2826728Z FAIL: test_unique_queries_preserve_dense_bag_results_and_original_ids (test_mapped_embedding_bag.MappedBagTest.test_unique_queries_preserve_dense_bag_results_and_original_ids) (dtype=torch.bfloat16, mode='sum', padding=7)
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2828507Z ----------------------------------------------------------------------
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2829245Z Traceback (most recent call last):
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2837945Z   File "/home/runner/work/me_fasttext/me_fasttext/tests/test_mapped_embedding_bag.py", line 122, in test_unique_queries_preserve_dense_bag_results_and_original_ids
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2839203Z     self.assertTrue(torch.equal(mapped(other), source(other)))
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2839745Z AssertionError: False is not true
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2840022Z 
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2840251Z ----------------------------------------------------------------------
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2840774Z Ran 58 tests in 7.075s
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2840981Z 
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.2841109Z FAILED (failures=1)
+PyTorch gather adapter	Verify adapter and row storage	2026-10-25T01:01:07.8770863Z ##[error]Process completed with exit code 1.

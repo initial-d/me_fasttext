@@ -1,7 +1,7 @@
 {
   "category": "trained causal character-memory CPU serving; cyclic held-out ID replay and original test task",
-  "commit": "80a0be4bf912c9280bb68d0be7a005d5750c1f24",
-  "command": "/tmp/projects-push-20261023-venv/bin/python tools/benchmark_embedding_bag.py --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --orders 4,8,12 --seed 3 --bags 32768 --chunks 1024,16384 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json",
+  "commit": "e61df114f31c9703f378682b1ad9c9bf336dc09d",
+  "command": "/tmp/projects-push-20261023-venv/bin/python tools/benchmark_embedding_bag.py --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --orders 4,8,12 --seed 3 --bags 32768 --chunks 1024,16384 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json",
   "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
   "pytorch": "2.14.1",
   "numpy": "2.5.4",
@@ -62,16 +62,16 @@
       "seed": 3,
       "chunk_rows": null,
       "seconds": [
-        0.0010798340663313866,
-        0.0011257501319050789,
-        0.0010652909986674786,
-        0.0010482501238584518,
-        0.0010573333129286766
+        0.0010612080805003643,
+        0.001051375176757574,
+        0.001045249868184328,
+        0.0010432079434394836,
+        0.0010437089949846268
       ],
-      "median_seconds": 0.0010652909986674786,
-      "p95_seconds": 0.0011165669187903405,
-      "input_peak_rss_bytes": 215121920,
-      "query_peak_rss_bytes": 224935936,
+      "median_seconds": 0.001045249868184328,
+      "p95_seconds": 0.0010592414997518062,
+      "input_peak_rss_bytes": 215302144,
+      "query_peak_rss_bytes": 225116160,
       "input_shape": [
         32768,
         3
@@ -90,7 +90,7 @@
       "sample_double_oracle_max_abs_error": 9.934107469966591e-08,
       "output_sha256": "158d0045c54463249e725c17546bdfd77e67271caf2f9a512694d351da90be6e",
       "last_query_native_counters": null,
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker resident-bag --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker resident-bag --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-gather",
@@ -98,16 +98,16 @@
       "seed": 3,
       "chunk_rows": null,
       "seconds": [
-        0.009943374898284674,
-        0.009923959150910378,
-        0.009938374627381563,
-        0.009844624903053045,
-        0.009852750226855278
+        0.010401790961623192,
+        0.010204541962593794,
+        0.01004716707393527,
+        0.009943708311766386,
+        0.009939707815647125
       ],
-      "median_seconds": 0.009923959150910378,
-      "p95_seconds": 0.009942374844104051,
-      "input_peak_rss_bytes": 216645632,
-      "query_peak_rss_bytes": 263159808,
+      "median_seconds": 0.01004716707393527,
+      "p95_seconds": 0.010362341161817312,
+      "input_peak_rss_bytes": 216809472,
+      "query_peak_rss_bytes": 263225344,
       "input_shape": [
         32768,
         3
@@ -131,7 +131,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1044480
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-gather --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-gather --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-unique",
@@ -139,15 +139,15 @@
       "seed": 3,
       "chunk_rows": null,
       "seconds": [
-        0.009082499891519547,
-        0.008958917111158371,
-        0.009251125156879425,
-        0.008920624852180481,
-        0.008917625062167645
+        0.009038666728883982,
+        0.008997166994959116,
+        0.008936583064496517,
+        0.008942082989960909,
+        0.008943082764744759
       ],
-      "median_seconds": 0.008958917111158371,
-      "p95_seconds": 0.00921740010380745,
-      "input_peak_rss_bytes": 216547328,
+      "median_seconds": 0.008943082764744759,
+      "p95_seconds": 0.009030366782099009,
+      "input_peak_rss_bytes": 216530944,
       "query_peak_rss_bytes": 236355584,
       "input_shape": [
         32768,
@@ -172,7 +172,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1044480
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-unique --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-unique --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-bag",
@@ -180,16 +180,16 @@
       "seed": 3,
       "chunk_rows": 1024,
       "seconds": [
-        0.4149221247062087,
-        0.4143583751283586,
-        0.413224833086133,
-        0.41447254084050655,
-        0.41382087487727404
+        0.4149317080155015,
+        0.4141488750465214,
+        0.41420187521725893,
+        0.4138400829397142,
+        0.41399999987334013
       ],
-      "median_seconds": 0.4143583751283586,
-      "p95_seconds": 0.4148322079330683,
-      "input_peak_rss_bytes": 216465408,
-      "query_peak_rss_bytes": 229310464,
+      "median_seconds": 0.4141488750465214,
+      "p95_seconds": 0.414785741455853,
+      "input_peak_rss_bytes": 216612864,
+      "query_peak_rss_bytes": 229523456,
       "input_shape": [
         32768,
         3
@@ -213,7 +213,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1044480
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-bag",
@@ -221,16 +221,16 @@
       "seed": 3,
       "chunk_rows": 16384,
       "seconds": [
-        0.03513512481004,
-        0.035199166275560856,
-        0.035133040975779295,
-        0.034966417122632265,
-        0.03503441717475653
+        0.03516320791095495,
+        0.03504825010895729,
+        0.034951208624988794,
+        0.03497304208576679,
+        0.03503691591322422
       ],
-      "median_seconds": 0.035133040975779295,
-      "p95_seconds": 0.03518635798245669,
+      "median_seconds": 0.03503691591322422,
+      "p95_seconds": 0.03514021635055542,
       "input_peak_rss_bytes": 216383488,
-      "query_peak_rss_bytes": 233357312,
+      "query_peak_rss_bytes": 233472000,
       "input_shape": [
         32768,
         3
@@ -254,7 +254,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1044480
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 16384 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 16384 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "resident-bag",
@@ -262,16 +262,16 @@
       "seed": 3,
       "chunk_rows": null,
       "seconds": [
-        0.001606374979019165,
-        0.0016058334149420261,
-        0.0016175000928342342,
-        0.0016125831753015518,
-        0.0016077496111392975
+        0.001664958894252777,
+        0.0016085421666502953,
+        0.001593249849975109,
+        0.0015984592027962208,
+        0.0015993337146937847
       ],
-      "median_seconds": 0.0016077496111392975,
-      "p95_seconds": 0.0016165167093276978,
-      "input_peak_rss_bytes": 234356736,
-      "query_peak_rss_bytes": 238878720,
+      "median_seconds": 0.0015993337146937847,
+      "p95_seconds": 0.0016536755487322808,
+      "input_peak_rss_bytes": 234307584,
+      "query_peak_rss_bytes": 238829568,
       "input_shape": [
         32768,
         7
@@ -290,7 +290,7 @@
       "sample_double_oracle_max_abs_error": 1.1920928955078125e-07,
       "output_sha256": "94420bb9acc314fd856997df3e0a47ce16142cda6dc19fc50f0179a06561a61f",
       "last_query_native_counters": null,
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker resident-bag --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker resident-bag --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-gather",
@@ -298,16 +298,16 @@
       "seed": 3,
       "chunk_rows": null,
       "seconds": [
-        0.025768457911908627,
-        0.025695291813462973,
-        0.02563616679981351,
-        0.025612167082726955,
-        0.025630333926528692
+        0.025499458890408278,
+        0.025573209393769503,
+        0.025585833005607128,
+        0.025375790894031525,
+        0.02547870809212327
       ],
-      "median_seconds": 0.02563616679981351,
-      "p95_seconds": 0.025753824692219495,
-      "input_peak_rss_bytes": 236683264,
-      "query_peak_rss_bytes": 314458112,
+      "median_seconds": 0.025499458890408278,
+      "p95_seconds": 0.025583308283239604,
+      "input_peak_rss_bytes": 236568576,
+      "query_peak_rss_bytes": 314376192,
       "input_shape": [
         32768,
         7
@@ -331,7 +331,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1042944
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-gather --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-gather --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-unique",
@@ -339,16 +339,16 @@
       "seed": 3,
       "chunk_rows": null,
       "seconds": [
-        0.027653707657009363,
-        0.027742040809243917,
-        0.027644749730825424,
-        0.027621750254184008,
-        0.027628999669104815
+        0.027849209029227495,
+        0.027712957933545113,
+        0.027587832883000374,
+        0.0276461667381227,
+        0.027665208093822002
       ],
-      "median_seconds": 0.027644749730825424,
-      "p95_seconds": 0.027724374178797008,
-      "input_peak_rss_bytes": 234471424,
-      "query_peak_rss_bytes": 257146880,
+      "median_seconds": 0.027665208093822002,
+      "p95_seconds": 0.02782195881009102,
+      "input_peak_rss_bytes": 234569728,
+      "query_peak_rss_bytes": 257245184,
       "input_shape": [
         32768,
         7
@@ -372,7 +372,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1042944
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-unique --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-unique --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-bag",
@@ -380,16 +380,16 @@
       "seed": 3,
       "chunk_rows": 1024,
       "seconds": [
-        1.1736598750576377,
-        1.177854291163385,
-        1.173419542144984,
-        1.1737200831994414,
-        1.1735303341411054
+        1.1765135419555008,
+        1.1738724997267127,
+        1.1760113327763975,
+        1.1726834159344435,
+        1.172358333133161
       ],
-      "median_seconds": 1.1736598750576377,
-      "p95_seconds": 1.1770274495705961,
-      "input_peak_rss_bytes": 235094016,
-      "query_peak_rss_bytes": 245661696,
+      "median_seconds": 1.1738724997267127,
+      "p95_seconds": 1.1764131001196803,
+      "input_peak_rss_bytes": 234749952,
+      "query_peak_rss_bytes": 245235712,
       "input_shape": [
         32768,
         7
@@ -413,7 +413,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1048576
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-bag",
@@ -421,16 +421,16 @@
       "seed": 3,
       "chunk_rows": 16384,
       "seconds": [
-        0.22571924980729818,
-        0.22593679185956717,
-        0.22604829212650657,
-        0.22607912495732307,
-        0.22580812498927116
+        0.2255450002849102,
+        0.2252458338625729,
+        0.22601016703993082,
+        0.22616033302620053,
+        0.22570399986580014
       ],
-      "median_seconds": 0.22593679185956717,
-      "p95_seconds": 0.22607295839115976,
+      "median_seconds": 0.22570399986580014,
+      "p95_seconds": 0.22613029982894658,
       "input_peak_rss_bytes": 234602496,
-      "query_peak_rss_bytes": 249315328,
+      "query_peak_rss_bytes": 249479168,
       "input_shape": [
         32768,
         7
@@ -454,7 +454,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1042944
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 16384 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 16384 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "resident-bag",
@@ -462,16 +462,16 @@
       "seed": 3,
       "chunk_rows": null,
       "seconds": [
-        0.0018687089905142784,
-        0.001872125081717968,
-        0.00186991598457098,
-        0.001865082886070013,
-        0.001859624870121479
+        0.0018479996360838413,
+        0.0018479591235518456,
+        0.0018503330647945404,
+        0.0018777917139232159,
+        0.0018512909300625324
       ],
-      "median_seconds": 0.0018687089905142784,
-      "p95_seconds": 0.0018716832622885705,
-      "input_peak_rss_bytes": 240549888,
-      "query_peak_rss_bytes": 246923264,
+      "median_seconds": 0.0018503330647945404,
+      "p95_seconds": 0.0018724915571510792,
+      "input_peak_rss_bytes": 240451584,
+      "query_peak_rss_bytes": 246841344,
       "input_shape": [
         32768,
         11
@@ -490,7 +490,7 @@
       "sample_double_oracle_max_abs_error": 1.1920928955078125e-07,
       "output_sha256": "1bc5f29ae6eee58050d5f209fc49622048d53c2ecb433a50eab15e872a56ffe3",
       "last_query_native_counters": null,
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker resident-bag --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker resident-bag --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-gather",
@@ -498,16 +498,16 @@
       "seed": 3,
       "chunk_rows": null,
       "seconds": [
-        0.030080041848123074,
-        0.030609999783337116,
-        0.030492582824081182,
-        0.030415792018175125,
-        0.030099375173449516
+        0.03049941686913371,
+        0.030410374980419874,
+        0.030400291085243225,
+        0.03044616710394621,
+        0.030261666979640722
       ],
-      "median_seconds": 0.030415792018175125,
-      "p95_seconds": 0.030586516391485928,
-      "input_peak_rss_bytes": 244514816,
-      "query_peak_rss_bytes": 357482496,
+      "median_seconds": 0.030410374980419874,
+      "p95_seconds": 0.03048876691609621,
+      "input_peak_rss_bytes": 243679232,
+      "query_peak_rss_bytes": 356646912,
       "input_shape": [
         32768,
         11
@@ -531,7 +531,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1036288
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-gather --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-gather --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-unique",
@@ -539,16 +539,16 @@
       "seed": 3,
       "chunk_rows": null,
       "seconds": [
-        0.04408316686749458,
-        0.04163970844820142,
-        0.041569416876882315,
-        0.04369375016540289,
-        0.04081037500873208
+        0.04403899982571602,
+        0.04159250017255545,
+        0.04132204223424196,
+        0.04339820798486471,
+        0.04163695778697729
       ],
-      "median_seconds": 0.04163970844820142,
-      "p95_seconds": 0.04400528352707624,
-      "input_peak_rss_bytes": 240386048,
-      "query_peak_rss_bytes": 272318464,
+      "median_seconds": 0.04163695778697729,
+      "p95_seconds": 0.04391084145754576,
+      "input_peak_rss_bytes": 240467968,
+      "query_peak_rss_bytes": 272433152,
       "input_shape": [
         32768,
         11
@@ -572,7 +572,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1036288
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-unique --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-unique --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-bag",
@@ -580,16 +580,16 @@
       "seed": 3,
       "chunk_rows": 1024,
       "seconds": [
-        1.3653483339585364,
-        1.3604145827703178,
-        1.3633630000986159,
-        1.360957833006978,
-        1.361473500262946
+        1.362241666764021,
+        1.3666096669621766,
+        1.3627250422723591,
+        1.3620142498984933,
+        1.361920750234276
       ],
-      "median_seconds": 1.361473500262946,
-      "p95_seconds": 1.3649512671865522,
+      "median_seconds": 1.362241666764021,
+      "p95_seconds": 1.3658327420242131,
       "input_peak_rss_bytes": 240680960,
-      "query_peak_rss_bytes": 252772352,
+      "query_peak_rss_bytes": 252837888,
       "input_shape": [
         32768,
         11
@@ -613,7 +613,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1048576
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     },
     {
       "mode": "mapped-bag",
@@ -621,16 +621,16 @@
       "seed": 3,
       "chunk_rows": 16384,
       "seconds": [
-        0.38237670809030533,
-        0.38151679188013077,
-        0.38295162469148636,
-        0.38224274991080165,
-        0.38184250006452203
+        0.3791745826601982,
+        0.3790050419047475,
+        0.3789002918638289,
+        0.378817583899945,
+        0.3792890841141343
       ],
-      "median_seconds": 0.38224274991080165,
-      "p95_seconds": 0.3828366413712502,
-      "input_peak_rss_bytes": 240713728,
-      "query_peak_rss_bytes": 257081344,
+      "median_seconds": 0.3790050419047475,
+      "p95_seconds": 0.3792661838233471,
+      "input_peak_rss_bytes": 241205248,
+      "query_peak_rss_bytes": 257507328,
       "input_shape": [
         32768,
         11
@@ -654,7 +654,7 @@
         "cache_hits": 0,
         "cache_payload_bytes": 1048576
       },
-      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 16384 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 16384 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-final-20261025.json"
     }
   ],
   "task_quality": [

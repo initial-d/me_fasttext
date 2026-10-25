@@ -64,7 +64,8 @@ expect the reduced `[bags, dim]` output; the adapter does not preserve an ordina
 embedding's unreduced shape. The included character-GRU supports both paths.
 
 The default `strategy="unique"` gathers each distinct original ID once and uses
-PyTorch's bag reduction; staging grows with query diversity. `strategy="chunked"`
+PyTorch's bag reduction; staging grows with query diversity, with at most one
+unused row to retain the configured padding-aware kernel. `strategy="chunked"`
 calls the C reducer with `chunk_rows=1024` (configurable), capping staged rows but
 potentially decoding blocks repeatedly. C accepts complete nondecreasing offsets
 of length `bags+1`, LE FP32/FP16/BF16 rows, sum/mean mode, padding ID or UINT64_MAX,
