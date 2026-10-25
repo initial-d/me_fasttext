@@ -20,10 +20,10 @@ import torch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from tools.causal_ngram_lm import CausalNgramLM, encode_segment, evaluate, metric_summary, prediction_delta
-from tools.benchmark_causal_lm_compression import text_splits
-from tools.engram_row_adapter import MappedEmbedding, file_sha256
-from tools.mapped_embedding_bag import MappedEmbeddingBag
+from tools.causal_ngram_lm import CausalNgramLM, encode_segment, evaluate, metric_summary, prediction_delta  # noqa: E402
+from tools.benchmark_causal_lm_compression import text_splits  # noqa: E402
+from tools.engram_row_adapter import MappedEmbedding, file_sha256  # noqa: E402
+from tools.mapped_embedding_bag import MappedEmbeddingBag  # noqa: E402
 
 
 def sha(data):
@@ -78,7 +78,8 @@ def worker(args):
             return module(ids).sum(-2) / denominator
     else:
         module = MappedEmbeddingBag(artifact, mode="mean", padding_idx=0, chunk_rows=args.chunk_rows,
-                                    native_library=args.native_library, native_cache_bytes=args.cache_bytes)
+                                    native_library=args.native_library, native_cache_bytes=args.cache_bytes,
+                                    strategy="unique" if args.worker == "mapped-unique" else "chunked")
         table = module.gather.table
         def forward():
             return module(ids)
@@ -120,6 +121,7 @@ def worker(args):
                   "output_tensor_bytes": output.numel() * output.element_size(),
                   "source_weight_sha256": weight_digest, "query_ids_sha256": sha(ids.numpy().tobytes()),
                   "checkpoint_sha256": run["checkpoint_sha256"], "all_native_rows_byte_exact": byte_exact,
+                  "distinct_queried_rows": getattr(module, "last_unique_rows", None),
                   "sample_double_oracle_max_abs_error": float(error.max()),
                   "output_sha256": sha(output.numpy().tobytes()), "last_query_native_counters": counters}
         print(json.dumps(result), flush=True)
@@ -164,7 +166,7 @@ def main():
     parser.add_argument("--repeat", type=int, default=5)
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--json-out", type=Path, required=True)
-    parser.add_argument("--worker", choices=["resident-bag", "mapped-gather", "mapped-bag"], help=argparse.SUPPRESS)
+    parser.add_argument("--worker", choices=["resident-bag", "mapped-gather", "mapped-bag", "mapped-unique"], help=argparse.SUPPRESS)
     parser.add_argument("--order", type=int, help=argparse.SUPPRESS)
     args = parser.parse_args()
     args.chunks = [int(v) for v in args.chunks.split(",")]
@@ -195,12 +197,14 @@ def main():
                               "Fresh subprocesses, fixed mode order and warm allocator/page cache; RSS includes checkpoints, framework, inputs, tables and cache.",
                               "Checkpoint weight retained as a common diagnostic baseline in every mode; mapped RSS is not a minimal deployment estimate.",
                               "Native chunks can decode more blocks than a whole-batch gather; report memory/latency tradeoffs and resident baseline.",
+                              "Unique-query mode stages all distinct queried rows plus an inverse index; worst-case staging grows with query diversity. Chunked mode caps staged rows.",
                               "Byte-exact storage does not imply bit-exact reductions. Native FP64 sums can change logits; task delta is measured separately.",
                               "Single-worker CPU; no CUDA, training, weighted or max bags. Corpus/weights remain local."],
               "cases": [], "task_quality": [], "failures": []}
     args.json_out.parent.mkdir(parents=True, exist_ok=True)
     for order in [int(v) for v in args.orders.split(",")]:
-        for mode, chunk in [("resident-bag", args.chunk_rows), ("mapped-gather", args.chunk_rows)] + [("mapped-bag", n) for n in args.chunks]:
+        for mode, chunk in [("resident-bag", args.chunk_rows), ("mapped-gather", args.chunk_rows),
+                            ("mapped-unique", args.chunk_rows)] + [("mapped-bag", n) for n in args.chunks]:
             cmd = [sys.executable, str(Path(__file__).resolve()), "--worker", mode, "--order", str(order),
                    "--training-dir", str(args.training_dir), "--corpus", str(args.corpus),
                    "--native-library", str(args.native_library), "--seed", str(args.seed),

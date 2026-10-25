@@ -1,8 +1,9 @@
 """Immutable CPU EmbeddingBag over native lossless row storage.
 
-No full [bags, entries, dim] gather tensor is built. C stages a bounded number
-of rows and accumulates in FP64, returning FP32 before conversion to table dtype.
-Storage remains byte-exact; reduction order/precision can change model logits.
+No full [bags, entries, dim] gather tensor is built. The default stages distinct
+query IDs once, then invokes PyTorch's native EmbeddingBag reduction. Optional
+chunked C reduction bounds staged rows and accumulates in FP64. Storage remains
+byte-exact; reduction order/precision can change model logits.
 """
 import json
 import ctypes
@@ -10,6 +11,7 @@ from pathlib import Path
 
 import torch
 from torch import nn
+from torch.nn import functional as F
 
 try:
     from .engram_row_adapter import MappedMultiHeadEmbedding, export_multihead
@@ -28,12 +30,14 @@ class MappedEmbeddingBag(nn.Module):
     is_embedding_bag = True
 
     def __init__(self, output_dir, mode="sum", padding_idx=None, include_last_offset=False,
-                 chunk_rows=1024, native_library=None, native_cache_bytes=0):
+                 chunk_rows=1024, native_library=None, native_cache_bytes=0, strategy="unique"):
         super().__init__()
         if mode not in ("sum", "mean") or type(include_last_offset) is not bool:
             raise ValueError("sum/mean mode and boolean include_last_offset required")
         if type(chunk_rows) is not int or not 1 <= chunk_rows <= ctypes.c_size_t(-1).value:
             raise ValueError("chunk_rows must be a positive integer")
+        if strategy not in ("unique", "chunked"):
+            raise ValueError("strategy must be unique or chunked")
         self.gather = MappedMultiHeadEmbedding(output_dir, native_library=native_library,
                                              native_cache_bytes=native_cache_bytes)
         self.num_embeddings, self.embedding_dim = self.gather.metadata["shape"]
@@ -48,6 +52,7 @@ class MappedEmbeddingBag(nn.Module):
             padding_idx %= self.num_embeddings
         self.mode, self.padding_idx = mode, padding_idx
         self.include_last_offset, self.chunk_rows = include_last_offset, chunk_rows
+        self.strategy, self.last_unique_rows = strategy, None
         self.dtype = self.gather.dtype
         self.dtype_code = {torch.float32: 1, torch.float16: 2, torch.bfloat16: 3}[self.dtype]
         self.training = False
@@ -88,6 +93,22 @@ class MappedEmbeddingBag(nn.Module):
                 or bool((boundary[1:] < boundary[:-1]).any())):
             raise ValueError("offsets must be nondecreasing and span all IDs")
         bags = boundary.numel() - 1
+        if self.strategy == "unique":
+            unique, inverse = torch.unique(ids, sorted=True, return_inverse=True)
+            self.last_unique_rows = unique.numel()
+            if not unique.numel():
+                return torch.zeros((bags, self.embedding_dim), dtype=self.dtype)
+            rows = torch.empty((unique.numel(), self.embedding_dim), dtype=self.dtype)
+            self.gather.table.gather_into(unique.data_ptr(), unique.numel(), rows.data_ptr(),
+                                         rows.numel() * rows.element_size())
+            padding = None
+            if self.padding_idx is not None:
+                positions = (unique == self.padding_idx).nonzero().reshape(-1)
+                if positions.numel():
+                    padding = int(positions[0])
+            return F.embedding_bag(inverse, rows, boundary, mode=self.mode,
+                                   include_last_offset=True, padding_idx=padding)
+        self.last_unique_rows = None
         output = torch.empty((bags, self.embedding_dim), dtype=torch.float32)
         self.gather.table.embedding_bag_into(
             ids.data_ptr(), ids.numel(), boundary.data_ptr(), bags, self.dtype_code,

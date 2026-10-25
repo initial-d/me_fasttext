@@ -49,7 +49,7 @@ class MappedBagTest(unittest.TestCase):
                     expected = torch.stack(expected).float().to(dtype)
                     outputs = []
                     for chunk in (1, 2, 1024):
-                        with open_embedding_bag(tmp, chunk_rows=chunk, native_library=self.library) as mapped:
+                        with open_embedding_bag(tmp, chunk_rows=chunk, native_library=self.library, strategy="chunked") as mapped:
                             output = mapped(ids.to(torch.int32), offsets.to(torch.int32))
                             self.assertTrue(torch.equal(output, expected))
                             self.assertEqual(output.dtype, dtype)
@@ -71,7 +71,7 @@ class MappedBagTest(unittest.TestCase):
                 source.weight[0] = torch.tensor([2**-24, -2**-24, 0., -0.])
                 source.weight[1] = torch.tensor([float("inf"), float("nan"), 2., -3.])
             export_embedding_bag(source, tmp)
-            with open_embedding_bag(tmp, native_library=self.library) as mapped:
+            with open_embedding_bag(tmp, native_library=self.library, strategy="chunked") as mapped:
                 ids = torch.tensor([[0], [1]])
                 actual = mapped(ids)
                 torch.testing.assert_close(actual, source(ids), atol=0, rtol=0, equal_nan=True)
@@ -100,6 +100,37 @@ class MappedBagTest(unittest.TestCase):
                 self.assertIs(mapped.eval(), mapped)
             with self.assertRaises(ValueError):
                 mapped(query)
+
+    def test_unique_queries_preserve_dense_bag_results_and_original_ids(self):
+        from tools.mapped_embedding_bag import export_embedding_bag, open_embedding_bag
+        for dtype in (torch.float32, torch.float16, torch.bfloat16):
+            for mode in ("sum", "mean"):
+                for padding in (None, 7):
+                    with self.subTest(dtype=dtype, mode=mode, padding=padding), tempfile.TemporaryDirectory() as tmp:
+                        source = torch.nn.EmbeddingBag(20, 6, mode=mode, padding_idx=padding, dtype=dtype).eval()
+                        ids = torch.tensor([[19, 19, 7, 2], [2, 2, 2, 7], [7, 7, 7, 7]])
+                        export_embedding_bag(source, tmp, predictor="xor")
+                        with open_embedding_bag(tmp, native_library=self.library) as mapped:
+                            actual = mapped(ids)
+                            self.assertTrue(torch.equal(actual, source(ids)))
+                            self.assertEqual(mapped.last_unique_rows, 3)
+                            # The padding row need not occur in the current query.
+                            other = torch.tensor([[2, 19, 2]])
+                            self.assertTrue(torch.equal(mapped(other), source(other)))
+                            self.assertEqual(mapped.last_unique_rows, 2)
+                            # Ragged bags include an empty bag and an all-padding bag.
+                            ragged = torch.tensor([19, 2, 19, 7, 7])
+                            offsets = torch.tensor([0, 3, 3])
+                            self.assertTrue(torch.equal(mapped(ragged, offsets), source(ragged, offsets)))
+                        source.include_last_offset = True
+                        complete_dir = Path(tmp) / "complete-offsets"
+                        export_embedding_bag(source, complete_dir, predictor="xor")
+                        with open_embedding_bag(complete_dir, native_library=self.library) as mapped:
+                            complete = torch.tensor([0, 3, 3, 5])
+                            self.assertTrue(torch.equal(mapped(ragged, complete), source(ragged, complete)))
+                            empty = mapped(torch.empty(0, dtype=torch.int64), torch.tensor([0, 0, 0]))
+                            self.assertTrue(empty.eq(0).all())
+                            self.assertEqual(empty.shape, (2, 6))
 
     def test_native_abi_rejects_bad_capacity_offsets_dtype_and_ids(self):
         from tools.native_row_store import NativeRows, pack_native
