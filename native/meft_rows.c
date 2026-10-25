@@ -1,6 +1,7 @@
 /* POSIX mmap and zlib; independent of the legacy FastText/trie libraries. */
 #include "meft_rows.h"
 #include <fcntl.h>
+#include <float.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -218,4 +219,104 @@ int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
 done:
     free(requests);
     return reason ? fail(err, cap, reason) : 0;
+}
+
+static float row_float(const unsigned char *p, int dtype) {
+    uint32_t bits;
+    if (dtype == 1) {
+        bits = (uint32_t)p[0] | (uint32_t)p[1] << 8 |
+               (uint32_t)p[2] << 16 | (uint32_t)p[3] << 24;
+    } else {
+        uint32_t half = (uint32_t)p[0] | (uint32_t)p[1] << 8;
+        if (dtype == 3) {
+            bits = half << 16;
+        } else {
+            uint32_t sign = (half & 0x8000u) << 16;
+            uint32_t exponent = (half >> 10) & 31u, mantissa = half & 1023u;
+            if (exponent == 31) bits = sign | 0x7f800000u | mantissa << 13;
+            else if (exponent) bits = sign | (exponent + 112u) << 23 | mantissa << 13;
+            else if (!mantissa) bits = sign;
+            else {
+                unsigned shift = 0;
+                while (!(mantissa & 1024u)) { mantissa <<= 1; ++shift; }
+                bits = sign | (113u - shift) << 23 | (mantissa & 1023u) << 13;
+            }
+        }
+    }
+    float value;
+    memcpy(&value, &bits, sizeof(value));
+    return value;
+}
+
+int meft_rows_embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
+                           const uint64_t *offsets, size_t bags, int dtype, int mean,
+                           uint64_t padding_id, size_t chunk_rows,
+                           float *out, size_t out_floats, char *err, size_t cap) {
+    if (!s) return fail(err, cap, "null store");
+    s->last_blocks = s->last_decodes = s->last_hits = 0;
+    size_t element = dtype == 1 ? 4 : 2;
+    if (sizeof(float) != 4 || FLT_RADIX != 2 || FLT_MANT_DIG != 24 ||
+        dtype < 1 || dtype > 3 || (mean != 0 && mean != 1) || !chunk_rows ||
+        s->width > SIZE_MAX || s->width % element)
+        return fail(err, cap, "invalid bag dtype, mode, chunk size or row width");
+    size_t dim = (size_t)(s->width / element);
+    if (bags > SIZE_MAX / dim || bags * dim > out_floats ||
+        dim > SIZE_MAX / sizeof(double) || bags > SIZE_MAX / (dim * sizeof(float)) ||
+        bags > SIZE_MAX / sizeof(uint64_t) - 1 || count > SIZE_MAX / sizeof(uint64_t) ||
+        (bags && (!offsets || !out)) ||
+        (count && (!ids || !bags)) ||
+        (padding_id != UINT64_MAX && padding_id >= s->nrows))
+        return fail(err, cap, "invalid bag capacity, query or padding ID");
+    if (!bags) return 0;
+    if (offsets[0] != 0 || offsets[bags] != count)
+        return fail(err, cap, "bag offsets must span all IDs");
+    for (size_t b = 0; b < bags; ++b)
+        if (offsets[b] > offsets[b + 1] || offsets[b + 1] > count)
+            return fail(err, cap, "bag offsets must be nondecreasing and bounded");
+    for (size_t i = 0; i < count; ++i)
+        if (ids[i] >= s->nrows) return fail(err, cap, "row ID out of bounds");
+    size_t staged = count < chunk_rows ? count : chunk_rows;
+    if (staged > SIZE_MAX / s->width)
+        return fail(err, cap, "bag staging capacity overflow");
+    unsigned char *rows = staged ? malloc(staged * (size_t)s->width) : NULL;
+    double *sum = calloc(dim, sizeof(*sum));
+    if ((staged && !rows) || !sum) {
+        free(rows); free(sum);
+        return fail(err, cap, "allocation failed");
+    }
+    uint64_t blocks = 0, decodes = 0, hits = 0;
+    int status = 0;
+    size_t bag = 0, observed = 0;
+    /* Coalesce blocks across bag boundaries, then consume restored ID order.
+     * Only the active bag's FP64 accumulator and chunk-sized rows are retained.
+     * Chunk boundaries never round partial sums or reset a partially read bag. */
+    for (size_t start = 0; start < count;) {
+        size_t n = count - start < staged ? count - start : staged;
+        status = meft_rows_gather(s, ids + start, n, rows, n * (size_t)s->width, err, cap);
+        blocks += s->last_blocks; decodes += s->last_decodes; hits += s->last_hits;
+        if (status) goto done_bags;
+        for (size_t i = 0; i < n; ++i) {
+            while (bag < bags && offsets[bag + 1] <= start + i) {
+                double divisor = mean && observed ? (double)observed : 1.0;
+                for (size_t j = 0; j < dim; ++j) out[bag * dim + j] = (float)(sum[j] / divisor);
+                ++bag; observed = 0;
+                memset(sum, 0, dim * sizeof(*sum));
+            }
+            if (ids[start + i] == padding_id) continue;
+            ++observed;
+            const unsigned char *row = rows + i * (size_t)s->width;
+            for (size_t j = 0; j < dim; ++j) sum[j] += row_float(row + j * element, dtype);
+        }
+        start += n;
+    }
+    while (bag < bags) {
+        double divisor = mean && observed ? (double)observed : 1.0;
+        for (size_t j = 0; j < dim; ++j) out[bag * dim + j] = (float)(sum[j] / divisor);
+        ++bag; observed = 0;
+        memset(sum, 0, dim * sizeof(*sum));
+    }
+done_bags:
+    s->last_blocks = blocks; s->last_decodes = decodes; s->last_hits = hits;
+    free(rows); free(sum);
+    return status;
 }

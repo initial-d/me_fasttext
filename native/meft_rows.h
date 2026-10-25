@@ -27,6 +27,19 @@ uint64_t meft_rows_cache_bytes(const meft_rows *store);
  */
 int meft_rows_gather(meft_rows *store, const uint64_t *ids, size_t count,
                      void *output, size_t output_bytes, char *error, size_t error_capacity);
+/* Bounded gather + sum/mean for ragged bags. offsets contains bags+1 entries,
+ * starts at 0 and ends at count. dtype: 1=LE float32, 2=LE IEEE float16,
+ * 3=LE bfloat16. Output is bags * (width / element_bytes) native float32.
+ * padding_id=UINT64_MAX disables padding; otherwise that row is excluded from
+ * both sum and mean denominator. Empty bags return zero. max_chunk_rows>0
+ * bounds staged rows. Reductions accumulate in float64 in original ID order;
+ * stored bytes stay exact, but sums are not bit-identical to float32 reduction.
+ * Same single-worker/no-overlapping-inputs/partial-error-output contract as gather.
+ */
+int meft_rows_embedding_bag(meft_rows *store, const uint64_t *ids, size_t count,
+                           const uint64_t *offsets, size_t bags, int dtype, int mean,
+                           uint64_t padding_id, size_t max_chunk_rows,
+                           float *output, size_t output_floats, char *error, size_t error_capacity);
 uint64_t meft_rows_last_block_reads(const meft_rows *store);
 uint64_t meft_rows_last_decompressions(const meft_rows *store);
 uint64_t meft_rows_last_cache_hits(const meft_rows *store);

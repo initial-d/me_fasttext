@@ -1,0 +1,25 @@
+{
+  "full_suite_content_commit": "80a0be4bf912c9280bb68d0be7a005d5750c1f24",
+  "full_suite_note": "Full suite ran before committing this exact code content; subsequent lifecycle-only change tested separately.",
+  "full_suite_command": "/tmp/projects-push-20261023-venv/bin/python -m unittest discover -s tests",
+  "full_suite_result": "58 tests in 3.632s, OK",
+  "empty_input_content_commit": "d1bcf25c0f68836c41f0d8f9b4d83fce714fc68c",
+  "empty_input_command": "/tmp/projects-push-20261023-venv/bin/python -m unittest tests.test_mapped_embedding_bag",
+  "empty_input_result": "6 tests in 0.871s, OK",
+  "empty_input_note": "Validates closed handles and resets native counters on zero-query input; benchmark source 80a0be4 predates only this empty-input guard.",
+  "sanitizer_source_commit": "80a0be4bf912c9280bb68d0be7a005d5750c1f24",
+  "sanitizer_command": "/tmp/projects-push-20261023-venv/bin/python tools/check_native_sanitizers.py",
+  "sanitizer_result": "ASan/UBSan: versions 1/2 and 128 mutated/truncated files checked.",
+  "lint_command": "/tmp/projects-push-20261023-venv/bin/python -m ruff check --isolated --select E4,E7,E9,F tools/mapped_embedding_bag.py tools/benchmark_embedding_bag.py tests/test_mapped_embedding_bag.py",
+  "lint_result": "All checks passed!",
+  "padding_kernel_content_commit": "e61df114f31c9703f378682b1ad9c9bf336dc09d",
+  "padding_kernel_command": "/tmp/projects-push-20261023-venv/bin/python -m unittest discover -s tests",
+  "padding_kernel_result": "58 tests in 3.655s, OK",
+  "padding_kernel_note": "Retains a padding-aware PyTorch reduction kernel by staging one unused padding row when a configured padding ID is absent. Benchmarks rerun at this commit.",
+  "ci_failure_before_fix": {
+    "head": "46595702455f163638cb3b747290822068b7f380",
+    "url": "https://github.com/initial-d/me_fasttext/actions/runs/40148900846/job/121036063249",
+    "failure": "x86 BF16 sum with configured but absent padding differed from nn.EmbeddingBag; regression retains the configured padding-aware kernel instead of relaxing the equality assertion.",
+    "raw_log": "ci-padding-before.txt"
+  }
+}

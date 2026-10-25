@@ -59,8 +59,14 @@ class CausalNgramLM(nn.Module):
     def forward(self, characters, memory_ids, hidden=None, use_memory=True):
         values = self.characters(characters)
         if use_memory:
-            count = memory_ids.ne(0).sum(-1, keepdim=True).clamp_min(1)
-            values = values + self.memory(memory_ids).sum(-2) / count
+            if isinstance(self.memory, nn.EmbeddingBag) or getattr(self.memory, "is_embedding_bag", False):
+                if self.memory.mode != "mean" or self.memory.padding_idx != 0:
+                    raise ValueError("causal memory bags require mean mode and padding_idx=0")
+                memory = self.memory(memory_ids.reshape(-1, memory_ids.shape[-1]))
+                values = values + memory.reshape(*memory_ids.shape[:-1], self.dim)
+            else:
+                count = memory_ids.ne(0).sum(-1, keepdim=True).clamp_min(1)
+                values = values + self.memory(memory_ids).sum(-2) / count
         states, hidden = self.recurrent(values, hidden)
         return self.output(states), hidden
 

@@ -60,6 +60,10 @@ interface proposal to executable code and source-linked evidence.
 - [Bounded native query cache](docs/native_cache_20261022.md): optional decoded
   block reuse with a byte budget, original-byte output and measured hotspot,
   corpus-replay and no-benefit cases. Disabled by default.
+- [Native embedding bags](docs/embedding_bag_evidence_20261025/README.md): sum/mean
+  inference without a full gathered tensor, with query-ID deduplication or bounded
+  C staging. Trained order-4/8/12 tests show 10–24% lower RSS versus native full
+  gather; higher orders trade latency for memory. Dense resident lookup is faster.
 - [High-order memory research plan](docs/ngram_memory_research_plan.md): trained
   structural redundancy, lossless codecs, indexing and serving experiments.
 - [Approximate compression curves](docs/approximate_ngram_compression_20261018.md):
