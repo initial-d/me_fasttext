@@ -97,6 +97,8 @@ class MappedEmbeddingBag(nn.Module):
             unique, inverse = torch.unique(ids, sorted=True, return_inverse=True)
             self.last_unique_rows = unique.numel()
             if not unique.numel():
+                # Validate the handle and reset last-query counters for empty input.
+                self.gather.table.gather_into(ids.data_ptr(), 0, 0, 0)
                 return torch.zeros((bags, self.embedding_dim), dtype=self.dtype)
             rows = torch.empty((unique.numel(), self.embedding_dim), dtype=self.dtype)
             self.gather.table.gather_into(unique.data_ptr(), unique.numel(), rows.data_ptr(),

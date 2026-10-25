@@ -87,6 +87,7 @@ class MappedBagTest(unittest.TestCase):
                 query = torch.tensor([[1, 2, 3], [4, 5, 6]]).t()
                 torch.testing.assert_close(mapped(query), source(query), atol=2e-7, rtol=2e-7)
                 self.assertEqual(mapped(torch.empty((0, 3), dtype=torch.int64)).shape, (0, 5))
+                self.assertEqual(mapped.gather.table.last_block_reads, 0)
                 self.assertTrue(mapped(torch.empty((3, 0), dtype=torch.int64)).eq(0).all())
                 self.assertEqual(mapped(torch.empty(0, dtype=torch.int64), torch.empty(0, dtype=torch.int64)).shape, (0, 5))
                 with self.assertRaises(ValueError):
@@ -100,6 +101,8 @@ class MappedBagTest(unittest.TestCase):
                 self.assertIs(mapped.eval(), mapped)
             with self.assertRaises(ValueError):
                 mapped(query)
+            with self.assertRaises(ValueError):
+                mapped(torch.empty((0, 3), dtype=torch.int64))
 
     def test_unique_queries_preserve_dense_bag_results_and_original_ids(self):
         from tools.mapped_embedding_bag import export_embedding_bag, open_embedding_bag
