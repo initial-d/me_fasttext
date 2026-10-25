@@ -1,0 +1,12 @@
+{"mode": "resident-bag", "order": 4, "chunk_rows": null, "median_seconds": 0.0010894169099628925, "query_peak_rss_bytes": 224722944}
+{"mode": "mapped-gather", "order": 4, "chunk_rows": null, "median_seconds": 0.012094500008970499, "query_peak_rss_bytes": 264716288}
+{"mode": "mapped-bag", "order": 4, "chunk_rows": 1024, "median_seconds": 0.4144202503375709, "query_peak_rss_bytes": 229490688}
+{"mode": "mapped-bag", "order": 4, "chunk_rows": 16384, "median_seconds": 0.034982915967702866, "query_peak_rss_bytes": 233652224}
+{"mode": "resident-bag", "order": 8, "chunk_rows": null, "median_seconds": 0.001637083012610674, "query_peak_rss_bytes": 238813184}
+{"mode": "mapped-gather", "order": 8, "chunk_rows": null, "median_seconds": 0.025433249771595, "query_peak_rss_bytes": 314359808}
+{"mode": "mapped-bag", "order": 8, "chunk_rows": 1024, "median_seconds": 1.1734925410710275, "query_peak_rss_bytes": 245235712}
+{"mode": "mapped-bag", "order": 8, "chunk_rows": 16384, "median_seconds": 0.22592595824971795, "query_peak_rss_bytes": 249298944}
+{"mode": "resident-bag", "order": 12, "chunk_rows": null, "median_seconds": 0.0018992922268807888, "query_peak_rss_bytes": 246644736}
+{"mode": "mapped-gather", "order": 12, "chunk_rows": null, "median_seconds": 0.03045258391648531, "query_peak_rss_bytes": 356433920}
+{"mode": "mapped-bag", "order": 12, "chunk_rows": 1024, "median_seconds": 1.3626854582689703, "query_peak_rss_bytes": 252887040}
+{"mode": "mapped-bag", "order": 12, "chunk_rows": 16384, "median_seconds": 0.37971891602501273, "query_peak_rss_bytes": 256753664}

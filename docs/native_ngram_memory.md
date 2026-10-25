@@ -44,6 +44,41 @@ discarded. One handle is single-threaded because it owns a scratch buffer; use
 one per serving worker and close it explicitly. The C example is an ABI check,
 not an ANN/nearest-neighbor engine.
 
+## Sum/mean bags without a full gathered tensor
+
+For immutable CPU `nn.EmbeddingBag` inference, export the learned rows and
+reduction configuration, then reopen them:
+
+```python
+from tools.mapped_embedding_bag import export_embedding_bag, open_embedding_bag
+
+export_embedding_bag(model.memory, "memory-bag", predictor="xor")
+with open_embedding_bag("memory-bag") as memory:
+    output = memory(ids)  # 2-D fixed bags, or memory(flat_ids, offsets)
+```
+
+This requires an actual sum/mean `nn.EmbeddingBag`, not an arbitrary model memory
+module. To use an existing single-head native embedding artifact, construct
+`MappedEmbeddingBag(path, mode="mean", padding_idx=0)` explicitly. A model must
+expect the reduced `[bags, dim]` output; the adapter does not preserve an ordinary
+embedding's unreduced shape. The included character-GRU supports both paths.
+
+The default `strategy="unique"` gathers each distinct original ID once and uses
+PyTorch's bag reduction; staging grows with query diversity. `strategy="chunked"`
+calls the C reducer with `chunk_rows=1024` (configurable), capping staged rows but
+potentially decoding blocks repeatedly. C accepts complete nondecreasing offsets
+of length `bags+1`, LE FP32/FP16/BF16 rows, sum/mean mode, padding ID or UINT64_MAX,
+and caller-owned FP32 output. C accumulates in FP64; Python casts to source dtype.
+Stored row bytes stay exact, while reduction precision can change model logits.
+
+Both adapters preserve original IDs, exclude padding from sums/counts and return
+zeros for empty/all-padding bags. Ragged offsets must start at zero and cover
+all IDs; `include_last_offset` selects whether the caller supplies the terminal
+count. No training, max mode, per-sample weights, `.weight`/tied heads or CUDA.
+Build the current library for the new C ABI. See the
+[trained-query timings, RSS, exact-byte checks and model deltas](embedding_bag_evidence_20261025/README.md)
+before choosing a strategy; dense resident lookup is faster in these tests.
+
 ## Native layout and construction
 
 `MEFTNAT1` is a binary little-endian format: versioned fixed-size header,

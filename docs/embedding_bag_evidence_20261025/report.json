@@ -1,0 +1,756 @@
+{
+  "category": "trained causal character-memory CPU serving; cyclic held-out ID replay and original test task",
+  "commit": "80a0be4bf912c9280bb68d0be7a005d5750c1f24",
+  "command": "/tmp/projects-push-20261023-venv/bin/python tools/benchmark_embedding_bag.py --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --orders 4,8,12 --seed 3 --bags 32768 --chunks 1024,16384 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "numpy": "2.5.4",
+  "os": "macOS-26.6.2-arm64-arm-64bit",
+  "cpu": "Apple M5",
+  "device": "cpu",
+  "gpu": "not used",
+  "threads": 1,
+  "interop_threads": 1,
+  "native_library_sha256": "919d614d5edea2e6879b4207dcb9bf40166c115af2e03b8a6dd63d40a6d10902",
+  "training_report_sha256": "0ab395574da8186552af5c342d8bc794dda3ef7c3c35a517397c431ea0ac3c2d",
+  "training_commit": "0f16f3eb57ee90aa8969415927be763e7e20aecd",
+  "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "split": {
+    "train": {
+      "characters": 104857,
+      "sha256": "f15404ff4c24dc00791057778d99ede05f9742611d8a82f4a7c5fd372ef914ea"
+    },
+    "validation": {
+      "characters": 13107,
+      "sha256": "cc151404dc3deeeb38a662f07721318bcf2b18889b95bb8ab3491f0c70a921da"
+    },
+    "test": {
+      "characters": 13108,
+      "sha256": "88075da3f975631774f1913cbf2b6280dcc75f8bdd4ae46dd7b62061bf0ad174"
+    }
+  },
+  "cost_assumptions": "Existing local trained checkpoints/cached public corpus; no retraining or paid services.",
+  "settings": {
+    "orders": "4,8,12",
+    "seed": 3,
+    "bags": 32768,
+    "chunk_rows": 1024,
+    "chunks": [
+      1024,
+      16384
+    ],
+    "cache_bytes": 4194304,
+    "warmup": 2,
+    "repeat": 5,
+    "timeout": 300
+  },
+  "limitations": [
+    "Three previously trained orders, one seed/corpus; not trained Engram or a large Transformer.",
+    "Performance repeats chronological test IDs cyclically to fill large batches; not full-model throughput or actual production traces.",
+    "Fresh subprocesses, fixed mode order and warm allocator/page cache; RSS includes checkpoints, framework, inputs, tables and cache.",
+    "Checkpoint weight retained as a common diagnostic baseline in every mode; mapped RSS is not a minimal deployment estimate.",
+    "Native chunks can decode more blocks than a whole-batch gather; report memory/latency tradeoffs and resident baseline.",
+    "Unique-query mode stages all distinct queried rows plus an inverse index; worst-case staging grows with query diversity. Chunked mode caps staged rows.",
+    "Byte-exact storage does not imply bit-exact reductions. Native FP64 sums can change logits; task delta is measured separately.",
+    "Single-worker CPU; no CUDA, training, weighted or max bags. Corpus/weights remain local."
+  ],
+  "cases": [
+    {
+      "mode": "resident-bag",
+      "order": 4,
+      "seed": 3,
+      "chunk_rows": null,
+      "seconds": [
+        0.0010798340663313866,
+        0.0011257501319050789,
+        0.0010652909986674786,
+        0.0010482501238584518,
+        0.0010573333129286766
+      ],
+      "median_seconds": 0.0010652909986674786,
+      "p95_seconds": 0.0011165669187903405,
+      "input_peak_rss_bytes": 215121920,
+      "query_peak_rss_bytes": 224935936,
+      "input_shape": [
+        32768,
+        3
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 25165824,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323",
+      "query_ids_sha256": "c9d6504d28ac91f4bedc124d8ab07634c592d0b820448ba006077b8ebaed67bb",
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "all_native_rows_byte_exact": null,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 9.934107469966591e-08,
+      "output_sha256": "158d0045c54463249e725c17546bdfd77e67271caf2f9a512694d351da90be6e",
+      "last_query_native_counters": null,
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker resident-bag --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-gather",
+      "order": 4,
+      "seed": 3,
+      "chunk_rows": null,
+      "seconds": [
+        0.009943374898284674,
+        0.009923959150910378,
+        0.009938374627381563,
+        0.009844624903053045,
+        0.009852750226855278
+      ],
+      "median_seconds": 0.009923959150910378,
+      "p95_seconds": 0.009942374844104051,
+      "input_peak_rss_bytes": 216645632,
+      "query_peak_rss_bytes": 263159808,
+      "input_shape": [
+        32768,
+        3
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 25165824,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323",
+      "query_ids_sha256": "c9d6504d28ac91f4bedc124d8ab07634c592d0b820448ba006077b8ebaed67bb",
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 9.934107469966591e-08,
+      "output_sha256": "158d0045c54463249e725c17546bdfd77e67271caf2f9a512694d351da90be6e",
+      "last_query_native_counters": {
+        "block_reads": 184,
+        "decompressions": 184,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1044480
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-gather --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-unique",
+      "order": 4,
+      "seed": 3,
+      "chunk_rows": null,
+      "seconds": [
+        0.009082499891519547,
+        0.008958917111158371,
+        0.009251125156879425,
+        0.008920624852180481,
+        0.008917625062167645
+      ],
+      "median_seconds": 0.008958917111158371,
+      "p95_seconds": 0.00921740010380745,
+      "input_peak_rss_bytes": 216547328,
+      "query_peak_rss_bytes": 236355584,
+      "input_shape": [
+        32768,
+        3
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 25165824,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323",
+      "query_ids_sha256": "c9d6504d28ac91f4bedc124d8ab07634c592d0b820448ba006077b8ebaed67bb",
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": 6604,
+      "sample_double_oracle_max_abs_error": 9.934107469966591e-08,
+      "output_sha256": "158d0045c54463249e725c17546bdfd77e67271caf2f9a512694d351da90be6e",
+      "last_query_native_counters": {
+        "block_reads": 184,
+        "decompressions": 184,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1044480
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-unique --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-bag",
+      "order": 4,
+      "seed": 3,
+      "chunk_rows": 1024,
+      "seconds": [
+        0.4149221247062087,
+        0.4143583751283586,
+        0.413224833086133,
+        0.41447254084050655,
+        0.41382087487727404
+      ],
+      "median_seconds": 0.4143583751283586,
+      "p95_seconds": 0.4148322079330683,
+      "input_peak_rss_bytes": 216465408,
+      "query_peak_rss_bytes": 229310464,
+      "input_shape": [
+        32768,
+        3
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 25165824,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323",
+      "query_ids_sha256": "c9d6504d28ac91f4bedc124d8ab07634c592d0b820448ba006077b8ebaed67bb",
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 5.960464477539063e-08,
+      "output_sha256": "790af180b598bb843ddcc7d3342c692d4e9ecae52c375513bd5bfa0d59dcb046",
+      "last_query_native_counters": {
+        "block_reads": 14975,
+        "decompressions": 14975,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1044480
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-bag",
+      "order": 4,
+      "seed": 3,
+      "chunk_rows": 16384,
+      "seconds": [
+        0.03513512481004,
+        0.035199166275560856,
+        0.035133040975779295,
+        0.034966417122632265,
+        0.03503441717475653
+      ],
+      "median_seconds": 0.035133040975779295,
+      "p95_seconds": 0.03518635798245669,
+      "input_peak_rss_bytes": 216383488,
+      "query_peak_rss_bytes": 233357312,
+      "input_shape": [
+        32768,
+        3
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 25165824,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323",
+      "query_ids_sha256": "c9d6504d28ac91f4bedc124d8ab07634c592d0b820448ba006077b8ebaed67bb",
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 5.960464477539063e-08,
+      "output_sha256": "790af180b598bb843ddcc7d3342c692d4e9ecae52c375513bd5bfa0d59dcb046",
+      "last_query_native_counters": {
+        "block_reads": 1104,
+        "decompressions": 1104,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1044480
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 4 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 16384 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "resident-bag",
+      "order": 8,
+      "seed": 3,
+      "chunk_rows": null,
+      "seconds": [
+        0.001606374979019165,
+        0.0016058334149420261,
+        0.0016175000928342342,
+        0.0016125831753015518,
+        0.0016077496111392975
+      ],
+      "median_seconds": 0.0016077496111392975,
+      "p95_seconds": 0.0016165167093276978,
+      "input_peak_rss_bytes": 234356736,
+      "query_peak_rss_bytes": 238878720,
+      "input_shape": [
+        32768,
+        7
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 58720256,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "0e8b9cb031160e8df3fa6ebc3f76ab5e718940d0564b573772b46a06d6812b63",
+      "query_ids_sha256": "f8c4d20026b1b88df48ec987e88f5e127a031a4b3c9092fe2169630be9d06bb0",
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "all_native_rows_byte_exact": null,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 1.1920928955078125e-07,
+      "output_sha256": "94420bb9acc314fd856997df3e0a47ce16142cda6dc19fc50f0179a06561a61f",
+      "last_query_native_counters": null,
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker resident-bag --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-gather",
+      "order": 8,
+      "seed": 3,
+      "chunk_rows": null,
+      "seconds": [
+        0.025768457911908627,
+        0.025695291813462973,
+        0.02563616679981351,
+        0.025612167082726955,
+        0.025630333926528692
+      ],
+      "median_seconds": 0.02563616679981351,
+      "p95_seconds": 0.025753824692219495,
+      "input_peak_rss_bytes": 236683264,
+      "query_peak_rss_bytes": 314458112,
+      "input_shape": [
+        32768,
+        7
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 58720256,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "0e8b9cb031160e8df3fa6ebc3f76ab5e718940d0564b573772b46a06d6812b63",
+      "query_ids_sha256": "f8c4d20026b1b88df48ec987e88f5e127a031a4b3c9092fe2169630be9d06bb0",
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 1.1920928955078125e-07,
+      "output_sha256": "94420bb9acc314fd856997df3e0a47ce16142cda6dc19fc50f0179a06561a61f",
+      "last_query_native_counters": {
+        "block_reads": 574,
+        "decompressions": 574,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1042944
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-gather --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-unique",
+      "order": 8,
+      "seed": 3,
+      "chunk_rows": null,
+      "seconds": [
+        0.027653707657009363,
+        0.027742040809243917,
+        0.027644749730825424,
+        0.027621750254184008,
+        0.027628999669104815
+      ],
+      "median_seconds": 0.027644749730825424,
+      "p95_seconds": 0.027724374178797008,
+      "input_peak_rss_bytes": 234471424,
+      "query_peak_rss_bytes": 257146880,
+      "input_shape": [
+        32768,
+        7
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 58720256,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "0e8b9cb031160e8df3fa6ebc3f76ab5e718940d0564b573772b46a06d6812b63",
+      "query_ids_sha256": "f8c4d20026b1b88df48ec987e88f5e127a031a4b3c9092fe2169630be9d06bb0",
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": 15152,
+      "sample_double_oracle_max_abs_error": 1.1920928955078125e-07,
+      "output_sha256": "94420bb9acc314fd856997df3e0a47ce16142cda6dc19fc50f0179a06561a61f",
+      "last_query_native_counters": {
+        "block_reads": 574,
+        "decompressions": 574,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1042944
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-unique --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-bag",
+      "order": 8,
+      "seed": 3,
+      "chunk_rows": 1024,
+      "seconds": [
+        1.1736598750576377,
+        1.177854291163385,
+        1.173419542144984,
+        1.1737200831994414,
+        1.1735303341411054
+      ],
+      "median_seconds": 1.1736598750576377,
+      "p95_seconds": 1.1770274495705961,
+      "input_peak_rss_bytes": 235094016,
+      "query_peak_rss_bytes": 245661696,
+      "input_shape": [
+        32768,
+        7
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 58720256,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "0e8b9cb031160e8df3fa6ebc3f76ab5e718940d0564b573772b46a06d6812b63",
+      "query_ids_sha256": "f8c4d20026b1b88df48ec987e88f5e127a031a4b3c9092fe2169630be9d06bb0",
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 5.960464477539063e-08,
+      "output_sha256": "44fd1137fe8ba333281666cb4382e73c60f74e6d5306634b660f322cb950a08a",
+      "last_query_native_counters": {
+        "block_reads": 42358,
+        "decompressions": 42358,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1048576
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-bag",
+      "order": 8,
+      "seed": 3,
+      "chunk_rows": 16384,
+      "seconds": [
+        0.22571924980729818,
+        0.22593679185956717,
+        0.22604829212650657,
+        0.22607912495732307,
+        0.22580812498927116
+      ],
+      "median_seconds": 0.22593679185956717,
+      "p95_seconds": 0.22607295839115976,
+      "input_peak_rss_bytes": 234602496,
+      "query_peak_rss_bytes": 249315328,
+      "input_shape": [
+        32768,
+        7
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 58720256,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "0e8b9cb031160e8df3fa6ebc3f76ab5e718940d0564b573772b46a06d6812b63",
+      "query_ids_sha256": "f8c4d20026b1b88df48ec987e88f5e127a031a4b3c9092fe2169630be9d06bb0",
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 5.960464477539063e-08,
+      "output_sha256": "44fd1137fe8ba333281666cb4382e73c60f74e6d5306634b660f322cb950a08a",
+      "last_query_native_counters": {
+        "block_reads": 7872,
+        "decompressions": 7872,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1042944
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 8 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 16384 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "resident-bag",
+      "order": 12,
+      "seed": 3,
+      "chunk_rows": null,
+      "seconds": [
+        0.0018687089905142784,
+        0.001872125081717968,
+        0.00186991598457098,
+        0.001865082886070013,
+        0.001859624870121479
+      ],
+      "median_seconds": 0.0018687089905142784,
+      "p95_seconds": 0.0018716832622885705,
+      "input_peak_rss_bytes": 240549888,
+      "query_peak_rss_bytes": 246923264,
+      "input_shape": [
+        32768,
+        11
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 92274688,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "530a17bab5f26cb25db40425b1f57616f527687e9c87188ad04b27a87bdf7499",
+      "query_ids_sha256": "9cebe3a6ce4480c5364d4beeec615cca46ec977809eb8eb7b8e4dbdab3aaa4be",
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "all_native_rows_byte_exact": null,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 1.1920928955078125e-07,
+      "output_sha256": "1bc5f29ae6eee58050d5f209fc49622048d53c2ecb433a50eab15e872a56ffe3",
+      "last_query_native_counters": null,
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker resident-bag --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-gather",
+      "order": 12,
+      "seed": 3,
+      "chunk_rows": null,
+      "seconds": [
+        0.030080041848123074,
+        0.030609999783337116,
+        0.030492582824081182,
+        0.030415792018175125,
+        0.030099375173449516
+      ],
+      "median_seconds": 0.030415792018175125,
+      "p95_seconds": 0.030586516391485928,
+      "input_peak_rss_bytes": 244514816,
+      "query_peak_rss_bytes": 357482496,
+      "input_shape": [
+        32768,
+        11
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 92274688,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "530a17bab5f26cb25db40425b1f57616f527687e9c87188ad04b27a87bdf7499",
+      "query_ids_sha256": "9cebe3a6ce4480c5364d4beeec615cca46ec977809eb8eb7b8e4dbdab3aaa4be",
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 1.1920928955078125e-07,
+      "output_sha256": "1bc5f29ae6eee58050d5f209fc49622048d53c2ecb433a50eab15e872a56ffe3",
+      "last_query_native_counters": {
+        "block_reads": 673,
+        "decompressions": 673,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1036288
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-gather --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-unique",
+      "order": 12,
+      "seed": 3,
+      "chunk_rows": null,
+      "seconds": [
+        0.04408316686749458,
+        0.04163970844820142,
+        0.041569416876882315,
+        0.04369375016540289,
+        0.04081037500873208
+      ],
+      "median_seconds": 0.04163970844820142,
+      "p95_seconds": 0.04400528352707624,
+      "input_peak_rss_bytes": 240386048,
+      "query_peak_rss_bytes": 272318464,
+      "input_shape": [
+        32768,
+        11
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 92274688,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "530a17bab5f26cb25db40425b1f57616f527687e9c87188ad04b27a87bdf7499",
+      "query_ids_sha256": "9cebe3a6ce4480c5364d4beeec615cca46ec977809eb8eb7b8e4dbdab3aaa4be",
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": 16746,
+      "sample_double_oracle_max_abs_error": 1.1920928955078125e-07,
+      "output_sha256": "1bc5f29ae6eee58050d5f209fc49622048d53c2ecb433a50eab15e872a56ffe3",
+      "last_query_native_counters": {
+        "block_reads": 673,
+        "decompressions": 673,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1036288
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-unique --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-bag",
+      "order": 12,
+      "seed": 3,
+      "chunk_rows": 1024,
+      "seconds": [
+        1.3653483339585364,
+        1.3604145827703178,
+        1.3633630000986159,
+        1.360957833006978,
+        1.361473500262946
+      ],
+      "median_seconds": 1.361473500262946,
+      "p95_seconds": 1.3649512671865522,
+      "input_peak_rss_bytes": 240680960,
+      "query_peak_rss_bytes": 252772352,
+      "input_shape": [
+        32768,
+        11
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 92274688,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "530a17bab5f26cb25db40425b1f57616f527687e9c87188ad04b27a87bdf7499",
+      "query_ids_sha256": "9cebe3a6ce4480c5364d4beeec615cca46ec977809eb8eb7b8e4dbdab3aaa4be",
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 5.960464477539063e-08,
+      "output_sha256": "c28da58899ad7e79c626dedd4448256061cea58f9253f440c63837548c65e42d",
+      "last_query_native_counters": {
+        "block_reads": 49084,
+        "decompressions": 49084,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1048576
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 1024 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    },
+    {
+      "mode": "mapped-bag",
+      "order": 12,
+      "seed": 3,
+      "chunk_rows": 16384,
+      "seconds": [
+        0.38237670809030533,
+        0.38151679188013077,
+        0.38295162469148636,
+        0.38224274991080165,
+        0.38184250006452203
+      ],
+      "median_seconds": 0.38224274991080165,
+      "p95_seconds": 0.3828366413712502,
+      "input_peak_rss_bytes": 240713728,
+      "query_peak_rss_bytes": 257081344,
+      "input_shape": [
+        32768,
+        11
+      ],
+      "output_shape": [
+        32768,
+        64
+      ],
+      "full_gather_tensor_bytes": 92274688,
+      "output_tensor_bytes": 8388608,
+      "source_weight_sha256": "530a17bab5f26cb25db40425b1f57616f527687e9c87188ad04b27a87bdf7499",
+      "query_ids_sha256": "9cebe3a6ce4480c5364d4beeec615cca46ec977809eb8eb7b8e4dbdab3aaa4be",
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "all_native_rows_byte_exact": true,
+      "distinct_queried_rows": null,
+      "sample_double_oracle_max_abs_error": 5.960464477539063e-08,
+      "output_sha256": "c28da58899ad7e79c626dedd4448256061cea58f9253f440c63837548c65e42d",
+      "last_query_native_counters": {
+        "block_reads": 13383,
+        "decompressions": 13383,
+        "cache_hits": 0,
+        "cache_payload_bytes": 1048576
+      },
+      "command": "/tmp/projects-push-20261023-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/benchmark_embedding_bag.py --worker mapped-bag --order 12 --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --native-library build/libmeft_rows.dylib --seed 3 --bags 32768 --chunk-rows 16384 --cache-bytes 4194304 --warmup 2 --repeat 5 --json-out /tmp/embedding-bag-unique-20261025.json"
+    }
+  ],
+  "task_quality": [
+    {
+      "order": 4,
+      "seed": 3,
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "trained_state_sha256": "17df0439b2e8dbc020205a4244be0fd46f1ea97dd74cd1bcedb03ae9af75052e",
+      "reference_test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6103526332244646,
+        "character_perplexity": 5.004575696375078,
+        "next_character_accuracy": 0.5303227785018784,
+        "unknown_targets": 0
+      },
+      "native_bag_test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6103526332244646,
+        "character_perplexity": 5.004575696375078,
+        "next_character_accuracy": 0.5303227785018784,
+        "unknown_targets": 0
+      },
+      "prediction_delta": {
+        "perplexity_relative_change": 0.0,
+        "mean_prediction_kl_nats": 0.0,
+        "prediction_kl_p99_nats": 0.0,
+        "maximum_prediction_kl_nats": 0.0,
+        "top1_changed_fraction": 0.0,
+        "accuracy_change": 0.0,
+        "maximum_absolute_logit_change": 0.0,
+        "maximum_per_target_cross_entropy_increase": 0.0
+      },
+      "target_ids_identical": true
+    },
+    {
+      "order": 8,
+      "seed": 3,
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "trained_state_sha256": "ed2cf6d59ca7b2ec5da9bd9f2485653bd8cead301fd3b43f37f68ffb78bfc5ca",
+      "reference_test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7329816830619431,
+        "character_perplexity": 5.6574976495151015,
+        "next_character_accuracy": 0.5241125507935291,
+        "unknown_targets": 0
+      },
+      "native_bag_test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7329816830619431,
+        "character_perplexity": 5.6574976495151015,
+        "next_character_accuracy": 0.5241125507935291,
+        "unknown_targets": 0
+      },
+      "prediction_delta": {
+        "perplexity_relative_change": 0.0,
+        "mean_prediction_kl_nats": 0.0,
+        "prediction_kl_p99_nats": 0.0,
+        "maximum_prediction_kl_nats": 0.0,
+        "top1_changed_fraction": 0.0,
+        "accuracy_change": 0.0,
+        "maximum_absolute_logit_change": 0.0,
+        "maximum_per_target_cross_entropy_increase": 0.0
+      },
+      "target_ids_identical": true
+    },
+    {
+      "order": 12,
+      "seed": 3,
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "trained_state_sha256": "d599e4f5556bfdc0f52e9f90aa366a94fc3f15f36d907ee42bf6cb1ddf863bf2",
+      "reference_test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7466553087645582,
+        "character_perplexity": 5.735387459268665,
+        "next_character_accuracy": 0.5228091696695546,
+        "unknown_targets": 0
+      },
+      "native_bag_test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7466553087645582,
+        "character_perplexity": 5.735387459268665,
+        "next_character_accuracy": 0.5228091696695546,
+        "unknown_targets": 0
+      },
+      "prediction_delta": {
+        "perplexity_relative_change": 0.0,
+        "mean_prediction_kl_nats": 0.0,
+        "prediction_kl_p99_nats": 0.0,
+        "maximum_prediction_kl_nats": 0.0,
+        "top1_changed_fraction": 0.0,
+        "accuracy_change": 0.0,
+        "maximum_absolute_logit_change": 0.0,
+        "maximum_per_target_cross_entropy_increase": 0.0
+      },
+      "target_ids_identical": true
+    }
+  ],
+  "failures": []
+}
