@@ -15,6 +15,29 @@ except ImportError:
 
 @unittest.skipUnless(torch is not None and shutil.which("cc"), "optional PyTorch and compiler required")
 class MappedBagTest(unittest.TestCase):
+    def test_dense_compaction_and_budget_fallback_preserve_sorted_original_ids(self):
+        from tools.mapped_embedding_bag import export_embedding_bag, open_embedding_bag
+        with tempfile.TemporaryDirectory() as tmp:
+            source = torch.nn.EmbeddingBag(32, 7, mode="mean", padding_idx=0).eval()
+            export_embedding_bag(source, tmp)
+            ids = torch.tensor([[31, 2, 31, 0, 4]]).repeat(40, 1)
+            with open_embedding_bag(tmp, native_library=self.library) as dense:
+                actual = dense(ids)
+                self.assertEqual(dense.last_unique_method, "dense")
+                with open_embedding_bag(tmp, native_library=self.library, unique_method="sort") as sorted_bag:
+                    self.assertTrue(torch.equal(actual, sorted_bag(ids)))
+                self.assertTrue(torch.equal(actual, source(ids)))
+                # A tiny query must not scan a large addressable row domain.
+                dense(torch.tensor([[31]]))
+                self.assertEqual(dense.last_unique_method, "sort")
+            for budget in (0, 32 * 16 - 1):
+                with open_embedding_bag(tmp, native_library=self.library, unique_index_bytes=budget) as fallback:
+                    self.assertTrue(torch.equal(actual, fallback(ids)))
+                    self.assertEqual(fallback.last_unique_method, "sort")
+            with open_embedding_bag(tmp, native_library=self.library, unique_index_bytes=32 * 16) as exact:
+                self.assertTrue(torch.equal(actual, exact(ids)))
+                self.assertEqual(exact.last_unique_method, "dense")
+
     @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()

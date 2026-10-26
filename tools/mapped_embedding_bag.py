@@ -30,7 +30,8 @@ class MappedEmbeddingBag(nn.Module):
     is_embedding_bag = True
 
     def __init__(self, output_dir, mode="sum", padding_idx=None, include_last_offset=False,
-                 chunk_rows=1024, native_library=None, native_cache_bytes=0, strategy="unique"):
+                 chunk_rows=1024, native_library=None, native_cache_bytes=0, strategy="unique",
+                 unique_method="auto", unique_index_bytes=8 * 1024 * 1024):
         super().__init__()
         if mode not in ("sum", "mean") or type(include_last_offset) is not bool:
             raise ValueError("sum/mean mode and boolean include_last_offset required")
@@ -38,6 +39,10 @@ class MappedEmbeddingBag(nn.Module):
             raise ValueError("chunk_rows must be a positive integer")
         if strategy not in ("unique", "chunked"):
             raise ValueError("strategy must be unique or chunked")
+        if unique_method not in ("auto", "sort"):
+            raise ValueError("unique_method must be auto or sort")
+        if type(unique_index_bytes) is not int or unique_index_bytes < 0:
+            raise ValueError("unique_index_bytes must be a nonnegative integer")
         self.gather = MappedMultiHeadEmbedding(output_dir, native_library=native_library,
                                              native_cache_bytes=native_cache_bytes)
         self.num_embeddings, self.embedding_dim = self.gather.metadata["shape"]
@@ -53,6 +58,8 @@ class MappedEmbeddingBag(nn.Module):
         self.mode, self.padding_idx = mode, padding_idx
         self.include_last_offset, self.chunk_rows = include_last_offset, chunk_rows
         self.strategy, self.last_unique_rows = strategy, None
+        self.unique_method, self.unique_index_bytes = unique_method, unique_index_bytes
+        self.last_unique_method = None
         self.dtype = self.gather.dtype
         self.dtype_code = {torch.float32: 1, torch.float16: 2, torch.bfloat16: 3}[self.dtype]
         self.training = False
@@ -94,7 +101,21 @@ class MappedEmbeddingBag(nn.Module):
             raise ValueError("offsets must be nondecreasing and span all IDs")
         bags = boundary.numel() - 1
         if self.strategy == "unique":
-            unique, inverse = torch.unique(ids, sorted=True, return_inverse=True)
+            # O(query + table) compaction beats sorting repeated large batches.
+            # Bound the histogram + lookup table; sparse/huge tables use sorting.
+            if (ids.numel() and self.unique_method == "auto"
+                    and self.num_embeddings <= ids.numel() * 4
+                    and self.num_embeddings * 16 <= self.unique_index_bytes):
+                histogram = torch.bincount(ids, minlength=self.num_embeddings)
+                unique = histogram.nonzero().reshape(-1)
+                lookup = torch.empty(self.num_embeddings, dtype=torch.int64)
+                lookup[unique] = torch.arange(unique.numel(), dtype=torch.int64)
+                inverse = lookup[ids]
+                del histogram, lookup
+                self.last_unique_method = "dense"
+            else:
+                unique, inverse = torch.unique(ids, sorted=True, return_inverse=True)
+                self.last_unique_method = "sort"
             self.last_unique_rows = unique.numel()
             if not unique.numel():
                 # Validate the handle and reset last-query counters for empty input.
@@ -117,7 +138,7 @@ class MappedEmbeddingBag(nn.Module):
                                          rows.numel() * rows.element_size())
             return F.embedding_bag(inverse, rows, boundary, mode=self.mode,
                                    include_last_offset=True, padding_idx=padding)
-        self.last_unique_rows = None
+        self.last_unique_rows = self.last_unique_method = None
         output = torch.empty((bags, self.embedding_dim), dtype=torch.float32)
         self.gather.table.embedding_bag_into(
             ids.data_ptr(), ids.numel(), boundary.data_ptr(), bags, self.dtype_code,
