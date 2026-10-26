@@ -7,10 +7,22 @@
 [![Evaluator quickstart](https://img.shields.io/badge/evaluator-quickstart-blue)](docs/evaluator_quickstart.md)
 [![Showcase](https://img.shields.io/badge/use_cases-showcase-orange)](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
 
-**Compact n-gram memory: exact indexing, storage compression, and mmap lookup.**
-`me_fasttext` explores these systems problems through a FastText-derived C++
-prototype, a native C row-gather backend, and PyTorch adapters for Engram-style
-lookup experiments.
+> [!IMPORTANT]
+> **me_fasttext：面向 learned n-gram memory 的无损存储与高效查询后端，保持原始寻址和向量字节。**
+>
+> **A lossless storage and efficient query backend for learned n-gram memory, preserving original addressing and vector bytes.**
+
+The native C row store and PyTorch adapters serve immutable CPU memory tables
+through compressed blocks, mmap, bounded caches and batched queries. The
+byte-preservation contract applies to this native backend; the FastText-derived
+legacy C++ exporter also supports approximate row sharing.
+
+[**C / PyTorch integration**](docs/native_ngram_memory.md)
+· [**Trained-model quality checks**](docs/causal_lm_evidence_20261024/README.md)
+· [**Query latency and memory results**](docs/bag_compaction_evidence_20261026/README.md)
+
+Current learned-model evidence uses small CPU reference models; Engram
+compatibility is checked through the official demonstration implementation.
 
 This repository accompanies the paper [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).
 
