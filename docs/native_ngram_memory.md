@@ -80,6 +80,15 @@ Build the current library for the new C ABI. See the
 [trained-query timings, RSS, exact-byte checks and model deltas](embedding_bag_evidence_20261025/README.md)
 before choosing a strategy; dense resident lookup is faster in these tests.
 
+Large repeated batches now use `unique_method="auto"` to compact IDs with a
+histogram and lookup table when the addressable table has at most four rows per
+queried ID and those two index buffers fit `unique_index_bytes` (default 8 MiB).
+Otherwise the adapter falls back to sorted unique IDs. Set `unique_method="sort"`
+to retain the previous method, or `unique_index_bytes=0` to disable dense
+compaction. Both paths preserve sorted original IDs, inverse bag membership and
+the same reduction kernel; this index budget does not cap staged embedding rows
+or total RSS. The retained table still supports arbitrary future queries.
+
 ## Native layout and construction
 
 `MEFTNAT1` is a binary little-endian format: versioned fixed-size header,

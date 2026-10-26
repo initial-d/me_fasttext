@@ -1,0 +1,8 @@
+{
+  "tested_content_commit": "8f39b1dd543c44d66f42a262633ab4ef93633aa0",
+  "note": "Tests preceded committing this exact code content. C unchanged.",
+  "test_command": "/tmp/projects-push-20261023-venv/bin/python -m unittest discover -s tests",
+  "test_result": "59 tests in 4.728s, OK",
+  "lint_command": "/tmp/projects-push-20261023-venv/bin/python -m ruff check --isolated --select E4,E7,E9,F tools/mapped_embedding_bag.py tools/benchmark_embedding_bag.py tests/test_mapped_embedding_bag.py",
+  "lint_result": "All checks passed!"
+}
