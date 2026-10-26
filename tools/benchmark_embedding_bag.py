@@ -79,7 +79,8 @@ def worker(args):
     else:
         module = MappedEmbeddingBag(artifact, mode="mean", padding_idx=0, chunk_rows=args.chunk_rows,
                                     native_library=args.native_library, native_cache_bytes=args.cache_bytes,
-                                    strategy="unique" if args.worker == "mapped-unique" else "chunked")
+                                    strategy="unique" if args.worker.startswith("mapped-unique") else "chunked",
+                                    unique_method="sort" if args.worker == "mapped-unique-sort" else "auto")
         table = module.gather.table
         def forward():
             return module(ids)
@@ -122,6 +123,7 @@ def worker(args):
                   "source_weight_sha256": weight_digest, "query_ids_sha256": sha(ids.numpy().tobytes()),
                   "checkpoint_sha256": run["checkpoint_sha256"], "all_native_rows_byte_exact": byte_exact,
                   "distinct_queried_rows": getattr(module, "last_unique_rows", None),
+                  "unique_method": getattr(module, "last_unique_method", None),
                   "sample_double_oracle_max_abs_error": float(error.max()),
                   "output_sha256": sha(output.numpy().tobytes()), "last_query_native_counters": counters}
         print(json.dumps(result), flush=True)
@@ -166,7 +168,7 @@ def main():
     parser.add_argument("--repeat", type=int, default=5)
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--json-out", type=Path, required=True)
-    parser.add_argument("--worker", choices=["resident-bag", "mapped-gather", "mapped-bag", "mapped-unique"], help=argparse.SUPPRESS)
+    parser.add_argument("--worker", choices=["resident-bag", "mapped-gather", "mapped-bag", "mapped-unique", "mapped-unique-sort"], help=argparse.SUPPRESS)
     parser.add_argument("--order", type=int, help=argparse.SUPPRESS)
     args = parser.parse_args()
     args.chunks = [int(v) for v in args.chunks.split(",")]
@@ -198,13 +200,14 @@ def main():
                               "Checkpoint weight retained as a common diagnostic baseline in every mode; mapped RSS is not a minimal deployment estimate.",
                               "Native chunks can decode more blocks than a whole-batch gather; report memory/latency tradeoffs and resident baseline.",
                               "Unique-query mode stages all distinct queried rows plus an inverse index; worst-case staging grows with query diversity. Chunked mode caps staged rows.",
+                              "Auto ID compaction scans the row domain only when histogram/lookup fit an 8 MiB index budget and rows <= 4*queries; otherwise it sorts.",
                               "Byte-exact storage does not imply bit-exact reductions. Native FP64 sums can change logits; task delta is measured separately.",
                               "Single-worker CPU; no CUDA, training, weighted or max bags. Corpus/weights remain local."],
               "cases": [], "task_quality": [], "failures": []}
     args.json_out.parent.mkdir(parents=True, exist_ok=True)
     for order in [int(v) for v in args.orders.split(",")]:
         for mode, chunk in [("resident-bag", args.chunk_rows), ("mapped-gather", args.chunk_rows),
-                            ("mapped-unique", args.chunk_rows)] + [("mapped-bag", n) for n in args.chunks]:
+                            ("mapped-unique-sort", args.chunk_rows), ("mapped-unique", args.chunk_rows)] + [("mapped-bag", n) for n in args.chunks]:
             cmd = [sys.executable, str(Path(__file__).resolve()), "--worker", mode, "--order", str(order),
                    "--training-dir", str(args.training_dir), "--corpus", str(args.corpus),
                    "--native-library", str(args.native_library), "--seed", str(args.seed),
