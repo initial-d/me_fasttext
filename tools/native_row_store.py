@@ -1,14 +1,38 @@
 """Native C ABI bindings and exporter for the versioned MEFTNAT1 format."""
 import ctypes
+from contextlib import contextmanager
 import os
 from pathlib import Path
 import struct
+import stat
 import tempfile
 import zlib
 
 HEADER = struct.Struct("<8s6Q")
 DESC = struct.Struct("<4Q")
 ROW = struct.Struct("<Q")
+
+
+@contextmanager
+def _atomic_output(output):
+    """Publish a complete same-filesystem file; existing mmap handles keep theirs."""
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="wb", dir=output.parent,
+                                         prefix="." + output.name + ".", suffix=".tmp",
+                                         delete=False) as dest:
+            temporary = Path(dest.name)
+            yield dest
+            dest.flush()
+            os.fsync(dest.fileno())
+            # Preserve regular-file access permissions when replacing a table.
+            # New artifacts keep the owner's tempfile permissions.
+            if output.is_file() and not output.is_symlink():
+                os.chmod(temporary, stat.S_IMODE(output.stat().st_mode))
+        os.replace(temporary, output)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
@@ -22,6 +46,10 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
     and writes format version 2. Version 1 remains the default. Optional
     row_order is a full permutation of original IDs; its validation uses O(n)
     memory and reading becomes nonsequential. Original query IDs stay unchanged.
+    The complete table is flushed/fsynced into a sibling temporary file before
+    atomic replacement. Failed construction/publication preserves the old file;
+    readers already mmap-ing it continue reading the old inode. This covers this
+    single file, not multi-file adapter metadata or concurrent-writer coordination.
     """
     source, output = Path(source), Path(output)
     if source.resolve() == output.resolve() or row_bytes <= 0 or block_rows <= 0:
@@ -84,7 +112,7 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
         if pending:
             flush()
         payload_start = HEADER.size + nrows * ROW.size + len(blocks) * DESC.size
-        with output.open("wb") as dest:
+        with _atomic_output(output) as dest:
             version = 2 if predictor == "xor" else 1
             dest.write(HEADER.pack(b"MEFTNAT1", version, nrows, row_bytes, unique, block_rows, len(blocks)))
             map_file.seek(0)
