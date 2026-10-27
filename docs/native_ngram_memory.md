@@ -105,6 +105,15 @@ map/payload files, avoiding a dictionary of every unique row. Descriptor memory
 still grows with the number of blocks. It retains all rows for arbitrary future
 queries; it does not prune according to a sample query trace.
 
+`pack_native` writes and flushes/fsyncs the complete table into a sibling
+temporary file, closes it, then atomically replaces the destination path. A
+failed write, sync or replacement preserves the previous destination and cleans
+up the temporary file. Existing C mmap handles retain the old inode and its
+bytes; new handles open the published table. Replacing a regular file preserves
+its access permissions; new tables use owner-only tempfile permissions. This
+publishes one table file: adapter metadata/checksums require a consistent bundle,
+and concurrent writers are not coordinated. The binary format/codec is unchanged.
+
 Each block chooses zlib only when smaller than the raw block. With
 `predictor="xor"`, the exporter also tries zlib-compressed XOR residuals and
 keeps the smallest of all three candidates. The first row resets prediction

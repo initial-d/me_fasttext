@@ -14,6 +14,86 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class NativeRowsTest(unittest.TestCase):
+    def test_atomic_replacement_keeps_old_mmap_readers_on_original_bytes(self):
+        rng = random.Random(27)
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            old = rng.randbytes(64 * 8)
+            new = rng.randbytes(64 * 8)
+            source.write_bytes(old)
+            pack_native(source, packed, 64, 4, False)
+            packed.chmod(0o640)
+            with NativeRows(packed, self.library) as previous:
+                original_inode = packed.stat().st_ino
+                source.write_bytes(new)
+                pack_native(source, packed, 64, 4, False)
+                self.assertNotEqual(original_inode, packed.stat().st_ino)
+                self.assertEqual(packed.stat().st_mode & 0o777, 0o640)
+                # Uncached C reads happen after publication, not just before it.
+                self.assertEqual(previous.rows(range(8)), old)
+                with NativeRows(packed, self.library) as current:
+                    self.assertEqual(current.rows(range(8)), new)
+            self.assertFalse(list(Path(tmp).glob(".table.men.*.tmp")))
+
+    def test_failed_flush_or_replace_preserves_target_and_cleans_temporary_file(self):
+        from unittest.mock import patch
+        for failure in ("fsync", "replace"):
+            for existing in (False, True):
+                with self.subTest(failure=failure, existing=existing), tempfile.TemporaryDirectory() as tmp:
+                    source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+                    source.write_bytes(b"A" * 64)
+                    if existing:
+                        pack_native(source, packed, 8, 4, False)
+                    original = packed.read_bytes() if existing else None
+                    source.write_bytes(b"B" * 64)
+                    with patch("tools.native_row_store.os." + failure, side_effect=OSError("injected export failure")):
+                        with self.assertRaisesRegex(OSError, "injected"):
+                            pack_native(source, packed, 8, 4, False)
+                    self.assertEqual(packed.read_bytes() if packed.exists() else None, original)
+                    self.assertFalse(list(Path(tmp).glob(".table.men.*.tmp")))
+
+    def test_failed_partial_write_never_publishes_a_partial_table(self):
+        from unittest.mock import patch
+        real_temporary = tempfile.NamedTemporaryFile
+
+        def broken_writer(*args, **kwargs):
+            result = real_temporary(*args, **kwargs)
+            write = result.write
+            calls = 0
+
+            def fail_after_header(data):
+                nonlocal calls
+                calls += 1
+                if calls > 1:
+                    raise OSError("partial write")
+                return write(data)
+
+            result.write = fail_after_header
+            return result
+
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            source.write_bytes(b"old rows" * 8)
+            pack_native(source, packed, 8, 4, False)
+            original = packed.read_bytes()
+            source.write_bytes(b"new rows" * 8)
+            with patch("tools.native_row_store.tempfile.NamedTemporaryFile", side_effect=broken_writer):
+                with self.assertRaisesRegex(OSError, "partial write"):
+                    pack_native(source, packed, 8, 4, False)
+            self.assertEqual(packed.read_bytes(), original)
+            self.assertFalse(list(Path(tmp).glob(".table.men.*.tmp")))
+
+    def test_export_to_source_hardlink_does_not_modify_source(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            raw = b"hardlink" * 8
+            source.write_bytes(raw)
+            os.link(source, packed)
+            pack_native(source, packed, 8, 4, False)
+            self.assertEqual(source.read_bytes(), raw)
+            with NativeRows(packed, self.library) as table:
+                self.assertEqual(table.rows(range(8)), raw)
+
     @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
