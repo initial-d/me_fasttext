@@ -75,10 +75,26 @@ Stored row bytes stay exact, while reduction precision can change model logits.
 Both adapters preserve original IDs, exclude padding from sums/counts and return
 zeros for empty/all-padding bags. Ragged offsets must start at zero and cover
 all IDs; `include_last_offset` selects whether the caller supplies the terminal
-count. No training, max mode, per-sample weights, `.weight`/tied heads or CUDA.
+count. No training, max mode, `.weight`/tied heads or CUDA.
 Build the current library for the new C ABI. See the
 [trained-query timings, RSS, exact-byte checks and model deltas](embedding_bag_evidence_20261025/README.md)
 before choosing a strategy; dense resident lookup is faster in these tests.
+
+Sum mode also accepts `memory(ids, offsets, per_sample_weights=weights)` for
+inference-time weighted memory aggregation. Omit `offsets` for fixed 2-D bags.
+Weights must be CPU tensors with the same shape as IDs and the stored row dtype;
+detach learned gates before using this inference-only adapter. Repeated IDs keep
+distinct weights for each occurrence; padding ignores both row and weight.
+Negative, zero and nonfinite weights follow arithmetic semantics. There is no
+implicit normalization or weighted-mean mode. The default unique path delegates
+weighted reduction to PyTorch without materializing all gathered query rows.
+The optional chunked path uses the additive C ABI
+`meft_rows_embedding_bag_weighted`, with a byte capacity for scalar weights and
+the same row staging bound. It multiplies and accumulates in FP64 before FP32
+output/source-dtype casting, so reduction rounding can differ from PyTorch.
+Rebuild the library for weighted C calls; the unweighted ABI stays unchanged.
+This adds an aggregation primitive; it does not replace a model's gating network
+or establish trained Engram quality/performance evidence.
 
 Large repeated batches now use `unique_method="auto"` to compact IDs with a
 histogram and lookup table when the addressable table has at most four rows per

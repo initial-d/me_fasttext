@@ -248,10 +248,11 @@ static float row_float(const unsigned char *p, int dtype) {
     return value;
 }
 
-int meft_rows_embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
+static int embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
                            const uint64_t *offsets, size_t bags, int dtype, int mean,
                            uint64_t padding_id, size_t chunk_rows,
-                           float *out, size_t out_floats, char *err, size_t cap) {
+                           float *out, size_t out_floats, char *err, size_t cap,
+                           int weighted, const unsigned char *weights, size_t weights_bytes) {
     if (!s) return fail(err, cap, "null store");
     s->last_blocks = s->last_decodes = s->last_hits = 0;
     size_t element = dtype == 1 ? 4 : 2;
@@ -259,6 +260,9 @@ int meft_rows_embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
         dtype < 1 || dtype > 3 || (mean != 0 && mean != 1) || !chunk_rows ||
         s->width > SIZE_MAX || s->width % element)
         return fail(err, cap, "invalid bag dtype, mode, chunk size or row width");
+    if (weighted && (mean || count > SIZE_MAX / element ||
+                     count * element > weights_bytes || (count && !weights)))
+        return fail(err, cap, "invalid per-sample weights capacity or mode");
     size_t dim = (size_t)(s->width / element);
     if (bags > SIZE_MAX / dim || bags * dim > out_floats ||
         dim > SIZE_MAX / sizeof(double) || bags > SIZE_MAX / (dim * sizeof(float)) ||
@@ -305,7 +309,9 @@ int meft_rows_embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
             if (ids[start + i] == padding_id) continue;
             ++observed;
             const unsigned char *row = rows + i * (size_t)s->width;
-            for (size_t j = 0; j < dim; ++j) sum[j] += row_float(row + j * element, dtype);
+            double scale = weighted ? row_float(weights + (start + i) * element, dtype) : 1.0;
+            for (size_t j = 0; j < dim; ++j)
+                sum[j] += (double)row_float(row + j * element, dtype) * scale;
         }
         start += n;
     }
@@ -319,4 +325,21 @@ done_bags:
     s->last_blocks = blocks; s->last_decodes = decodes; s->last_hits = hits;
     free(rows); free(sum);
     return status;
+}
+
+int meft_rows_embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
+                           const uint64_t *offsets, size_t bags, int dtype, int mean,
+                           uint64_t padding_id, size_t chunk_rows,
+                           float *out, size_t out_floats, char *err, size_t cap) {
+    return embedding_bag(s, ids, count, offsets, bags, dtype, mean, padding_id,
+                         chunk_rows, out, out_floats, err, cap, 0, NULL, 0);
+}
+
+int meft_rows_embedding_bag_weighted(meft_rows *s, const uint64_t *ids, size_t count,
+                                    const uint64_t *offsets, size_t bags, int dtype,
+                                    const void *weights, size_t weights_bytes,
+                                    uint64_t padding_id, size_t chunk_rows,
+                                    float *out, size_t out_floats, char *err, size_t cap) {
+    return embedding_bag(s, ids, count, offsets, bags, dtype, 0, padding_id,
+                         chunk_rows, out, out_floats, err, cap, 1, weights, weights_bytes);
 }

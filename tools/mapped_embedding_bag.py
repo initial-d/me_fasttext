@@ -24,7 +24,8 @@ class MappedEmbeddingBag(nn.Module):
 
     Ragged offsets start at 0; include_last_offset=True supplies the terminal
     count, otherwise it is appended. Empty/all-padding bags return zeros.
-    No gradients, per-sample weights, max mode, .weight or tied-head support.
+    Optional per-sample weights support sum mode, with the source row dtype.
+    No gradients, max mode, .weight or tied-head support.
     One single-worker native handle per module; keep it on CPU and close it.
     """
     is_embedding_bag = True
@@ -74,8 +75,19 @@ class MappedEmbeddingBag(nn.Module):
             raise ValueError("embedding bags support CPU only")
         if input.dtype not in (torch.int32, torch.int64):
             raise TypeError("bag IDs must be int32 or int64")
+        weights = None
         if per_sample_weights is not None:
-            raise ValueError("per-sample weights are not supported")
+            if self.mode != "sum":
+                raise ValueError("per-sample weights require sum mode")
+            if not isinstance(per_sample_weights, torch.Tensor):
+                raise TypeError("per-sample weights must be a tensor")
+            if (per_sample_weights.device.type != "cpu" or per_sample_weights.dtype != self.dtype
+                    or per_sample_weights.shape != input.shape
+                    or per_sample_weights.layout != torch.strided):
+                raise ValueError("per-sample weights need CPU strided storage, row dtype and ID shape")
+            if per_sample_weights.requires_grad:
+                raise ValueError("per-sample weights support inference only; detach them first")
+            weights = per_sample_weights.reshape(-1).contiguous()
         if input.ndim == 2:
             if offsets is not None:
                 raise ValueError("2-D bags do not take offsets")
@@ -137,13 +149,16 @@ class MappedEmbeddingBag(nn.Module):
             self.gather.table.gather_into(unique.data_ptr(), unique.numel(), rows.data_ptr(),
                                          rows.numel() * rows.element_size())
             return F.embedding_bag(inverse, rows, boundary, mode=self.mode,
-                                   include_last_offset=True, padding_idx=padding)
+                                   include_last_offset=True, padding_idx=padding,
+                                   per_sample_weights=weights)
         self.last_unique_rows = self.last_unique_method = None
         output = torch.empty((bags, self.embedding_dim), dtype=torch.float32)
         self.gather.table.embedding_bag_into(
             ids.data_ptr(), ids.numel(), boundary.data_ptr(), bags, self.dtype_code,
             self.mode == "mean", self.padding_idx if self.padding_idx is not None else 2**64 - 1,
             self.chunk_rows, output.data_ptr(), output.numel(),
+            weights_address=weights.data_ptr() if weights is not None else None,
+            weights_bytes=weights.numel() * weights.element_size() if weights is not None else 0,
         )
         return output.to(self.dtype)
 

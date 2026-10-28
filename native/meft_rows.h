@@ -40,6 +40,19 @@ int meft_rows_embedding_bag(meft_rows *store, const uint64_t *ids, size_t count,
                            const uint64_t *offsets, size_t bags, int dtype, int mean,
                            uint64_t padding_id, size_t max_chunk_rows,
                            float *output, size_t output_floats, char *error, size_t error_capacity);
+/* Weighted sum, with one LE scalar of the same dtype per query occurrence.
+ * weights_bytes must cover count * element_bytes; repeated IDs retain distinct
+ * weights. Padding excludes the row and its weight, even if nonfinite.
+ * Products and sums use float64. No weight normalization or weighted mean.
+ * Same capacities, staging bound and input/output ownership as the reducer above.
+ * Existing unweighted ABI remains available unchanged.
+ */
+int meft_rows_embedding_bag_weighted(meft_rows *store, const uint64_t *ids, size_t count,
+                                    const uint64_t *offsets, size_t bags, int dtype,
+                                    const void *weights, size_t weights_bytes,
+                                    uint64_t padding_id, size_t max_chunk_rows,
+                                    float *output, size_t output_floats,
+                                    char *error, size_t error_capacity);
 uint64_t meft_rows_last_block_reads(const meft_rows *store);
 uint64_t meft_rows_last_decompressions(const meft_rows *store);
 uint64_t meft_rows_last_cache_hits(const meft_rows *store);
