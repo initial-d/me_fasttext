@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
     (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_set_cache_bytes(s, 0);
     uint64_t offsets[3] = {0, 2, 3}, bad_offsets[3] = {0, 3, 2};
+    unsigned char weights[12] = {0}; /* Enough LE FP32/FP16/BF16 scalar bytes. */
     for (int dtype = 1; dtype <= 3; ++dtype) {
         (void)meft_rows_embedding_bag(s, ids, 3, offsets, 2, dtype, 1, UINT64_MAX, 2,
                                      (float *)out, (size_t)width, error, sizeof(error));
@@ -32,6 +33,18 @@ int main(int argc, char **argv) {
                                      (float *)out, (size_t)width, error, sizeof(error));
         (void)meft_rows_embedding_bag(s, ids, 3, offsets, 2, dtype, 0, UINT64_MAX, 1,
                                      (float *)out, 0, error, sizeof(error));
+        (void)meft_rows_embedding_bag_weighted(s, ids, 3, offsets, 2, dtype,
+                                              weights, sizeof(weights), UINT64_MAX, 1,
+                                              (float *)out, (size_t)width, error, sizeof(error));
+        (void)meft_rows_embedding_bag_weighted(s, ids, 3, offsets, 2, dtype,
+                                              weights, 1, UINT64_MAX, 1,
+                                              (float *)out, (size_t)width, error, sizeof(error));
+        (void)meft_rows_embedding_bag_weighted(s, ids, 3, offsets, 2, dtype,
+                                              NULL, sizeof(weights), UINT64_MAX, 1,
+                                              (float *)out, (size_t)width, error, sizeof(error));
+        (void)meft_rows_embedding_bag_weighted(s, ids, 3, bad_offsets, 2, dtype,
+                                              weights, sizeof(weights), UINT64_MAX, 2,
+                                              (float *)out, (size_t)width, error, sizeof(error));
     }
     free(out); meft_rows_close(s); return 0;
 }

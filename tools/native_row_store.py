@@ -209,22 +209,32 @@ class NativeRows:
             raise ValueError(error.value.decode())
 
     def embedding_bag_into(self, ids_address, count, offsets_address, bags, dtype,
-                           mean, padding_id, chunk_rows, output_address, output_floats):
+                           mean, padding_id, chunk_rows, output_address, output_floats,
+                           *, weights_address=None, weights_bytes=0):
         """Reduce original row IDs into float32 output with bounded row staging."""
         if not self.handle:
             raise ValueError("row store is closed")
+        weighted = weights_address is not None
+        if weighted and mean:
+            raise ValueError("per-sample weights require sum mode")
+        if weighted and (type(weights_bytes) is not int or
+                         not 0 <= weights_bytes <= ctypes.c_size_t(-1).value):
+            raise ValueError("weights bytes must fit a nonnegative size_t")
         try:
-            function = self.lib.meft_rows_embedding_bag
+            function = getattr(self.lib, "meft_rows_embedding_bag_weighted" if weighted
+                               else "meft_rows_embedding_bag")
         except AttributeError as error:
             raise ValueError("embedding bags require rebuilding the native row library") from error
         function.argtypes = [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t,
-                             ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int, ctypes.c_int,
+                             ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int] + (
+                             [ctypes.c_void_p, ctypes.c_size_t] if weighted else [ctypes.c_int]) + [
                              ctypes.c_uint64, ctypes.c_size_t, ctypes.c_void_p, ctypes.c_size_t,
                              ctypes.c_void_p, ctypes.c_size_t]
         function.restype = ctypes.c_int
         error = ctypes.create_string_buffer(256)
-        status = function(self.handle, ids_address, count, offsets_address, bags, dtype,
-                          int(mean), padding_id, chunk_rows, output_address, output_floats,
+        arguments = [self.handle, ids_address, count, offsets_address, bags, dtype]
+        arguments += [weights_address, weights_bytes] if weighted else [int(mean)]
+        status = function(*arguments, padding_id, chunk_rows, output_address, output_floats,
                           error, len(error))
         if status:
             raise ValueError(error.value.decode())
