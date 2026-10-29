@@ -44,6 +44,21 @@ discarded. One handle is single-threaded because it owns a scratch buffer; use
 one per serving worker and close it explicitly. The C example is an ABI check,
 not an ANN/nearest-neighbor engine.
 
+The PyTorch mapped modules support `copy.deepcopy` and serialization into
+`multiprocessing` spawn workers. Only configuration, metadata and small buffers
+are copied; the mmap, C pointer and decoded cache are excluded. Each restored
+module verifies the expected table checksum and opens its own handle with a cold
+cache. Checksum verification scans the full artifact during restore, adding startup
+I/O without materializing its rows. `MappedEmbedding` and `MappedEmbeddingBag` inherit this through their
+gather module. Close every copy explicitly. The artifact directory and native
+library must remain available at the captured absolute paths; this is a local
+worker handoff, not a portable self-contained checkpoint. A replaced/changed
+table fails checksum verification rather than silently changing the snapshot.
+Closed modules cannot be copied/serialized. Constructor cache settings are
+restored; later direct cache changes through the low-level handle are not copied.
+Use spawn or open modules independently inside fork workers; this does not make
+one live handle safe to share across threads or coordinate distributed serving.
+
 ## Sum/mean bags without a full gathered tensor
 
 For immutable CPU `nn.EmbeddingBag` inference, export the learned rows and
