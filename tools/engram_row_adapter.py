@@ -115,7 +115,7 @@ class MappedMultiHeadEmbedding(nn.Module):
 
     def __init__(self, output_dir, cache_blocks=4, native_library=None, native_cache_bytes=0):
         super().__init__()
-        output_dir = Path(output_dir)
+        output_dir = Path(output_dir).resolve()
         meta = json.loads((output_dir / "embedding.json").read_text())
         backend = meta.get("backend", "python")
         if backend != "native" and native_cache_bytes:
@@ -127,22 +127,50 @@ class MappedMultiHeadEmbedding(nn.Module):
         offsets = head_offsets(meta["head_sizes"])
         if meta["offsets"] != offsets or meta["shape"][0] != sum(meta["head_sizes"]):
             raise ValueError("inconsistent head metadata")
-        path = output_dir / meta["table_file"]
-        if file_sha256(path) != meta["artifact_sha256"]:
-            raise ValueError("row-store checksum mismatch")
         self.dtype = DTYPES[meta["dtype"]]
         self.num_heads = len(offsets)
         self.embedding_dim = meta["shape"][1]
         self.metadata = meta
         self.backend = backend
+        self._output_dir = str(output_dir)
+        self._cache_blocks = cache_blocks
+        self._native_library = native_library
+        self._native_cache_bytes = native_cache_bytes
         self.register_buffer("offsets", torch.tensor(offsets, dtype=torch.int64))
         self.register_buffer("head_sizes", torch.tensor(meta["head_sizes"], dtype=torch.int64))
-        self.table = NativeRows(path, native_library, native_cache_bytes) if backend == "native" else MappedRows(path, cache_blocks)
+        self._open_table()
+        if backend == "native":
+            # Capture the resolved library, including an environment-selected
+            # path, instead of depending on another worker's environment/cwd.
+            self._native_library = self.table.lib._name
+        self.training = False
+
+    def _open_table(self):
+        path = Path(self._output_dir) / self.metadata["table_file"]
+        if file_sha256(path) != self.metadata["artifact_sha256"]:
+            raise ValueError("row-store checksum mismatch")
+        self.table = (NativeRows(path, self._native_library, self._native_cache_bytes)
+                      if self.backend == "native" else MappedRows(path, self._cache_blocks))
         width = self.embedding_dim * torch.empty((), dtype=self.dtype).element_size()
-        if self.table.header["n_rows"] != meta["shape"][0] or self.table.header["row_bytes"] != width:
+        if (self.table.header["n_rows"] != self.metadata["shape"][0]
+                or self.table.header["row_bytes"] != width):
             self.table.close()
             raise ValueError("row-store shape differs from embedding metadata")
-        self.training = False
+
+    def __getstate__(self):
+        """Serialize configuration/buffers, never mmap, C pointers or row caches."""
+        closed = not self.table.handle if self.backend == "native" else self.table.file.closed
+        if closed:
+            raise ValueError("cannot serialize a closed mapped embedding")
+        state = super().__getstate__()
+        state.pop("table")
+        return state
+
+    def __setstate__(self, state):
+        super().__setstate__(state)
+        # Copy/deepcopy and spawned workers each own a checksum-verified handle.
+        # A replaced table is rejected rather than silently changing snapshots.
+        self._open_table()
 
     def train(self, mode=True):
         if mode:
@@ -160,6 +188,10 @@ class MappedMultiHeadEmbedding(nn.Module):
             raise IndexError("head-local ID outside its head's vocabulary")
         shape = (*input_ids.shape, self.embedding_dim)
         if input_ids.numel() == 0:
+            if self.backend == "native":
+                self.table.gather_into(0, 0, 0, 0)
+            elif self.table.file.closed:
+                raise ValueError("row store is closed")
             return torch.empty(shape, dtype=self.dtype)
         global_tensor = (input_ids.to(torch.int64) + self.offsets).contiguous()
         if self.backend == "native":
