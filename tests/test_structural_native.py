@@ -59,7 +59,7 @@ class RealStructuralTest(unittest.TestCase):
                 self.assertEqual(reps[7], 7)
                 self.assertTrue(all(reps[r] == r for r in reps))
                 self.assertLess(len(set(reps)), len(rows))
-                for index in ("flat", "datrie"):
+                for index in ("flat", "datrie", "hash"):
                     self.assertEqual(plan.lookup([keys[i] for i in keys] + ["unknown", ""], index=index),
                                      list(keys) + [None, None])
                 metadata = plan.export(source, Path(tmp) / "compact", block_rows=2)

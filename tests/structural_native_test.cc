@@ -24,7 +24,7 @@ int main() {
                 assert(order[i] < 8 && !seen[order[i]]); seen[order[i]] = true;
             }
             const char* queries[] = {"记忆", "ab", "abc", "a", "unknown", "", "ax", "ay"};
-            for (int index = 0; index <= 1; ++index) {
+            for (int index = 0; index <= 2; ++index) {
                 assert(!meft_structural_lookup(plan, queries, 8, found, index, error, sizeof(error)));
                 assert(found[0] == 7 && found[1] == 2 && found[2] == 3 && found[3] == 1);
                 assert(found[4] == UINT64_MAX && found[5] == UINT64_MAX && found[6] == 4 && found[7] == 5);

@@ -21,7 +21,8 @@ int meft_structural_maps(void* plan, uint64_t* representatives, uint64_t* order,
     size_t count, char* error, size_t error_size);
 /* Both lookup implementations return original numeric IDs, including after
  * compaction. index=0 uses sorted keys + binary search, index=1 DASTrie.
- * Missing keys return UINT64_MAX. Flat lookup is available on built plans.
+ * index=2 adds an owned std::unordered_map baseline on built plans only.
+ * Missing keys return UINT64_MAX. Flat/hash lookup is available on built plans.
  */
 int meft_structural_lookup(void* plan, const char* const* keys, size_t count,
     uint64_t* ids, int index, char* error, size_t error_size);

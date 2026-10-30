@@ -8,11 +8,13 @@
 #include <memory>
 #include <numeric>
 #include <set>
+#include <unordered_map>
 
 namespace {
 struct Plan {
     DASTrie* index = nullptr;
     std::vector<std::pair<std::string, uint64_t>> flat;
+    std::unordered_map<std::string, uint64_t> hash;
     std::vector<uint64_t> representatives, order;
     bool built = false;
     ~Plan() { if (index) dastrie_delete_unsafe(index); }
@@ -54,6 +56,7 @@ extern "C" void* meft_structural_build(const char* const* keys, const uint64_t* 
         for (size_t i = 0; i < count; ++i) {
             require(!i || p->flat[i-1].first != p->flat[i].first, "duplicate key");
             datrie_insert_key(source.get(), p->flat[i].first.c_str(), p->flat[i].second);
+            p->hash.emplace(p->flat[i].first, p->flat[i].second);
         }
         p->index = dastrie_new();
         require(p->index, "cannot allocate DASTrie");
@@ -146,14 +149,17 @@ extern "C" int meft_structural_lookup(void* plan, const char* const* keys, size_
     uint64_t* ids, int index, char* error, size_t error_size) {
     try {
         Plan* p = static_cast<Plan*>(plan);
-        require(p && (!count || (keys && ids)) && (index == 0 || index == 1) &&
-                (index || p->built), "invalid lookup arguments");
+        require(p && (!count || (keys && ids)) && index >= 0 && index <= 2 &&
+                (index == 1 || p->built), "invalid lookup arguments");
         for (size_t i = 0; i < count; ++i) {
             require(keys[i], "null query key");
             ids[i] = UINT64_MAX;
-            if (index) {
+            if (index == 1) {
                 size_t id = 0;
                 if (dastrie_search_exact_match(p->index, keys[i], &id) != -1) ids[i] = id;
+            } else if (index == 2) {
+                const auto it = p->hash.find(keys[i]);
+                if (it != p->hash.end()) ids[i] = it->second;
             } else {
                 const auto it = std::lower_bound(p->flat.begin(), p->flat.end(), keys[i],
                     [](const std::pair<std::string, uint64_t>& entry, const char* key) { return entry.first < key; });

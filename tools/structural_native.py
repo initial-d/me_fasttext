@@ -62,11 +62,11 @@ class StructuralIndex:
 
     def lookup_into(self, query, output, *, index="datrie"):
         """Accept pre-encoded ctypes query/output arrays to avoid Python key loops."""
-        if not self.handle or index not in ("flat", "datrie") or len(output) != len(query):
+        if not self.handle or index not in ("flat", "datrie", "hash") or len(output) != len(query):
             raise ValueError("closed index, invalid index policy or query capacity")
         error = ctypes.create_string_buffer(512)
         if self.lib.meft_structural_lookup(self.handle, query, len(query), output,
-                                           int(index == "datrie"), error, len(error)):
+                                           ("flat", "datrie", "hash").index(index), error, len(error)):
             raise ValueError(error.value.decode())
 
     def lookup(self, keys, *, index="datrie"):
