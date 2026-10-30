@@ -97,6 +97,24 @@ class RealStructuralTest(unittest.TestCase):
                 self.assertGreaterEqual(cosine, .99)
                 self.assertGreaterEqual(ratio, .99)
 
+    def test_engine_cli_uses_original_key_ids_after_structural_compaction(self):
+        import contextlib,io,json
+        from ngram_store.cli import pack_store,main
+        raw=struct.pack('<8f',9,8,1,0,1,0,0,1)
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); source=root/'input.f32'; source.write_bytes(raw)
+            bundle=root/'store'
+            report=pack_store(source,bundle,2,native_library=self.rows_library,
+                keys={1:'a',2:'ab',3:'z'},structural_library=self.library)
+            self.assertTrue(report['original_bytes_preserved'])
+            self.assertEqual(report['storage']['unique_rows'],3)
+            capture=io.StringIO()
+            with contextlib.redirect_stdout(capture):main(['query','--store',str(bundle),'--keys','ab','a','z','ab',
+                '--structural-library',str(self.library),'--native-library',str(self.rows_library)])
+            result=json.loads(capture.getvalue())
+            self.assertEqual(result['ids'],[2,1,3,2])
+            self.assertEqual(result['vectors'],[[1,0],[1,0],[0,1],[1,0]])
+
     def test_layout_only_bytes_exact_signed_zero_and_duplicate_keys(self):
         raw = struct.pack("<6f", 0., 0., -0., 0., 0., 0.)
         keys = {0: "a", 1: "ab", 2: "abc"}

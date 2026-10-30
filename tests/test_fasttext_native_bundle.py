@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import sys
 import shutil
 import struct
 import subprocess
@@ -79,6 +80,27 @@ class NativeFastTextTest(unittest.TestCase):
                 with self.assertRaises(RuntimeError):
                     export_fasttext_model(invalid,failed,fasttext_binary=self.binary,structural_library=self.structural)
                 self.assertFalse(failed.exists())
+
+    def test_documented_plain_text_prepare_train_export_query_workflow(self):
+        with tempfile.TemporaryDirectory(dir=self.root) as tmp:
+            root=Path(tmp); corpus=root/'pairs.txt'; model=root/'sample'; bundle=root/'native'
+            environment=dict(os.environ,PYTHONPATH=str(ROOT))
+            prepare=subprocess.run([sys.executable,'-m','ngram_store','prepare-fasttext',
+                '--input',str(ROOT/'examples/fasttext_sample.txt'),'--output',str(corpus)],
+                cwd=root,env=environment,check=True,capture_output=True,text=True)
+            prepared=json.loads(prepare.stdout)
+            self.assertGreater(prepared['pair_tokens'],0)
+            subprocess.run([str(self.binary),'skipgram','-input',str(corpus),'-output',str(model),
+                '-dim','32','-minCount','1','-minn','2','-maxn','6','-epoch','1','-thread','1','-verbose','0'],
+                cwd=root,check=True,capture_output=True)
+            subprocess.run([sys.executable,'-m','ngram_store','fasttext-export',
+                '--model',str(root/'sample.bin'),'--output-dir',str(bundle),
+                '--fasttext-binary',str(self.binary),'--structural-library',str(self.structural),
+                '--native-library',str(self.library)],cwd=root,env=environment,check=True,capture_output=True)
+            words='memory\nvectors\nlookup\n'
+            dense=subprocess.run([str(self.binary),'print-word-vectors',str(root/'sample.bin')],input=words,text=True,capture_output=True,check=True)
+            native=subprocess.run([str(self.binary),'print-word-vectors',str(bundle)],input=words,text=True,capture_output=True,check=True)
+            self.assertEqual([line for line in dense.stdout.splitlines() if line.split(' ')[0] in words.split()],native.stdout.splitlines())
 
 
 if __name__=='__main__':unittest.main()

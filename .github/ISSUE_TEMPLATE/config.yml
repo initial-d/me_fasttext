@@ -1,11 +1,11 @@
 blank_issues_enabled: true
 contact_links:
   - name: Evaluator quickstart
-    url: https://github.com/initial-d/me_fasttext/blob/main/docs/evaluator_quickstart.md
+    url: https://github.com/initial-d/ngram-store/blob/main/docs/evaluator_quickstart.md
     about: Start here if you want to run a first public-corpus benchmark.
   - name: Benchmark protocol
-    url: https://github.com/initial-d/me_fasttext/blob/main/docs/benchmark_protocol.md
+    url: https://github.com/initial-d/ngram-store/blob/main/docs/benchmark_protocol.md
     about: Use this for the fuller memory, latency, OOV, and quality report shape.
   - name: Outreach notes
-    url: https://github.com/initial-d/me_fasttext/blob/main/docs/outreach.md
+    url: https://github.com/initial-d/ngram-store/blob/main/docs/outreach.md
     about: Use this when adding the project to lists or sharing it with maintainers.

@@ -1,6 +1,6 @@
-# Native n-gram memory: C ABI and model integration
+# NGramStore engine: C ABI and model integration
 
-The native backend is a CPU storage/gather component for immutable embedding
+NGramStore's native backend is a CPU storage/gather component for immutable embedding
 tables. It accepts original numeric row IDs and writes identical bytes into
 caller-owned memory. It is a place to optimize storage and query behavior;
 it does not replace a model's tokenizer, n-gram hasher, contextual gates,
@@ -31,7 +31,7 @@ This builds a standalone shared library and C example independently of the
 bundled legacy FastText/trie binaries. From a raw fixed-width byte table:
 
 ```python
-from tools.native_row_store import pack_native
+from ngram_store import pack_native
 
 # Example: 128 float32 values per row. No numeric/dtype conversion.
 pack_native("table.raw", "table.men", row_bytes=512, block_rows=256,

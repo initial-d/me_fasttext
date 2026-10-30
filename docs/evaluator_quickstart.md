@@ -1,92 +1,76 @@
-# Evaluator quickstart
+# NGramStore engine quickstart
 
-This page is for readers who have cloned `me_fasttext` and want to produce a
-useful first signal quickly. The goal is not a perfect benchmark. The goal is a
-clear public run that another researcher or engineer can understand, compare,
-or reproduce.
+Start with the storage engine, then choose FastText or Engram as the application.
+Use an existing learned table; deterministic fixtures establish correctness only.
 
-## What helps most
+## Install and pack numeric rows
 
-A useful report answers one narrow question:
+From a Linux/macOS source checkout with a C compiler and zlib headers:
 
-> On this corpus and machine, does the compact `.z` mmap-serving artifact reduce
-> memory or startup cost while preserving useful lexical behavior?
+```bash
+python -m pip install .
+ngram-store pack --input vectors.f32 --dim 256 --output memory.native
+ngram-store inspect --store memory.native
+ngram-store query --store memory.native --ids 0 42 0
+```
 
-Report one of these outcomes:
+`vectors.f32` must be a nonempty, contiguous little-endian float32 table.
+`--dim` is its row width in floats. Output must be a fresh directory. No dtype
+conversion or rounding occurs. All reconstructed row bytes are verified before
+publication. `--deduplicate` optionally shares identical row bytes with an
+index that grows with the number of unique rows. Default packing omits it.
 
-| Outcome | Why it helps |
-| --- | --- |
-| Positive result | Shows where exact-then-compact lexical embeddings transfer. |
-| Negative result | Shows where the method does not help or is too costly. |
-| Partial result | Records build, corpus, or serving friction for the next evaluator. |
+Use `query --hex` for signed-zero/nonfinite payload inspection. Numeric JSON
+output requires finite values. The query keeps original IDs, order and duplicates.
+`--max-block-bytes` controls decoded block width; one indivisible row can exceed
+it. `--cache-bytes` controls query cache payload, not total process memory.
 
-## Fifteen-minute orientation
+The wheel distribution remains `meft-memory`; new code imports `ngram_store`.
+Existing imports are aliases of the same API, not independent implementations.
+`python -m ngram_store` also runs directly from a checkout; pass
+`--native-library build/libmeft_rows.so` after `make native` if not installed.
+On macOS use `make native NATIVE_SHARED=-dynamiclib NATIVE_EXT=dylib`.
 
-1. Read the [artifact card](artifact_card.md) to confirm the project fits your
-   use case.
-2. Build the tools on Linux:
+## Registered string n-grams
 
-   ```bash
-   make opt
-   ```
+On Linux x86-64, the optional original DATrie bridge is built with:
 
-3. Pick a public or redistributable plain-text corpus. Product titles, news
-   text, encyclopedia titles, entity-heavy logs, and Chinese or multilingual
-   text are especially useful.
-4. Generate a manifest and query slices:
+```bash
+make structural-native
+ngram-store pack --input vectors.f32 --dim 256 --output keyed.native \
+  --keys keys.json --structural-library build/libmeft_structural.so --mode exact
+ngram-store query --store keyed.native --keys '<memory>' '<vector>' \
+  --structural-library build/libmeft_structural.so
+```
 
-   ```bash
-   python3 tools/prepare_public_benchmark.py \
-     --input data/public_train.txt \
-     --output-dir runs/public-benchmark \
-     --name "example-public-corpus" \
-     --language en \
-     --license "public / CC / unknown"
-   ```
+`keys.json` maps canonical original row IDs to unique registered strings, for
+example `{"0":"<memory>","42":"<vector>"}`. Unkeyed rows retain their identities.
+`layout` keeps all rows; `exact` shares only byte-identical structural pairs;
+`joint` changes rows under cosine/norm-ratio guards. Generic byte dedup and
+structural representative selection are separate options.
 
-5. Train a small first model:
+A many-to-one hash bucket registry does not provide this key-to-row contract.
+Engram's numeric/hash path works through the same row engine without assuming
+prefix/suffix relationships. Open only trusted self-produced DATrie files.
 
-   ```bash
-   /usr/bin/time -v ./fasttext skipgram \
-     -input data/public_train.txt \
-     -output runs/public-meft \
-     -dim 128 \
-     -minn 2 \
-     -maxn 6 \
-     -minCount 5 \
-     -thread 8
-   ```
+## Choose an application
 
-6. Measure the compact serving artifact:
+- [FastText prepare/train/export/query](fasttext_native_bundle.md): includes a
+  real tiny text-training smoke path; the current trainer requires positional/source
+  pairs rather than ordinary upstream FastText training input.
+- [Engram demonstration](engram_quickstart.md): preserve existing hashes and
+  head offsets, source-pin the demo and verify full module output.
+- [TinyEngram/Qwen checkpoint](tinyengram_qwen_evidence_20261030/README.md):
+  convert and verify actual trained memory weights with the existing backbone.
 
-   ```bash
-   ./bench_ftindex runs/public-meft.z runs/public-benchmark/queries.txt 1 3
-   ```
+## Report a useful result
 
-## Minimum report
+Record the exact commit, command, data and split, source/artifact hashes, dtype,
+row count, compiler/Python/PyTorch versions, CPU/GPU and storage environment.
+Compare with raw mmap/dense lookup using the same rows and trace. Report whole
+artifact bytes, p50/p95 latency, load time, anonymous/file-backed RSS, cache and
+block settings, output fidelity and task quality separately. Name approximate
+thresholds and denominators. Include slow, failed and no-benefit cases.
 
-Open a [benchmark result issue](https://github.com/initial-d/me_fasttext/issues/new?template=benchmark-result.yml)
-with:
-
-- exact commit SHA;
-- corpus name, language, license status, and preprocessing;
-- build and training commands;
-- hardware, OS, compiler, filesystem, and storage type;
-- `.bin`, `.vec`, and `.z` artifact sizes;
-- `bench_ftindex` output;
-- one quality metric, or an explicit serving-only caveat;
-- anything that failed, surprised you, or made the method look bad.
-
-If you cannot share the corpus, share aggregate metrics and the generated
-`corpus_manifest.json` fields instead of private text.
-
-## What not to claim
-
-Keep the comparison narrow. `me_fasttext` is not a replacement for transformer
-embeddings, a vector database, or a full RAG system. It is most useful as a
-compact lexical embedding layer for memory-sensitive serving, OOV-heavy text,
-and first-stage retrieval or ranking.
-
-For a fuller protocol, continue with
-[`first_public_corpus_benchmark.md`](first_public_corpus_benchmark.md) and
-[`retrieval_oov_benchmark.md`](retrieval_oov_benchmark.md).
+[Current results](index.md) include strong negative controls. Legacy lexical
+retrieval protocols remain in [the compatibility guide](legacy_fasttext.md).

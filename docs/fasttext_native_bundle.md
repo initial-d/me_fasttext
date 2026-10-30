@@ -1,11 +1,46 @@
-# Native storage through the original FastText model and CLI
+# FastText application: NGramStore native storage and query
 
-Dense **me_fasttext** `.bin` models can be converted into immutable native
+Dense historical **me_fasttext** `.bin` models can be converted into immutable native
 serving bundles. `loadModel(path)` and existing query commands then use the
 original dictionary and row IDs, with input vectors stored in compressed native
 blocks. The production DATrie prefix/suffix planner and mark-compact forwarding
 are part of this conversion. [Actual trained-model results and limits](fasttext_native_evidence_20261031/README.md)
 include a historical-main comparison and a matched identity-layout control.
+
+## Complete text-training smoke path
+
+On Linux x86-64, this included real-text sample needs no external dataset or GPU.
+It verifies preparation, actual training, conversion and querying, not representative
+compression or task quality:
+
+```bash
+python -m pip install .
+make fasttext-native native structural-native
+mkdir -p artifacts/fasttext-sample
+ngram-store prepare-fasttext --input examples/fasttext_sample.txt \
+  --output artifacts/fasttext-sample/pairs.txt
+```
+
+The trainer uses single-dash flags. Run the training command from the owned output
+directory because it also writes legacy trie dumps:
+
+```bash
+cd artifacts/fasttext-sample
+../../build/fasttext-native skipgram -input pairs.txt -output model \
+  -dim 32 -minCount 1 -minn 2 -maxn 6 -epoch 1 -thread 1 -verbose 0
+cd ../..
+ngram-store fasttext-export --model artifacts/fasttext-sample/model.bin \
+  --output-dir artifacts/fasttext-sample/model.native \
+  --fasttext-binary build/fasttext-native \
+  --structural-library build/libmeft_structural.so
+printf 'memory\nvectors\nlookup\n' | build/fasttext-native print-word-vectors \
+  artifacts/fasttext-sample/model.native
+```
+
+Preparation preserves within-line word order and emits `p#0 query\x01source`
+pairs. This is the current custom positional/source SGNS protocol. Ordinary
+upstream FastText whitespace training input is not silently interchangeable.
+Use fresh paths when repeating; retained dense `.bin` remains the source model.
 
 ## Export and query
 
@@ -16,11 +51,11 @@ this repository; the standalone memory wheel does not bundle the legacy trainer.
 make fasttext-native native structural-native
 
 # Use a NEW output directory. Keep the original .bin for training/quantization.
-python tools/export_fasttext_native_cli.py \
+ngram-store fasttext-export \
   --model model.bin --output-dir model.native \
   --fasttext-binary build/fasttext-native \
   --structural-library build/libmeft_structural.so \
-  --native-library build/libmeft_rows.so --mode exact
+  --mode exact
 
 # The same command and arguments accept either a .bin or a bundle directory.
 printf 'example\nexamples\n' | build/fasttext-native print-word-vectors model.native

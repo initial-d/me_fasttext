@@ -1,13 +1,16 @@
 cff-version: 1.2.0
-message: "If you use me_fasttext or the accompanying method, please cite the arXiv paper."
-title: "Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management"
+message: "NGramStore was formerly me_fasttext. Cite the original paper for its method and the exact software commit/report for later engine work."
+title: "NGramStore: Compression, Storage and Exact Lookup for Learned N-Gram Vectors"
 authors:
   - family-names: Du
     given-names: Yimin
-repository-code: "https://github.com/initial-d/me_fasttext"
-url: "https://arxiv.org/abs/2506.01254"
+repository-code: "https://github.com/initial-d/ngram-store"
+url: "https://github.com/initial-d/ngram-store"
 license: MIT
 keywords:
+  - n-gram memory
+  - vector compression
+  - Engram
   - fastText
   - word embeddings
   - subword embeddings

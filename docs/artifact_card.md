@@ -1,98 +1,32 @@
-# Artifact card
+# NGramStore artifact card
 
-This card summarizes `me_fasttext` for researchers, maintainers, and engineers
-who need to decide quickly whether the project is relevant to cite, benchmark,
-or list.
+**Compression, storage and exact lookup for learned n-gram vectors.**
+Formerly me_fasttext; the original Memory-Efficient FastText paper is the method
+origin, while native row storage and LLM integrations are later software work.
 
-## One-line description
+| Component | What it provides | Boundary |
+| --- | --- | --- |
+| Native C engine | Lossless compressed blocks, original-ID forwarding, mmap and gather | Frozen single-worker handles; caches do not bound RSS |
+| DATrie / mark-compact | Exact registered keys and structural representatives | Linux x86-64 trusted metadata; joint sharing can change weights |
+| FastText application | Dense model export and existing vector/classification queries | This repository's custom unquantized models, not official .bin conversion |
+| Engram / TinyEngram application | Storage replacement behind existing hashes and memory gathers | Demo and trained TinyEngram/Qwen evidence are distinct from official trained Engram |
 
-`me_fasttext` is a FastText-derived lexical embedding system that keeps word
-and character n-gram identities explicit with trie-backed ids, then exports a
-compact mmap-ready serving artifact through structure-aware row sharing and
-mark-compact style row rewriting.
+## Start and evaluate
 
-## Best fit
+Use the [engine quickstart](evaluator_quickstart.md), then select an application.
+[Trained evidence](index.md) separates identity, storage, query costs and task
+quality. Small real-model native artifacts can save little and be slower than
+dense/raw mmap; structural layout is not universally better. Numeric hash buckets
+can use the row engine but do not certify structural string sharing.
 
-Use this artifact when your work involves:
+A comparison should preserve rows and query traces, state exact vs approximate
+mode and include forwarding/index/metadata bytes. Report complete latency and
+RSS alongside compression. Generic vectors are supported by the row engine;
+stronger structural claims require a real unique n-gram registry.
 
-| Area | Fit |
-| --- | --- |
-| FastText-style embeddings | Comparing hash-bucketed n-grams with exact trie-backed n-gram ids. |
-| OOV-heavy retrieval | Serving lexical vectors for rare words, names, misspellings, and long-tail entities. |
-| Compact inference | Measuring artifact size, cold mmap load time, RSS, and p50/p95 lookup latency. |
-| Double-array trie systems | Using trie terminal values as model row ids rather than only dictionary payloads. |
-| Memory-management ideas | Applying mark, forwarding, and compaction concepts to a static model artifact. |
+## Cite and reuse
 
-## Main claims
-
-The artifact supports these narrow claims:
-
-- exact subword identity can be preserved during training before compression;
-- trie-backed ids make word and n-gram rows inspectable before export;
-- structure-aware row sharing can reduce serving artifact size;
-- a compact `.z` artifact can be mmap-loaded for lexical embedding inference;
-- mark-compact style row rewriting is a useful model-layout abstraction.
-
-## Evidence to report
-
-For Engram-style storage experiments, start with the
-[byte-exact row-store guide](engram_storage.md). It documents the new Python
-reference, its limitations and the historical legacy-export mismatch. The
-[current legacy merge contract](legacy_merge_contract.md) maps the corrected
-criterion to executable checks and outstanding reproduction work. Report
-row-level byte equality separately from model quality and query performance.
-
-For citable reports, pair deployment metrics with task quality:
-
-| Evidence | Recommended metric |
-| --- | --- |
-| Artifact footprint | `.bin` size, `.z` size, `mmap_bytes` |
-| Startup behavior | cold load time, cold mmap load time |
-| Serving behavior | p50/p95 query latency, RSS after loading |
-| Lexical coverage | OOV rate, OOV subword coverage |
-| Downstream value | recall@k, MRR, NDCG, accuracy, or candidate recall before reranking |
-
-The [`bench_ftindex`](../src/bench_ftindex.cc) helper and
-[`retrieval_oov_benchmark.md`](retrieval_oov_benchmark.md) provide the concrete
-serving benchmark path.
-
-## Comparison baselines
-
-Strong comparisons include:
-
-- original FastText `.bin`;
-- hash-free uncompressed FastText-style models;
-- quantized FastText;
-- BM25 or another lexical retrieval baseline;
-- dense embedding models or rerankers when `me_fasttext` is used as a cheap
-  lexical stage before them.
-
-Use [`retrieval_comparison_matrix.md`](retrieval_comparison_matrix.md) for a
-report table that keeps these comparisons narrow.
-
-## Citation hooks
-
-This is a good citation when a paper or report discusses:
-
-- memory-efficient FastText or subword embeddings;
-- explicit n-gram identity before compression;
-- compact lexical embedding inference;
-- mmap serving artifacts for embedding tables;
-- trie-backed NLP infrastructure;
-- applying mark-compact memory-management ideas to model layout.
-
-Use [`citation_guide.md`](citation_guide.md) for BibTeX and suggested wording.
-
-## Not a fit
-
-Do not frame the artifact as:
-
-- a replacement for transformer embeddings;
-- a vector database;
-- a full RAG framework;
-- a general-purpose garbage collector;
-- a generic double-array trie library;
-- a universal compression method for unrelated model families.
-
-The narrower story is stronger: `me_fasttext` is an exact-then-compact lexical
-embedding artifact for memory-sensitive serving and OOV-heavy text.
+Use [the paper](https://arxiv.org/abs/2506.01254) for its method and
+[the exact code/report](citation_guide.md) for later engine results.
+This is a storage/query backend, with FastText and Engram application examples;
+it is not a universal task-quality or production-performance guarantee.
