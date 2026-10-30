@@ -1,5 +1,10 @@
 # Device gather preparation, 2026-10-30
 
+This records CPU preparation before the later
+[A100 gather measurements](../cuda_gather_evidence_20261030/README.md) and
+[trained Qwen CUDA timing](../qwen_cuda_performance_20261030/README.md).
+The original preparation reports and commands remain unchanged.
+
 **CPU protocol validation passed; CUDA performance remains pending.**
 The [preparation and benchmark commands](../device_gather_benchmark.md) run at
 commit `8f6ae4e563c9c0bf462e40a4e93cc6c2c76f608a`, with source hashes in each

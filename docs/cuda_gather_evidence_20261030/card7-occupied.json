@@ -1,0 +1,81 @@
+{
+  "category": "CUDA gather microbenchmark",
+  "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/meft-cuda-20261030/source/tools/benchmark_device_gather.py --fixture /llm-align/duyimin/meft-cuda-20261030/preparation/fixtures/order-4-seed-3 --native-library build/libmeft_rows.so --device cuda --output-dir /llm-align/duyimin/meft-cuda-20261030/preparation/cuda-20261030T081622Z-order-4-seed-3 --warmup 3 --repeat 10 --staging-rows 256 --staging-slots 2 --cache-bytes 4194304",
+  "commit": "ca054e843c90e59c63e021ae64bda4ec6674505a",
+  "limitations": [
+    "Small trained character-GRU tables; no TinyEngram/DeepSeek compatibility or model throughput conclusion.",
+    "CPU mode validates bytes/protocol only; no accelerator speed or staging evidence.",
+    "Fresh processes, fixed baseline order; warm OS page cache is not flushed.",
+    "First-pass diagnostics include readback; warm timings exclude correctness D2H/hash.",
+    "One live gather output; full-model prefetch outputs/KV/backbone memory are excluded.",
+    "Dense offload shares native copy scheduling; generic offload savings are not compression gains.",
+    "GPU allocator metrics exclude driver/context allocations; RSS peak includes startup/transient tensors.",
+    "Idle gate samples external processes before/after timing, cannot reserve the GPU or rule out short interference.",
+    "Driver PID is the sole client appearing after an empty-device gate and worker context creation; ambiguity blocks the run.",
+    "Existing local checkpoints and corpus; no paid services, retraining or downloads."
+  ],
+  "settings": {
+    "allocator_fraction": 0.04,
+    "cache_bytes": 4194304,
+    "device": "cuda",
+    "fixture": "/llm-align/duyimin/meft-cuda-20261030/preparation/fixtures/order-4-seed-3",
+    "native_library": "build/libmeft_rows.so",
+    "output_dir": "/llm-align/duyimin/meft-cuda-20261030/preparation/cuda-20261030T081622Z-order-4-seed-3",
+    "query_chunk_rows": 65536,
+    "repeat": 10,
+    "reserve_bytes": 2147483648,
+    "staging_rows": 256,
+    "staging_slots": 2,
+    "timeout": 300,
+    "warmup": 3
+  },
+  "source_hashes": {
+    "benchmark_device_gather.py": "75f2294da5673a4cc59ba994d1955c338bf11c36e1172a7dce966533fbb527f0",
+    "device_row_adapter.py": "dfaf3fdbcc5d9c5fdfa25f6fb54c74c5bd10c53679e69a6fb02abc7d3cb1b432",
+    "prepare_device_gather.py": "d7d40b39a52f53253386031fb558056baa4a6c5f5cf5385d41c2abc7aed9126c"
+  },
+  "status": "blocked",
+  "time_utc": "2026-10-30T08:16:24.555018+00:00",
+  "workers": [
+    {
+      "cases": [],
+      "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/meft-cuda-20261030/source/tools/benchmark_device_gather.py --worker resident --worker-report /llm-align/duyimin/meft-cuda-20261030/preparation/cuda-20261030T081622Z-order-4-seed-3/resident.json --fixture /llm-align/duyimin/meft-cuda-20261030/preparation/fixtures/order-4-seed-3 --native-library build/libmeft_rows.so --device cuda --output-dir /llm-align/duyimin/meft-cuda-20261030/preparation/cuda-20261030T081622Z-order-4-seed-3 --staging-rows 256 --staging-slots 2 --query-chunk-rows 65536 --cache-bytes 4194304 --warmup 3 --repeat 10 --timeout 300 --allocator-fraction 0.04 --reserve-bytes 2147483648",
+      "cpu": "x86_64",
+      "device": "cuda",
+      "dtype": "torch.float32",
+      "error": "selected GPU is contended; performance run deferred",
+      "exit_code": 2,
+      "fixture_sha256": "adc46c0772ad0d64312b2f85a8cb7b501652ad04169f7cad8555a4df9df2974e",
+      "gpu_before": {
+        "compute_pids": [
+          326141
+        ],
+        "driver": "535.54.03",
+        "external_compute_pids": [
+          326141
+        ],
+        "free_mib": 80589,
+        "gpu": "NVIDIA A100-SXM4-80GB",
+        "gpu_uuid": "GPU-0d6f5ec3-1a8c-b91d-cab5-0cf73accebf8",
+        "utilization_percent": 44
+      },
+      "interop_threads": 1,
+      "mode": "resident",
+      "native_library_sha256": "d4a7ac2fdc7d25bbb32f7eb5cd009123d2346215bcd386ee8f0e182c33ee66f4",
+      "native_table_and_metadata_bytes": 2896214,
+      "os": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+      "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+      "raw_table_bytes": 3010560,
+      "source_shape": [
+        11760,
+        64
+      ],
+      "status": "blocked",
+      "stderr": "",
+      "stdout": "",
+      "threads": 1,
+      "torch": "2.11.0+cu130",
+      "weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323"
+    }
+  ]
+}

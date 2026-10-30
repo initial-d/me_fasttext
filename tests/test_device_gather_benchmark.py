@@ -101,6 +101,20 @@ class DeviceBenchmarkTest(unittest.TestCase):
             "GPU-a, NVIDIA A100, 535.54.03, 99, 6277\n"]):
             self.assertEqual(gpu_snapshot("GPU-a")["external_compute_pids"], [7])
 
+    def test_gpu_uuid_prefix_and_explicit_host_pid_mapping(self):
+        from tools.benchmark_device_gather import gpu_snapshot, monitor_client_pid
+        with patch("subprocess.check_output", side_effect=[
+            "GPU-a, 17\nGPU-a, 19\n", "GPU-a, NVIDIA A100, 535.54.03, 1, 75000\n"]) as command:
+            snapshot = gpu_snapshot("a", own_pid=17)
+            self.assertEqual(snapshot["compute_pids"], [17, 19])
+            self.assertEqual(snapshot["external_compute_pids"], [19])
+            self.assertIn("--id=GPU-a", command.call_args.args[0])
+            with self.assertRaisesRegex(ValueError, "cannot identify"):
+                monitor_client_pid(snapshot)
+        self.assertEqual(monitor_client_pid({"compute_pids": [17]}), 17)
+        with self.assertRaises(ValueError):
+            monitor_client_pid({"compute_pids": []})
+
 
 if __name__ == "__main__":
     unittest.main()
