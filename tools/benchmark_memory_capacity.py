@@ -246,7 +246,7 @@ def main():
                 raise RuntimeError('worker failed: '+variant)
     report['status'] = 'passed'
     (args.output_dir/'report.json').write_text(json.dumps(report,indent=2)+'\n')
-    print(json.dumps({'status':report['status'],'shape':shape,'raw_bytes':source.stat().st_size()}),flush=True)
+    print(json.dumps({'status':report['status'],'shape':shape,'raw_bytes':source.stat().st_size}),flush=True)
 
 
 if __name__ == '__main__':
