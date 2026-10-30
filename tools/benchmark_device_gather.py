@@ -53,12 +53,15 @@ def rss():
     return {"current_bytes": current, "process_peak_bytes": int(peak if sys.platform == "darwin" else peak * 1024)}
 
 
-def gpu_snapshot(uuid):
+def gpu_snapshot(uuid, *, own_pid=None):
     """No process names/commands; report competition without disturbing jobs."""
+    uuid = uuid if uuid.startswith("GPU-") else "GPU-" + uuid
+    own_pid = os.getpid() if own_pid is None else own_pid
     raw = subprocess.check_output(["nvidia-smi", "--query-compute-apps=gpu_uuid,pid",
                                    "--format=csv,noheader,nounits"], text=True, timeout=10)
-    others = [int(pid.strip()) for line in raw.splitlines() if "," in line
-              for gpu, pid in [line.split(",")] if gpu.strip() == uuid and int(pid.strip()) != os.getpid()]
+    clients = sorted({int(pid.strip()) for line in raw.splitlines() if "," in line
+                      for gpu, pid in [line.split(",")] if gpu.strip() == uuid})
+    others = [pid for pid in clients if pid != own_pid]
     raw = subprocess.check_output(["nvidia-smi", "--id=" + uuid,
                                    "--query-gpu=uuid,name,driver_version,utilization.gpu,memory.free",
                                    "--format=csv,noheader,nounits"], text=True, timeout=10)
@@ -66,7 +69,18 @@ def gpu_snapshot(uuid):
     if gpu != uuid:
         raise ValueError("GPU monitoring selected a different device")
     return {"gpu_uuid": gpu, "gpu": name, "driver": driver, "utilization_percent": int(utilization),
-            "free_mib": int(free), "external_compute_pids": others}
+            "free_mib": int(free), "compute_pids": clients, "external_compute_pids": others}
+
+
+def monitor_client_pid(snapshot):
+    """Resolve driver PID after an empty-device gate and our context creation.
+
+    NVML may report a host PID while os.getpid() is in a container namespace.
+    Require one client; never ignore an arbitrary pre-existing driver process.
+    """
+    if len(snapshot["compute_pids"]) != 1:
+        raise ValueError("cannot identify worker CUDA client after idle-device gate")
+    return snapshot["compute_pids"][0]
 
 
 def fixture_inputs(fixture, mode):
@@ -95,7 +109,7 @@ def worker(args):
               "python": sys.version, "torch": torch.__version__, "os": platform.platform(),
               "cpu": platform.processor() or platform.machine(), "threads": 1, "interop_threads": 1,
               "cases": []}
-    module, uuid = None, None
+    module, uuid, monitor_pid = None, None, None
     try:
         manifest, replay = fixture_inputs(args.fixture, args.worker)
         report.update(fixture_sha256=file_sha256(args.fixture / "manifest.json"),
@@ -104,6 +118,18 @@ def worker(args):
                       native_table_and_metadata_bytes=manifest["native_table_and_metadata_bytes"],
                       native_library_sha256=file_sha256(args.native_library))
         if args.device == "cuda":
+            selector = os.environ.get("CUDA_VISIBLE_DEVICES", "")
+            if not selector or "," in selector:
+                report.update(status="blocked", error="expose exactly one selected GPU with CUDA_VISIBLE_DEVICES")
+                return 2
+            # Observe competition before creating any worker CUDA context, so
+            # the driver/client PID can subsequently be resolved in containers.
+            uuid = subprocess.check_output(["nvidia-smi", "--id=" + selector, "--query-gpu=uuid",
+                                            "--format=csv,noheader,nounits"], text=True, timeout=10).strip()
+            report["gpu_before"] = gpu_snapshot(uuid, own_pid=0)
+            if report["gpu_before"]["external_compute_pids"] or report["gpu_before"]["utilization_percent"] > 5:
+                report.update(status="blocked", error="selected GPU is contended; performance run deferred")
+                return 2
             if not torch.cuda.is_available():
                 report.update(status="blocked", error="CUDA unavailable")
                 return 2
@@ -111,11 +137,10 @@ def worker(args):
                 report.update(status="blocked", error="expose exactly one selected GPU with CUDA_VISIBLE_DEVICES")
                 return 2
             properties = torch.cuda.get_device_properties(0)
-            uuid = str(properties.uuid)
-            report["gpu_before"] = gpu_snapshot(uuid)
-            if report["gpu_before"]["external_compute_pids"] or report["gpu_before"]["utilization_percent"] > 5:
-                report.update(status="blocked", error="selected GPU is contended; performance run deferred")
-                return 2
+            runtime_uuid = str(properties.uuid)
+            runtime_uuid = runtime_uuid if runtime_uuid.startswith("GPU-") else "GPU-" + runtime_uuid
+            if runtime_uuid != uuid:
+                raise ValueError("CUDA runtime and GPU monitoring selected different devices")
             free, total = torch.cuda.mem_get_info()
             cap = int(total * args.allocator_fraction)
             report.update(cuda_runtime=torch.version.cuda, allocator_limit_bytes=cap,
@@ -124,6 +149,17 @@ def worker(args):
                 report.update(status="blocked", error="insufficient free memory for allocator cap plus reserve")
                 return 2
             torch.cuda.set_per_process_memory_fraction(args.allocator_fraction)
+            probe = torch.empty(1, device="cuda")
+            torch.cuda.synchronize()
+            snapshot = gpu_snapshot(uuid, own_pid=0)
+            try:
+                monitor_pid = monitor_client_pid(snapshot)
+            except ValueError as error:
+                report.update(status="blocked", error=str(error), gpu_after_context=snapshot)
+                return 2
+            report.update(monitor_client_pid=monitor_pid, worker_namespace_pid=os.getpid(),
+                          monitor_pid_method="sole driver client after empty-device gate and worker context creation")
+            del probe
         sync = torch.cuda.synchronize if args.device == "cuda" else lambda: None
         report["rss_before_open"] = rss()
         started = time.perf_counter()
@@ -165,8 +201,8 @@ def worker(args):
                         sync()
                         del output
                 if uuid:
-                    before_timing = gpu_snapshot(uuid)
-                    if before_timing["external_compute_pids"]:
+                    before_timing = gpu_snapshot(uuid, own_pid=monitor_pid)
+                    if before_timing["external_compute_pids"] or monitor_pid not in before_timing["compute_pids"]:
                         report.update(status="blocked", error="competition appeared before timing", gpu_during=before_timing)
                         return 2
                     torch.cuda.reset_peak_memory_stats()
@@ -185,8 +221,8 @@ def worker(args):
                            "warm_peak_allocated_bytes": torch.cuda.max_memory_allocated(),
                            "warm_peak_reserved_bytes": torch.cuda.max_memory_reserved()} if uuid else None)
                 if uuid:
-                    after_timing = gpu_snapshot(uuid)
-                    if after_timing["external_compute_pids"]:
+                    after_timing = gpu_snapshot(uuid, own_pid=monitor_pid)
+                    if after_timing["external_compute_pids"] or monitor_pid not in after_timing["compute_pids"]:
                         report.update(status="blocked", error="competition appeared during timing", gpu_after=after_timing)
                         return 2
                 report["cases"].append({"positions": case["positions"], "query_shape": items[0]["shape"],
@@ -252,6 +288,7 @@ def main():
                               "Dense offload shares native copy scheduling; generic offload savings are not compression gains.",
                               "GPU allocator metrics exclude driver/context allocations; RSS peak includes startup/transient tensors.",
                               "Idle gate samples external processes before/after timing, cannot reserve the GPU or rule out short interference.",
+                              "Driver PID is the sole client appearing after an empty-device gate and worker context creation; ambiguity blocks the run.",
                               "Existing local checkpoints and corpus; no paid services, retraining or downloads."], "workers": []}
     for mode in MODES:
         path = args.output_dir / (mode + ".json")
