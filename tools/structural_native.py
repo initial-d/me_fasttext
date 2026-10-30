@@ -141,7 +141,7 @@ class StructuralPlan(StructuralIndex):
                                                 error, len(error)):
             raise ValueError(error.value.decode())
 
-    def export(self, source, directory, *, block_rows=256, predictor="xor", index="datrie"):
+    def export(self, source, directory, *, block_rows=256, predictor="xor", index="datrie", max_block_bytes=None):
         """Publish to a NEW owned directory; failed exports remove that directory.
 
         Source must match planned bytes. Existing reader/cache ABI is unchanged.
@@ -159,7 +159,7 @@ class StructuralPlan(StructuralIndex):
             self.save_index(index_path, index=index)
             metadata = pack_native(source, directory / "table.men", self.dim * 4, block_rows,
                 deduplicate=False, predictor=predictor, row_order=self.row_order,
-                representatives=self.representatives)
+                representatives=self.representatives, max_block_bytes=max_block_bytes)
             if hashlib.sha256(source.read_bytes()).hexdigest() != self.source_sha256:
                 raise ValueError("source changed during structural export")
             metadata.update({"structural_mode": self.mode, "index": index,

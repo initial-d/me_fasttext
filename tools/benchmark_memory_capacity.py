@@ -41,7 +41,7 @@ def environment():
     if path.exists():
         cpu = next((line.split(':',1)[1].strip() for line in path.read_text().splitlines() if line.startswith('model name')), cpu)
     return {'python': sys.version, 'numpy': np.__version__, 'os': platform.platform(), 'cpu': cpu,
-            'command': shlex.join([sys.executable, *sys.argv]),
+            'command': shlex.join(getattr(sys, 'orig_argv', [sys.executable, *sys.argv])),
             'source_commit': subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             'cuda_visible_devices': os.environ.get('CUDA_VISIBLE_DEVICES'),
             'cpu_affinity': sorted(os.sched_getaffinity(0)) if hasattr(os,'sched_getaffinity') else None}

@@ -12,6 +12,28 @@ except ImportError:
 
 @unittest.skipUnless(torch is not None, "optional PyTorch adapter tests; install torch")
 class EngramGatherTest(unittest.TestCase):
+    def test_byte_cap_resolves_each_dtype_and_bounds_tensor_staging(self):
+        from unittest.mock import patch
+        from tools.engram_row_adapter import export_multihead
+        for dtype in (torch.float32, torch.float16, torch.bfloat16):
+            with self.subTest(dtype=dtype), tempfile.TemporaryDirectory() as tmp:
+                source = torch.arange(55, dtype=torch.float32).reshape(11, 5).to(dtype)
+                observed = []
+                original_numpy = torch.Tensor.numpy
+                def numpy(tensor, *args, **kwargs):
+                    observed.append(tensor.numel() * tensor.element_size())
+                    return original_numpy(tensor, *args, **kwargs)
+                with patch.object(torch.Tensor, 'numpy', numpy):
+                    metadata = export_multihead(source, [5, 6], tmp, backend='native',
+                        deduplicate=False, predictor='xor', max_block_bytes=40)
+                self.assertEqual(metadata['block_rows'], 40 // (5 * source.element_size()))
+                self.assertTrue(all(n <= 40 for n in observed))
+                self.assertEqual(metadata['weight_sha256'],
+                    hashlib.sha256(source.view(torch.uint8).numpy().tobytes()).hexdigest())
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, 'native backend'):
+                export_multihead(torch.zeros(2, 5), [2], tmp, max_block_bytes=40)
+
     def test_streamed_export_bounds_chunks_and_preserves_noncontiguous_weights(self):
         from unittest.mock import patch
         from tools.engram_row_adapter import export_multihead, MappedMultiHeadEmbedding

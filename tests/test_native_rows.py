@@ -8,12 +8,89 @@ import tempfile
 import unittest
 import zlib
 
-from tools.native_row_store import NativeRows, pack_native
+from tools.native_row_store import DESC, HEADER, NativeRows, pack_native, resolve_block_rows
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class NativeRowsTest(unittest.TestCase):
+    def test_byte_cap_keeps_original_ids_with_compaction_permutation_and_tail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table"
+            rows = [b"A" * 65, b"B" * 65, b"A" * 65, b"C" * 65, b"D" * 65, b"E" * 65]
+            source.write_bytes(b"".join(rows))
+            metadata = pack_native(source, packed, 65, 256, False, "xor",
+                row_order=[5, 4, 3, 2, 1, 0], representatives=[0, 1, 0, 3, 4, 5], max_block_bytes=130)
+            self.assertEqual(metadata['block_rows'], 2)
+            self.assertEqual(metadata['blocks'], 3)
+            with packed.open('rb') as stream:
+                header = HEADER.unpack(stream.read(HEADER.size))
+                stream.seek(HEADER.size + header[2] * 8)
+                sizes = [DESC.unpack(stream.read(DESC.size))[2] for _ in range(header[-1])]
+            self.assertEqual(sizes, [130, 130, 65])
+            with NativeRows(packed, self.library) as table:
+                self.assertEqual(table.rows([2, 5, 0, 3, 1, 4, 2]), b"".join(rows[i] for i in [2, 5, 0, 3, 1, 4, 2]))
+            for cap, expected in ((None, 256), (1, 1), (64, 1), (130, 2), (10**9, 256)):
+                self.assertEqual(resolve_block_rows(65, 256, cap), expected)
+            for invalid in (0, -1, True, 1.5, '8'):
+                with self.assertRaises(ValueError):
+                    resolve_block_rows(65, 256, invalid)
+            cap_table, explicit_table = Path(tmp) / 'cap', Path(tmp) / 'explicit'
+            pack_native(source, cap_table, 65, 256, False, 'xor', max_block_bytes=130)
+            pack_native(source, explicit_table, 65, 2, False, 'xor')
+            self.assertEqual(cap_table.read_bytes(), explicit_table.read_bytes())
+
+    def test_codec_bytes_count_whole_blocks_chunk_redecodes_cache_hits_and_raw(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / 'raw', Path(tmp) / 'table'
+            # Repeated fixtures test codecs, not trained-data compression claims.
+            source.write_bytes(b'A' * (128 * 8))
+            pack_native(source, packed, 128, 4, False, 'xor')
+            with packed.open('rb') as stream:
+                stream.seek(HEADER.size + 8 * 8)
+                descriptors = [DESC.unpack(stream.read(DESC.size)) for _ in range(2)]
+            query = (ctypes.c_uint64 * 4)(0, 4, 1, 5)
+            out = ctypes.create_string_buffer(4 * 128)
+            with NativeRows(packed, self.library, cache_bytes=512, cache_policy='rows') as table:
+                table.gather_into(ctypes.addressof(query), 4, ctypes.addressof(out), len(out), max_query_rows=1)
+                self.assertEqual(table.last_decoded_bytes, 4 * 512)
+                self.assertEqual(table.last_compressed_bytes, 2 * sum(d[1] for d in descriptors))
+                table.gather_into(ctypes.addressof(query), 4, ctypes.addressof(out), len(out))
+                self.assertEqual(table.last_decoded_bytes, 0)
+                self.assertEqual(table.last_compressed_bytes, 0)
+                self.assertEqual(table.last_row_cache_hits, 4)
+                table.gather_into(0, 0, 0, 0)
+                self.assertEqual(table.last_decoded_bytes, 0)
+                table.set_cache_bytes(0)
+                table.rows([0, 1, 4, 5])
+                self.assertEqual(table.last_decoded_bytes, 2 * 512)
+                self.assertEqual(table.last_compressed_bytes, sum(d[1] for d in descriptors))
+            source.write_bytes(random.Random(42).randbytes(128 * 8))
+            metadata = pack_native(source, packed, 128, 4, False)
+            self.assertEqual(metadata['raw_blocks'], 2)
+            with NativeRows(packed, self.library) as table:
+                table.rows([0, 4])
+                self.assertEqual(table.last_decoded_bytes, 0)
+                self.assertEqual(table.last_compressed_bytes, 0)
+
+    def test_bag_calls_aggregate_codec_bytes_and_reset_on_rejected_input(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / 'raw', Path(tmp) / 'table'
+            source.write_bytes(struct.pack('<32f', *([1.0] * 32)))
+            pack_native(source, packed, 16, 4, False)
+            with NativeRows(packed, self.library) as table:
+                ids = (ctypes.c_uint64 * 4)(0, 4, 1, 5)
+                offsets = (ctypes.c_uint64 * 3)(0, 2, 4)
+                out = (ctypes.c_float * 8)()
+                table.embedding_bag_into(ctypes.addressof(ids), 4, ctypes.addressof(offsets), 2,
+                    1, False, ctypes.c_uint64(-1).value, 1, ctypes.addressof(out), 8)
+                self.assertEqual(table.last_decoded_bytes, 4 * 64)
+                ids[3] = 8
+                gathered = ctypes.create_string_buffer(64)
+                with self.assertRaises(ValueError):
+                    table.gather_into(ctypes.addressof(ids), 4, ctypes.addressof(gathered), len(gathered))
+                self.assertEqual(table.last_decoded_bytes, 0)
+
     def test_chunked_query_preserves_bytes_order_and_aggregates_all_counters(self):
         with tempfile.TemporaryDirectory() as tmp:
             source, packed = Path(tmp) / "raw", Path(tmp) / "table"

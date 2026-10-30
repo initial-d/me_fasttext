@@ -161,7 +161,8 @@ def _mapping(engram, config):
 
 def export_tinyengram_checkpoint(checkpoint_dir, output_dir, *, upstream_dir,
                                 engram_config=None, tokenizer_dir=None, global_step=None,
-                                block_rows=256, predictor="xor", shard_bytes=256 * 1024**2):
+                                block_rows=256, predictor="xor", shard_bytes=256 * 1024**2,
+                                max_block_bytes=None):
     """Convert full frozen safetensors weights without constructing a dense model.
 
     Non-memory tensors are copied into bounded-size shards (an individual large
@@ -221,6 +222,7 @@ def export_tinyengram_checkpoint(checkpoint_dir, output_dir, *, upstream_dir,
             metadata = export_multihead(
                 _tensor(checkpoint_dir, keys, weight_key), sizes, stage / "memory" / str(layer_id),
                 block_rows=block_rows, backend="native", deduplicate=False, predictor=predictor,
+                max_block_bytes=max_block_bytes,
             )
             if metadata["shape"][1] != config.n_embed_per_ngram // config.n_head_per_ngram:
                 raise ValueError("checkpoint memory dimension differs from config")
@@ -549,13 +551,15 @@ def main():
     parser.add_argument("--tokenizer-dir")
     parser.add_argument("--global-step", type=int)
     parser.add_argument("--block-rows", type=int, default=256)
+    parser.add_argument("--max-block-bytes", type=int,
+                        help="Cap decoded native block bytes for sparse access (at least one row); trades compression for latency")
     parser.add_argument("--predictor", choices=("none", "xor"), default="xor")
     args = parser.parse_args()
     manifest = export_tinyengram_checkpoint(
         args.checkpoint, args.output_dir, upstream_dir=args.upstream_dir,
         engram_config=_json(args.engram_config) if args.engram_config else None,
         tokenizer_dir=args.tokenizer_dir, global_step=args.global_step,
-        block_rows=args.block_rows, predictor=args.predictor,
+        block_rows=args.block_rows, predictor=args.predictor, max_block_bytes=args.max_block_bytes,
     )
     print(json.dumps({"output_dir": str(Path(args.output_dir).resolve()), "layers": list(manifest["layers"])}, indent=2))
 
