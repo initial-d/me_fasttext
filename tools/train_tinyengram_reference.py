@@ -38,21 +38,38 @@ def _metrics(logits, ids):
 
 
 @torch.inference_mode()
+def cached_logits(model, ids):
+    cache, pieces = None, []
+    sizes = [min(8, ids.shape[1]), *([1] * max(0, ids.shape[1] - 8))]
+    start = 0
+    for size in sizes:
+        output = model(ids[:, start:start + size], past_key_values=cache, use_cache=True)
+        cache = output.past_key_values
+        pieces.append(output.logits)
+        start += size
+    return torch.cat(pieces, dim=1), cache
+
+
+def logit_delta(candidate, reference, ids):
+    delta = candidate - reference
+    return {"max_abs": delta.abs().max().item(), "mean_abs": delta.abs().mean().item(),
+            "top1_changed_fraction": (candidate.argmax(-1) != reference.argmax(-1)).float().mean().item(),
+            "cross_entropy_change": _metrics(candidate, ids)["next_token_cross_entropy"]
+                                    - _metrics(reference, ids)["next_token_cross_entropy"]}
+
+
+@torch.inference_mode()
 def verify(resident, mapped, ids, decode_tokens):
     reference = resident(ids, use_cache=False).logits
     packed = mapped(ids, use_cache=False).logits
     if _tensor_hash(reference) != _tensor_hash(packed):
         raise AssertionError("mapped full-forward logits changed")
-    cache, pieces = None, []
-    sizes = [min(8, ids.shape[1]), *([1] * max(0, ids.shape[1] - 8))]
-    start = 0
-    for size in sizes:
-        output = mapped(ids[:, start:start + size], past_key_values=cache, use_cache=True)
-        cache = output.past_key_values
-        pieces.append(output.logits)
-        start += size
-    cached = torch.cat(pieces, dim=1)
-    torch.testing.assert_close(cached, reference, rtol=2e-4, atol=2e-5)
+    cached, cache = cached_logits(mapped, ids)
+    resident_cached, _ = cached_logits(resident, ids)
+    # Match execution schedules to isolate the storage replacement. Full and
+    # incremental matrix shapes differ; report that separate rounding delta.
+    if _tensor_hash(cached) != _tensor_hash(resident_cached):
+        raise AssertionError("mapped and resident same-schedule cached logits changed")
     prompt = ids[:, :8]
     a = resident.generate(prompt, max_new_tokens=decode_tokens, use_cache=False)
     b = mapped.generate(prompt, max_new_tokens=decode_tokens, use_cache=True)
@@ -60,8 +77,8 @@ def verify(resident, mapped, ids, decode_tokens):
     if not (torch.equal(a, b) and torch.equal(a, c)):
         raise AssertionError("greedy tokens changed")
     return {"full_forward_logits_byte_exact": True, "full_forward": _metrics(reference, ids),
-            "cached_decode_max_abs_logit_error": (cached - reference).abs().max().item(),
-            "cached_decode_allclose": {"rtol": 2e-4, "atol": 2e-5},
+            "cached_mapped_vs_resident_logits_byte_exact": True,
+            "cached_vs_full_forward_delta": logit_delta(cached, reference, ids),
             "generated_token_ids": a.tolist(), "greedy_cached_and_uncached_tokens_equal": True,
             "decode_tokens": decode_tokens, "memory_history_tokens": cache.token_tail.shape[1],
             "convolution_history_shapes": {key: list(value.shape) for key, value in cache.conv_tails.items()}}
@@ -183,6 +200,13 @@ def main():
         resident = TinyEngramModel(model).eval()
         with load_tinyengram_checkpoint(bundle, upstream_dir=args.upstream_dir,
                                        native_library=args.native_library, native_cache_bytes=1024**2) as mapped:
+            restored_tokenizer = AutoTokenizer.from_pretrained(bundle / "tokenizer", local_files_only=True,
+                                                               trust_remote_code=False)
+            for name, segment in segments.items():
+                if not torch.equal(restored_tokenizer(segment, return_tensors="pt", add_special_tokens=False).input_ids,
+                                   encoded[name]):
+                    raise AssertionError("bundle tokenizer changed source token IDs")
+            report["tokenizer_roundtrip_ids_exact"] = True
             report["all_memory_rows_byte_exact"] = True
             for layer_id, layer in mapped.model.model.engram_layers.items():
                 weight = model.model.engram_layers[layer_id].multi_head_embedding.embedding.weight.detach()
