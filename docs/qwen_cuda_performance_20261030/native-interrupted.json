@@ -1,0 +1,107 @@
+{
+  "allocator_limit_bytes": 3399509606,
+  "cases": [
+    {
+      "generated_ids": null,
+      "gpu_peak_allocated_bytes": 2439205888,
+      "gpu_peak_reserved_bytes": 2447376384,
+      "input_ids_sha256": "79f21622712c760e04619cea018d49fb781393ad95f82b2ce15a327949fdf138",
+      "input_tokens": 32,
+      "key": "32/prefill",
+      "median_seconds": 0.07760525587946177,
+      "method": "prefill",
+      "output_sha256": "7f0ca724b30ddd8a63b6f7880ed1c0055f308cae26ac35add6300eef0cd038e9",
+      "p95_seconds": 0.09130607503466308,
+      "rss": {
+        "current_bytes": 1534828544,
+        "process_peak_bytes": 1968443392
+      },
+      "same_schedule_byte_exact": true,
+      "seconds": [
+        0.09336195280775428,
+        0.0830825639422983,
+        0.07760525587946177,
+        0.07743065292015672,
+        0.07738190400414169
+      ],
+      "tokens_per_second": 412.343205848108
+    }
+  ],
+  "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python -m tools.benchmark_tinyengram_cuda --mode native --checkpoint /llm-align/duyimin/meft-cuda-20261030/checkpoint --bundle /llm-align/duyimin/meft-cuda-20261030/bundle --corpus /llm-align/duyimin/meft-cuda-20261030/delta/corpus.txt --upstream-dir /llm-align/duyimin/meft-cuda-20261030/upstream --native-library build/libmeft_rows.so --output-dir /llm-align/duyimin/meft-cuda-20261030/preparation/qwen-cuda-20261030T082638Z --tokens 32,128 --decode-tokens 16 --warmup 2 --repeat 5",
+  "commit": "89e09f47679f5594ac464a21353aae32f7d134d1",
+  "error": "competition during timing",
+  "gpu_before": {
+    "compute_pids": [],
+    "driver": "535.54.03",
+    "external_compute_pids": [],
+    "free_mib": 81042,
+    "gpu": "NVIDIA A100-SXM4-80GB",
+    "gpu_uuid": "GPU-0d6f5ec3-1a8c-b91d-cab5-0cf73accebf8",
+    "utilization_percent": 0
+  },
+  "gpu_during": {
+    "compute_pids": [
+      354438,
+      355476
+    ],
+    "driver": "535.54.03",
+    "external_compute_pids": [
+      355476
+    ],
+    "free_mib": 77693,
+    "gpu": "NVIDIA A100-SXM4-80GB",
+    "gpu_uuid": "GPU-0d6f5ec3-1a8c-b91d-cab5-0cf73accebf8",
+    "utilization_percent": 44
+  },
+  "inputs": {
+    "bundle": "cdb970a1d030be8956bdead60fd70b692b6ed830b3ea96f5cde5dd602d4c33a0",
+    "checkpoint_files": {
+      "model.safetensors": "25dbc45f793f693c462c027045335ee08b67b45b793bacc5ce53970842971972"
+    },
+    "config": "114e06ef3f4ea33eace4fc7c56b32eaede4643650b790d9ddefa1b55ffbd8576",
+    "corpus": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "engram_config": "a19b39ded3d245f4cdcf858ac048ea623295de58911ffbdc41d7bf7e958befdd"
+  },
+  "limitations": [
+    "One small trained Qwen3-0.6B branch: 648x8 float32 memory, not large-table memory savings.",
+    "Eager unpadded batch-one inference, fixed-length greedy decode; no deployment traffic or quality benchmark.",
+    "Same host hash/prefetch schedule for all modes; resident is a controlled baseline, not upstream GPU hashing.",
+    "Warm wall-clock measurements include host work and per-token greedy ID readback; prefill excludes logits D2H hashing.",
+    "Driver/context memory excluded from Torch allocator counters; RSS includes startup/framework state.",
+    "Sampled empty-device gate and competing-client checks do not reserve the GPU or exclude shared CPU/I/O interference.",
+    "Cached local corpus/checkpoints; no downloads, retraining or paid services."
+  ],
+  "mode": "native",
+  "monitor_client_pid": 354438,
+  "open_seconds": 7.560960867907852,
+  "reserve_bytes": 2147483648,
+  "rss_after_open": {
+    "current_bytes": 1162637312,
+    "process_peak_bytes": 1968443392
+  },
+  "settings": {
+    "cache_bytes": 1048576,
+    "decode_tokens": 16,
+    "repeat": 5,
+    "staging_rows": 256,
+    "tokens": [
+      32,
+      128
+    ],
+    "warmup": 2
+  },
+  "software": {
+    "cuda_runtime": "13.0",
+    "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+    "torch": "2.11.0+cu130",
+    "transformers": "4.57.3"
+  },
+  "source_hashes": {
+    "benchmark_device_gather.py": "75f2294da5673a4cc59ba994d1955c338bf11c36e1172a7dce966533fbb527f0",
+    "benchmark_tinyengram_cuda.py": "b73510cbd9a9a540b9638a8fc4ca7ac31eddebd5d7b0202de87f95c5cf9cab9e",
+    "device_row_adapter.py": "dfaf3fdbcc5d9c5fdfa25f6fb54c74c5bd10c53679e69a6fb02abc7d3cb1b432",
+    "tinyengram_checkpoint.py": "af5d64e4b1dbf39c9a7551542988b27172a9c504dee212c5b1606d79ca4c29bb"
+  },
+  "status": "blocked",
+  "worker_namespace_pid": 604494
+}

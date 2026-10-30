@@ -4,9 +4,11 @@
 from **original trained memory weights and original held-out query IDs**.
 [`benchmark_device_gather.py`](../tools/benchmark_device_gather.py) runs each
 baseline in a fresh process. CPU protocol validation passes for trained orders
-4/8/12, seed 3; **CUDA timing has not been run and awaits an idle GPU**.
-The separate [A100 Qwen correctness result](cuda_a100_evidence_20261030/README.md)
-does not supply performance numbers for these baselines.
+4/8/12, seed 3. **[Completed A100 CUDA measurements](cuda_gather_evidence_20261030/README.md)**
+now record all three modes and two staging configurations. A separate
+[trained Qwen performance experiment](qwen_cuda_performance_20261030/README.md)
+measures the much smaller memory inside the full Transformer. The earlier
+[A100 correctness result](cuda_a100_evidence_20261030/README.md) is retained.
 
 | Mode | Table placement | Work measured |
 | --- | --- | --- |
@@ -87,5 +89,5 @@ query size may increase output memory even with bounded staging.
 Local preparation uses Python 3.12.14 / PyTorch 2.14.1, macOS M5 CPU, Torch 1/1
 threads, cached corpus and existing trained checkpoints; no downloads,
 retraining or paid services. [Preparation manifests and CPU raw reports](device_gather_preparation_20261030/README.md)
-record the completed protocol checks. CUDA results and any plots will be added
-after an actual idle-card measurement; no projected speed curve is published.
+record the completed protocol checks. The later CUDA reports and actual
+measurement curves are linked above; no projected speed curve is published.

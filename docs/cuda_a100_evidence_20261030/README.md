@@ -1,5 +1,10 @@
 # Real A100 CUDA correctness, 2026-10-30
 
+This page records the earlier shared-card correctness run. Later
+[gather costs](../cuda_gather_evidence_20261030/README.md) and
+[controlled Qwen timings](../qwen_cuda_performance_20261030/README.md)
+are recorded separately; the original reports below are preserved.
+
 **The native host-memory backend preserves trained Qwen3-0.6B outputs on real
 CUDA hardware. GPU speed and large-table memory gains remain unmeasured.**
 The card was shared with existing training jobs; those jobs were left running.

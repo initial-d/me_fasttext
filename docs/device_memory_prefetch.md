@@ -11,9 +11,12 @@ real A100 with PyTorch 2.11.0+cu130**, including pinned staging, copy events,
 non-default consumer streams, allocation lifetime and partial-failure cleanup.
 [The trained Qwen CUDA replay](cuda_a100_evidence_20261030/README.md) preserves
 same-schedule full/cached logits and fixed greedy tokens byte for byte.
-Shared-card correctness does not establish latency, throughput or large-table
-memory savings. The [three-baseline benchmark](device_gather_benchmark.md) is
-prepared but CUDA timing awaits an idle GPU. Skips do not constitute validation.
+Shared-card correctness does not establish performance. Later
+[three-baseline A100 gather measurements](cuda_gather_evidence_20261030/README.md)
+and [controlled Qwen inference timings](qwen_cuda_performance_20261030/README.md)
+record actual costs on a card that passed sampled competition checks. These
+small experiments do not establish large-table memory gains or production
+serving performance. Skips do not constitute validation.
 
 The [trained Qwen replay reports](device_memory_evidence_20261030/README.md)
 record MPS, installed-wheel CPU and the earlier local CUDA blocker, retained as
@@ -89,8 +92,9 @@ scratch uses the separate `query_chunk_rows` setting.
 The bound excludes query IDs, full per-query output tensors, prefetched outputs
 for all layers, the native block cache, mmap/RSS, model weights and KV state.
 All prefetched layer outputs are retained until that forward finishes. A large
-prefill can therefore consume substantial device memory. No transfer overlap,
-end-to-end speedup or large-table GPU-memory saving has been measured here.
+prefill can therefore consume substantial device memory. Controlled Qwen
+end-to-end timings are linked above; transfer overlap has not been isolated,
+and large-table whole-model GPU-memory savings remain unmeasured.
 
 ## Reproduce on real hardware
 

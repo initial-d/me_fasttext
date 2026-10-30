@@ -25,15 +25,18 @@ legacy C++ exporter also supports approximate row sharing.
 
 Learned-model evidence includes small CPU references and a trained memory branch
 on pretrained Qwen3-0.6B. Official Engram compatibility uses its demonstration;
-GPU serving performance remains unmeasured.
+[Small-table A100 gather costs](docs/cuda_gather_evidence_20261030/README.md)
+and [controlled Qwen CUDA inference timings](docs/qwen_cuda_performance_20261030/README.md)
+are measured; large-table and production serving performance remain open.
 
 The device adapter keeps immutable tables on CPU and transfers only queried
 vectors to the backbone. TinyEngram prefetches each layer's hashes before decoder
 execution. CPU/MPS checks and [real A100 CUDA correctness checks](docs/cuda_a100_evidence_20261030/README.md)
 pass, including trained Qwen full/cached logits and CUDA stream/pinned-memory
-lifetime checks. GPU latency, throughput and large-table memory gains remain
-unmeasured; [three-baseline measurement tooling](docs/device_gather_benchmark.md)
-is ready for an idle GPU.
+lifetime checks. [Three-baseline A100 measurements](docs/device_gather_benchmark.md)
+separate generic CPU offload from native storage/query costs. Native preserves
+outputs but is slower than dense offload on these trained-table query traces;
+large-table whole-model memory gains remain unmeasured.
 
 This repository accompanies the paper [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).
 
