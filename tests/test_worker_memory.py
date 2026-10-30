@@ -93,7 +93,8 @@ class WorkerMemoryTest(unittest.TestCase):
                     rows[2, 0] = -0.
                     export_multihead(rows, [3, 4], tmp, block_rows=2, backend=backend)
                     with MappedMultiHeadEmbedding(tmp, cache_blocks=1, native_library=self.library,
-                                                 native_cache_bytes=48 if backend == "native" else 0) as original:
+                                                 native_cache_bytes=48 if backend == "native" else 0,
+                                                 native_cache_policy="rows" if backend == "native" else "blocks") as original:
                         query = torch.tensor([[2, 3], [0, 0]])
                         expected = original(query).view(torch.uint8).clone()
                         for clone in (copy.copy(original), copy.deepcopy(original), pickle.loads(pickle.dumps(original))):
@@ -102,6 +103,7 @@ class WorkerMemoryTest(unittest.TestCase):
                                 if backend == "native":
                                     self.assertNotEqual(clone.table.handle, original.table.handle)
                                     self.assertEqual(clone.table.cache_bytes, 0)
+                                    self.assertEqual(clone.table.cache_policy, "rows")
                                 else:
                                     self.assertIsNot(clone.table.mapping, original.table.mapping)
                                     self.assertFalse(clone.table.cache)

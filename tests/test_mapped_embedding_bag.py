@@ -42,7 +42,8 @@ class MappedBagTest(unittest.TestCase):
                                                  ("chunked", "auto", 1024)):
                     with self.subTest(strategy=strategy, method=method, chunk=chunk):
                         with open_embedding_bag(tmp, native_library=self.library, strategy=strategy,
-                                                unique_method=method, chunk_rows=chunk) as mapped:
+                                                unique_method=method, chunk_rows=chunk,
+                                                native_cache_bytes=1024, native_cache_policy="rows") as mapped:
                             actual = mapped(ids, offsets, per_sample_weights=weights)
                             expected = source(ids, offsets, per_sample_weights=weights) if strategy == "unique" else oracle
                             self.assertTrue(torch.equal(actual, expected))

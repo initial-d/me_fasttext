@@ -32,7 +32,8 @@ class MappedEmbeddingBag(nn.Module):
 
     def __init__(self, output_dir, mode="sum", padding_idx=None, include_last_offset=False,
                  chunk_rows=1024, native_library=None, native_cache_bytes=0, strategy="unique",
-                 unique_method="auto", unique_index_bytes=8 * 1024 * 1024, query_chunk_rows=65536):
+                 unique_method="auto", unique_index_bytes=8 * 1024 * 1024, query_chunk_rows=65536,
+                 *, native_cache_policy="blocks"):
         super().__init__()
         if mode not in ("sum", "mean") or type(include_last_offset) is not bool:
             raise ValueError("sum/mean mode and boolean include_last_offset required")
@@ -46,7 +47,7 @@ class MappedEmbeddingBag(nn.Module):
             raise ValueError("unique_index_bytes must be a nonnegative integer")
         self.gather = MappedMultiHeadEmbedding(output_dir, native_library=native_library,
                                              native_cache_bytes=native_cache_bytes,
-                                             query_chunk_rows=query_chunk_rows)
+                                             query_chunk_rows=query_chunk_rows, native_cache_policy=native_cache_policy)
         self.num_embeddings, self.embedding_dim = self.gather.metadata["shape"]
         if (self.gather.backend != "native" or self.gather.num_heads != 1
                 or self.gather.metadata["byteorder"] != "little"):

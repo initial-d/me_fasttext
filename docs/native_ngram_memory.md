@@ -170,9 +170,17 @@ artifact larger. This is a distinct format, not a reinterpretation of legacy
 
 The reader bounds-checks file structure, descriptors and queried row IDs. It
 maps bytes lazily and groups a batch's requests by block, decodes once per block
-and restores original order. An optional [byte-budgeted decoded-block cache](native_cache_20261022.md)
+and restores original order. An optional [byte-budgeted cache](native_query_evidence_20261030/README.md)
 reuses compressed blocks between calls and is disabled by default. Cached payload
-bytes are bounded by the chosen budget, with a separate cap of 64 entries.
+bytes are bounded by the chosen budget. A lazily allocated hash index and linked
+LRU reuse decoded blocks without a fixed entry cap; index/LRU metadata is
+additional to the payload budget. Existing cache hits are read before misses
+can evict them, and fully cached queries skip sorting.
+For sparse repeated requests, `native_cache_policy="rows"` retains only queried
+rows from compressed blocks within the same payload budget. It uses forwarded
+IDs, preserves bytes and still decodes whole blocks on misses; block caching
+remains the default. Choose the policy from measured locality and include its
+metadata/RSS costs when comparing memory.
 Scratch retains up to one maximum decoded block plus per-batch request
 locations. Direct C opening does not verify a full-file cryptographic checksum;
 the PyTorch adapter does. Use trusted, immutable artifacts and external checksums

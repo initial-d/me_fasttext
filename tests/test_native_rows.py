@@ -293,23 +293,143 @@ class NativeRowsTest(unittest.TestCase):
                     self.assertEqual(table.cache_bytes, 0)
                     self.assertEqual(table.last_cache_hits, 0)
 
-    def test_cache_entry_cap_and_invalid_query_do_not_corrupt_cached_rows(self):
+    def test_cache_uses_budget_beyond_64_entries_and_invalid_query_is_atomic(self):
         with tempfile.TemporaryDirectory() as tmp:
             source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
-            rows = [bytes([i]) * 128 for i in range(70)]
+            rows = [bytes([i % 256]) * 128 for i in range(300)]
             source.write_bytes(b"".join(rows))
             pack_native(source, packed, 128, 1, False)
             with NativeRows(packed, self.library, 1024 * 1024) as table:
-                self.assertEqual(table.rows(range(70)), b"".join(rows))
-                self.assertEqual(table.cache_bytes, 64 * 128)
-                table.rows([69]); self.assertEqual(table.last_cache_hits, 1)
-                ids = (ctypes.c_uint64 * 2)(69, 70)
+                self.assertEqual(table.cache_bytes, 0)  # Budget allocation is lazy.
+                self.assertEqual(table.rows(range(300)), b"".join(rows))
+                self.assertEqual(table.cache_bytes, 300 * 128)
+                self.assertEqual(table.rows([0, 299, 0, 128, 299]), b"".join(rows[i] for i in [0, 299, 0, 128, 299]))
+                self.assertEqual(table.last_cache_hits, 3)  # Count blocks, not repeated rows.
+                self.assertEqual(table.last_decompressions, 0)
+                ids = (ctypes.c_uint64 * 2)(299, 300)
                 out = ctypes.create_string_buffer(256)
+                original_output = out.raw
                 with self.assertRaisesRegex(ValueError, "row ID"):
                     table.gather_into(ctypes.addressof(ids), 2, ctypes.addressof(out), 256)
-                self.assertEqual(table.rows([69]), rows[69])
+                self.assertEqual(out.raw, original_output)
+                self.assertEqual(table.rows([299]), rows[299])
                 self.assertEqual(table.last_cache_hits, 1)
-                table.rows([0]); self.assertEqual(table.last_decompressions, 1)
+                table.rows([0]); self.assertEqual(table.last_decompressions, 0)
+
+    def test_cache_consumes_later_hits_before_earlier_misses_evict_them(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            rows = [bytes([i]) * 128 for i in range(10)]
+            source.write_bytes(b"".join(rows))
+            pack_native(source, packed, 128, 1, False)
+            with NativeRows(packed, self.library, cache_bytes=256) as table:
+                table.rows([8, 9])
+                self.assertEqual(table.rows([0, 8, 1, 9, 8]), b"".join(rows[i] for i in [0, 8, 1, 9, 8]))
+                self.assertEqual(table.last_cache_hits, 2)
+                self.assertEqual(table.last_decompressions, 2)
+                self.assertEqual(table.cache_bytes, 256)
+                self.assertEqual(table.rows([0, 1, 0]), rows[0] + rows[1] + rows[0])
+                self.assertEqual(table.last_decompressions, 0)
+
+    def test_cache_hash_growth_eviction_and_budget_reset_match_lru_model(self):
+        from collections import OrderedDict
+        rng = random.Random(76)
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            rows = [i.to_bytes(2, "little") * 64 for i in range(300)]
+            source.write_bytes(b"".join(rows))
+            pack_native(source, packed, 128, 1, False)
+            with NativeRows(packed, self.library) as table:
+                for capacity in (150, 65, 1, 0, 300):
+                    table.set_cache_bytes(capacity * 128)
+                    self.assertEqual(table.cache_bytes, 0)
+                    model = OrderedDict()
+                    # Growth, collisions, eviction and reset use a deterministic replay.
+                    for row in [*range(300), *(rng.randrange(300) for _ in range(400))]:
+                        hit = row in model
+                        self.assertEqual(table.rows([row, row]), rows[row] * 2)
+                        self.assertEqual(table.last_cache_hits, int(hit))
+                        self.assertEqual(table.last_decompressions, int(not hit))
+                        if capacity:
+                            model[row] = None
+                            model.move_to_end(row)
+                            if len(model) > capacity:
+                                model.popitem(last=False)
+                        self.assertEqual(table.cache_bytes, len(model) * 128)
+
+    def test_row_cache_retains_sparse_queries_and_forwarded_aliases(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            # Opaque bit patterns, odd width and original forwarding aliases.
+            rows = [i.to_bytes(2, "little") * 31 + bytes([i]) for i in range(80)]
+            source.write_bytes(b"".join(rows + rows))
+            pack_native(source, packed, 63, 8, True, "xor")
+            with NativeRows(packed, self.library, cache_bytes=4 * 63, cache_policy="rows") as table:
+                ids = [0, 64, 80, 32, 0]
+                self.assertEqual(table.rows(ids), b"".join(rows[i % 80] for i in ids))
+                self.assertEqual(table.last_decompressions, 3)
+                self.assertEqual(table.cache_bytes, 3 * 63)  # Original alias 80 shares row 0.
+                self.assertEqual(table.last_row_cache_hits, 0)
+                self.assertEqual(table.rows(ids[::-1]), b"".join(rows[i % 80] for i in ids[::-1]))
+                self.assertEqual(table.last_decompressions, 0)
+                self.assertEqual(table.last_row_cache_hits, 3)
+                self.assertEqual(table.last_cache_hits, 0)
+                table.rows([8, 16])  # Evicts two original rows under the exact budget.
+                self.assertEqual(table.cache_bytes, 4 * 63)
+                table.set_cache_policy("blocks")
+                self.assertEqual(table.cache_bytes, 0)
+                table.rows([0]); table.rows([0])
+                self.assertEqual(table.last_decompressions, 1)  # Whole block exceeds budget.
+                for bad in ("unknown", 1, None):
+                    with self.assertRaisesRegex(ValueError, "policy"):
+                        table.set_cache_policy(bad)
+                self.assertEqual(table.lib.meft_rows_set_cache_policy(table.handle, 2), -1)
+                table.set_cache_policy("rows")
+                table.rows([0]); table.rows([80])
+                self.assertEqual(table.last_row_cache_hits, 1)
+                table.set_cache_bytes(62)
+                table.rows([0]); table.rows([0])
+                self.assertEqual(table.cache_bytes, 0)
+                self.assertEqual(table.last_decompressions, 1)
+
+    def test_row_cache_chunk_counters_and_failed_queries_preserve_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            rows = [bytes([i]) * 128 for i in range(20)]
+            source.write_bytes(b"".join(rows))
+            pack_native(source, packed, 128, 4, False)
+            with NativeRows(packed, self.library, cache_bytes=256, cache_policy="rows") as table:
+                table.rows([0, 1])
+                ids = (ctypes.c_uint64 * 4)(0, 1, 0, 1)
+                out = ctypes.create_string_buffer(512)
+                table.gather_into(ctypes.addressof(ids), 4, ctypes.addressof(out), 512, max_query_rows=1)
+                self.assertEqual(out.raw, (rows[0] + rows[1]) * 2)
+                self.assertEqual(table.last_row_cache_hits, 4)
+                self.assertEqual(table.last_decompressions, 0)
+                bad = (ctypes.c_uint64 * 2)(0, 20)
+                before = out.raw
+                with self.assertRaisesRegex(ValueError, "row ID"):
+                    table.gather_into(ctypes.addressof(bad), 2, ctypes.addressof(out), 512)
+                self.assertEqual(out.raw, before)
+                self.assertEqual(table.cache_bytes, 256)
+                table.gather_into(0, 0, 0, 0)
+                self.assertEqual(table.last_row_cache_hits, 0)
+
+    def test_row_cache_failed_decode_never_publishes_rows(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            source.write_bytes(b"\0" * 512)
+            pack_native(source, packed, 128, 4, False)
+            data = bytearray(packed.read_bytes())
+            offset = struct.unpack_from("<Q", data, 56 + 4 * 8)[0]
+            data[offset] ^= 255
+            packed.write_bytes(data)
+            with NativeRows(packed, self.library, cache_bytes=128, cache_policy="rows") as table:
+                for _ in range(2):
+                    with self.assertRaisesRegex(ValueError, "decompression"):
+                        table.rows([0])
+                    self.assertEqual(table.cache_bytes, 0)
+                    self.assertEqual(table.last_row_cache_hits, 0)
 
     def test_cache_preserves_older_library_loading_when_disabled(self):
         from unittest.mock import patch
@@ -317,7 +437,7 @@ class NativeRowsTest(unittest.TestCase):
             def __init__(self, library):
                 self.library = library
             def __getattr__(self, name):
-                if name == "meft_rows_set_cache_bytes":
+                if name in ("meft_rows_set_cache_bytes", "meft_rows_set_cache_policy", "meft_rows_last_row_cache_hits"):
                     raise AttributeError(name)
                 return getattr(self.library, name)
         with tempfile.TemporaryDirectory() as tmp:
@@ -328,8 +448,11 @@ class NativeRowsTest(unittest.TestCase):
             with patch("tools.native_row_store.ctypes.CDLL", return_value=legacy):
                 with NativeRows(packed, self.library) as store:
                     self.assertEqual(store.rows([0, 1]), b"abcabc")
+                    self.assertEqual(store.last_row_cache_hits, 0)
                 with self.assertRaisesRegex(ValueError, "rebuilding"):
                     NativeRows(packed, self.library, cache_bytes=64)
+                with self.assertRaisesRegex(ValueError, "rebuilding"):
+                    NativeRows(packed, self.library, cache_policy="rows")
 
     def test_xor_codec_adapts_and_preserves_reordered_original_ids(self):
         rng = random.Random(23)

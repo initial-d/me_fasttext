@@ -17,6 +17,22 @@ int main(int argc, char **argv) {
     (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_gather(s, ids, 4, out, (size_t)width * 4, error, sizeof(error));
+    /* Exercise lazy hash growth, LRU unlink/eviction and budget resets without
+     * allocating a full query/table. Malformed reads may legitimately fail. */
+    const size_t budgets[] = {65536, 8192, 0, 65536};
+    for (int policy = 0; policy <= 1; ++policy) {
+        (void)meft_rows_set_cache_policy(s, policy);
+        for (size_t budget = 0; budget < sizeof(budgets) / sizeof(budgets[0]); ++budget) {
+            (void)meft_rows_set_cache_bytes(s, budgets[budget]);
+            uint64_t limit = n < 300 ? n : 300;
+            for (uint64_t row = 0; row < limit; ++row)
+                (void)meft_rows_gather(s, &row, 1, out, (size_t)width * 4, error, sizeof(error));
+            for (uint64_t row = limit; row;) {
+                --row;
+                (void)meft_rows_gather(s, &row, 1, out, (size_t)width * 4, error, sizeof(error));
+            }
+        }
+    }
     (void)meft_rows_set_cache_bytes(s, 1);
     (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_set_cache_bytes(s, 0);
@@ -27,6 +43,7 @@ int main(int argc, char **argv) {
     (void)meft_rows_gather_chunked(s, NULL, 3, out, (size_t)width * 4, 2, error, sizeof(error));
     (void)meft_rows_gather_chunked(NULL, ids, 3, out, (size_t)width * 4, 2, error, sizeof(error));
     uint64_t offsets[3] = {0, 2, 3}, bad_offsets[3] = {0, 3, 2};
+    (void)meft_rows_set_cache_bytes(s, 65536);
     unsigned char weights[12] = {0}; /* Enough LE FP32/FP16/BF16 scalar bytes. */
     for (int dtype = 1; dtype <= 3; ++dtype) {
         (void)meft_rows_embedding_bag(s, ids, 3, offsets, 2, dtype, 1, UINT64_MAX, 2,

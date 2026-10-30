@@ -1,0 +1,6 @@
+{
+  "command": "/tmp/projects-push-20261028-venv/bin/python tools/plot_native_query.py --summary docs/native_query_evidence_20261030/summary.json --output-dir docs/native_query_evidence_20261030",
+  "matplotlib": "3.11.2",
+  "summary_sha256": "54be1ed78a5ae27809177df8bdecc8b35176ead58d69f7b820544c092b687069",
+  "plot_source_sha256": "ed64fc685a77a2fc0d50c4df72d53352dba9f79c6bc381ee2bdae1292736d8d1"
+}

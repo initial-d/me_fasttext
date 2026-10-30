@@ -50,11 +50,12 @@ class DeviceGatherTest(unittest.TestCase):
         self.assertTrue(torch.equal(a.cpu().contiguous().view(torch.uint8),
                                     b.cpu().contiguous().view(torch.uint8)))
 
-    def check_queries(self, device):
+    def check_queries(self, device, cache_policy="blocks"):
         for dtype in (torch.float32, torch.float16, torch.bfloat16):
             with self.subTest(device=device, dtype=dtype):
                 directory, weight = self.fixture(dtype)
-                with self.adapter(directory, device) as mapped:
+                with self.adapter(directory, device, native_cache_bytes=4096,
+                                  native_cache_policy=cache_policy) as mapped:
                     ids = torch.tensor([[[0, 0], [4, 7]], [[1, 3], [2, 5]]])
                     handles, expected = [], []
                     # Delay consumption until slots have been reused many times.
@@ -81,6 +82,13 @@ class DeviceGatherTest(unittest.TestCase):
 
     def test_cpu_owned_results_and_original_bytes(self):
         self.check_queries("cpu")
+
+    def test_cpu_row_cache_owned_results_and_original_bytes(self):
+        self.check_queries("cpu", "rows")
+
+    @unittest.skipUnless(torch is not None and torch.cuda.is_available(), "real CUDA required")
+    def test_cuda_row_cache_staging_and_owned_results(self):
+        self.check_queries("cuda", "rows")
 
     @unittest.skipUnless(torch is not None and torch.backends.mps.is_available(), "MPS unavailable")
     def test_mps_synchronous_staging_and_reuse(self):

@@ -165,7 +165,7 @@ def worker(args):
         started = time.perf_counter()
         kwargs = dict(device=args.device, native_library=args.native_library, native_cache_bytes=args.cache_bytes,
                       query_chunk_rows=args.query_chunk_rows, staging_rows=args.staging_rows,
-                      staging_slots=args.staging_slots)
+                      staging_slots=args.staging_slots, native_cache_policy=args.cache_policy)
         if args.worker == "native":
             module = StagedMultiHeadEmbedding(args.fixture / "native", **kwargs)
             forward = module
@@ -259,6 +259,7 @@ def main():
     parser.add_argument("--staging-slots", type=int, default=2)
     parser.add_argument("--query-chunk-rows", type=int, default=65536)
     parser.add_argument("--cache-bytes", type=int, default=4194304)
+    parser.add_argument("--cache-policy", choices=("blocks", "rows"), default="blocks")
     parser.add_argument("--warmup", type=int, default=3)
     parser.add_argument("--repeat", type=int, default=10)
     parser.add_argument("--timeout", type=int, default=300)
