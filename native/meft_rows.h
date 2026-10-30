@@ -71,6 +71,12 @@ int meft_rows_embedding_bag_weighted(meft_rows *store, const uint64_t *ids, size
                                     char *error, size_t error_capacity);
 uint64_t meft_rows_last_block_reads(const meft_rows *store);
 uint64_t meft_rows_last_decompressions(const meft_rows *store);
+/* Successfully decoded compressed blocks in the last call, including repeated
+ * decoding across chunks. Input bytes are codec payload, decoded bytes are full
+ * block output. Excludes raw-row copies and cache hits. These are logical codec
+ * work counters, not disk I/O, page faults or bytes resident in the OS cache. */
+uint64_t meft_rows_last_compressed_bytes(const meft_rows *store);
+uint64_t meft_rows_last_decoded_bytes(const meft_rows *store);
 uint64_t meft_rows_last_cache_hits(const meft_rows *store);
 /* Distinct cached forwarded rows hit per gather, summed across chunk/bag calls.
  * Block hits remain separate and are zero in row mode (and vice versa). */

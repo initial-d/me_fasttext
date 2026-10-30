@@ -32,6 +32,7 @@ struct meft_rows {
     unsigned char *scratch;
     size_t scratch_capacity;
     uint64_t last_blocks, last_decodes, last_hits, last_row_hits;
+    uint64_t last_compressed_bytes, last_decoded_bytes;
     int cache_rows;
     size_t cache_budget, cache_used, cache_count;
     size_t cache_buckets;
@@ -111,6 +112,8 @@ uint64_t meft_rows_count(const meft_rows *s) { return s ? s->nrows : 0; }
 uint64_t meft_rows_width(const meft_rows *s) { return s ? s->width : 0; }
 uint64_t meft_rows_last_block_reads(const meft_rows *s) { return s ? s->last_blocks : 0; }
 uint64_t meft_rows_last_decompressions(const meft_rows *s) { return s ? s->last_decodes : 0; }
+uint64_t meft_rows_last_compressed_bytes(const meft_rows *s) { return s ? s->last_compressed_bytes : 0; }
+uint64_t meft_rows_last_decoded_bytes(const meft_rows *s) { return s ? s->last_decoded_bytes : 0; }
 uint64_t meft_rows_last_cache_hits(const meft_rows *s) { return s ? s->last_hits : 0; }
 uint64_t meft_rows_last_row_cache_hits(const meft_rows *s) { return s ? s->last_row_hits : 0; }
 uint64_t meft_rows_cache_bytes(const meft_rows *s) { return s ? s->cache_used : 0; }
@@ -225,6 +228,7 @@ int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
                      void *out, size_t outbytes, char *err, size_t cap) {
     if (!s) return fail(err, cap, "null store");
     s->last_blocks = s->last_decodes = s->last_hits = s->last_row_hits = 0;
+    s->last_compressed_bytes = s->last_decoded_bytes = 0;
     if (count > SIZE_MAX / s->width || count * s->width > outbytes ||
         count > SIZE_MAX / sizeof(struct request) || (count && (!ids || !out)))
         return fail(err, cap, "invalid output capacity or query size");
@@ -276,6 +280,8 @@ int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
             if (uncompress(s->scratch, &actual, bytes, (uLong)stored) != Z_OK || actual != raw) {
                 reason = "block decompression failed"; goto done;
             }
+            s->last_compressed_bytes += stored;
+            s->last_decoded_bytes += raw;
             /* Prediction resets at each block's first row. Bytewise XOR
              * reconstructs original bits without floating-point arithmetic. */
             if (codec == 2) {
@@ -318,11 +324,13 @@ int meft_rows_gather_chunked(meft_rows *s, const uint64_t *ids, size_t count,
                              char *err, size_t cap) {
     if (!s) return fail(err, cap, "null store");
     s->last_blocks = s->last_decodes = s->last_hits = s->last_row_hits = 0;
+    s->last_compressed_bytes = s->last_decoded_bytes = 0;
     if (!max_query_rows || count > SIZE_MAX / s->width ||
         count * s->width > outbytes || count > SIZE_MAX / sizeof(uint64_t) ||
         (count && (!ids || !out)))
         return fail(err, cap, "invalid output capacity, query size or chunk limit");
     uint64_t blocks = 0, decodes = 0, hits = 0, row_hits = 0;
+    uint64_t compressed_bytes = 0, decoded_bytes = 0;
     int status = 0;
     for (size_t start = 0; start < count;) {
         size_t n = count - start < max_query_rows ? count - start : max_query_rows;
@@ -330,10 +338,12 @@ int meft_rows_gather_chunked(meft_rows *s, const uint64_t *ids, size_t count,
                                   (unsigned char *)out + start * (size_t)s->width,
                                   n * (size_t)s->width, err, cap);
         blocks += s->last_blocks; decodes += s->last_decodes; hits += s->last_hits; row_hits += s->last_row_hits;
+        compressed_bytes += s->last_compressed_bytes; decoded_bytes += s->last_decoded_bytes;
         if (status) break;
         start += n;
     }
     s->last_blocks = blocks; s->last_decodes = decodes; s->last_hits = hits; s->last_row_hits = row_hits;
+    s->last_compressed_bytes = compressed_bytes; s->last_decoded_bytes = decoded_bytes;
     return status;
 }
 
@@ -371,6 +381,7 @@ static int embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
                            int weighted, const unsigned char *weights, size_t weights_bytes) {
     if (!s) return fail(err, cap, "null store");
     s->last_blocks = s->last_decodes = s->last_hits = s->last_row_hits = 0;
+    s->last_compressed_bytes = s->last_decoded_bytes = 0;
     size_t element = dtype == 1 ? 4 : 2;
     if (sizeof(float) != 4 || FLT_RADIX != 2 || FLT_MANT_DIG != 24 ||
         dtype < 1 || dtype > 3 || (mean != 0 && mean != 1) || !chunk_rows ||
@@ -405,6 +416,7 @@ static int embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
         return fail(err, cap, "allocation failed");
     }
     uint64_t blocks = 0, decodes = 0, hits = 0, row_hits = 0;
+    uint64_t compressed_bytes = 0, decoded_bytes = 0;
     int status = 0;
     size_t bag = 0, observed = 0;
     /* Coalesce blocks across bag boundaries, then consume restored ID order.
@@ -414,6 +426,7 @@ static int embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
         size_t n = count - start < staged ? count - start : staged;
         status = meft_rows_gather(s, ids + start, n, rows, n * (size_t)s->width, err, cap);
         blocks += s->last_blocks; decodes += s->last_decodes; hits += s->last_hits; row_hits += s->last_row_hits;
+        compressed_bytes += s->last_compressed_bytes; decoded_bytes += s->last_decoded_bytes;
         if (status) goto done_bags;
         for (size_t i = 0; i < n; ++i) {
             while (bag < bags && offsets[bag + 1] <= start + i) {
@@ -439,6 +452,7 @@ static int embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
     }
 done_bags:
     s->last_blocks = blocks; s->last_decodes = decodes; s->last_hits = hits; s->last_row_hits = row_hits;
+    s->last_compressed_bytes = compressed_bytes; s->last_decoded_bytes = decoded_bytes;
     free(rows); free(sum);
     return status;
 }
