@@ -3,10 +3,12 @@ from importlib import import_module
 
 from ._runtime.native_row_store import NativeRows, pack_native
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 _ADAPTERS = {
     "MappedMultiHeadEmbedding": "engram_row_adapter",
+    "StagedMultiHeadEmbedding": "device_row_adapter",
+    "GatherTicket": "device_row_adapter",
     "MappedEmbedding": "engram_row_adapter",
     "export_multihead": "engram_row_adapter",
     "export_embedding": "engram_row_adapter",

@@ -2,7 +2,7 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-2506.01254-b31b1b.svg)](https://arxiv.org/abs/2506.01254)
 [![CI](https://github.com/initial-d/me_fasttext/actions/workflows/ci.yml/badge.svg)](https://github.com/initial-d/me_fasttext/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/initial-d/me_fasttext?label=release)](https://github.com/initial-d/me_fasttext/releases/tag/v0.1.0)
+[![Release](https://img.shields.io/github/v/release/initial-d/me_fasttext?label=release)](https://github.com/initial-d/me_fasttext/releases/latest)
 [![Benchmark reports welcome](https://img.shields.io/badge/benchmark_reports-welcome-2ea44f)](https://github.com/initial-d/me_fasttext/issues/1)
 [![Evaluator quickstart](https://img.shields.io/badge/evaluator-quickstart-blue)](docs/evaluator_quickstart.md)
 [![Showcase](https://img.shields.io/badge/use_cases-showcase-orange)](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
@@ -21,10 +21,16 @@ legacy C++ exporter also supports approximate row sharing.
 · [**Trained-model quality checks**](docs/causal_lm_evidence_20261024/README.md)
 · [**Query latency and memory results**](docs/bag_compaction_evidence_20261026/README.md)
 · [**Installable TinyEngram/Qwen checkpoint backend**](docs/tinyengram_qwen_evidence_20261030/README.md)
+· [**Host memory → device query and prefetch**](docs/device_memory_prefetch.md)
 
 Learned-model evidence includes small CPU references and a trained memory branch
 on pretrained Qwen3-0.6B. Official Engram compatibility uses its demonstration;
 GPU serving remains unmeasured.
+
+The device adapter keeps immutable tables on CPU and transfers only queried
+vectors to the backbone. TinyEngram prefetches each layer's hashes before decoder
+execution. CPU/MPS correctness checks are available; CUDA stream/pinned-memory
+checks require a CUDA host and remain unvalidated locally.
 
 This repository accompanies the paper [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).
 

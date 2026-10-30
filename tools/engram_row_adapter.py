@@ -142,8 +142,8 @@ class MappedMultiHeadEmbedding(nn.Module):
         self._cache_blocks = cache_blocks
         self._native_library = native_library
         self._native_cache_bytes = native_cache_bytes
-        self.register_buffer("offsets", torch.tensor(offsets, dtype=torch.int64))
-        self.register_buffer("head_sizes", torch.tensor(meta["head_sizes"], dtype=torch.int64))
+        self.register_buffer("offsets", torch.tensor(offsets, dtype=torch.int64, device="cpu"))
+        self.register_buffer("head_sizes", torch.tensor(meta["head_sizes"], dtype=torch.int64, device="cpu"))
         self._open_table()
         if backend == "native":
             # Capture the resolved library, including an environment-selected
@@ -184,7 +184,8 @@ class MappedMultiHeadEmbedding(nn.Module):
             raise RuntimeError("mapped embeddings are immutable and support inference only")
         return super().train(False)
 
-    def forward(self, input_ids):
+    def _global_ids(self, input_ids):
+        """Validate original local-head addressing before any native writes."""
         if input_ids.device.type != "cpu" or self.offsets.device.type != "cpu":
             raise ValueError("adapter supports CPU gather only")
         if input_ids.dtype not in (torch.int32, torch.int64):
@@ -193,16 +194,19 @@ class MappedMultiHeadEmbedding(nn.Module):
             raise ValueError("last input dimension must match the number of heads")
         if bool(((input_ids < 0) | (input_ids >= self.head_sizes)).any()):
             raise IndexError("head-local ID outside its head's vocabulary")
+        return (input_ids.to(torch.int64) + self.offsets).contiguous()
+
+    def forward(self, input_ids):
+        global_tensor = self._global_ids(input_ids)
         shape = (*input_ids.shape, self.embedding_dim)
         if input_ids.numel() == 0:
             if self.backend == "native":
                 self.table.gather_into(0, 0, 0, 0)
             elif self.table.file.closed:
                 raise ValueError("row store is closed")
-            return torch.empty(shape, dtype=self.dtype)
-        global_tensor = (input_ids.to(torch.int64) + self.offsets).contiguous()
+            return torch.empty(shape, dtype=self.dtype, device="cpu")
         if self.backend == "native":
-            output = torch.empty(shape, dtype=self.dtype)
+            output = torch.empty(shape, dtype=self.dtype, device="cpu")
             self.table.gather_into(global_tensor.data_ptr(), global_tensor.numel(),
                                    output.data_ptr(), output.numel() * output.element_size(),
                                    max_query_rows=self.query_chunk_rows)
