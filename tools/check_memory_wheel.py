@@ -1,7 +1,9 @@
 """Run outside the checkout after installing a wheel; needs no Torch extra."""
 import ctypes
+from importlib.metadata import distribution
 import os
 from pathlib import Path
+import platform
 import tempfile
 
 import meft_memory
@@ -10,6 +12,8 @@ from meft_memory import NativeRows, pack_native
 
 def main():
     os.environ.pop("MEFT_ROWS_LIBRARY", None)
+    tags = [line for line in distribution("meft-memory").read_text("WHEEL").splitlines() if line.startswith("Tag:")]
+    assert tags and all(tag.endswith("_" + platform.machine()) for tag in tags), tags
     with tempfile.TemporaryDirectory() as tmp:
         source, packed = Path(tmp) / "raw", Path(tmp) / "table"
         source.write_bytes(b"ABCDEFGHabcdefgh")
