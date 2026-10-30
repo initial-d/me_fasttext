@@ -1,0 +1,245 @@
+{
+  "status": "incomplete-training-coverage",
+  "category": "public-text finite CPU SGNS storage reference",
+  "source_commit": "56c947fad6d1d22670fd1365ba8534b1f8cc36a0",
+  "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/meft-cpu-capacity-20261030/source/tools/train_capacity_memory.py --corpus-zip /llm-align/duyimin/meft-cpu-capacity-20261030/enwik8.zip --output-dir /llm-align/duyimin/meft-cpu-capacity-20261030/training --order 12 --dim 256 --min-count 2 --epochs 3 --random-pairs 262144 --batch-size 128 --threads 4 --seed 42",
+  "settings": {
+    "corpus_zip": "/llm-align/duyimin/meft-cpu-capacity-20261030/enwik8.zip",
+    "output_dir": "/llm-align/duyimin/meft-cpu-capacity-20261030/training",
+    "order": 12,
+    "dim": 256,
+    "min_count": 2,
+    "epochs": 3,
+    "random_pairs": 262144,
+    "batch_size": 128,
+    "negatives": 5,
+    "lr": 0.02,
+    "threads": 4,
+    "seed": 42
+  },
+  "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+  "torch": "2.11.0+cu130",
+  "numpy": "2.2.6",
+  "os": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+  "cuda_visible_devices": "",
+  "corpus_source": "https://mattmahoney.net/dc/enwik8.zip",
+  "corpus_license_note": "Wikipedia-derived benchmark XML; publish aggregates/hashes only, no text or weights.",
+  "zip_sha256": "547994d9980ebed1288380d652999f38a14fe291a6247c157c3d33d4932534bc",
+  "loss_samples": [
+    {
+      "pair": 128,
+      "loss_per_pair": 4.1588826179504395
+    },
+    {
+      "pair": 25728,
+      "loss_per_pair": 4.15886926651001
+    },
+    {
+      "pair": 51328,
+      "loss_per_pair": 4.1541571617126465
+    },
+    {
+      "pair": 76928,
+      "loss_per_pair": 4.104265213012695
+    },
+    {
+      "pair": 102528,
+      "loss_per_pair": 4.097651481628418
+    },
+    {
+      "pair": 128128,
+      "loss_per_pair": 4.011539459228516
+    },
+    {
+      "pair": 153728,
+      "loss_per_pair": 3.821012020111084
+    },
+    {
+      "pair": 179328,
+      "loss_per_pair": 3.7390387058258057
+    },
+    {
+      "pair": 204928,
+      "loss_per_pair": 3.499899387359619
+    },
+    {
+      "pair": 230528,
+      "loss_per_pair": 3.392859935760498
+    },
+    {
+      "pair": 256128,
+      "loss_per_pair": 3.1507654190063477
+    },
+    {
+      "pair": 281728,
+      "loss_per_pair": 3.030824899673462
+    },
+    {
+      "pair": 307328,
+      "loss_per_pair": 2.8885982036590576
+    },
+    {
+      "pair": 332928,
+      "loss_per_pair": 2.884829521179199
+    },
+    {
+      "pair": 358528,
+      "loss_per_pair": 2.5694169998168945
+    },
+    {
+      "pair": 384128,
+      "loss_per_pair": 2.682878017425537
+    },
+    {
+      "pair": 404170,
+      "loss_per_pair": 2.451352119445801
+    },
+    {
+      "pair": 429770,
+      "loss_per_pair": 2.7473137378692627
+    },
+    {
+      "pair": 455370,
+      "loss_per_pair": 2.586317777633667
+    },
+    {
+      "pair": 480970,
+      "loss_per_pair": 2.6172497272491455
+    },
+    {
+      "pair": 506570,
+      "loss_per_pair": 2.568492889404297
+    },
+    {
+      "pair": 532170,
+      "loss_per_pair": 2.551452875137329
+    },
+    {
+      "pair": 557770,
+      "loss_per_pair": 2.3971922397613525
+    },
+    {
+      "pair": 583370,
+      "loss_per_pair": 2.339668035507202
+    },
+    {
+      "pair": 608970,
+      "loss_per_pair": 2.3867764472961426
+    },
+    {
+      "pair": 634570,
+      "loss_per_pair": 2.358508348464966
+    },
+    {
+      "pair": 660170,
+      "loss_per_pair": 2.0983707904815674
+    },
+    {
+      "pair": 685770,
+      "loss_per_pair": 2.401175022125244
+    },
+    {
+      "pair": 711370,
+      "loss_per_pair": 2.5801897048950195
+    },
+    {
+      "pair": 736970,
+      "loss_per_pair": 2.0772454738616943
+    },
+    {
+      "pair": 762570,
+      "loss_per_pair": 2.13584566116333
+    },
+    {
+      "pair": 788170,
+      "loss_per_pair": 2.2601511478424072
+    },
+    {
+      "pair": 808212,
+      "loss_per_pair": 1.954177737236023
+    },
+    {
+      "pair": 833812,
+      "loss_per_pair": 2.157029151916504
+    },
+    {
+      "pair": 859412,
+      "loss_per_pair": 2.305432081222534
+    },
+    {
+      "pair": 885012,
+      "loss_per_pair": 2.092989921569824
+    },
+    {
+      "pair": 910612,
+      "loss_per_pair": 1.9835753440856934
+    },
+    {
+      "pair": 936212,
+      "loss_per_pair": 2.4388372898101807
+    },
+    {
+      "pair": 961812,
+      "loss_per_pair": 2.010632038116455
+    },
+    {
+      "pair": 987412,
+      "loss_per_pair": 2.254207134246826
+    },
+    {
+      "pair": 1013012,
+      "loss_per_pair": 2.1635193824768066
+    },
+    {
+      "pair": 1038612,
+      "loss_per_pair": 2.1499266624450684
+    },
+    {
+      "pair": 1064212,
+      "loss_per_pair": 1.9153399467468262
+    },
+    {
+      "pair": 1089812,
+      "loss_per_pair": 1.9550358057022095
+    },
+    {
+      "pair": 1115412,
+      "loss_per_pair": 2.0913519859313965
+    },
+    {
+      "pair": 1141012,
+      "loss_per_pair": 2.1659600734710693
+    },
+    {
+      "pair": 1166612,
+      "loss_per_pair": 2.104854106903076
+    },
+    {
+      "pair": 1192212,
+      "loss_per_pair": 2.1347568035125732
+    }
+  ],
+  "limitations": [
+    "Finite reference training, not convergence or task quality.",
+    "ASCII word tokenization of XML-tag-stripped Wikipedia benchmark text.",
+    "No trained DeepSeek weights, no whole-model inference or GPU memory result.",
+    "Coverage sampling overweights rare words; it is recorded, not claimed as standard full-corpus SGNS.",
+    "Shared CPU host, monetary/energy cost unmeasured."
+  ],
+  "corpus_raw_bytes": 100000000,
+  "corpus_raw_sha256": "2b49720ec4d78c3c9fabaee6e4179a5e997302b3a70029f30f2d582218c024a8",
+  "train_raw_sha256": "f8978bd9ca51fbea387d5145d310652ab39904bcbc8ab2647932c8c2e0539e64",
+  "heldout_raw_sha256": "10c136c4dc9db600c9c8e640271ea9d9628348c90e40309927ea1bbd481dcfe1",
+  "vocabulary": 142308,
+  "ngram_rows": 1860921,
+  "dim": 256,
+  "raw_table_bytes": 1905583104,
+  "training_tokens": 12186524,
+  "valid_adjacent_pair_pool": 11917115,
+  "coverage_centers": 141898,
+  "preparation_seconds": 22.423513206886128,
+  "completed_epochs": 3,
+  "sampled_training_pairs": 1212126,
+  "changed_rows": 1855907,
+  "all_finite": true
+}
