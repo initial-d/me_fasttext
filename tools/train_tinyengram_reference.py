@@ -89,7 +89,7 @@ def main():
     parser.add_argument("--base-model", type=Path, required=True)
     parser.add_argument("--corpus", type=Path, required=True)
     parser.add_argument("--upstream-dir", type=Path, required=True)
-    parser.add_argument("--native-library", type=Path, required=True)
+    parser.add_argument("--native-library", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--train-steps", type=int, default=32)
     parser.add_argument("--sequence-length", type=int, default=32)

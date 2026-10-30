@@ -27,7 +27,7 @@ def main():
     parser.add_argument("--bundle", type=Path, required=True)
     parser.add_argument("--corpus", type=Path, required=True)
     parser.add_argument("--upstream-dir", type=Path, required=True)
-    parser.add_argument("--native-library", type=Path, required=True)
+    parser.add_argument("--native-library", type=Path)
     parser.add_argument("--report-out", type=Path, required=True)
     parser.add_argument("--training-report", type=Path)
     parser.add_argument("--max-characters", type=int, default=16384)
@@ -102,6 +102,14 @@ def main():
             report["verification"] = {name: verify(resident, mapped, ids[name][:, :args.eval_tokens], args.decode_tokens)
                                       for name in ("validation", "test")}
         with torch.inference_mode():
+            # Calling the raw upstream model bypasses our request context, so
+            # its hash/convolution methods use the original history-free path.
+            report["upstream_incremental_without_memory_history_control"] = {}
+            for name in ("validation", "test"):
+                sample = ids[name][:, :args.eval_tokens]
+                full = model(sample, use_cache=False).logits
+                cached, _ = cached_logits(model, sample)
+                report["upstream_incremental_without_memory_history_control"][name] = logit_delta(cached, full, sample)
             try:
                 qwen.set_skip_engram(True)
                 report["memory_off_backbone_rounding_control"] = {}
