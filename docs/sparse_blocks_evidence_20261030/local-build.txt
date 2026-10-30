@@ -1,0 +1,3 @@
+mkdir -p build
+cc -std=c11 -O2 -Wall -Wextra -Werror -fPIC -dynamiclib native/meft_rows.c -lz -o build/libmeft_rows.dylib
+cc -std=c11 -O2 -Wall -Wextra -Werror -Inative examples/native_gather.c native/meft_rows.c -lz -o build/native_gather

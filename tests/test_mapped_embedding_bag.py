@@ -25,7 +25,8 @@ class MappedBagTest(unittest.TestCase):
                     source.weight.copy_(torch.arange(60).reshape(12, 5).to(dtype) / 13)
                     source.weight[0] = float("nan")
                 original_bytes = source.weight.detach().view(torch.uint8).numpy().tobytes()
-                export_embedding_bag(source, tmp, block_rows=3, predictor="xor")
+                metadata = export_embedding_bag(source, tmp, block_rows=256, predictor="xor", max_block_bytes=40)
+                self.assertEqual(metadata['block_rows'], 40 // (5 * source.weight.element_size()))
                 # Repeated IDs have different positive, negative and zero weights.
                 ids = torch.tensor([2, 2, 0, 7, 2, 0, 0, 11], dtype=torch.int32)
                 weights = torch.tensor([.25, -2, float("nan"), 0, 3, float("inf"), -1, .1], dtype=dtype)

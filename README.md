@@ -24,6 +24,7 @@ records that separately; the legacy C++ exporter also supports approximate shari
 · [**Native query cache optimization and CPU evidence**](docs/native_query_evidence_20261030/README.md)
 · [**Original DATrie + mark-compact native integration and trained ablations**](docs/structural_native_evidence_20261030/README.md)
 · [**1.85M trained-row CPU capacity controls and read-amplification limits**](docs/cpu_capacity_evidence_20261030/README.md)
+· [**Sparse native blocks: 16–27× lower miss latency on the same trained table**](docs/sparse_blocks_evidence_20261030/README.md)
 · [**Installable TinyEngram/Qwen checkpoint backend**](docs/tinyengram_qwen_evidence_20261030/README.md)
 · [**Host memory → device query and prefetch**](docs/device_memory_prefetch.md)
 
