@@ -437,7 +437,7 @@ class NativeRowsTest(unittest.TestCase):
             def __init__(self, library):
                 self.library = library
             def __getattr__(self, name):
-                if name == "meft_rows_set_cache_bytes":
+                if name in ("meft_rows_set_cache_bytes", "meft_rows_set_cache_policy", "meft_rows_last_row_cache_hits"):
                     raise AttributeError(name)
                 return getattr(self.library, name)
         with tempfile.TemporaryDirectory() as tmp:
@@ -448,8 +448,11 @@ class NativeRowsTest(unittest.TestCase):
             with patch("tools.native_row_store.ctypes.CDLL", return_value=legacy):
                 with NativeRows(packed, self.library) as store:
                     self.assertEqual(store.rows([0, 1]), b"abcabc")
+                    self.assertEqual(store.last_row_cache_hits, 0)
                 with self.assertRaisesRegex(ValueError, "rebuilding"):
                     NativeRows(packed, self.library, cache_bytes=64)
+                with self.assertRaisesRegex(ValueError, "rebuilding"):
+                    NativeRows(packed, self.library, cache_policy="rows")
 
     def test_xor_codec_adapts_and_preserves_reordered_original_ids(self):
         rng = random.Random(23)

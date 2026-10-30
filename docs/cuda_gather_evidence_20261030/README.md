@@ -5,6 +5,11 @@ gather GPU allocation, while native queries are slower than dense offload on
 these traces. Native and dense offload have the same measured GPU allocation.**
 That separates offload benefits from storage compression benefits.
 
+These historical measurements use the 64-entry block cache. The subsequent
+[CPU query optimization](../native_query_evidence_20261030/README.md) removes that
+limit and adds row caching; new exclusive CUDA timings remain blocked. The
+numbers below are preserved and are not timings of the new reader.
+
 ![A100 gather latency and GPU allocation](gather-curves.svg)
 
 Three original character-GRU memory tables, trained max orders 4/8/12, seed 3;
@@ -26,7 +31,7 @@ are preserved.
 Two staging configurations use 256 or 8,192 rows/slot, both with 2 slots and a
 4 MiB native decoded-cache budget. The maximum pinned host allocation is
 128 KiB or 4 MiB respectively. Native cache metadata/entry limits are separate:
-the current C reader retains at most 64 decoded blocks, so a configured byte
+the measured C reader retains at most 64 decoded blocks, so a configured byte
 budget does not guarantee that many bytes can be retained. Artifacts here use
 64-row blocks; block decoding/cache churn is a candidate for further profiling.
 Changing staging alone does not fix the underlying query gap.

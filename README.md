@@ -13,13 +13,14 @@
 > **A lossless storage and efficient query backend for learned n-gram memory, preserving original addressing and vector bytes.**
 
 The native C row store and PyTorch adapters serve immutable CPU memory tables
-through compressed blocks, mmap, bounded caches and batched queries. The
+through compressed blocks, mmap, bounded row/block caches and batched queries. The
 byte-preservation contract applies to this native backend; the FastText-derived
 legacy C++ exporter also supports approximate row sharing.
 
 [**C / PyTorch integration**](docs/native_ngram_memory.md)
 · [**Trained-model quality checks**](docs/causal_lm_evidence_20261024/README.md)
 · [**Query latency and memory results**](docs/bag_compaction_evidence_20261026/README.md)
+· [**Native query cache optimization and CPU evidence**](docs/native_query_evidence_20261030/README.md)
 · [**Installable TinyEngram/Qwen checkpoint backend**](docs/tinyengram_qwen_evidence_20261030/README.md)
 · [**Host memory → device query and prefetch**](docs/device_memory_prefetch.md)
 

@@ -1,0 +1,2411 @@
+{
+  "category": "CPU C-query replay, not accelerator or model throughput",
+  "tables": [
+    {
+      "architecture": "m5",
+      "order": 4,
+      "chunk_rows": 256,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 13.369499999999999,
+          "p95_ms": 13.836875,
+          "decompressions": 38670,
+          "cache_hits": 60,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 211156992
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              13.335,
+              13.177667,
+              13.931166,
+              12.647833,
+              13.280125,
+              13.756542,
+              13.679667,
+              13.422125
+            ],
+            "p50_ms": 13.378562500000001,
+            "block_reads": 3867,
+            "decompressions": 3867,
+            "block_cache_hits": 6,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 8.0595,
+          "p95_ms": 8.249833,
+          "decompressions": 23180,
+          "cache_hits": 15550,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 211058688
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              8.61475,
+              7.682458,
+              8.15375,
+              7.653875,
+              8.165042,
+              8.269334,
+              8.153458,
+              8.038166
+            ],
+            "p50_ms": 8.153604000000001,
+            "block_reads": 2346,
+            "decompressions": 2346,
+            "block_cache_hits": 1527,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.027937,
+          "p95_ms": 0.035291,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 102280,
+          "peak_cached_payload_bytes": 935424,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 210993152
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              10.793459,
+              8.172833,
+              7.307166,
+              5.921083,
+              5.986209,
+              6.227375,
+              5.514333,
+              5.03675
+            ],
+            "p50_ms": 6.106792,
+            "block_reads": 1993,
+            "decompressions": 1993,
+            "block_cache_hits": 0,
+            "row_cache_hits": 6574,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 478.5589003830046,
+      "block_speedup": 1.6588498045784477
+    },
+    {
+      "architecture": "m5",
+      "order": 4,
+      "chunk_rows": 256,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 13.370146,
+          "p95_ms": 13.836542,
+          "decompressions": 38670,
+          "cache_hits": 60,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 210878464
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              13.370708,
+              13.134625,
+              13.882083,
+              12.52025,
+              13.281875,
+              13.7355,
+              13.499917,
+              13.42775
+            ],
+            "p50_ms": 13.399229,
+            "block_reads": 3867,
+            "decompressions": 3867,
+            "block_cache_hits": 6,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 0.023916,
+          "p95_ms": 0.024666,
+          "decompressions": 0,
+          "cache_hits": 38730,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 3010560,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 213565440
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              4.649458,
+              0.535584,
+              0.031583,
+              0.030708,
+              0.065,
+              0.03,
+              0.029167,
+              0.028958
+            ],
+            "p50_ms": 0.0311455,
+            "block_reads": 184,
+            "decompressions": 184,
+            "block_cache_hits": 3689,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.028042,
+          "p95_ms": 0.035542,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 102280,
+          "peak_cached_payload_bytes": 935424,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 210812928
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              10.782583,
+              8.185209,
+              7.342917,
+              6.010917,
+              6.043292,
+              6.258333,
+              5.464792,
+              5.04825
+            ],
+            "p50_ms": 6.150812500000001,
+            "block_reads": 1993,
+            "decompressions": 1993,
+            "block_cache_hits": 0,
+            "row_cache_hits": 6574,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 476.79002924185147,
+      "block_speedup": 559.0460779394548
+    },
+    {
+      "architecture": "m5",
+      "order": 4,
+      "chunk_rows": 8192,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 4.6891045,
+          "p95_ms": 4.77425,
+          "decompressions": 13470,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1044480,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 210681856
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              4.605708,
+              4.772166,
+              4.795167,
+              4.486292,
+              4.818459,
+              4.665,
+              4.78225,
+              4.758667
+            ],
+            "p50_ms": 4.765416500000001,
+            "block_reads": 1347,
+            "decompressions": 1347,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 3.0869375000000003,
+          "p95_ms": 3.2205,
+          "decompressions": 8880,
+          "cache_hits": 4590,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 210976768
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              4.626417,
+              3.21425,
+              3.240625,
+              2.826,
+              3.098083,
+              3.021333,
+              2.961333,
+              3.105458
+            ],
+            "p50_ms": 3.1017704999999998,
+            "block_reads": 939,
+            "decompressions": 939,
+            "block_cache_hits": 408,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.0188545,
+          "p95_ms": 0.020458,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 73530,
+          "peak_cached_payload_bytes": 935424,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 210911232
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              4.654958,
+              4.461042,
+              4.041958,
+              3.660917,
+              3.826041,
+              3.690584,
+              3.363708,
+              3.237875
+            ],
+            "p50_ms": 3.7583124999999997,
+            "block_reads": 1107,
+            "decompressions": 1107,
+            "block_cache_hits": 0,
+            "row_cache_hits": 3699,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 248.69948818584425,
+      "block_speedup": 1.5190150432264986
+    },
+    {
+      "architecture": "m5",
+      "order": 4,
+      "chunk_rows": 8192,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 4.692021,
+          "p95_ms": 4.787875,
+          "decompressions": 13470,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1044480,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 210681856
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              4.586667,
+              4.767792,
+              4.743583,
+              4.432667,
+              4.772292,
+              4.619292,
+              4.818209,
+              4.7345
+            ],
+            "p50_ms": 4.7390415,
+            "block_reads": 1347,
+            "decompressions": 1347,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 0.015833,
+          "p95_ms": 0.027375,
+          "decompressions": 0,
+          "cache_hits": 13470,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 3010560,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 213417984
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              4.676,
+              0.549625,
+              0.049583,
+              0.045375,
+              0.076541,
+              0.025917,
+              0.0245,
+              0.023041
+            ],
+            "p50_ms": 0.047479,
+            "block_reads": 184,
+            "decompressions": 184,
+            "block_cache_hits": 1163,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.019813,
+          "p95_ms": 0.028416,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 73530,
+          "peak_cached_payload_bytes": 935424,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 211107840
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              4.635083,
+              4.4435,
+              4.020958,
+              3.646833,
+              3.84525,
+              3.702416,
+              3.364625,
+              3.255375
+            ],
+            "p50_ms": 3.7738329999999998,
+            "block_reads": 1107,
+            "decompressions": 1107,
+            "block_cache_hits": 0,
+            "row_cache_hits": 3699,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 236.81527280068644,
+      "block_speedup": 296.344407250679
+    },
+    {
+      "architecture": "m5",
+      "order": 8,
+      "chunk_rows": 256,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 21.5810205,
+          "p95_ms": 22.961667,
+          "decompressions": 60480,
+          "cache_hits": 10080,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 222904320
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              23.335792,
+              20.854208,
+              21.232958,
+              21.079917,
+              20.968792,
+              22.045916,
+              21.98025,
+              22.148584
+            ],
+            "p50_ms": 21.606604,
+            "block_reads": 6053,
+            "decompressions": 6053,
+            "block_cache_hits": 1003,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 19.054458,
+          "p95_ms": 19.805917,
+          "decompressions": 53750,
+          "cache_hits": 16810,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 222953472
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              19.907084,
+              18.411667,
+              18.525334,
+              17.905166,
+              19.137583,
+              19.193791,
+              18.70875,
+              19.247
+            ],
+            "p50_ms": 18.9231665,
+            "block_reads": 5382,
+            "decompressions": 5382,
+            "block_cache_hits": 1674,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 10.7303955,
+          "p95_ms": 11.747166,
+          "decompressions": 30660,
+          "cache_hits": 0,
+          "row_cache_hits": 100600,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 222920704
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              17.680875,
+              12.731417,
+              11.025,
+              10.165333,
+              10.774125,
+              11.783792,
+              10.879833,
+              11.458334
+            ],
+            "p50_ms": 11.241667,
+            "block_reads": 3411,
+            "decompressions": 3411,
+            "block_cache_hits": 0,
+            "row_cache_hits": 9049,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 2.0112045730280865,
+      "block_speedup": 1.132596922987786
+    },
+    {
+      "architecture": "m5",
+      "order": 8,
+      "chunk_rows": 256,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 21.5235625,
+          "p95_ms": 23.301417,
+          "decompressions": 60480,
+          "cache_hits": 10080,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 224509952
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              23.524333,
+              20.95725,
+              21.527375,
+              21.16275,
+              21.249959,
+              21.860625,
+              22.090084,
+              22.233
+            ],
+            "p50_ms": 21.694,
+            "block_reads": 6053,
+            "decompressions": 6053,
+            "block_cache_hits": 1003,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 9.7592295,
+          "p95_ms": 10.600209,
+          "decompressions": 26810,
+          "cache_hits": 43750,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 4194304,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 228261888
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              13.588958,
+              9.094292,
+              8.457,
+              8.622292,
+              10.198583,
+              9.714709,
+              9.793292,
+              10.284792
+            ],
+            "p50_ms": 9.7540005,
+            "block_reads": 2794,
+            "decompressions": 2794,
+            "block_cache_hits": 4262,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.0695,
+          "p95_ms": 0.07775,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 169780,
+          "peak_cached_payload_bytes": 1876224,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 223854592
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              17.583083,
+              12.924709,
+              10.924125,
+              10.238833,
+              10.367541,
+              10.661958,
+              9.668292,
+              9.635458
+            ],
+            "p50_ms": 10.5147495,
+            "block_reads": 3242,
+            "decompressions": 3242,
+            "block_cache_hits": 0,
+            "row_cache_hits": 9649,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 309.6915467625899,
+      "block_speedup": 2.2054571521245605
+    },
+    {
+      "architecture": "m5",
+      "order": 8,
+      "chunk_rows": 8192,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 11.203104,
+          "p95_ms": 11.9055,
+          "decompressions": 31130,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 222724096
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              11.197834,
+              11.39825,
+              10.652583,
+              10.086875,
+              11.18325,
+              10.822958,
+              11.369708,
+              11.245458
+            ],
+            "p50_ms": 11.190542,
+            "block_reads": 3113,
+            "decompressions": 3113,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 10.093625,
+          "p95_ms": 10.3345,
+          "decompressions": 27630,
+          "cache_hits": 3500,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 223051776
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              11.491459,
+              10.295042,
+              9.589917,
+              9.199958,
+              10.44475,
+              10.487959,
+              10.726416,
+              10.411208
+            ],
+            "p50_ms": 10.427979,
+            "block_reads": 2810,
+            "decompressions": 2810,
+            "block_cache_hits": 303,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 7.8844795,
+          "p95_ms": 8.494167,
+          "decompressions": 21740,
+          "cache_hits": 0,
+          "row_cache_hits": 57730,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 222855168
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              11.537292,
+              9.116583,
+              7.658875,
+              7.165625,
+              7.915,
+              8.224792,
+              7.852,
+              8.067458
+            ],
+            "p50_ms": 7.991229000000001,
+            "block_reads": 2336,
+            "decompressions": 2336,
+            "block_cache_hits": 0,
+            "row_cache_hits": 4779,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 1.4209059710282714,
+      "block_speedup": 1.1099187853719552
+    },
+    {
+      "architecture": "m5",
+      "order": 8,
+      "chunk_rows": 8192,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 11.376438,
+          "p95_ms": 11.64375,
+          "decompressions": 31130,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 222609408
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              11.4195,
+              11.414833,
+              10.979042,
+              10.390125,
+              11.369583,
+              11.155042,
+              11.491916,
+              11.422667
+            ],
+            "p50_ms": 11.392208,
+            "block_reads": 3113,
+            "decompressions": 3113,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 5.903729,
+          "p95_ms": 6.129209,
+          "decompressions": 16230,
+          "cache_hits": 14900,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 4194304,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 227229696
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              11.253416,
+              6.093584,
+              5.321084,
+              5.284917,
+              5.905666,
+              5.636333,
+              6.111709,
+              5.965709
+            ],
+            "p50_ms": 5.9356875,
+            "block_reads": 1813,
+            "decompressions": 1813,
+            "block_cache_hits": 1300,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.048458,
+          "p95_ms": 0.067792,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 125670,
+          "peak_cached_payload_bytes": 1876224,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 224100352
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              11.685125,
+              9.139583,
+              7.716417,
+              7.279458,
+              7.897625,
+              7.834375,
+              7.681375,
+              7.317625
+            ],
+            "p50_ms": 7.775396,
+            "block_reads": 2268,
+            "decompressions": 2268,
+            "block_cache_hits": 0,
+            "row_cache_hits": 5238,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 234.7690371042965,
+      "block_speedup": 1.9269919063019323
+    },
+    {
+      "architecture": "m5",
+      "order": 12,
+      "chunk_rows": 256,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 21.835895999999998,
+          "p95_ms": 23.4535,
+          "decompressions": 61790,
+          "cache_hits": 14840,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 230113280
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              23.441459,
+              21.56825,
+              21.88325,
+              21.524625,
+              21.356458,
+              21.959584,
+              22.12525,
+              21.792042
+            ],
+            "p50_ms": 21.837646,
+            "block_reads": 6181,
+            "decompressions": 6181,
+            "block_cache_hits": 1482,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 20.1767915,
+          "p95_ms": 21.721083,
+          "decompressions": 57950,
+          "cache_hits": 18680,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 230424576
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              21.685875,
+              19.613042,
+              20.588458,
+              20.211,
+              20.010291,
+              20.918333,
+              19.728917,
+              20.326292
+            ],
+            "p50_ms": 20.268645999999997,
+            "block_reads": 5796,
+            "decompressions": 5796,
+            "block_cache_hits": 1867,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 11.950229,
+          "p95_ms": 13.422625,
+          "decompressions": 34340,
+          "cache_hits": 0,
+          "row_cache_hits": 105340,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 230326272
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              19.490625,
+              13.853125,
+              12.2925,
+              10.931208,
+              11.907542,
+              13.208917,
+              12.194917,
+              12.744167
+            ],
+            "p50_ms": 12.5183335,
+            "block_reads": 3746,
+            "decompressions": 3746,
+            "block_cache_hits": 0,
+            "row_cache_hits": 9682,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 1.8272366161351383,
+      "block_speedup": 1.082228361233747
+    },
+    {
+      "architecture": "m5",
+      "order": 12,
+      "chunk_rows": 256,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 22.3503545,
+          "p95_ms": 24.215459,
+          "decompressions": 61790,
+          "cache_hits": 14840,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 230227968
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              23.378625,
+              21.775958,
+              21.775167,
+              21.369084,
+              21.115041,
+              22.190459,
+              21.886,
+              21.856542
+            ],
+            "p50_ms": 21.81625,
+            "block_reads": 6181,
+            "decompressions": 6181,
+            "block_cache_hits": 1482,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 11.735916499999998,
+          "p95_ms": 12.714708,
+          "decompressions": 31680,
+          "cache_hits": 44950,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 4194304,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 234438656
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              15.500667,
+              11.168083,
+              10.953875,
+              10.363666,
+              12.880084,
+              12.097791,
+              11.671333,
+              11.767833
+            ],
+            "p50_ms": 11.719583,
+            "block_reads": 3269,
+            "decompressions": 3269,
+            "block_cache_hits": 4394,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.11077100000000001,
+          "p95_ms": 0.119209,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 185340,
+          "peak_cached_payload_bytes": 2060800,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 231669760
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              20.047167,
+              14.134083,
+              12.67375,
+              11.150834,
+              11.678375,
+              11.393292,
+              10.728667,
+              10.875917
+            ],
+            "p50_ms": 11.5358335,
+            "block_reads": 3496,
+            "decompressions": 3496,
+            "block_cache_hits": 0,
+            "row_cache_hits": 10484,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 201.77081095232506,
+      "block_speedup": 1.9044404840474116
+    },
+    {
+      "architecture": "m5",
+      "order": 12,
+      "chunk_rows": 8192,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 12.2310625,
+          "p95_ms": 12.818708,
+          "decompressions": 33640,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 230342656
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              12.3505,
+              12.40575,
+              11.704708,
+              10.97025,
+              12.174042,
+              11.918875,
+              12.046709,
+              12.140042
+            ],
+            "p50_ms": 12.0933755,
+            "block_reads": 3364,
+            "decompressions": 3364,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 10.912416499999999,
+          "p95_ms": 11.297208,
+          "decompressions": 30420,
+          "cache_hits": 3220,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 230506496
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              12.724834,
+              11.324041,
+              10.677834,
+              10.261958,
+              11.130292,
+              11.01675,
+              11.271875,
+              11.053708
+            ],
+            "p50_ms": 11.092,
+            "block_reads": 3080,
+            "decompressions": 3080,
+            "block_cache_hits": 284,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 8.376042,
+          "p95_ms": 9.076459,
+          "decompressions": 23500,
+          "cache_hits": 0,
+          "row_cache_hits": 59880,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 230375424
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              12.503583,
+              9.825333,
+              8.374042,
+              7.771791,
+              8.679542,
+              8.912125,
+              8.302875,
+              8.422
+            ],
+            "p50_ms": 8.550771000000001,
+            "block_reads": 2525,
+            "decompressions": 2525,
+            "block_cache_hits": 0,
+            "row_cache_hits": 4964,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 1.4602436926653424,
+      "block_speedup": 1.12083904605364
+    },
+    {
+      "architecture": "m5",
+      "order": 12,
+      "chunk_rows": 8192,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 12.5691665,
+          "p95_ms": 12.902125,
+          "decompressions": 33640,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 230162432
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              12.384875,
+              12.30375,
+              11.751,
+              10.991167,
+              12.269666,
+              11.771458,
+              12.275958,
+              12.05875
+            ],
+            "p50_ms": 12.164208,
+            "block_reads": 3364,
+            "decompressions": 3364,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 7.2311665000000005,
+          "p95_ms": 7.699833,
+          "decompressions": 20160,
+          "cache_hits": 13480,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 4194304,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 234881024
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              12.370833,
+              7.363583,
+              6.958875,
+              6.630333,
+              7.412833,
+              6.850292,
+              7.300667,
+              7.56
+            ],
+            "p50_ms": 7.332125,
+            "block_reads": 2175,
+            "decompressions": 2175,
+            "block_cache_hits": 1189,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.08897949999999999,
+          "p95_ms": 0.118959,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 136110,
+          "peak_cached_payload_bytes": 2060800,
+          "rss_after_case": {
+            "current_bytes": null,
+            "process_peak_bytes": 231587840
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              12.910625,
+              10.265917,
+              8.749375,
+              8.0415,
+              8.698584,
+              8.528583,
+              7.846208,
+              7.961167
+            ],
+            "p50_ms": 8.6135835,
+            "block_reads": 2437,
+            "decompressions": 2437,
+            "block_cache_hits": 0,
+            "row_cache_hits": 5561,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 141.2591271023101,
+      "block_speedup": 1.7381934851036827
+    },
+    {
+      "architecture": "epyc",
+      "order": 4,
+      "chunk_rows": 256,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 54.1347765,
+          "p95_ms": 56.117538,
+          "decompressions": 38670,
+          "cache_hits": 60,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 600465408,
+            "process_peak_bytes": 600465408
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              54.100589,
+              53.502188,
+              56.087856,
+              50.64833,
+              53.363064,
+              55.365836,
+              54.582774,
+              54.281897
+            ],
+            "p50_ms": 54.191243,
+            "block_reads": 3867,
+            "decompressions": 3867,
+            "block_cache_hits": 6,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 32.956988499999994,
+          "p95_ms": 38.590428,
+          "decompressions": 23180,
+          "cache_hits": 15550,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 600444928,
+            "process_peak_bytes": 600444928
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              42.368707,
+              31.494126,
+              33.503951,
+              31.438323,
+              33.587761,
+              34.625185,
+              33.224865,
+              32.35981
+            ],
+            "p50_ms": 33.364408,
+            "block_reads": 2346,
+            "decompressions": 2346,
+            "block_cache_hits": 1527,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.1542795,
+          "p95_ms": 0.160356,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 102280,
+          "peak_cached_payload_bytes": 935424,
+          "rss_after_case": {
+            "current_bytes": 600129536,
+            "process_peak_bytes": 600129536
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              43.549165,
+              32.854776,
+              29.51985,
+              24.031157,
+              24.308777,
+              25.288162,
+              22.182665,
+              20.397101
+            ],
+            "p50_ms": 24.7984695,
+            "block_reads": 1993,
+            "decompressions": 1993,
+            "block_cache_hits": 0,
+            "row_cache_hits": 6574,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 350.8876843650647,
+      "block_speedup": 1.6425886879803964
+    },
+    {
+      "architecture": "epyc",
+      "order": 4,
+      "chunk_rows": 256,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 54.137081,
+          "p95_ms": 56.092535,
+          "decompressions": 38670,
+          "cache_hits": 60,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 600522752,
+            "process_peak_bytes": 600522752
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              54.039688,
+              53.294481,
+              55.942026,
+              50.539517,
+              53.245731,
+              55.288171,
+              54.501339,
+              54.133345
+            ],
+            "p50_ms": 54.0865165,
+            "block_reads": 3867,
+            "decompressions": 3867,
+            "block_cache_hits": 6,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 0.12543549999999998,
+          "p95_ms": 0.131022,
+          "decompressions": 0,
+          "cache_hits": 38730,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 3010560,
+          "rss_after_case": {
+            "current_bytes": 601513984,
+            "process_peak_bytes": 601513984
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              18.538692,
+              2.170251,
+              0.135702,
+              0.131092,
+              0.251708,
+              0.128648,
+              0.127251,
+              0.131093
+            ],
+            "p50_ms": 0.1333975,
+            "block_reads": 184,
+            "decompressions": 184,
+            "block_cache_hits": 3689,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.149042,
+          "p95_ms": 0.154699,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 102280,
+          "peak_cached_payload_bytes": 935424,
+          "rss_after_case": {
+            "current_bytes": 600133632,
+            "process_peak_bytes": 600133632
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              43.404384,
+              32.77816,
+              29.525438,
+              23.957823,
+              24.212815,
+              25.210638,
+              22.129587,
+              20.341786
+            ],
+            "p50_ms": 24.711726499999997,
+            "block_reads": 1993,
+            "decompressions": 1993,
+            "block_cache_hits": 0,
+            "row_cache_hits": 6574,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 363.2337260637941,
+      "block_speedup": 431.5929780644236
+    },
+    {
+      "architecture": "epyc",
+      "order": 4,
+      "chunk_rows": 8192,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 19.0875755,
+          "p95_ms": 19.433849,
+          "decompressions": 13470,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1044480,
+          "rss_after_case": {
+            "current_bytes": 600694784,
+            "process_peak_bytes": 600694784
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              18.510826,
+              19.366103,
+              19.172223,
+              17.945949,
+              19.317423,
+              18.608254,
+              19.066693,
+              19.065785
+            ],
+            "p50_ms": 19.066239000000003,
+            "block_reads": 1347,
+            "decompressions": 1347,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 12.561249499999999,
+          "p95_ms": 13.071789,
+          "decompressions": 8880,
+          "cache_hits": 4590,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 600793088,
+            "process_peak_bytes": 600793088
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              18.485264,
+              13.062361,
+              13.051396,
+              18.587022,
+              13.272862,
+              12.640728,
+              12.059369,
+              12.635631
+            ],
+            "p50_ms": 13.0568785,
+            "block_reads": 939,
+            "decompressions": 939,
+            "block_cache_hits": 408,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.102248,
+          "p95_ms": 0.107416,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 73530,
+          "peak_cached_payload_bytes": 935424,
+          "rss_after_case": {
+            "current_bytes": 600457216,
+            "process_peak_bytes": 600457216
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              18.516413,
+              17.645002,
+              16.175959,
+              14.658585,
+              15.240155,
+              14.85023,
+              13.505644,
+              13.059498
+            ],
+            "p50_ms": 15.045192499999999,
+            "block_reads": 1107,
+            "decompressions": 1107,
+            "block_cache_hits": 0,
+            "row_cache_hits": 3699,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 186.67920643924575,
+      "block_speedup": 1.5195602555303118
+    },
+    {
+      "architecture": "epyc",
+      "order": 4,
+      "chunk_rows": 8192,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 19.0593595,
+          "p95_ms": 19.387475,
+          "decompressions": 13470,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1044480,
+          "rss_after_case": {
+            "current_bytes": 600530944,
+            "process_peak_bytes": 600530944
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              18.550426,
+              19.403538,
+              19.212312,
+              17.957193,
+              19.326992,
+              18.643733,
+              19.051957,
+              19.104547
+            ],
+            "p50_ms": 19.078252,
+            "block_reads": 1347,
+            "decompressions": 1347,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 0.07047,
+          "p95_ms": 0.073892,
+          "decompressions": 0,
+          "cache_hits": 13470,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 3010560,
+          "rss_after_case": {
+            "current_bytes": 601481216,
+            "process_peak_bytes": 601481216
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              18.535829,
+              2.098314,
+              0.081854,
+              0.075219,
+              0.199607,
+              0.077035,
+              0.076127,
+              0.073753
+            ],
+            "p50_ms": 0.0794445,
+            "block_reads": 184,
+            "decompressions": 184,
+            "block_cache_hits": 1163,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.1040285,
+          "p95_ms": 0.168038,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 73530,
+          "peak_cached_payload_bytes": 935424,
+          "rss_after_case": {
+            "current_bytes": 600551424,
+            "process_peak_bytes": 600551424
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              18.602528,
+              24.611609,
+              17.611408,
+              14.751404,
+              15.331926,
+              14.831861,
+              13.526038,
+              13.108736
+            ],
+            "p50_ms": 15.0818935,
+            "block_reads": 1107,
+            "decompressions": 1107,
+            "block_cache_hits": 0,
+            "row_cache_hits": 3699,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 183.21286474379616,
+      "block_speedup": 270.4606144458635
+    },
+    {
+      "architecture": "epyc",
+      "order": 8,
+      "chunk_rows": 256,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 85.384912,
+          "p95_ms": 90.287636,
+          "decompressions": 60480,
+          "cache_hits": 10080,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 610906112,
+            "process_peak_bytes": 610906112
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              92.074598,
+              80.874067,
+              83.092928,
+              89.393877,
+              82.438234,
+              85.827078,
+              86.31918,
+              87.253099
+            ],
+            "p50_ms": 86.073129,
+            "block_reads": 6053,
+            "decompressions": 6053,
+            "block_cache_hits": 1003,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 75.92891499999999,
+          "p95_ms": 78.231689,
+          "decompressions": 53750,
+          "cache_hits": 16810,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 611094528,
+            "process_peak_bytes": 611094528
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              79.251164,
+              73.620134,
+              81.436989,
+              71.471743,
+              76.721998,
+              76.267191,
+              74.210154,
+              76.557801
+            ],
+            "p50_ms": 76.412496,
+            "block_reads": 5382,
+            "decompressions": 5382,
+            "block_cache_hits": 1674,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 43.019523,
+          "p95_ms": 46.903576,
+          "decompressions": 30660,
+          "cache_hits": 0,
+          "row_cache_hits": 100600,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 611139584,
+            "process_peak_bytes": 611139584
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              69.689462,
+              50.755746,
+              43.508517,
+              40.362303,
+              42.826726,
+              46.583283,
+              43.264841,
+              45.300228
+            ],
+            "p50_ms": 44.404372499999994,
+            "block_reads": 3411,
+            "decompressions": 3411,
+            "block_cache_hits": 0,
+            "row_cache_hits": 9049,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 1.9847944850527515,
+      "block_speedup": 1.124537496683576
+    },
+    {
+      "architecture": "epyc",
+      "order": 8,
+      "chunk_rows": 256,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 85.3556485,
+          "p95_ms": 90.289102,
+          "decompressions": 60480,
+          "cache_hits": 10080,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 610910208,
+            "process_peak_bytes": 610910208
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              91.051701,
+              80.794518,
+              83.843722,
+              82.2688,
+              82.064863,
+              85.461319,
+              85.964316,
+              86.82539
+            ],
+            "p50_ms": 84.65252050000001,
+            "block_reads": 6053,
+            "decompressions": 6053,
+            "block_cache_hits": 1003,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 38.4503615,
+          "p95_ms": 41.331702,
+          "decompressions": 26810,
+          "cache_hits": 43750,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 4194304,
+          "rss_after_case": {
+            "current_bytes": 614178816,
+            "process_peak_bytes": 614178816
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              54.229865,
+              36.221968,
+              33.274453,
+              33.881025,
+              40.597878,
+              38.464992,
+              38.590847,
+              39.424963
+            ],
+            "p50_ms": 38.527919499999996,
+            "block_reads": 2794,
+            "decompressions": 2794,
+            "block_cache_hits": 4262,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.3061495,
+          "p95_ms": 0.319314,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 169780,
+          "peak_cached_payload_bytes": 1876224,
+          "rss_after_case": {
+            "current_bytes": 611553280,
+            "process_peak_bytes": 611553280
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              69.622833,
+              50.659645,
+              43.400612,
+              40.210399,
+              41.044444,
+              41.701652,
+              38.157062,
+              38.045386
+            ],
+            "p50_ms": 41.373048,
+            "block_reads": 3242,
+            "decompressions": 3242,
+            "block_cache_hits": 0,
+            "row_cache_hits": 9649,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 278.80381480289856,
+      "block_speedup": 2.2198919638245793
+    },
+    {
+      "architecture": "epyc",
+      "order": 8,
+      "chunk_rows": 8192,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 44.562633,
+          "p95_ms": 45.040976,
+          "decompressions": 31130,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 611233792,
+            "process_peak_bytes": 611233792
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              44.695541,
+              44.917986,
+              42.729297,
+              40.638526,
+              44.204417,
+              43.37547,
+              45.446336,
+              48.034866
+            ],
+            "p50_ms": 44.449979,
+            "block_reads": 3113,
+            "decompressions": 3113,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 39.659454999999994,
+          "p95_ms": 40.95791,
+          "decompressions": 27630,
+          "cache_hits": 3500,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 611393536,
+            "process_peak_bytes": 611393536
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              44.758958,
+              40.428444,
+              37.443144,
+              35.591789,
+              39.513941,
+              38.961355,
+              40.359859,
+              39.607179
+            ],
+            "p50_ms": 39.56056,
+            "block_reads": 2810,
+            "decompressions": 2810,
+            "block_cache_hits": 303,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 30.764039500000003,
+          "p95_ms": 32.981538,
+          "decompressions": 21740,
+          "cache_hits": 0,
+          "row_cache_hits": 57730,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 611246080,
+            "process_peak_bytes": 611246080
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              44.538887,
+              35.417186,
+              29.63048,
+              27.853506,
+              30.607909,
+              31.729282,
+              30.399293,
+              31.26791
+            ],
+            "p50_ms": 30.9379095,
+            "block_reads": 2336,
+            "decompressions": 2336,
+            "block_cache_hits": 0,
+            "row_cache_hits": 4779,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 1.4485299630433772,
+      "block_speedup": 1.1236320065416936
+    },
+    {
+      "architecture": "epyc",
+      "order": 8,
+      "chunk_rows": 8192,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 44.5585825,
+          "p95_ms": 45.011643,
+          "decompressions": 31130,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 611446784,
+            "process_peak_bytes": 611446784
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              44.681852,
+              44.933002,
+              42.791736,
+              40.589288,
+              44.239966,
+              43.336777,
+              44.942571,
+              44.812945
+            ],
+            "p50_ms": 44.460909,
+            "block_reads": 3113,
+            "decompressions": 3113,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 23.537239,
+          "p95_ms": 24.344256,
+          "decompressions": 16230,
+          "cache_hits": 14900,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 4194304,
+          "rss_after_case": {
+            "current_bytes": 614453248,
+            "process_peak_bytes": 614453248
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              44.871612,
+              24.620618,
+              21.11528,
+              21.023509,
+              23.536751,
+              22.275764,
+              24.479189,
+              23.7307
+            ],
+            "p50_ms": 23.633725499999997,
+            "block_reads": 1813,
+            "decompressions": 1813,
+            "block_cache_hits": 1300,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.186406,
+          "p95_ms": 0.199606,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 125670,
+          "peak_cached_payload_bytes": 1876224,
+          "rss_after_case": {
+            "current_bytes": 611667968,
+            "process_peak_bytes": 611667968
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              44.720615,
+              35.504836,
+              29.714708,
+              27.980687,
+              30.233629,
+              30.436728,
+              27.996401,
+              27.979219
+            ],
+            "p50_ms": 29.9741685,
+            "block_reads": 2268,
+            "decompressions": 2268,
+            "block_cache_hits": 0,
+            "row_cache_hits": 5238,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 239.04049494114997,
+      "block_speedup": 1.8931099990105043
+    },
+    {
+      "architecture": "epyc",
+      "order": 12,
+      "chunk_rows": 256,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 86.47387850000001,
+          "p95_ms": 92.710014,
+          "decompressions": 61790,
+          "cache_hits": 14840,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 617811968,
+            "process_peak_bytes": 617811968
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              93.630244,
+              86.688082,
+              86.45537,
+              85.937776,
+              84.360898,
+              87.660973,
+              87.140515,
+              86.66252
+            ],
+            "p50_ms": 86.67530099999999,
+            "block_reads": 6181,
+            "decompressions": 6181,
+            "block_cache_hits": 1482,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 80.2128445,
+          "p95_ms": 86.418983,
+          "decompressions": 57950,
+          "cache_hits": 18680,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 617836544,
+            "process_peak_bytes": 617836544
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              87.062851,
+              78.360756,
+              81.952767,
+              80.062231,
+              79.996301,
+              83.495005,
+              79.272955,
+              81.271884
+            ],
+            "p50_ms": 80.6670575,
+            "block_reads": 5796,
+            "decompressions": 5796,
+            "block_cache_hits": 1867,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 48.442635,
+          "p95_ms": 53.504004,
+          "decompressions": 34340,
+          "cache_hits": 0,
+          "row_cache_hits": 105340,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 618483712,
+            "process_peak_bytes": 618483712
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              77.005275,
+              54.103592,
+              48.609172,
+              43.262466,
+              46.689373,
+              51.948009,
+              48.537305,
+              50.235359
+            ],
+            "p50_ms": 49.4222655,
+            "block_reads": 3746,
+            "decompressions": 3746,
+            "block_cache_hits": 0,
+            "row_cache_hits": 9682,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 1.7850779277386544,
+      "block_speedup": 1.0780552546045168
+    },
+    {
+      "architecture": "epyc",
+      "order": 12,
+      "chunk_rows": 256,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 86.21358000000001,
+          "p95_ms": 92.500351,
+          "decompressions": 61790,
+          "cache_hits": 14840,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 617984000,
+            "process_peak_bytes": 617984000
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              93.352415,
+              86.104767,
+              86.577942,
+              85.111274,
+              84.431926,
+              87.625423,
+              93.351088,
+              86.824901
+            ],
+            "p50_ms": 86.7014215,
+            "block_reads": 6181,
+            "decompressions": 6181,
+            "block_cache_hits": 1482,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 45.082078499999994,
+          "p95_ms": 48.90956,
+          "decompressions": 31680,
+          "cache_hits": 44950,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 4194304,
+          "rss_after_case": {
+            "current_bytes": 621846528,
+            "process_peak_bytes": 621846528
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              59.639428,
+              42.734395,
+              42.519145,
+              40.193776,
+              49.088004,
+              46.193918,
+              45.220678,
+              45.273689
+            ],
+            "p50_ms": 45.2471835,
+            "block_reads": 3269,
+            "decompressions": 3269,
+            "block_cache_hits": 4394,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.4632225,
+          "p95_ms": 0.485886,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 185340,
+          "peak_cached_payload_bytes": 2060800,
+          "rss_after_case": {
+            "current_bytes": 618496000,
+            "process_peak_bytes": 618496000
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              77.296304,
+              54.25871,
+              48.821141,
+              42.546663,
+              44.507249,
+              43.862403,
+              41.197746,
+              41.34113
+            ],
+            "p50_ms": 44.184826,
+            "block_reads": 3496,
+            "decompressions": 3496,
+            "block_cache_hits": 0,
+            "row_cache_hits": 10484,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 186.11699561225979,
+      "block_speedup": 1.912369235593253
+    },
+    {
+      "architecture": "epyc",
+      "order": 12,
+      "chunk_rows": 8192,
+      "budget": 1048576,
+      "variants": {
+        "before": {
+          "p50_ms": 48.2955495,
+          "p95_ms": 49.263446,
+          "decompressions": 33640,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 618577920,
+            "process_peak_bytes": 618577920
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              49.788653,
+              49.417726,
+              46.908814,
+              44.117394,
+              48.947903,
+              47.150535,
+              48.573623,
+              48.643254
+            ],
+            "p50_ms": 48.6084385,
+            "block_reads": 3364,
+            "decompressions": 3364,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 43.673378,
+          "p95_ms": 44.960939,
+          "decompressions": 30420,
+          "cache_hits": 3220,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 618565632,
+            "process_peak_bytes": 618565632
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              49.369535,
+              44.359116,
+              42.20828,
+              40.006951,
+              43.710498,
+              43.023051,
+              44.329293,
+              43.504676
+            ],
+            "p50_ms": 43.607587,
+            "block_reads": 3080,
+            "decompressions": 3080,
+            "block_cache_hits": 284,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 32.859525,
+          "p95_ms": 35.681186,
+          "decompressions": 23500,
+          "cache_hits": 0,
+          "row_cache_hits": 59880,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 618598400,
+            "process_peak_bytes": 618598400
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              49.145694,
+              38.32552,
+              32.932859,
+              29.849501,
+              33.639164,
+              34.690975,
+              32.242127,
+              32.810845
+            ],
+            "p50_ms": 33.2860115,
+            "block_reads": 2525,
+            "decompressions": 2525,
+            "block_cache_hits": 0,
+            "row_cache_hits": 4964,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 1.4697579925455406,
+      "block_speedup": 1.1058349894528425
+    },
+    {
+      "architecture": "epyc",
+      "order": 12,
+      "chunk_rows": 8192,
+      "budget": 4194304,
+      "variants": {
+        "before": {
+          "p50_ms": 48.246961999999996,
+          "p95_ms": 49.307991,
+          "decompressions": 33640,
+          "cache_hits": 0,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 1048576,
+          "rss_after_case": {
+            "current_bytes": 618610688,
+            "process_peak_bytes": 618610688
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              49.270557,
+              49.10168,
+              46.698719,
+              43.951789,
+              48.505584,
+              46.844548,
+              48.272315,
+              48.296899
+            ],
+            "p50_ms": 48.284607,
+            "block_reads": 3364,
+            "decompressions": 3364,
+            "block_cache_hits": 0,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "blocks": {
+          "p50_ms": 28.663692,
+          "p95_ms": 30.588066,
+          "decompressions": 20160,
+          "cache_hits": 13480,
+          "row_cache_hits": 0,
+          "peak_cached_payload_bytes": 4194304,
+          "rss_after_case": {
+            "current_bytes": 621727744,
+            "process_peak_bytes": 621727744
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              49.424418,
+              29.218896,
+              27.492348,
+              26.286887,
+              29.044782,
+              27.562958,
+              28.945468,
+              30.203939
+            ],
+            "p50_ms": 28.995125,
+            "block_reads": 2175,
+            "decompressions": 2175,
+            "block_cache_hits": 1189,
+            "row_cache_hits": 0,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        },
+        "rows": {
+          "p50_ms": 0.26445450000000004,
+          "p95_ms": 0.281042,
+          "decompressions": 0,
+          "cache_hits": 0,
+          "row_cache_hits": 136110,
+          "peak_cached_payload_bytes": 2060800,
+          "rss_after_case": {
+            "current_bytes": 618631168,
+            "process_peak_bytes": 618631168
+          },
+          "empty_cache_first_trace": {
+            "samples_ms": [
+              49.096512,
+              38.377052,
+              32.94137,
+              29.979608,
+              34.423125,
+              32.191973,
+              29.496097,
+              29.531157
+            ],
+            "p50_ms": 32.5666715,
+            "block_reads": 2437,
+            "decompressions": 2437,
+            "block_cache_hits": 0,
+            "row_cache_hits": 5561,
+            "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."
+          }
+        }
+      },
+      "row_speedup": 182.43955765547565,
+      "block_speedup": 1.683208220350679
+    }
+  ],
+  "limitations": [
+    "Same configured budget does not mean the same actual payload/metadata/RSS.",
+    "Warm replay of eight fixed held-out windows, not changing production traffic.",
+    "Row working sets fit 4MiB; new-query first pass and 1MiB results remain in raw files.",
+    "CUDA performance blocked by competing GPU client; only correctness verified under load."
+  ]
+}

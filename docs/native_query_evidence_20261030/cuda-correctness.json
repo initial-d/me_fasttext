@@ -1,0 +1,18 @@
+{
+  "category": "CUDA correctness under shared GPU load, no performance claim",
+  "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "os": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+  "visible_devices": "7",
+  "command": "selected GPU7, allocator fraction .01; unittest device-row + TinyEngram checkpoint suites",
+  "gpu_before": "GPU-0d6f5ec3-1a8c-b91d-cab5-0cf73accebf8, 8015, 100",
+  "status": "passed",
+  "tests": 20,
+  "skips": 3,
+  "failures": 0,
+  "errors": 0,
+  "peak_allocated": 10034688,
+  "peak_reserved": 52428800,
+  "gpu_after": "GPU-0d6f5ec3-1a8c-b91d-cab5-0cf73accebf8, 7437, 100"
+}

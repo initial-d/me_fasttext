@@ -1,0 +1,120 @@
+{
+  "baseline_commit": "acda866d38772147ee4aaafaf5157ad77bb32218",
+  "optimized_code_commit": "5276a7b0e04f4cd720e820b476ffb9e890f85ed3",
+  "baseline_c_sha256": "1a1df51680be88eeb6a02d9369578bf182dcb9c47efb9367be93cddd77655500",
+  "optimized_c_sha256": "83a82148b62fc5913d1fdc176e84dd56dcce243094d433a1a2c5bfed9cdda251",
+  "optimized_h_sha256": "848e4a73e17ab5e8a78ec4b8cad2fedf20488c0dd989edfef5a463beb66f061c",
+  "baseline_m5_library_sha256": "3436ce7c3984443e87815c7ba1aec5d0ef6188ca418637a52499df7183f14e39",
+  "optimized_m5_library_sha256": "d46e28b05133665c4bdbc34dbc6824c4cbf6852070de0105045471e2e0c7b1a4",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin\n",
+  "build_commands": [
+    "git show main:native/meft_rows.c > artifacts/native-query-20261030/before.c",
+    "cc -std=c11 -O2 -Wall -Wextra -Werror -dynamiclib -I native artifacts/native-query-20261030/before.c -o artifacts/native-query-20261030/before.dylib -lz",
+    "make native NATIVE_SHARED=-dynamiclib NATIVE_EXT=dylib"
+  ],
+  "cpu_hardware": {
+    "machdep.cpu.brand_string": "Apple M5",
+    "hw.memsize": "34359738368",
+    "hw.logicalcpu": "10"
+  },
+  "fixtures": {
+    "4": {
+      "shape": [
+        11760,
+        64
+      ],
+      "weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323",
+      "training_commit": "0f16f3eb57ee90aa8969415927be763e7e20aecd",
+      "training_report_sha256": "0ab395574da8186552af5c342d8bc794dda3ef7c3c35a517397c431ea0ac3c2d",
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+      "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+      "test_split": {
+        "characters": 13108,
+        "sha256": "88075da3f975631774f1913cbf2b6280dcc75f8bdd4ae46dd7b62061bf0ad174"
+      },
+      "full_test_ids_sha256": "36510e879ac121b79d46889bc4ac94c4cb9bfbd945c4a4a6e10c62f98a3b63c7",
+      "raw_table_bytes": 3010560,
+      "native_table_and_metadata_bytes": 2896214,
+      "files": {
+        "dense.pt": "5b096b03084a8af1afbc1b1736690d2ccbe68d308f4cb592f9b94c77e67faf20",
+        "native/embedding.json": "02432037800444cf2d51748325948a66e9ad741913c11ccdb64bb2328a0f8ffd",
+        "native/table.men": "7a9a031d40ef789e45361bddf86ecab0a9be8e5c1a59062b74c51013c91f6dbe",
+        "queries.pt": "5f5c7acbc405ed4a1acd089e9b4553da0bf295932c740e3c87ed28ab592743af"
+      },
+      "limitations": [
+        "Original lossless memory, not approximate cosine/norm variants.",
+        "Distinct chronological windows; no manufactured larger table or repeated rows.",
+        "Timed replay repeats these windows; gather microbenchmark, not model throughput.",
+        "One small character GRU/corpus, not TinyEngram or DeepSeek trained weights.",
+        "Corpus and weights remain local; no quality or compression claim from this preparation."
+      ]
+    },
+    "8": {
+      "shape": [
+        36778,
+        64
+      ],
+      "weight_sha256": "0e8b9cb031160e8df3fa6ebc3f76ab5e718940d0564b573772b46a06d6812b63",
+      "training_commit": "0f16f3eb57ee90aa8969415927be763e7e20aecd",
+      "training_report_sha256": "0ab395574da8186552af5c342d8bc794dda3ef7c3c35a517397c431ea0ac3c2d",
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+      "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+      "test_split": {
+        "characters": 13108,
+        "sha256": "88075da3f975631774f1913cbf2b6280dcc75f8bdd4ae46dd7b62061bf0ad174"
+      },
+      "full_test_ids_sha256": "5f0ff556283f9b40e506fbc8577813bd8238480c7b5bd4accc0fd4eb6b3a826f",
+      "raw_table_bytes": 9415168,
+      "native_table_and_metadata_bytes": 9042576,
+      "files": {
+        "dense.pt": "a95bbb1af1ef0b51a4fda0a70f93f3eb72375b6880f139af7ee359968215f578",
+        "native/embedding.json": "5e3aece3bc9d3f0e13df93d08ecc609865f3e09909360049e6ebef13659a224e",
+        "native/table.men": "1084704dcb06b1a1e2625852cca2fcb4dfa2ae90b9fda3b7d08abf08e7305573",
+        "queries.pt": "f7dff340215502512aaf7257d083f0be9bca483fb481d778de3e9233e6eeb54f"
+      },
+      "limitations": [
+        "Original lossless memory, not approximate cosine/norm variants.",
+        "Distinct chronological windows; no manufactured larger table or repeated rows.",
+        "Timed replay repeats these windows; gather microbenchmark, not model throughput.",
+        "One small character GRU/corpus, not TinyEngram or DeepSeek trained weights.",
+        "Corpus and weights remain local; no quality or compression claim from this preparation."
+      ]
+    },
+    "12": {
+      "shape": [
+        43152,
+        64
+      ],
+      "weight_sha256": "530a17bab5f26cb25db40425b1f57616f527687e9c87188ad04b27a87bdf7499",
+      "training_commit": "0f16f3eb57ee90aa8969415927be763e7e20aecd",
+      "training_report_sha256": "0ab395574da8186552af5c342d8bc794dda3ef7c3c35a517397c431ea0ac3c2d",
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+      "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+      "test_split": {
+        "characters": 13108,
+        "sha256": "88075da3f975631774f1913cbf2b6280dcc75f8bdd4ae46dd7b62061bf0ad174"
+      },
+      "full_test_ids_sha256": "97cb2091f3bd760ffb2d8c7e516b7d53c817b532294692cf040ebb79cbe56f74",
+      "raw_table_bytes": 11046912,
+      "native_table_and_metadata_bytes": 10607487,
+      "files": {
+        "dense.pt": "a9641fae44df3df4da4e4375fb6e3f56b54ef280d0326d211551dc33e0bcefbb",
+        "native/embedding.json": "f00bddb117e8c0280bceeee68a85016c8af985b13792bb1378f4fb316cbcc5fe",
+        "native/table.men": "d914d6bc6e83f593a7502e00ab2ca8b33e7b686321fc898f79f9c6c6b208163b",
+        "queries.pt": "9476dd64c47b26fbf9b9ca0e6a695fd10e5142f64ebfcd6c71ca2e9d64a186cd"
+      },
+      "limitations": [
+        "Original lossless memory, not approximate cosine/norm variants.",
+        "Distinct chronological windows; no manufactured larger table or repeated rows.",
+        "Timed replay repeats these windows; gather microbenchmark, not model throughput.",
+        "One small character GRU/corpus, not TinyEngram or DeepSeek trained weights.",
+        "Corpus and weights remain local; no quality or compression claim from this preparation."
+      ]
+    }
+  },
+  "remote_environment_sha256": "999e196f8c632aa403c7087f997e5e1358555525a200a7d81f098798316d68b9",
+  "remote_report_code_commit": "5276a7b0e04f4cd720e820b476ffb9e890f85ed3"
+}

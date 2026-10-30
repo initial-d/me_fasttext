@@ -1,0 +1,1 @@
+Installed native wheel, automatic library lookup and chunked query: passed

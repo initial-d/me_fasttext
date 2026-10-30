@@ -1,5 +1,9 @@
 # Bounded decoded-block cache for native queries — 2026-10-22
 
+Historical measurements and the 64-entry implementation below describe the
+2026-10-22 code. The current reader uses a lazy hash/LRU cache without that
+entry cap; see [the query optimization report](native_query_evidence_20261030/README.md).
+
 The C reader can now reuse decoded blocks between calls with an explicit byte
 budget. It remains disabled by default. Files, original row IDs, dtype bits and
 outputs are unchanged; the tradeoff is extra decoded memory for fewer zlib/XOR
