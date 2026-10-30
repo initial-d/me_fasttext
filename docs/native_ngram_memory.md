@@ -235,7 +235,7 @@ path does not have lazy startup even though the C reader does.
 | --- | --- | --- | --- |
 | Engram-style conditional memory | Multi-head embedding gather after the existing token/ngram hash | Official full CPU module output matches in 6 random-weight cases, including gates/ShortConv | Trained checkpoint, backbone/LM logits, model quality, GPU transfer |
 | PyTorch decoder with ordinary embeddings | Global-ID input embedding lookup | Byte-exact gather; small synthetic untied causal Transformer logits match | Model-specific wrappers, tied heads, device/distributed placement |
-| Llama/Qwen/Mistral/Gemma-style HF models | A compatible `nn.Embedding` call or a separately trained n-gram branch | No downloaded model validated here | Inspect `.weight` use, tying, `set_input_embeddings`, device map, export and generation |
+| Llama/Qwen/Mistral/Gemma-style HF models | A compatible `nn.Embedding` call or a separately trained n-gram branch | [Pretrained Qwen3-0.6B + trained TinyEngram branch](tinyengram_qwen_evidence_20261030/README.md): native CPU checkpoint/full-logit and stateful greedy decode checks | Other architectures, GPU placement and full HF generation remain open |
 | C++ inference / llama.cpp-style runtime | CPU row gather behind a runtime-specific tensor operator | C ABI and example compile/test | Loader, tensor layout and runtime scheduling integration; no plugin yet |
 | vLLM / TensorRT-LLM / GPU serving | Host-memory gather and prefetch/transfer operator | No integration or GPU result | Custom operators, pinned memory, async queues, batching and quality checks |
 | Plain Transformer without n-gram memory | Add a trained n-gram memory branch | No architectural/training result | Learn/gate the branch and evaluate against strong baselines |
