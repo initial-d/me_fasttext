@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "model_type": "me_fasttext-native",
+  "shape": [
+    90380,
+    64
+  ],
+  "keyed_ngram_rows": 75567,
+  "mode": "layout",
+  "source_model_sha256": "522bc3434dc6c69afe819756cc32aeacf632c5806087afff97738003138a6338",
+  "source_rows_sha256": "88f2a1a9609eff9b09d0fe7f20cf2bae328511de10684112a118eb521000eaa9",
+  "reconstructed_rows_sha256": "88f2a1a9609eff9b09d0fe7f20cf2bae328511de10684112a118eb521000eaa9",
+  "original_bytes_preserved": true,
+  "extraction_command": [
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/fasttext-native",
+    "dump-native",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/trained.bin",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/.meft-fasttext-l3bb_86b/extracted"
+  ],
+  "storage": {
+    "format": "MEFTNAT1",
+    "format_version": 2,
+    "input_bytes": 23137280,
+    "artifact_bytes": 22401608,
+    "unique_rows": 90380,
+    "row_map_bytes": 723040,
+    "n_rows": 90380,
+    "row_bytes": 256,
+    "block_rows": 32,
+    "blocks": 2825,
+    "max_block_bytes": 8192,
+    "raw_blocks": 0,
+    "compressed_blocks": 2825,
+    "zlib_blocks": 2733,
+    "xor_blocks": 92,
+    "deduplicate": false,
+    "predictor": "xor",
+    "reordered": true,
+    "external_representatives": true,
+    "marked_rows": 90380,
+    "structural_mode": "layout",
+    "index": "datrie",
+    "index_bytes": 605232,
+    "source_sha256": "88f2a1a9609eff9b09d0fe7f20cf2bae328511de10684112a118eb521000eaa9",
+    "representatives_sha256": "8b4e8f17cf8fcb4012f022d00edba81a174c24340bf9675fc5d069a2f3676608",
+    "original_bytes_preserved": true,
+    "minimum_cosine": null,
+    "minimum_norm_ratio": null,
+    "contract": "original IDs retained; decoder exact to representative bytes; joint sharing may change weights"
+  },
+  "query_chunk_rows": 256,
+  "cache_payload_budget_bytes": 4194304,
+  "contract": "Original DATrie registry IDs; original float32 ordered accumulation. Joint mode can change source weights.",
+  "limitations": [
+    "Trusted self-produced, Linux x86-64 legacy metadata/index serialization.",
+    "Frozen inference; output matrix/dictionary remain resident. Cache is not an RSS limit.",
+    "Not an official fastText converter or quantized/.z migration."
+  ],
+  "artifacts": {
+    "structural.json": "d940f9078ebeb3632e101e793f7e185a4243c193d40b76afd03dc9bd9c389cbc",
+    "table.men": "dae4b249da573240868e8797b66b7951c2761762bfc16666639aa89e623847ae",
+    "reader.cfg": "a9de3eb788520ddacad77c6f73b089aa15133800442b02ecce76ac2d11d81ec1",
+    "embedding.json": "6216702620768cdbca11e4974fb8ee56a5c78683967a3cefb828e9fdae02a6e3",
+    "keys.das": "0979b4dc1d730edb4429e9a99f9867a528c98eb5f8e0cf703e886a09f155154d",
+    "model.meta": "a44eed12b4dc3ae9de8735d54d7a98143e7e3ed03a401644685229bd2872cec6"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "shape": [
+    90380,
+    64
+  ],
+  "output_dir": "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction"
+}

@@ -14,6 +14,10 @@ def main():
     os.environ.pop("MEFT_ROWS_LIBRARY", None)
     tags = [line for line in distribution("meft-memory").read_text("WHEEL").splitlines() if line.startswith("Tag:")]
     assert tags and all(tag.endswith("_" + platform.machine()) for tag in tags), tags
+    assert callable(meft_memory.export_fasttext_model)
+    assert any(entry.name == "meft-fasttext-export" and
+               entry.value == "meft_memory._runtime.fasttext_native_bundle:main"
+               for entry in distribution("meft-memory").entry_points)
     with tempfile.TemporaryDirectory() as tmp:
         source, packed = Path(tmp) / "raw", Path(tmp) / "table"
         source.write_bytes(b"ABCDEFGHabcdefgh")

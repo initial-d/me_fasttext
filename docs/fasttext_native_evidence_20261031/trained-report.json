@@ -1,0 +1,1019 @@
+{
+  "status": "passed",
+  "category": "public-text, actually trained custom me_fasttext SGNS storage/serving reference",
+  "commit": "bd6bd86eb38c5dec9ac63c35eb7ee3cfc895a2b8",
+  "exact_command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python tools/benchmark_fasttext_native.py --enwik8-zip /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/../enwik8.zip --output-dir /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction",
+  "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+  "platform": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+  "cpu": "AMD EPYC 7742 64-Core Processor",
+  "cpu_affinity": [
+    0
+  ],
+  "device": "CPU",
+  "pytorch": null,
+  "commands": [
+    "make -C /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source fasttext-native native structural-native",
+    "c++ -std=c++11 -O2 -pthread -DMEFT_NATIVE_FASTTEXT -I/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src -I/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/native -I/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/mylib/include /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/tools/fasttext_serving_probe.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/args.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/dictionary.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/productquantizer.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/matrix.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/qmatrix.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/vector.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/model.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/utils.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/fasttext.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/ftindex.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/native/fasttext_bundle.cc /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/meft_rows_fasttext.o -L/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/mylib/lib -ltrie -lpub -lz -o /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe train /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/pairs.txt /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/trained.bin /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/training.json",
+    "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/tools/export_fasttext_native_cli.py --model /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/trained.bin --output-dir /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout --fasttext-binary /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/fasttext-native --structural-library /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/libmeft_structural.so --native-library /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/libmeft_rows.so --mode layout",
+    "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/tools/export_fasttext_native_cli.py --model /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/trained.bin --output-dir /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact --fasttext-binary /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/fasttext-native --structural-library /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/libmeft_structural.so --native-library /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/libmeft_rows.so --mode exact",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe serve /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/trained.bin /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/queries.tsv /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/dense-0.f32 /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/dense-0.json",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe serve /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/trained.bin /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/queries.tsv /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/dense-1.f32 /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/dense-1.json",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe serve /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/trained.bin /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/queries.tsv /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/dense-2.f32 /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/dense-2.json",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe serve /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/queries.tsv /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout-0.f32 /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout-0.json",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe serve /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/queries.tsv /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout-1.f32 /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout-1.json",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe serve /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/queries.tsv /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout-2.f32 /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/layout-2.json",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe serve /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/queries.tsv /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact-0.f32 /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact-0.json",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe serve /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/queries.tsv /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact-1.f32 /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact-1.json",
+    "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/probe serve /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/queries.tsv /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact-2.f32 /llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/exact-2.json"
+  ],
+  "limitations": [
+    "Finite 64-dim public-text reference; not an Engram checkpoint or downstream quality result.",
+    "Filesystem prewarmed; first pass is reader-cache cold, not disk cold.",
+    "Single worker on a shared server; no GPU or other user process touched.",
+    "Dictionary (including legacy 200 MB word2int allocation) and output matrix remain resident.",
+    "No inference negative-sampling table in either loader; training builds one.",
+    "4 MiB cache payload budget is not an RSS bound; native mmap pages and index remain resident.",
+    "Conversion is offline and copies full input/maps; no bounded exporter memory claim."
+  ],
+  "data": {
+    "source": "enwik8 (existing archive, no download)",
+    "zip_sha256": "547994d9980ebed1288380d652999f38a14fe291a6247c157c3d33d4932534bc",
+    "raw_sha256": "2b49720ec4d78c3c9fabaee6e4179a5e997302b3a70029f30f2d582218c024a8",
+    "raw_bytes": 100000000,
+    "raw_split_byte": 90000000,
+    "transform": "Split raw 90/10 first; strip XML tags, lowercase, [a-z]+; use first requested train words. Each 64-word block emits p#0 and 63 adjacent query\\x01source pairs.",
+    "train_words": 65536,
+    "training_pair_tokens": 64512,
+    "training_lines": 1024,
+    "corpus_sha256": "ea2a0b0b96e4368ed6b140902068c9f5f5452b2c1202a0eda19e481402806672",
+    "query_sha256": "e3b9d05301a1cf3e53929ac0f9fc254338bc02dd8b2c55ba79a09a57ef99ccf6",
+    "query_seed": 42,
+    "heldout_source_words": 8192,
+    "word_queries": 1024,
+    "sentence_queries": 128,
+    "sentence_length": 8
+  },
+  "training": {
+    "training_seconds": 6.456823598,
+    "rows": 90380,
+    "dim": 64,
+    "word_rows": 14813,
+    "ngram_rows": 75567,
+    "changed_rows": 88725,
+    "changed_ngram_rows": 75545,
+    "epochs": 2,
+    "threads": 1,
+    "min_count": 2,
+    "minn": 2,
+    "maxn": 12,
+    "window": 3,
+    "negative_samples": 5,
+    "lr": 0.025,
+    "initializer_seed": 1,
+    "training_rng_seed": 0
+  },
+  "source_model_sha256": "522bc3434dc6c69afe819756cc32aeacf632c5806087afff97738003138a6338",
+  "source_model_bytes": 27204018,
+  "exports": {
+    "layout": {
+      "seconds": 11.612938207108527,
+      "bundle_bytes": 27078264,
+      "manifest": {
+        "schema_version": 1,
+        "model_type": "me_fasttext-native",
+        "shape": [
+          90380,
+          64
+        ],
+        "keyed_ngram_rows": 75567,
+        "mode": "layout",
+        "source_model_sha256": "522bc3434dc6c69afe819756cc32aeacf632c5806087afff97738003138a6338",
+        "source_rows_sha256": "88f2a1a9609eff9b09d0fe7f20cf2bae328511de10684112a118eb521000eaa9",
+        "reconstructed_rows_sha256": "88f2a1a9609eff9b09d0fe7f20cf2bae328511de10684112a118eb521000eaa9",
+        "original_bytes_preserved": true,
+        "extraction_command": [
+          "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/fasttext-native",
+          "dump-native",
+          "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/trained.bin",
+          "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/.meft-fasttext-l3bb_86b/extracted"
+        ],
+        "storage": {
+          "format": "MEFTNAT1",
+          "format_version": 2,
+          "input_bytes": 23137280,
+          "artifact_bytes": 22401608,
+          "unique_rows": 90380,
+          "row_map_bytes": 723040,
+          "n_rows": 90380,
+          "row_bytes": 256,
+          "block_rows": 32,
+          "blocks": 2825,
+          "max_block_bytes": 8192,
+          "raw_blocks": 0,
+          "compressed_blocks": 2825,
+          "zlib_blocks": 2733,
+          "xor_blocks": 92,
+          "deduplicate": false,
+          "predictor": "xor",
+          "reordered": true,
+          "external_representatives": true,
+          "marked_rows": 90380,
+          "structural_mode": "layout",
+          "index": "datrie",
+          "index_bytes": 605232,
+          "source_sha256": "88f2a1a9609eff9b09d0fe7f20cf2bae328511de10684112a118eb521000eaa9",
+          "representatives_sha256": "8b4e8f17cf8fcb4012f022d00edba81a174c24340bf9675fc5d069a2f3676608",
+          "original_bytes_preserved": true,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "contract": "original IDs retained; decoder exact to representative bytes; joint sharing may change weights"
+        },
+        "query_chunk_rows": 256,
+        "cache_payload_budget_bytes": 4194304,
+        "contract": "Original DATrie registry IDs; original float32 ordered accumulation. Joint mode can change source weights.",
+        "limitations": [
+          "Trusted self-produced, Linux x86-64 legacy metadata/index serialization.",
+          "Frozen inference; output matrix/dictionary remain resident. Cache is not an RSS limit.",
+          "Not an official fastText converter or quantized/.z migration."
+        ],
+        "artifacts": {
+          "structural.json": "d940f9078ebeb3632e101e793f7e185a4243c193d40b76afd03dc9bd9c389cbc",
+          "table.men": "dae4b249da573240868e8797b66b7951c2761762bfc16666639aa89e623847ae",
+          "reader.cfg": "a9de3eb788520ddacad77c6f73b089aa15133800442b02ecce76ac2d11d81ec1",
+          "embedding.json": "6216702620768cdbca11e4974fb8ee56a5c78683967a3cefb828e9fdae02a6e3",
+          "keys.das": "0979b4dc1d730edb4429e9a99f9867a528c98eb5f8e0cf703e886a09f155154d",
+          "model.meta": "a44eed12b4dc3ae9de8735d54d7a98143e7e3ed03a401644685229bd2872cec6"
+        }
+      }
+    },
+    "exact": {
+      "seconds": 11.937780583044514,
+      "bundle_bytes": 27078261,
+      "manifest": {
+        "schema_version": 1,
+        "model_type": "me_fasttext-native",
+        "shape": [
+          90380,
+          64
+        ],
+        "keyed_ngram_rows": 75567,
+        "mode": "exact",
+        "source_model_sha256": "522bc3434dc6c69afe819756cc32aeacf632c5806087afff97738003138a6338",
+        "source_rows_sha256": "88f2a1a9609eff9b09d0fe7f20cf2bae328511de10684112a118eb521000eaa9",
+        "reconstructed_rows_sha256": "88f2a1a9609eff9b09d0fe7f20cf2bae328511de10684112a118eb521000eaa9",
+        "original_bytes_preserved": true,
+        "extraction_command": [
+          "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/build/fasttext-native",
+          "dump-native",
+          "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/trained.bin",
+          "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/reproduction/.meft-fasttext-4yeh63_c/extracted"
+        ],
+        "storage": {
+          "format": "MEFTNAT1",
+          "format_version": 2,
+          "input_bytes": 23137280,
+          "artifact_bytes": 22401608,
+          "unique_rows": 90380,
+          "row_map_bytes": 723040,
+          "n_rows": 90380,
+          "row_bytes": 256,
+          "block_rows": 32,
+          "blocks": 2825,
+          "max_block_bytes": 8192,
+          "raw_blocks": 0,
+          "compressed_blocks": 2825,
+          "zlib_blocks": 2733,
+          "xor_blocks": 92,
+          "deduplicate": false,
+          "predictor": "xor",
+          "reordered": true,
+          "external_representatives": true,
+          "marked_rows": 90380,
+          "structural_mode": "exact",
+          "index": "datrie",
+          "index_bytes": 605232,
+          "source_sha256": "88f2a1a9609eff9b09d0fe7f20cf2bae328511de10684112a118eb521000eaa9",
+          "representatives_sha256": "8b4e8f17cf8fcb4012f022d00edba81a174c24340bf9675fc5d069a2f3676608",
+          "original_bytes_preserved": true,
+          "minimum_cosine": null,
+          "minimum_norm_ratio": null,
+          "contract": "original IDs retained; decoder exact to representative bytes; joint sharing may change weights"
+        },
+        "query_chunk_rows": 256,
+        "cache_payload_budget_bytes": 4194304,
+        "contract": "Original DATrie registry IDs; original float32 ordered accumulation. Joint mode can change source weights.",
+        "limitations": [
+          "Trusted self-produced, Linux x86-64 legacy metadata/index serialization.",
+          "Frozen inference; output matrix/dictionary remain resident. Cache is not an RSS limit.",
+          "Not an official fastText converter or quantized/.z migration."
+        ],
+        "artifacts": {
+          "structural.json": "0e0484813aab6527c6ee2a1017212d95b299d6814dd88d63af9bca89c3060111",
+          "table.men": "dae4b249da573240868e8797b66b7951c2761762bfc16666639aa89e623847ae",
+          "reader.cfg": "9aec7711f5cb0f77405a33251042899b93322365e849dcdcbe5ab219fecd76d9",
+          "embedding.json": "6216702620768cdbca11e4974fb8ee56a5c78683967a3cefb828e9fdae02a6e3",
+          "keys.das": "0979b4dc1d730edb4429e9a99f9867a528c98eb5f8e0cf703e886a09f155154d",
+          "model.meta": "a44eed12b4dc3ae9de8735d54d7a98143e7e3ed03a401644685229bd2872cec6"
+        }
+      }
+    }
+  },
+  "serving": {
+    "dense": [
+      {
+        "native": false,
+        "load_seconds": 0.189239462,
+        "after_load": {
+          "VmRSS_bytes": 235302912,
+          "RssAnon_bytes": 231632896,
+          "RssFile_bytes": 3670016
+        },
+        "passes": [
+          {
+            "batch_seconds": 0.009227229,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.794,
+              "p95_us": 8.94
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 18.368,
+              "p95_us": 26.54
+            },
+            "memory": {
+              "VmRSS_bytes": 235810816,
+              "RssAnon_bytes": 231858176,
+              "RssFile_bytes": 3952640
+            }
+          },
+          {
+            "batch_seconds": 0.008357635,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.444,
+              "p95_us": 6.635
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 16.552,
+              "p95_us": 23.746
+            },
+            "memory": {
+              "VmRSS_bytes": 235810816,
+              "RssAnon_bytes": 231858176,
+              "RssFile_bytes": 3952640
+            }
+          },
+          {
+            "batch_seconds": 0.008408758,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.444,
+              "p95_us": 6.635
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 16.552,
+              "p95_us": 23.746
+            },
+            "memory": {
+              "VmRSS_bytes": 235810816,
+              "RssAnon_bytes": 231858176,
+              "RssFile_bytes": 3952640
+            }
+          },
+          {
+            "batch_seconds": 0.008366155,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.444,
+              "p95_us": 6.705
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 16.552,
+              "p95_us": 23.607
+            },
+            "memory": {
+              "VmRSS_bytes": 235810816,
+              "RssAnon_bytes": 231858176,
+              "RssFile_bytes": 3952640
+            }
+          }
+        ],
+        "peak_rss_bytes": 1619439616,
+        "oracle_vectors": 1152,
+        "oracle_sha256": "da1b7fb1a0dc0c354308ac99a6c3c008fbf59ee32794cba4de758fa738bc7058"
+      },
+      {
+        "native": false,
+        "load_seconds": 0.187410317,
+        "after_load": {
+          "VmRSS_bytes": 235118592,
+          "RssAnon_bytes": 231636992,
+          "RssFile_bytes": 3481600
+        },
+        "passes": [
+          {
+            "batch_seconds": 0.009179039,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.794,
+              "p95_us": 8.939
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 18.019,
+              "p95_us": 26.051
+            },
+            "memory": {
+              "VmRSS_bytes": 235806720,
+              "RssAnon_bytes": 231849984,
+              "RssFile_bytes": 3956736
+            }
+          },
+          {
+            "batch_seconds": 0.008367133,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.444,
+              "p95_us": 6.635
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 16.133,
+              "p95_us": 23.606
+            },
+            "memory": {
+              "VmRSS_bytes": 235806720,
+              "RssAnon_bytes": 231849984,
+              "RssFile_bytes": 3956736
+            }
+          },
+          {
+            "batch_seconds": 0.00834632,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.444,
+              "p95_us": 6.635
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 16.133,
+              "p95_us": 23.676
+            },
+            "memory": {
+              "VmRSS_bytes": 235806720,
+              "RssAnon_bytes": 231849984,
+              "RssFile_bytes": 3956736
+            }
+          },
+          {
+            "batch_seconds": 0.008381799,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.444,
+              "p95_us": 6.635
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 16.552,
+              "p95_us": 23.677
+            },
+            "memory": {
+              "VmRSS_bytes": 235806720,
+              "RssAnon_bytes": 231849984,
+              "RssFile_bytes": 3956736
+            }
+          }
+        ],
+        "peak_rss_bytes": 1619439616,
+        "oracle_vectors": 1152,
+        "oracle_sha256": "da1b7fb1a0dc0c354308ac99a6c3c008fbf59ee32794cba4de758fa738bc7058"
+      },
+      {
+        "native": false,
+        "load_seconds": 0.187380704,
+        "after_load": {
+          "VmRSS_bytes": 235171840,
+          "RssAnon_bytes": 231636992,
+          "RssFile_bytes": 3534848
+        },
+        "passes": [
+          {
+            "batch_seconds": 0.009114646,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.794,
+              "p95_us": 8.94
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 17.949,
+              "p95_us": 25.981
+            },
+            "memory": {
+              "VmRSS_bytes": 235798528,
+              "RssAnon_bytes": 231854080,
+              "RssFile_bytes": 3944448
+            }
+          },
+          {
+            "batch_seconds": 0.008280949,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.444,
+              "p95_us": 6.635
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 16.133,
+              "p95_us": 23.257
+            },
+            "memory": {
+              "VmRSS_bytes": 235798528,
+              "RssAnon_bytes": 231854080,
+              "RssFile_bytes": 3944448
+            }
+          },
+          {
+            "batch_seconds": 0.008307977,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.375,
+              "p95_us": 6.635
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 16.133,
+              "p95_us": 24.095
+            },
+            "memory": {
+              "VmRSS_bytes": 235798528,
+              "RssAnon_bytes": 231854080,
+              "RssFile_bytes": 3944448
+            }
+          },
+          {
+            "batch_seconds": 0.00828947,
+            "word": {
+              "count": 1024,
+              "p50_us": 2.444,
+              "p95_us": 6.635
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 16.064,
+              "p95_us": 23.677
+            },
+            "memory": {
+              "VmRSS_bytes": 235798528,
+              "RssAnon_bytes": 231854080,
+              "RssFile_bytes": 3944448
+            }
+          }
+        ],
+        "peak_rss_bytes": 1619439616,
+        "oracle_vectors": 1152,
+        "oracle_sha256": "da1b7fb1a0dc0c354308ac99a6c3c008fbf59ee32794cba4de758fa738bc7058"
+      }
+    ],
+    "layout": [
+      {
+        "native": true,
+        "load_seconds": 0.124478024,
+        "after_load": {
+          "VmRSS_bytes": 211509248,
+          "RssAnon_bytes": 207958016,
+          "RssFile_bytes": 3551232
+        },
+        "passes": [
+          {
+            "batch_seconds": 0.311189649,
+            "word": {
+              "count": 1024,
+              "p50_us": 9.01,
+              "p95_us": 748.071
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 691.29,
+              "p95_us": 1853.59
+            },
+            "memory": {
+              "VmRSS_bytes": 234369024,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22290432
+            }
+          },
+          {
+            "batch_seconds": 0.011327359,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.33,
+              "p95_us": 9.917
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.377,
+              "p95_us": 39.321
+            },
+            "memory": {
+              "VmRSS_bytes": 234369024,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22290432
+            }
+          },
+          {
+            "batch_seconds": 0.011164559,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.331,
+              "p95_us": 9.428
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 26.54,
+              "p95_us": 39.67
+            },
+            "memory": {
+              "VmRSS_bytes": 234369024,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22290432
+            }
+          },
+          {
+            "batch_seconds": 0.011084311,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.33,
+              "p95_us": 9.359
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 26.609,
+              "p95_us": 39.321
+            },
+            "memory": {
+              "VmRSS_bytes": 234369024,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22290432
+            }
+          }
+        ],
+        "peak_rss_bytes": 1619439616,
+        "oracle_vectors": 1152,
+        "oracle_sha256": "da1b7fb1a0dc0c354308ac99a6c3c008fbf59ee32794cba4de758fa738bc7058"
+      },
+      {
+        "native": true,
+        "load_seconds": 0.125100171,
+        "after_load": {
+          "VmRSS_bytes": 211554304,
+          "RssAnon_bytes": 207958016,
+          "RssFile_bytes": 3596288
+        },
+        "passes": [
+          {
+            "batch_seconds": 0.307535759,
+            "word": {
+              "count": 1024,
+              "p50_us": 8.521,
+              "p95_us": 752.75
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 650.502,
+              "p95_us": 1769.431
+            },
+            "memory": {
+              "VmRSS_bytes": 234414080,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22335488
+            }
+          },
+          {
+            "batch_seconds": 0.011561047,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.679,
+              "p95_us": 10.825
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.937,
+              "p95_us": 40.717
+            },
+            "memory": {
+              "VmRSS_bytes": 234414080,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22335488
+            }
+          },
+          {
+            "batch_seconds": 0.011131593,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.679,
+              "p95_us": 9.428
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.517,
+              "p95_us": 39.669
+            },
+            "memory": {
+              "VmRSS_bytes": 234414080,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22335488
+            }
+          },
+          {
+            "batch_seconds": 0.010990933,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.33,
+              "p95_us": 9.01
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.378,
+              "p95_us": 39.181
+            },
+            "memory": {
+              "VmRSS_bytes": 234414080,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22335488
+            }
+          }
+        ],
+        "peak_rss_bytes": 1619439616,
+        "oracle_vectors": 1152,
+        "oracle_sha256": "da1b7fb1a0dc0c354308ac99a6c3c008fbf59ee32794cba4de758fa738bc7058"
+      },
+      {
+        "native": true,
+        "load_seconds": 0.123673662,
+        "after_load": {
+          "VmRSS_bytes": 211509248,
+          "RssAnon_bytes": 207958016,
+          "RssFile_bytes": 3551232
+        },
+        "passes": [
+          {
+            "batch_seconds": 0.306155695,
+            "word": {
+              "count": 1024,
+              "p50_us": 8.521,
+              "p95_us": 749.887
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 649.106,
+              "p95_us": 1747.64
+            },
+            "memory": {
+              "VmRSS_bytes": 234369024,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22290432
+            }
+          },
+          {
+            "batch_seconds": 0.011337415,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.679,
+              "p95_us": 9.429
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.866,
+              "p95_us": 39.321
+            },
+            "memory": {
+              "VmRSS_bytes": 234369024,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22290432
+            }
+          },
+          {
+            "batch_seconds": 0.011119721,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.33,
+              "p95_us": 9.01
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.448,
+              "p95_us": 39.251
+            },
+            "memory": {
+              "VmRSS_bytes": 234369024,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22290432
+            }
+          },
+          {
+            "batch_seconds": 0.0112124,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.33,
+              "p95_us": 9.428
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.866,
+              "p95_us": 39.251
+            },
+            "memory": {
+              "VmRSS_bytes": 234369024,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22290432
+            }
+          }
+        ],
+        "peak_rss_bytes": 1619439616,
+        "oracle_vectors": 1152,
+        "oracle_sha256": "da1b7fb1a0dc0c354308ac99a6c3c008fbf59ee32794cba4de758fa738bc7058"
+      }
+    ],
+    "exact": [
+      {
+        "native": true,
+        "load_seconds": 0.124378221,
+        "after_load": {
+          "VmRSS_bytes": 211587072,
+          "RssAnon_bytes": 207962112,
+          "RssFile_bytes": 3624960
+        },
+        "passes": [
+          {
+            "batch_seconds": 0.306126291,
+            "word": {
+              "count": 1024,
+              "p50_us": 9.009,
+              "p95_us": 752.331
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 645.334,
+              "p95_us": 1745.405
+            },
+            "memory": {
+              "VmRSS_bytes": 234446848,
+              "RssAnon_bytes": 212082688,
+              "RssFile_bytes": 22364160
+            }
+          },
+          {
+            "batch_seconds": 0.011199689,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.61,
+              "p95_us": 9.429
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.797,
+              "p95_us": 39.739
+            },
+            "memory": {
+              "VmRSS_bytes": 234446848,
+              "RssAnon_bytes": 212082688,
+              "RssFile_bytes": 22364160
+            }
+          },
+          {
+            "batch_seconds": 0.011131034,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.33,
+              "p95_us": 9.358
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 26.54,
+              "p95_us": 38.343
+            },
+            "memory": {
+              "VmRSS_bytes": 234446848,
+              "RssAnon_bytes": 212082688,
+              "RssFile_bytes": 22364160
+            }
+          },
+          {
+            "batch_seconds": 0.011073765,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.33,
+              "p95_us": 9.01
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.378,
+              "p95_us": 39.251
+            },
+            "memory": {
+              "VmRSS_bytes": 234446848,
+              "RssAnon_bytes": 212082688,
+              "RssFile_bytes": 22364160
+            }
+          }
+        ],
+        "peak_rss_bytes": 1619439616,
+        "oracle_vectors": 1152,
+        "oracle_sha256": "da1b7fb1a0dc0c354308ac99a6c3c008fbf59ee32794cba4de758fa738bc7058"
+      },
+      {
+        "native": true,
+        "load_seconds": 0.123836462,
+        "after_load": {
+          "VmRSS_bytes": 211599360,
+          "RssAnon_bytes": 207962112,
+          "RssFile_bytes": 3637248
+        },
+        "passes": [
+          {
+            "batch_seconds": 0.305294062,
+            "word": {
+              "count": 1024,
+              "p50_us": 7.962,
+              "p95_us": 749.398
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 647.289,
+              "p95_us": 1757.139
+            },
+            "memory": {
+              "VmRSS_bytes": 234405888,
+              "RssAnon_bytes": 212086784,
+              "RssFile_bytes": 22319104
+            }
+          },
+          {
+            "batch_seconds": 0.011282032,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.679,
+              "p95_us": 9.429
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.866,
+              "p95_us": 39.321
+            },
+            "memory": {
+              "VmRSS_bytes": 234405888,
+              "RssAnon_bytes": 212086784,
+              "RssFile_bytes": 22319104
+            }
+          },
+          {
+            "batch_seconds": 0.011135295,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.331,
+              "p95_us": 9.428
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.447,
+              "p95_us": 39.739
+            },
+            "memory": {
+              "VmRSS_bytes": 234405888,
+              "RssAnon_bytes": 212086784,
+              "RssFile_bytes": 22319104
+            }
+          },
+          {
+            "batch_seconds": 0.011108336,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.331,
+              "p95_us": 9.429
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.378,
+              "p95_us": 39.251
+            },
+            "memory": {
+              "VmRSS_bytes": 234405888,
+              "RssAnon_bytes": 212086784,
+              "RssFile_bytes": 22319104
+            }
+          }
+        ],
+        "peak_rss_bytes": 1619439616,
+        "oracle_vectors": 1152,
+        "oracle_sha256": "da1b7fb1a0dc0c354308ac99a6c3c008fbf59ee32794cba4de758fa738bc7058"
+      },
+      {
+        "native": true,
+        "load_seconds": 0.12414537,
+        "after_load": {
+          "VmRSS_bytes": 211505152,
+          "RssAnon_bytes": 207958016,
+          "RssFile_bytes": 3547136
+        },
+        "passes": [
+          {
+            "batch_seconds": 0.30457728,
+            "word": {
+              "count": 1024,
+              "p50_us": 7.613,
+              "p95_us": 745.626
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 647.29,
+              "p95_us": 1720.751
+            },
+            "memory": {
+              "VmRSS_bytes": 234323968,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22245376
+            }
+          },
+          {
+            "batch_seconds": 0.011255981,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.679,
+              "p95_us": 9.429
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.866,
+              "p95_us": 39.181
+            },
+            "memory": {
+              "VmRSS_bytes": 234323968,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22245376
+            }
+          },
+          {
+            "batch_seconds": 0.011099327,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.33,
+              "p95_us": 9.01
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.447,
+              "p95_us": 39.739
+            },
+            "memory": {
+              "VmRSS_bytes": 234323968,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22245376
+            }
+          },
+          {
+            "batch_seconds": 0.011174616,
+            "word": {
+              "count": 1024,
+              "p50_us": 4.261,
+              "p95_us": 9.01
+            },
+            "sentence": {
+              "count": 128,
+              "p50_us": 27.867,
+              "p95_us": 39.321
+            },
+            "memory": {
+              "VmRSS_bytes": 234323968,
+              "RssAnon_bytes": 212078592,
+              "RssFile_bytes": 22245376
+            }
+          }
+        ],
+        "peak_rss_bytes": 1619439616,
+        "oracle_vectors": 1152,
+        "oracle_sha256": "da1b7fb1a0dc0c354308ac99a6c3c008fbf59ee32794cba4de758fa738bc7058"
+      }
+    ]
+  },
+  "all_inference_outputs_byte_equal": true,
+  "artifacts_sha256": {
+    "dense-2.json": "deceeb1a656b02435f8a964ca043db6195ec3fcdefcce87b7ed2649c93779c5c",
+    "exact-0.json": "261e8127915a72e1e7ccb1e675da7b8f2ff6fcf24407b5780c4fcb91f533d253",
+    "layout-2.json": "99e07b5dc28afcb82ec9e6740fe9c88477b1468d25357af3752a5815a3a331b9",
+    "exact-1.json": "cf11d2ffd7d0dee7033f3de161f870b64da5a25453839cef376d489517be529c",
+    "layout-1.json": "757e8ef6e5e14a385ecf798c38374d3852f42f2b83953df8b60f90ae7e6699b2",
+    "exact-2.json": "e6f559f6b84011a4942c2ae0dbb1cabe03054bc1ab74b2d554d389f5ddb2de19",
+    "dense-1.json": "d53cd48666d98b97588db8eaad1bac224ddeb9c9211d58c95bb1f4b63d33afc4",
+    "training.json": "d95065dea5f297660d080148b2f35ce1a19c3039ad8d0547defc25dfc4cb3447",
+    "queries.tsv": "e3b9d05301a1cf3e53929ac0f9fc254338bc02dd8b2c55ba79a09a57ef99ccf6",
+    "layout-0.json": "04f797c3f1537b283f3919e31312dca7a9af694a7307780a7e4da8532790c9d7",
+    "dense-0.json": "a4e26be1011866dd249f2cd499d2398b5cb03b5a72cf4e5d65202dc725840ffe"
+  }
+}

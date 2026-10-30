@@ -1,0 +1,21 @@
+{
+  "historical_commit": "bea4302bb7fb1a6c0108fdde141ce667f2389920",
+  "fusion_commit": "bd6bd86eb38c5dec9ac63c35eb7ee3cfc895a2b8",
+  "query_sha256": "9adea2fb6f7b3268624e9bf0de80598c3243f4d41159a17db4936b9f81e4d3ca",
+  "oracle_sha256": {
+    "old": "7deea210e7fb264f9228ca01c59e7a82bbaf4201461084cb48bfc28d77d830d4",
+    "dense": "7deea210e7fb264f9228ca01c59e7a82bbaf4201461084cb48bfc28d77d830d4",
+    "native": "7deea210e7fb264f9228ca01c59e7a82bbaf4201461084cb48bfc28d77d830d4"
+  },
+  "byte_equal": true,
+  "word_queries": 1024,
+  "sentence_queries": 128,
+  "query_seed": 42,
+  "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+  "platform": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+  "limitations": [
+    "Known registered words only. Prior OOV insertion and hash-bucket helper behavior can address untrained/out-of-bounds rows and is deliberately fixed.",
+    "Same actual trained model; source-compatible facade comparison, not binary ABI compatibility.",
+    "Historical probe only substitutes false for new hasNativeInput method; dense math and loader are original source."
+  ]
+}

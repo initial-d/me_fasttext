@@ -14,6 +14,12 @@ targets. Windows, CUDA and distributed serving are not implemented.
 
 ## Build and call from C
 
+For existing me_fasttext models, the optional
+[native FastText facade](fasttext_native_bundle.md) connects this C reader and
+the original DATrie/mark-compact planner to `loadModel`, word/sentence vectors
+and classification. [Actual trained .bin results](fasttext_native_evidence_20261031/README.md)
+include full-row fidelity, historical compatibility and dense/identity controls.
+
 ```bash
 # Linux: zlib development headers and a C compiler are required.
 make native

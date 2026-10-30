@@ -62,6 +62,9 @@ int main(int argc,char** argv) {
   for(const std::string& sentence:{"alpha beta alpha","你好 alpha","","☃unknown"}) {
     std::istringstream left(sentence),right(sentence);
     dense.getSentenceVector(left,a); native.getSentenceVector(right,b); same(a,b);
+    std::string x,y; dense.sentenceVectors(sentence,x); native.sentenceVectors(sentence,y);
+    assert(x==y && x.find("nan")==std::string::npos);
+    dense.wordVectors(sentence,x); native.wordVectors(sentence,y); assert(x==y);
   }
   std::vector<int32_t> ids;
   for(int i=0;i<517;++i) ids.push_back((i*7)%matrix->m_);
