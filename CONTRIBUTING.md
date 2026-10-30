@@ -1,22 +1,31 @@
 # Contributing
 
-Thanks for taking a look at NGramStore. This is a research prototype, so the
-most valuable contributions are the ones that make its evidence easier to
-understand, reproduce, or falsify.
+Thanks for taking a look at NGramStore. It is a general-purpose backend for
+learned n-gram embeddings, with a research implementation and explicit runtime
+limits. Useful contributions make the engine easier to integrate, reduce a
+measured cost, or make its evidence easier to reproduce or falsify.
 
-Please follow the [code of conduct](CODE_OF_CONDUCT.md). In short: keep
+Please follow the [code of conduct](CODE_OF_CONDUCT.md). Keep
 discussion respectful, evidence-oriented, and careful with private data.
 
 ## Best first contributions
 
-The highest-impact contribution is a benchmark report on a public or clearly
-described corpus. Positive, negative, and partial results are all useful when
-they include enough context for another reader to compare them fairly.
+The [engine roadmap](docs/ngram_memory_research_plan.md) prioritizes sparse
+query costs, independent DATrie/mark-compact gains and large-table construction
+resources. Stable original-ID/byte contracts and historical compatibility are
+gates for every change. FastText and Engram are applications of the same engine.
 
-Good first contributions include:
+Useful contributions include:
 
 - a public-corpus benchmark report using the
   [evaluator quickstart](docs/evaluator_quickstart.md);
+- a frozen n-gram table exporter or integration through the common engine API,
+  preserving the model's existing IDs, dtypes and aggregation;
+- a same-trace query optimization with dense/raw-mmap controls and full
+  storage/latency/RSS costs;
+- an exact structural codec/layout improvement, or a separately measured
+  approximate compaction improvement with held-out quality;
+- a construction-memory or portability fix with a clear supported boundary;
 - an
   [evaluation question](https://github.com/initial-d/ngram-store/issues/new?template=evaluation-question.yml)
   about build, benchmark setup, corpus preparation, baselines, or result
@@ -25,9 +34,14 @@ Good first contributions include:
   [showcase or use-case note](https://github.com/initial-d/ngram-store/issues/new?template=showcase.yml)
   for citations, list entries, comparisons, integrations, or deployment notes;
 - a retrieval, ranking, classification, or OOV-heavy serving result;
-- a negative result showing where the compact `.z` path does not help;
+- a negative result showing where native storage, structural optimization or
+  the legacy approximate `.z` path does not help;
 - a build, portability, or documentation fix;
 - a small code patch with a clear before/after behavior.
+
+Positive, negative and partial results are useful when another reader can
+compare them fairly. Mathematical fixtures establish correctness; compression
+and model-performance claims require trained rows and their provenance.
 
 Please do not include private corpora, secrets, internal hostnames, proprietary
 logs, or credentials. Aggregate metrics and corpus manifests are enough.
@@ -90,7 +104,11 @@ or platform limitation.
 
 ## Scope and positioning
 
-NGramStore is a compression, storage and exact-query backend for learned n-gram vectors. FastText and Engram/TinyEngram are applications with different training and addressing contracts. Numeric/hash queries use the native row engine; structural sharing requires registered string keys. Lossless bytes, approximate distortion, query cost and task quality need separate evidence.
+NGramStore's shared boundary is a frozen n-gram embedding table. FastText and
+Engram/TinyEngram are applications with different training and addressing
+contracts. Numeric/hash queries use the native row engine; structural sharing
+requires registered unique string keys. Lossless bytes, approximate distortion,
+query cost and task quality need separate evidence.
 See [`docs/artifact_card.md`](docs/artifact_card.md) and
 [`docs/citation_guide.md`](docs/citation_guide.md) for wording that is easier
 to cite without overclaiming.

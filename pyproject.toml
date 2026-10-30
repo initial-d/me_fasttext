@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "meft-memory"
 version = "0.4.0"
-description = "NGramStore: compression, storage and exact lookup for learned n-gram vectors"
+description = "NGramStore: a general-purpose backend for learned n-gram embeddings, with compression, storage and exact lookup"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 
