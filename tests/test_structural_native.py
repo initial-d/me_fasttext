@@ -127,3 +127,22 @@ class RealStructuralTest(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 plan.export(source, output)
             self.assertTrue((output / "keep").exists())
+
+    def test_compact_export_uses_existing_frozen_embedding_adapter(self):
+        try:
+            import torch
+            from tools.engram_row_adapter import MappedEmbedding
+        except ImportError:
+            self.skipTest("PyTorch not installed")
+        raw = struct.pack("<6f", 0., 0., 1., 0., .996, .089)
+        with tempfile.TemporaryDirectory() as tmp:
+            source, output = Path(tmp) / "raw", Path(tmp) / "compact"
+            source.write_bytes(raw)
+            with StructuralPlan(raw, 2, {1: "a", 2: "ab"}, self.library) as plan:
+                plan.export(source, output)
+            with MappedEmbedding(output, self.rows_library, native_cache_bytes=1024,
+                                 native_cache_policy="rows") as memory:
+                ids = torch.tensor([[2, 0, 1, 2]])
+                self.assertTrue(torch.equal(memory(ids), torch.tensor([[[1., 0.], [0., 0.], [1., 0.], [1., 0.]]])))
+                self.assertTrue(memory.gather.metadata["approximate"])
+                self.assertEqual(memory.gather.table.header["n_rows"], 3)

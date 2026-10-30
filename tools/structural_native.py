@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import sys
 
 from .native_row_store import pack_native
 
@@ -124,8 +125,13 @@ class StructuralPlan(StructuralIndex):
             raise ValueError(error.value.decode())
         self.representatives, self.row_order = list(representatives), list(order)
         width = dim * 4
-        self.original_bytes_preserved = all(rows[i*width:(i+1)*width] == rows[r*width:(r+1)*width]
-                                            for i, r in enumerate(self.representatives))
+        digest = hashlib.sha256()
+        self.original_bytes_preserved = True
+        for i, r in enumerate(self.representatives):
+            row = rows[r*width:(r+1)*width]
+            digest.update(row)
+            self.original_bytes_preserved &= rows[i*width:(i+1)*width] == row
+        self.reconstructed_sha256 = digest.hexdigest()
 
     def save_index(self, path, *, index="datrie"):
         if not self.handle or index not in ("flat", "datrie"):
@@ -165,6 +171,18 @@ class StructuralPlan(StructuralIndex):
                 "minimum_norm_ratio": self.norm_ratio if self.mode == "joint" else None,
                 "contract": "original IDs retained; decoder exact to representative bytes; joint sharing may change weights"})
             (directory / "structural.json").write_text(json.dumps(metadata, indent=2) + "\n")
+            # Standard frozen global-ID PyTorch adapter metadata. The C table
+            # remains independent of PyTorch; no expanded table is staged.
+            embedding = {"schema_version": 1, "table_file": "table.men",
+                "shape": [self.nrows, self.dim], "dtype": "torch.float32", "byteorder": sys.byteorder,
+                "head_sizes": [self.nrows], "offsets": [0], "backend": "native", "predictor": predictor,
+                "weight_sha256": self.reconstructed_sha256, "source_weight_sha256": self.source_sha256,
+                "artifact_sha256": hashlib.sha256((directory / "table.men").read_bytes()).hexdigest(),
+                "input_bytes": self.nrows * self.dim * 4, "artifact_bytes": metadata["artifact_bytes"],
+                "unique_rows": metadata["unique_rows"], "row_map_bytes": metadata["row_map_bytes"],
+                "block_rows": block_rows, "approximate": not self.original_bytes_preserved,
+                "contract": metadata["contract"]}
+            (directory / "embedding.json").write_text(json.dumps(embedding, indent=2) + "\n")
             return metadata
         except BaseException:
             shutil.rmtree(directory)
