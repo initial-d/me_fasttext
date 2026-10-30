@@ -181,6 +181,20 @@ rows from compressed blocks within the same payload budget. It uses forwarded
 IDs, preserves bytes and still decodes whole blocks on misses; block caching
 remains the default. Choose the policy from measured locality and include its
 metadata/RSS costs when comparing memory.
+For sparse misses, export with `max_block_bytes=8192` to cap decoded blocks:
+`pack_native(..., row_bytes=1024, predictor="xor", max_block_bytes=8192)` uses
+eight rows per block. The effective row count is
+`min(block_rows, max(1, max_block_bytes // row_bytes))`; an indivisible row may
+exceed the limit. This option is available in ordinary/multi-head/EmbeddingBag
+exports, `StructuralPlan.export` and `meft-tiny-export --max-block-bytes 8192`.
+It keeps original addressing and vector bytes, uses the existing native format
+and leaves the default layout unchanged. Smaller blocks add descriptors and
+can reduce compression; they do not bound RSS or guarantee a workload speedup.
+See the [same-table sparse-block measurements](sparse_blocks_evidence_20261030/README.md).
+`last_compressed_bytes` and `last_decoded_bytes` count codec input and full
+decoded block output, excluding raw-row copies and cache hits. They aggregate
+across chunk/bag calls, require the updated library and measure logical codec
+work, not physical I/O.
 Scratch retains up to one maximum decoded block plus per-batch request
 locations. Direct C opening does not verify a full-file cryptographic checksum;
 the PyTorch adapter does. Use trusted, immutable artifacts and external checksums

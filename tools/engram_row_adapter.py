@@ -15,10 +15,10 @@ from torch import nn
 
 try:
     from .lossless_row_store import MappedRows, pack_rows
-    from .native_row_store import NativeRows, pack_native
+    from .native_row_store import NativeRows, pack_native, resolve_block_rows
 except ImportError:  # direct script imports from tools/
     from lossless_row_store import MappedRows, pack_rows
-    from native_row_store import NativeRows, pack_native
+    from native_row_store import NativeRows, pack_native, resolve_block_rows
 
 DTYPES = {str(dtype): dtype for dtype in (torch.float32, torch.float16, torch.bfloat16)}
 
@@ -42,7 +42,7 @@ def head_offsets(head_sizes):
 
 
 def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="python", deduplicate=True,
-                     predictor="none"):
+                     predictor="none", *, max_block_bytes=None):
     """Preserve every row, including unseen/unused rows, and the source dtype."""
     offsets = head_offsets(head_sizes)
     if weight.layout != torch.strided or weight.ndim != 2 or weight.shape[1] <= 0:
@@ -64,6 +64,9 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="py
     if backend == "python" and not deduplicate:
         raise ValueError("non-deduplicating export requires the native backend")
     width = weight.shape[1] * weight.element_size()
+    if max_block_bytes is not None and backend != "native":
+        raise ValueError("max block bytes requires the native backend")
+    block_rows = resolve_block_rows(width, block_rows, max_block_bytes)
     with tempfile.TemporaryDirectory(dir=output_dir) as tmp:
         source = Path(tmp) / "table.raw"
         # Copy/transfer at most one block instead of materializing another CPU
@@ -77,7 +80,8 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="py
                 digest.update(raw)
                 stream.write(raw)
         if backend == "native":
-            packed = pack_native(source, table, width, block_rows, deduplicate, predictor)
+            packed = pack_native(source, table, width, block_rows, deduplicate, predictor,
+                                 max_block_bytes=max_block_bytes)
         else:
             packed = pack_rows(source, table, width, block_rows)
     metadata = {
@@ -89,6 +93,7 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="py
         "input_bytes": weight.shape[0] * width, "artifact_bytes": table.stat().st_size,
         "unique_rows": packed["unique_rows"], "row_map_bytes": packed["row_map_bytes"],
         "block_rows": block_rows,
+        "max_block_bytes": max_block_bytes,
         "backend": backend,
         "predictor": predictor,
         "contract": "unchanged local-head IDs plus original offsets; byte-exact CPU gather",
@@ -98,13 +103,13 @@ def export_multihead(weight, head_sizes, output_dir, block_rows=256, backend="py
 
 
 def export_demo_embedding(module, head_sizes, output_dir, block_rows=256, backend="python", deduplicate=True,
-                          predictor="none"):
+                          predictor="none", *, max_block_bytes=None):
     """Accept the official demo's .embedding.weight / .offsets interface."""
     expected = torch.tensor(head_offsets(head_sizes), dtype=torch.int64)
     if not torch.equal(module.offsets.detach().cpu(), expected):
         raise ValueError("source offsets differ from declared head sizes")
     return export_multihead(module.embedding.weight, head_sizes, output_dir, block_rows, backend, deduplicate,
-                            predictor)
+                            predictor, max_block_bytes=max_block_bytes)
 
 
 class MappedMultiHeadEmbedding(nn.Module):
@@ -248,12 +253,12 @@ def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library
 
 
 def export_embedding(module, output_dir, block_rows=256, backend="native", deduplicate=True,
-                     predictor="none"):
+                     predictor="none", *, max_block_bytes=None):
     """Export ordinary nn.Embedding without forward-time max_norm mutation."""
     if not isinstance(module, nn.Embedding) or module.max_norm is not None:
         raise ValueError("requires nn.Embedding without forward-time max_norm mutation")
     return export_multihead(module.weight, [module.num_embeddings], output_dir,
-                            block_rows, backend, deduplicate, predictor)
+                            block_rows, backend, deduplicate, predictor, max_block_bytes=max_block_bytes)
 
 
 class MappedEmbedding(nn.Module):

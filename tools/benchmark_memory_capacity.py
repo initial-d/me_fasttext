@@ -41,7 +41,7 @@ def environment():
     if path.exists():
         cpu = next((line.split(':',1)[1].strip() for line in path.read_text().splitlines() if line.startswith('model name')), cpu)
     return {'python': sys.version, 'numpy': np.__version__, 'os': platform.platform(), 'cpu': cpu,
-            'command': shlex.join([sys.executable, *sys.argv]),
+            'command': shlex.join(getattr(sys, 'orig_argv', [sys.executable, *sys.argv])),
             'source_commit': subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             'cuda_visible_devices': os.environ.get('CUDA_VISIBLE_DEVICES'),
             'cpu_affinity': sorted(os.sched_getaffinity(0)) if hasattr(os,'sched_getaffinity') else None}
@@ -103,12 +103,25 @@ def worker(args):
                 if hashlib.sha256(item[1].raw).hexdigest() != item[2]:
                     raise AssertionError('query bytes differ from the precomputed trained-row oracle')
 
+            def counters():
+                if not isinstance(table, NativeRows):
+                    return None
+                result = {name: getattr(table, name) for name in
+                          ('last_block_reads', 'last_decompressions', 'last_row_cache_hits')}
+                # Earlier compiled readers still support the capacity benchmark.
+                for name in ('last_compressed_bytes', 'last_decoded_bytes'):
+                    result[name] = getattr(table, name) if hasattr(table.lib, 'meft_rows_' + name) else None
+                return result
+
             first = []
+            first_cpu, first_work = [], []
             start_memory = memory()
             for item in queries:
-                started = time.perf_counter_ns()
+                started, cpu_started = time.perf_counter_ns(), time.process_time_ns()
                 gather(item)
                 first.append((time.perf_counter_ns()-started)/1e6)
+                first_cpu.append((time.process_time_ns()-cpu_started)/1e6)
+                first_work.append(counters())
                 check(item)
             first_memory = memory()
             hot = queries[:min(8,len(queries))]
@@ -117,16 +130,19 @@ def worker(args):
                 gather(item)
             warm = []
             cpu = []
+            hot_work = []
             for _ in range(args.repeat):
                 for item in hot:
                     started,cpu_started = time.perf_counter_ns(),time.process_time_ns()
                     gather(item)
                     warm.append((time.perf_counter_ns()-started)/1e6)
                     cpu.append((time.process_time_ns()-cpu_started)/1e6)
+                    hot_work.append(counters())
                     check(item)
             report['cases'].append({'name':case['name'],'query_rows':sum(len(q[0]) for q in queries),
                 'distinct_rows':len(set(int(i) for q in queries for i in q[0])),
                 'first_trace':samples(first),'hot_repeated':samples(warm),
+                'first_cpu':samples(first_cpu), 'first_codec_work':first_work, 'hot_codec_work':hot_work,
                 'hot_cpu':samples(cpu),'all_query_bytes_exact':True,
                 'memory_before_queries':start_memory,'memory_after_first_trace':first_memory,
                 'memory_after_hot':memory(),

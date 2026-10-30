@@ -175,13 +175,13 @@ class MappedEmbeddingBag(nn.Module):
         self.close()
 
 
-def export_embedding_bag(module, output_dir, block_rows=256, deduplicate=True, predictor="none"):
+def export_embedding_bag(module, output_dir, block_rows=256, deduplicate=True, predictor="none", *, max_block_bytes=None):
     """Export nn.EmbeddingBag's rows and its inference reduction configuration."""
     if (not isinstance(module, nn.EmbeddingBag) or module.mode not in ("sum", "mean")
             or module.max_norm is not None):
         raise ValueError("requires sum/mean nn.EmbeddingBag without max_norm mutation")
     metadata = export_multihead(module.weight, [module.num_embeddings], output_dir, block_rows,
-                               "native", deduplicate, predictor)
+                               "native", deduplicate, predictor, max_block_bytes=max_block_bytes)
     metadata["embedding_bag"] = {"mode": module.mode, "padding_idx": module.padding_idx,
                                  "include_last_offset": module.include_last_offset}
     (Path(output_dir) / "embedding.json").write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")

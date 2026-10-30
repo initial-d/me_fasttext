@@ -13,6 +13,17 @@ DESC = struct.Struct("<4Q")
 ROW = struct.Struct("<Q")
 
 
+def resolve_block_rows(row_bytes, block_rows=256, max_block_bytes=None):
+    """Cap decoded block width for sparse access; an indivisible row can exceed it."""
+    if type(row_bytes) is not int or row_bytes <= 0 or type(block_rows) is not int or block_rows <= 0:
+        raise ValueError("row bytes and block rows must be positive integers")
+    if max_block_bytes is None:
+        return block_rows
+    if type(max_block_bytes) is not int or max_block_bytes <= 0:
+        raise ValueError("max block bytes must be a positive integer")
+    return min(block_rows, max(1, max_block_bytes // row_bytes))
+
+
 @contextmanager
 def _atomic_output(output):
     """Publish a complete same-filesystem file; existing mmap handles keep theirs."""
@@ -36,7 +47,7 @@ def _atomic_output(output):
 
 
 def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
-                predictor="none", row_order=None, *, representatives=None):
+                predictor="none", row_order=None, *, representatives=None, max_block_bytes=None):
     """Stream blocks into a spool; exact dedup index still grows with unique rows.
 
     deduplicate=False avoids the unbounded unique-row dictionary for large raw
@@ -56,8 +67,12 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
     atomic replacement. Failed construction/publication preserves the old file;
     readers already mmap-ing it continue reading the old inode. This covers this
     single file, not multi-file adapter metadata or concurrent-writer coordination.
+    max_block_bytes optionally caps decoded bytes per block, retaining at least
+    one full row. Reduces sparse-miss amplification at a compression/metadata
+    tradeoff; it does not bound RSS. None preserves the existing block_rows layout.
     """
     source, output = Path(source), Path(output)
+    block_rows = resolve_block_rows(row_bytes, block_rows, max_block_bytes)
     if source.resolve() == output.resolve() or row_bytes <= 0 or block_rows <= 0:
         raise ValueError("invalid paths or block dimensions")
     nrows, remainder = divmod(source.stat().st_size, row_bytes)
@@ -147,6 +162,7 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
             "artifact_bytes": output.stat().st_size, "unique_rows": unique,
             "row_map_bytes": nrows * ROW.size, "n_rows": nrows, "row_bytes": row_bytes,
             "block_rows": block_rows, "blocks": len(blocks),
+            "max_block_bytes": max_block_bytes,
             "raw_blocks": sum(codec == 0 for _, _, _, codec in blocks),
             "compressed_blocks": sum(codec != 0 for _, _, _, codec in blocks),
             "zlib_blocks": sum(codec == 1 for _, _, _, codec in blocks),
@@ -335,6 +351,14 @@ class NativeRows:
     @property
     def last_decompressions(self):
         return self.lib.meft_rows_last_decompressions(self.handle)
+
+    @property
+    def last_compressed_bytes(self):
+        return self._counter("last_compressed_bytes")
+
+    @property
+    def last_decoded_bytes(self):
+        return self._counter("last_decoded_bytes")
 
     def close(self):
         if self.handle:

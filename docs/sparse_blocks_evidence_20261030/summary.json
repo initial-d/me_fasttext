@@ -1,0 +1,122 @@
+{
+  "raw-mmap": {
+    "artifact_bytes": 1900448768,
+    "cases": {
+      "heldout-lexical": {
+        "first_p50_ms": 0.1722285,
+        "first_p95_ms": 0.3032093999999999,
+        "hot_p50_ms": 0.037854,
+        "first_cpu_p50_ms": 0.17304049999999999,
+        "rss_bytes": 152178688,
+        "anonymous_bytes": 90112000,
+        "output_bytes": 67108864,
+        "decoded_bytes": null,
+        "compressed_input_bytes": null,
+        "decoded_to_output_ratio": null
+      },
+      "uniform-id-stress": {
+        "first_p50_ms": 0.673934,
+        "first_p95_ms": 0.70679405,
+        "hot_p50_ms": 0.047353,
+        "first_cpu_p50_ms": 0.67439,
+        "rss_bytes": 406241280,
+        "anonymous_bytes": 95633408,
+        "output_bytes": 67108864,
+        "decoded_bytes": null,
+        "compressed_input_bytes": null,
+        "decoded_to_output_ratio": null
+      }
+    },
+    "saving_percent": 0.0
+  },
+  "block-8": {
+    "artifact_bytes": 1788494457,
+    "cases": {
+      "heldout-lexical": {
+        "first_p50_ms": 8.074009499999999,
+        "first_p95_ms": 11.150689199999999,
+        "hot_p50_ms": 0.0609715,
+        "first_cpu_p50_ms": 8.069859,
+        "rss_bytes": 231063552,
+        "anonymous_bytes": 94621696,
+        "output_bytes": 67108864,
+        "decoded_bytes": 139190272,
+        "compressed_input_bytes": 130538259,
+        "decoded_to_output_ratio": 2.0740966796875
+      },
+      "uniform-id-stress": {
+        "first_p50_ms": 31.943548999999997,
+        "first_p95_ms": 32.39819585,
+        "hot_p50_ms": 0.067676,
+        "first_cpu_p50_ms": 31.918359000000002,
+        "rss_bytes": 821325824,
+        "anonymous_bytes": 100261888,
+        "output_bytes": 67108864,
+        "decoded_bytes": 536313856,
+        "compressed_input_bytes": 498432318,
+        "decoded_to_output_ratio": 7.99169921875
+      }
+    },
+    "saving_percent": 5.89094075489437
+  },
+  "block-32": {
+    "artifact_bytes": 1778755690,
+    "cases": {
+      "heldout-lexical": {
+        "first_p50_ms": 23.0721625,
+        "first_p95_ms": 32.142976899999994,
+        "hot_p50_ms": 0.062438,
+        "first_cpu_p50_ms": 23.058335,
+        "rss_bytes": 360710144,
+        "anonymous_bytes": 94646272,
+        "output_bytes": 67108864,
+        "decoded_bytes": 436633600,
+        "compressed_input_bytes": 406220503,
+        "decoded_to_output_ratio": 6.50634765625
+      },
+      "uniform-id-stress": {
+        "first_p50_ms": 115.457788,
+        "first_p95_ms": 117.30489605,
+        "hot_p50_ms": 0.07047,
+        "first_cpu_p50_ms": 115.37924100000001,
+        "rss_bytes": 1449811968,
+        "anonymous_bytes": 100290560,
+        "output_bytes": 67108864,
+        "decoded_bytes": 2138243072,
+        "compressed_input_bytes": 1982515926,
+        "decoded_to_output_ratio": 31.8623046875
+      }
+    },
+    "saving_percent": 6.40338640267939
+  },
+  "block-256": {
+    "artifact_bytes": 1776985765,
+    "cases": {
+      "heldout-lexical": {
+        "first_p50_ms": 132.702283,
+        "first_p95_ms": 181.7166688,
+        "hot_p50_ms": 0.0676765,
+        "first_cpu_p50_ms": 132.61299,
+        "rss_bytes": 1050669056,
+        "anonymous_bytes": 94900224,
+        "output_bytes": 67108864,
+        "decoded_bytes": 2537291776,
+        "compressed_input_bytes": 2353541227,
+        "decoded_to_output_ratio": 37.80859375
+      },
+      "uniform-id-stress": {
+        "first_p50_ms": 876.0839235,
+        "first_p95_ms": 888.200523,
+        "hot_p50_ms": 0.070714,
+        "first_cpu_p50_ms": 875.416013,
+        "rss_bytes": 1889452032,
+        "anonymous_bytes": 100524032,
+        "output_bytes": 67108864,
+        "decoded_bytes": 16582681600,
+        "compressed_input_bytes": 15373809028,
+        "decoded_to_output_ratio": 247.10121154785156
+      }
+    },
+    "saving_percent": 6.496518352869374
+  }
+}

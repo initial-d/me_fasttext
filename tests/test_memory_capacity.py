@@ -63,13 +63,31 @@ class CapacityProvenanceTest(unittest.TestCase):
             self.assertEqual(set(result['workers']),{'resident','raw-mmap','native-ordinary'})
             for variant in result['workers'].values():
                 self.assertTrue(all(case['all_query_bytes_exact'] for case in variant['result']['cases']))
+            sparse = root / 'sparse'
+            ablation = subprocess.run([sys.executable, '-m', 'tools.benchmark_sparse_blocks',
+                '--training-dir', str(exported), '--query-manifest', str(capacity / 'queries-ordinary.json'),
+                '--output-dir', str(sparse), '--native-library', str(library), '--repeat', '1',
+                '--block-rows', '1', '4', '256', '--reuse-baseline', str(capacity / 'native-ordinary.men')],
+                env=env, cwd=ROOT, capture_output=True, text=True)
+            self.assertEqual(ablation.returncode, 0, ablation.stdout + ablation.stderr)
+            layouts = json.loads((sparse / 'report.json').read_text())
+            self.assertEqual(layouts['status'], 'passed')
+            for name, packed in layouts['variants'].items():
+                self.assertEqual(packed['reconstructed_sha256'], layouts['source_sha256'])
+                self.assertTrue(packed['all_original_ids_byte_exact'])
+                self.assertEqual(packed['reused_artifact'], name == 'block-256')
+                worker = layouts['workers'][name]['result']
+                for case in worker['cases']:
+                    self.assertTrue(case['all_query_bytes_exact'])
+                    self.assertTrue(all(isinstance(work['last_decoded_bytes'], int)
+                                        for work in case['first_codec_work']))
 
 
 @unittest.skipUnless(HAS_NUMPY, 'capacity workers require NumPy')
 class CapacityImportsTest(unittest.TestCase):
     def test_workers_do_not_import_torch_or_initialize_cuda(self):
         check = subprocess.run([sys.executable,'-c',
-            'import sys; import tools.benchmark_memory_capacity; assert "torch" not in sys.modules'],
+            'import sys; import tools.benchmark_memory_capacity; import tools.benchmark_sparse_blocks; assert "torch" not in sys.modules'],
             cwd=ROOT,capture_output=True,text=True)
         self.assertEqual(check.returncode,0,check.stderr)
 

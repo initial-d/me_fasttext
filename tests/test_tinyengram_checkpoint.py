@@ -188,6 +188,31 @@ class TinyEngramCheckpointTest(unittest.TestCase):
                     layer.hash_mapping = layer.hash_mapping.original
                     del layer.short_conv.forward
 
+    def test_byte_capped_blocks_preserve_full_and_cached_logits(self):
+        from tools.tinyengram_checkpoint import TinyEngramModel
+        bundle = self.export(max_block_bytes=32)
+        metadata_files = list(bundle.glob('memory/*/embedding.json'))
+        self.assertEqual(len(metadata_files), 2)
+        for metadata in metadata_files:
+            layout = json.loads(metadata.read_text())
+            width = layout['shape'][1] * 4  # This fixture uses float32.
+            self.assertEqual(layout['max_block_bytes'], 32)
+            self.assertEqual(layout['block_rows'], min(3, max(1, 32 // width)))
+        with self.load(bundle) as mapped, torch.inference_mode():
+            self.assertTrue(torch.equal(mapped(self.ids).logits, self.expected))
+            resident = TinyEngramModel(self.original).eval()
+            try:
+                left, right = None, None
+                for start, end in ((0, 5), (5, 8), (8, 19)):
+                    a = mapped(self.ids[:, start:end], past_key_values=left, use_cache=True)
+                    b = resident(self.ids[:, start:end], past_key_values=right, use_cache=True)
+                    self.assertTrue(torch.equal(a.logits, b.logits))
+                    left, right = a.past_key_values, b.past_key_values
+            finally:
+                for layer in self.original.model.engram_layers.values():
+                    layer.hash_mapping = layer.hash_mapping.original
+                    del layer.short_conv.forward
+
     def test_independent_requests_and_invalid_cache_inputs(self):
         with self.load(self.export()) as mapped, self.load(self.export()) as other, torch.inference_mode():
             left = mapped(self.ids[:1, :4], use_cache=True).past_key_values
