@@ -25,6 +25,7 @@ records that separately; the legacy C++ exporter also supports approximate shari
 · [**Original DATrie + mark-compact native integration and trained ablations**](docs/structural_native_evidence_20261030/README.md)
 · [**1.85M trained-row CPU capacity controls and read-amplification limits**](docs/cpu_capacity_evidence_20261030/README.md)
 · [**Sparse native blocks: 16–27× lower miss latency on the same trained table**](docs/sparse_blocks_evidence_20261030/README.md)
+· [**Native storage in the original FastText model/CLI: trained fidelity and serving controls**](docs/fasttext_native_evidence_20261031/README.md)
 · [**Installable TinyEngram/Qwen checkpoint backend**](docs/tinyengram_qwen_evidence_20261030/README.md)
 · [**Host memory → device query and prefetch**](docs/device_memory_prefetch.md)
 
@@ -44,6 +45,14 @@ outputs but is slower than dense offload on these trained-table query traces;
 large-table whole-model memory gains remain unmeasured.
 
 This repository accompanies the paper [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).
+
+The optional [native FastText facade](docs/fasttext_native_bundle.md) converts
+this repository's dense `.bin` models through the original DATrie registry and
+mark-compact pipeline, then serves them with the existing CLI/query APIs.
+Layout/exact modes retain every input byte and float32 aggregation order.
+The first actual trained-model control saves 0.46% for the whole bundle; hot
+queries remain slower than dense, and structural ordering has no added storage
+benefit on that table. Historical valid word/sentence outputs match exactly.
 
 > Status: research / production-prototype code. The command-line interface remains close to the original fastText workflow, while the storage and serving path has been extended for large-vocabulary, memory-sensitive deployments.
 

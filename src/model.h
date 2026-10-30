@@ -19,6 +19,7 @@
 #include "vector.h"
 #include "qmatrix.h"
 #include "real.h"
+#include "row_backend.h"
 
 namespace fasttext {
 
@@ -37,6 +38,7 @@ class Model {
     std::shared_ptr<QMatrix> qwi_;
     std::shared_ptr<QMatrix> qwo_;
     std::shared_ptr<Args> args_;
+    std::shared_ptr<RowBackend> input_backend_;
     Vector hidden_;
     Vector output_;
     Vector grad_;
@@ -84,6 +86,7 @@ class Model {
                    Vector&, Vector&) const;
     void update(const std::vector<int32_t>&, int32_t, real);
     void computeHidden(const std::vector<int32_t>&, Vector&) const;
+    void setInputBackend(std::shared_ptr<RowBackend> backend) { input_backend_ = backend; }
     void computeOutputSoftmax(Vector&, Vector&) const;
     void computeOutputSoftmax();
 

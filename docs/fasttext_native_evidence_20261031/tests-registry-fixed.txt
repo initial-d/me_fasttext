@@ -1,0 +1,14 @@
+/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/ftindex.cc: In function ‘FTIndex* ftindex_map_from_buffer(void*, size_t*)’:
+/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/mylib/include/pub/pub_malloc.h:16:82: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   16 | #define pub_calloc(num, size)                   pub_calloc_detail((num), (size), __FILE__, __FUNCTION__, __LINE__)
+      |                                                                                  ^~~~~~~~
+/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/ftindex.cc:461:31: note: in expansion of macro ‘pub_calloc’
+  461 |         if (!(fti = (FTIndex*)pub_calloc(1, sizeof(*fti)))) return NULL;
+      |                               ^~~~~~~~~~
+test_real_model_all_rows_and_legacy_inference_are_exact (tests.test_fasttext_native_bundle.NativeFastTextTest.test_real_model_all_rows_and_legacy_inference_are_exact) ... ok
+test_rejects_truncated_duplicate_and_out_of_range_registry (tests.test_fasttext_native_bundle.RegistryTest.test_rejects_truncated_duplicate_and_out_of_range_registry) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 34.487s
+
+OK

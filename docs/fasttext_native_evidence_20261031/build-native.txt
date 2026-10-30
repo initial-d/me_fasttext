@@ -1,0 +1,17 @@
+make: 进入目录“/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source”
+mkdir -p build
+cc -std=c11 -O2 -fPIC -c native/meft_rows.c -o build/meft_rows_fasttext.o
+c++ -pthread -std=c++0x -march=native -fPIC -O2 -DMEFT_NATIVE_FASTTEXT -Isrc -Inative -I. -I./mylib/include src/args.cc src/dictionary.cc src/productquantizer.cc src/matrix.cc src/qmatrix.cc src/vector.cc src/model.cc src/utils.cc src/fasttext.cc src/ftindex.cc native/fasttext_bundle.cc src/main.cc build/meft_rows_fasttext.o -L./mylib/lib -ltrie -lpub -lz -o build/fasttext-native
+src/ftindex.cc: In function ‘FTIndex* ftindex_map_from_buffer(void*, size_t*)’:
+./mylib/include/pub/pub_malloc.h:16:82: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   16 | #define pub_calloc(num, size)                   pub_calloc_detail((num), (size), __FILE__, __FUNCTION__, __LINE__)
+      |                                                                                  ^~~~~~~~
+src/ftindex.cc:461:31: note: in expansion of macro ‘pub_calloc’
+  461 |         if (!(fti = (FTIndex*)pub_calloc(1, sizeof(*fti)))) return NULL;
+      |                               ^~~~~~~~~~
+mkdir -p build
+cc -std=c11 -O2 -Wall -Wextra -Werror -fPIC -shared native/meft_rows.c -lz -o build/libmeft_rows.so
+cc -std=c11 -O2 -Wall -Wextra -Werror -Inative examples/native_gather.c native/meft_rows.c -lz -o build/native_gather
+mkdir -p build
+c++ -std=c++11 -O2 -Wall -Wextra -Werror -fPIC -shared -Isrc -Imylib/include native/meft_structural.cc -L./mylib/lib -ltrie -lpub -o build/libmeft_structural.so
+make: 离开目录“/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source”

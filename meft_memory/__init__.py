@@ -19,6 +19,7 @@ _ADAPTERS = {
     "TinyEngramCache": "tinyengram_checkpoint",
     "export_tinyengram_checkpoint": "tinyengram_checkpoint",
     "load_tinyengram_checkpoint": "tinyengram_checkpoint",
+    "export_fasttext_model": "fasttext_native_bundle",
 }
 
 

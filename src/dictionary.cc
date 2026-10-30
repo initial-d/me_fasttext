@@ -279,8 +279,9 @@ void Dictionary::computeSubwords(const std::string& word,
         /*int32_t h = hash(ngram) % args_->bucket;
         ngrams.push_back(nwords_ + h);*/
 		size_t id = 0;
-		if (datrie_search_exact_match(ngramdat, ngram.c_str(), &id) == -1)
+		if (!lookupNgram(ngram, id))
 		{
+            if (frozen_ngrams_) continue;
 			if (datrie_insert_key(ngramdat, ngram.c_str(), ncount) == -1)
 				std::cout << "insert ngram error: " << ngram << " " << ncount << std::endl;
 			id = ncount++;
@@ -307,8 +308,9 @@ void Dictionary::computeSubwords(const std::string& word,
         /*int32_t h = hash(ngram) % args_->bucket;
         pushHash(ngrams, h);*/
 		size_t id = 0;
-		if (datrie_search_exact_match(ngramdat, ngram.c_str(), &id) == -1)
+		if (!lookupNgram(ngram, id))
 		{
+            if (frozen_ngrams_) continue;
 			if (datrie_insert_key(ngramdat, ngram.c_str(), ncount) == -1)
 				std::cout << "insert ngram error: " << ngram << " " << ncount << std::endl;
 			id = ncount++;
@@ -335,7 +337,7 @@ void Dictionary::computeSubwords2(const std::string& word,
         /*int32_t h = hash(ngram) % args_->bucket;
         ngrams.push_back(nwords_ + h);*/
 		size_t id = 0;
-		if (datrie_search_exact_match(ngramdat, ngram.c_str(), &id) != -1)
+		if (lookupNgram(ngram, id))
 		{
 			ngrams.push_back(nwords_ + (int32_t)id);
 	        substrings.push_back(ngram);
@@ -359,7 +361,7 @@ void Dictionary::computeSubwords2(const std::string& word,
         /*int32_t h = hash(ngram) % args_->bucket;
         pushHash(ngrams, h);*/
 		size_t id = 0;
-		if (datrie_search_exact_match(ngramdat, ngram.c_str(), &id) != -1)
+		if (lookupNgram(ngram, id))
 		{
 			ngrams.push_back(nwords_ + (int32_t)id);
 		}
@@ -367,6 +369,26 @@ void Dictionary::computeSubwords2(const std::string& word,
       }
     }
   }
+}
+
+bool Dictionary::lookupNgram(const std::string& key, size_t& id) const {
+  if (native_ngram_lookup_) {
+    int32_t original = native_ngram_lookup_(key);
+    if (original < nwords_) return false;
+    id = static_cast<size_t>(original - nwords_);
+    return true;
+  }
+  return datrie_search_exact_match(ngramdat, key.c_str(), &id) != -1;
+}
+
+int32_t Dictionary::getNgramId(const std::string& key) const {
+  size_t id;
+  return lookupNgram(key, id) ? nwords_ + static_cast<int32_t>(id) : -1;
+}
+
+void Dictionary::setNativeNgramLookup(std::function<int32_t(const std::string&)> lookup) {
+  native_ngram_lookup_ = lookup;
+  initNgrams();
 }
 
 void Dictionary::initNgrams() {
@@ -385,7 +407,7 @@ void Dictionary::initNgrams() {
       computeSubwords(word, words_[i].subwords);
     }
   }
-  nngrams_ = (int32_t)datrie_get_key_num(ngramdat);
+  if (!native_ngram_lookup_) nngrams_ = (int32_t)datrie_get_key_num(ngramdat);
 }
 
 bool Dictionary::readWord(std::istream& in, std::string& word) const
@@ -416,6 +438,7 @@ bool Dictionary::readWord(std::istream& in, std::string& word) const
 }
 
 void Dictionary::readFromFile(std::istream& in) {
+  frozen_ngrams_ = false;
   std::string word;
   int64_t minThreshold = 1;
 
@@ -719,9 +742,13 @@ std::string Dictionary::getLabel(int32_t lid) const {
   return words_[lid + nwords_].word;
 }
 
-void Dictionary::save(std::ostream& out) const {
-  datrie_store_to_file(worddat, "worddat.bin");
-  datrie_store_to_file(ngramdat, "ngramdat.bin");
+void Dictionary::save(std::ostream& out) const { save(out, true); }
+
+void Dictionary::save(std::ostream& out, bool auxiliary_files) const {
+  if (auxiliary_files) {
+    datrie_store_to_file(worddat, "worddat.bin");
+    datrie_store_to_file(ngramdat, "ngramdat.bin");
+  }
   out.write((char*) &size_, sizeof(int32_t));
   out.write((char*) &nwords_, sizeof(int32_t));
   out.write((char*) &nngrams_, sizeof(int32_t));
@@ -741,7 +768,13 @@ void Dictionary::save(std::ostream& out) const {
   }
 }
 
-void Dictionary::load(std::istream& in) {
+void Dictionary::load(std::istream& in) { load(in, true); }
+
+void Dictionary::load(std::istream& in, bool initialize_ngrams) {
+  frozen_ngrams_ = false;
+  native_ngram_lookup_ = nullptr;
+  datrie_delete(worddat);
+  datrie_delete(ngramdat);
   //worddat = datrie_load_from_file("worddat.bin");
   //ngramdat = datrie_load_from_file("ngramdat.bin");
   worddat = datrie_new();
@@ -754,12 +787,17 @@ void Dictionary::load(std::istream& in) {
   in.read((char*) &nlabels_, sizeof(int32_t));
   in.read((char*) &ntokens_, sizeof(int64_t));
   in.read((char*) &pruneidx_size_, sizeof(int64_t));
+  if (!in || size_ < 0 || size_ > MAX_VOCAB_SIZE || nwords_ < 0 || nlabels_ < 0 ||
+      int64_t(nwords_) + nlabels_ != size_ || nngrams_ < 0 || ntokens_ < 0 ||
+      pruneidx_size_ < -1 || pruneidx_size_ > MAX_VOCAB_SIZE)
+    throw std::invalid_argument("invalid dictionary dimensions");
   for (int32_t i = 0; i < size_; i++) {
     char c;
     entry e;
-    while ((c = in.get()) != 0) {
+    while (in.get(c) && c != 0) {
       e.word.push_back(c);
     }
+    if (!in) throw std::invalid_argument("truncated dictionary entry");
     in.read((char*) &e.count, sizeof(int64_t));
     in.read((char*) &e.type, sizeof(entry_type));
     words_.push_back(e);
@@ -775,8 +813,10 @@ void Dictionary::load(std::istream& in) {
     in.read((char*) &second, sizeof(int32_t));
     pruneidx_[first] = second;
   }
+  if (!in) throw std::invalid_argument("truncated dictionary");
   initTableDiscard();
-  initNgrams();
+  if (initialize_ngrams) initNgrams();
+  frozen_ngrams_ = true;
 }
 
 void Dictionary::prune(std::vector<int32_t>& idx) {

@@ -15,7 +15,13 @@ LIBS = -L./mylib/lib -ltrie -lpub
 LIBNAME = libfasttext
 PYTHON ?= python3
 
-.PHONY: opt debug test clean native structural-native
+.PHONY: opt debug test clean native structural-native fasttext-native
+
+# Optional Linux FastText facade; retain the original binary/library targets.
+fasttext-native:
+	mkdir -p build
+	$(CC) -std=c11 -O2 -fPIC -c native/meft_rows.c -o build/meft_rows_fasttext.o
+	$(CXX) $(CXXFLAGS) -O2 -DMEFT_NATIVE_FASTTEXT -Isrc -Inative $(INCLUDES) $(addprefix src/,$(OBJS:.o=.cc)) native/fasttext_bundle.cc src/main.cc build/meft_rows_fasttext.o $(LIBS) -lz -o build/fasttext-native
 
 # Optional original-algorithm bridge; bundled archives require Linux x86-64.
 structural-native:

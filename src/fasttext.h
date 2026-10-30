@@ -20,6 +20,7 @@
 #include "matrix.h"
 #include "model.h"
 #include "qmatrix.h"
+#include "row_backend.h"
 #include "real.h"
 #include "utils.h"
 #include "vector.h"
@@ -38,6 +39,7 @@ class FastText {
   std::shared_ptr<QMatrix> qoutput_;
 
   std::shared_ptr<Model> model_;
+  std::shared_ptr<RowBackend> input_backend_;
 
   std::atomic<int64_t> tokenCount_;
   clock_t start;
@@ -68,6 +70,11 @@ class FastText {
   void getInputVector(Vector&, const std::string&) const;
   void getSubwordVector(Vector&, const std::string&) const;
   void addInputVector(Vector&, int32_t) const;
+  void addInputVectors(Vector&, const std::vector<int32_t>&) const;
+  bool hasNativeInput() const { return bool(input_backend_); }
+  // Available in the optional fasttext-native build; old model APIs stay intact.
+  void dumpNative(const std::string&) const;
+  void loadNativeBundle(const std::string&);
   inline void getInputVector(Vector& vec, int32_t ind) {
     vec.zero();
     addInputVector(vec, ind);

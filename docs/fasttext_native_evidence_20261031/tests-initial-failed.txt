@@ -1,0 +1,48 @@
+/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/ftindex.cc: In function ‘FTIndex* ftindex_map_from_buffer(void*, size_t*)’:
+/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/mylib/include/pub/pub_malloc.h:16:82: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   16 | #define pub_calloc(num, size)                   pub_calloc_detail((num), (size), __FILE__, __FUNCTION__, __LINE__)
+      |                                                                                  ^~~~~~~~
+/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/src/ftindex.cc:461:31: note: in expansion of macro ‘pub_calloc’
+  461 |         if (!(fti = (FTIndex*)pub_calloc(1, sizeof(*fti)))) return NULL;
+      |                               ^~~~~~~~~~
+test_real_model_all_rows_and_legacy_inference_are_exact (tests.test_fasttext_native_bundle.NativeFastTextTest.test_real_model_all_rows_and_legacy_inference_are_exact) ... 
+  test_real_model_all_rows_and_legacy_inference_are_exact (tests.test_fasttext_native_bundle.NativeFastTextTest.test_real_model_all_rows_and_legacy_inference_are_exact) (dim=7) ... ERROR
+  test_real_model_all_rows_and_legacy_inference_are_exact (tests.test_fasttext_native_bundle.NativeFastTextTest.test_real_model_all_rows_and_legacy_inference_are_exact) (dim=32) ... ERROR
+test_rejects_truncated_duplicate_and_out_of_range_registry (tests.test_fasttext_native_bundle.RegistryTest.test_rejects_truncated_duplicate_and_out_of_range_registry) ... ok
+
+======================================================================
+ERROR: test_real_model_all_rows_and_legacy_inference_are_exact (tests.test_fasttext_native_bundle.NativeFastTextTest.test_real_model_all_rows_and_legacy_inference_are_exact) (dim=7)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/tests/test_fasttext_native_bundle.py", line 59, in test_real_model_all_rows_and_legacy_inference_are_exact
+    report=export_fasttext_model(model,bundle,fasttext_binary=self.binary,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/tools/fasttext_native_bundle.py", line 75, in export_fasttext_model
+    raise RuntimeError('dense model extraction failed:\n'+run.stdout+run.stderr)
+RuntimeError: dense model extraction failed:
+m: 95, n: 7
+m: 2, n: 7
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  invalid n-gram registry export
+
+
+======================================================================
+ERROR: test_real_model_all_rows_and_legacy_inference_are_exact (tests.test_fasttext_native_bundle.NativeFastTextTest.test_real_model_all_rows_and_legacy_inference_are_exact) (dim=32)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/tests/test_fasttext_native_bundle.py", line 59, in test_real_model_all_rows_and_legacy_inference_are_exact
+    report=export_fasttext_model(model,bundle,fasttext_binary=self.binary,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/llm-align/duyimin/meft-cpu-capacity-20261030/fusion-20261031/source/tools/fasttext_native_bundle.py", line 75, in export_fasttext_model
+    raise RuntimeError('dense model extraction failed:\n'+run.stdout+run.stderr)
+RuntimeError: dense model extraction failed:
+m: 95, n: 32
+m: 2, n: 32
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  invalid n-gram registry export
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 32.388s
+
+FAILED (errors=2)

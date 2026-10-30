@@ -54,6 +54,21 @@ jobs:
           c++ -std=c++11 -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -Isrc -Inative -Imylib/include tests/structural_native_test.cc native/meft_structural.cc -Lmylib/lib -ltrie -lpub -o build/structural-sanitizers
           ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 build/structural-sanitizers
 
+  fasttext-native-fusion:
+    name: FastText native facade sanitizers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check original model IDs, row bytes and inference outputs
+        env:
+          MEFT_FUSION_SANITIZERS: "1"
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: python -m unittest tests.test_fasttext_native_bundle -v
+
   legacy-roundtrip:
     name: Legacy artifact roundtrip
     runs-on: ubuntu-latest
