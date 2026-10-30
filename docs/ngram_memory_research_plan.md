@@ -1,84 +1,200 @@
-# Research plan: exact high-order n-gram memory storage and serving
+# NGramStore engine roadmap and research plan
 
-## Research question
+## Product contract and history
 
-Can exact indexing and byte-preserving storage keep high-order n-gram memory
-tractable while preserving a frozen model's lookup results and reducing actual
-serving cost? The existing C ABI and PyTorch adapters provide a reproducible
-engineering starting point, not a demonstrated LLM performance improvement.
+NGramStore is a general-purpose backend for **learned n-gram embeddings**:
+compression, storage and exact lookup. The reusable unit is a frozen embedding
+table, independent of the model architecture that trained or consumes it.
 
-## Hypotheses and competing explanations
+1. **Shared table engine:** preserve original IDs, shape, dtype and row bytes;
+   encode blocks, forward IDs, mmap, cache and gather.
+2. **Optional n-gram structure:** registered unique string keys enable DATrie
+   indexing, prefix/suffix selection and mark-compact export. Numeric/hash IDs
+   work without this layer; colliding buckets do not certify string relations.
+3. **Model applications:** FastText is the historical word-embedding use case;
+   Engram/TinyEngram is the LLM-memory use case. Models keep training,
+   normalization, addressing, aggregation, gates and downstream state.
 
-| Hypothesis | What would support it | What could refute or explain it |
+This contract covers immutable inference tables. The [CLI](evaluator_quickstart.md)
+currently packs little-endian float32; lower-level dtype support does not imply
+every exporter supports every dtype. [Runtime boundaries](native_ngram_memory.md)
+remain part of the contract.
+
+NGramStore continues me_fasttext's repository history. The original paper's
+DATrie/mark-compact method is the origin; native codecs, query scheduling and
+LLM adapters are subsequent software contributions. Preserve paper attribution,
+file readers, C symbols and Python aliases; cite later results with their own
+source commits. The [legacy audit](audits/legacy-roundtrip-20261024/README.md) and
+[structural ablation](structural_native_evidence_20261030/README.md) cover the
+corrected cosine/norm-ratio guards. Historical reports retain their run names.
+
+## Why the backend matters
+
+Growing n-gram coverage forces separate choices about **identity**, **capacity**
+and **vector fidelity**. These choices interact but solve different problems.
+
+| Approach | What it buys | Cost or risk | NGramStore boundary |
+| --- | --- | --- | --- |
+| Fixed-size hash buckets, common in n-gram embedding designs | Bounded row count and cheap addressing | Different n-grams can share one row and its updates, losing independent identities; actual task impact depends on occupancy, distribution and model design | Existing hash IDs remain unchanged. A unique key registry with distinct source rows can instead use exact DATrie lookup |
+| Full distinct-key vector table | Independent rows without bucket collisions | Key/index, vector and metadata storage grow with covered types; construction RAM and query working set also matter | Compress keys and row payloads separately; count complete artifacts and process costs |
+| Quantization or approximate vector sharing | Smaller payloads, sometimes substantially | Quantization rounds source values; joint sharing replaces rows. Vector errors and downstream task effects require measurement | Byte-preserving modes retain the exported source bytes; approximation is explicit and separately evaluated |
+
+Hashing is not universally the default and collisions are not automatically
+harmful in every trained architecture. Their impact must be measured, rather
+than inferred from the mere presence of a hash. Increasing bucket capacity
+reduces collision pressure at a storage cost. Higher n-gram order can enlarge
+key diversity and query fan-out, but the number of observed types and bucket
+occupancy depend on the corpus and allocation policy.
+
+A collision shares parameters rather than merely causing a lookup failure:
+updates from distinct keys can affect the same vector. Multiple independent
+hash heads may mitigate this, so report the actual addressing design. A plain
+distinct-row table costs N × d × bytes-per-value before keys, maps and metadata;
+covering more observed types or using wider vectors raises this baseline.
+
+Exact indexing can avoid **additional addressing collisions** for independently
+represented registered keys. It cannot unmix information already combined in a
+trained hash bucket or manufacture missing per-key vectors. Changing a model
+from bucket sharing to independent rows is a model/training change, not a
+byte-preserving storage conversion.
+
+Likewise, packing an already quantized table preserves that table's bytes, not
+the original pre-quantization weights. Exact compression offers a storage
+option without introducing new vector error, but unique learned float rows may
+compress only modestly, and decoding may cost more than dense/raw mmap lookup.
+
+## Recommended training-to-serving lifecycle
+
+Train independent rows for a **selected, affordable n-gram vocabulary**, then
+optimize frozen storage and queries. Full coverage means the chosen vocabulary,
+not enumeration of every possible n-gram. Select observed types, normalization,
+order limits and frequency/coverage policy according to training resources.
+Exact post-training compression does not remove the cost of training those rows.
+
+| Starting point | Integration route | What it establishes |
 | --- | --- | --- |
-| Longer n-gram keys benefit more from shared-prefix indexing | Same-source key storage/query comparisons by order; all identities preserved | Diverse keys share little structure; index metadata outweighs savings |
-| Shared training creates high-cosine structural rows, especially at higher orders | Trained prefix/suffix and identical-update distributions across orders, languages, seeds and training durations | Spelling alone does not imply shared host words/gradients; initial differences and sparse training remain |
-| Structural prediction compresses similar learned rows without losing bits | Reversible residual codecs with original-ID forwarding beat ordinary blocks and shuffled layouts | Independent low bits, predictor/layout overhead or query decode work erase benefits |
-| Larger trained memory tables offer exact-byte redundancy | Frozen learned-row hashes and dedup rates by order/layer/head | Random/learned rows remain unique; only quantization creates duplicates |
-| Native batched decoding reduces serving cost | Same-ID byte-exact outputs, latency/throughput/RSS versus raw mmap and tensor gather | Resident tensor gathers remain faster; sorting/decode/transfer dominates |
-| Higher-order memory improves model task quality | Trained architecture ablation with equal capacity/compute and strong baselines | Additional capacity/training causes apparent gain; sparse keys harm generalization |
+| Existing trained table with distinct rows and registered keys | Export the original key-to-ID registry and rows, pack, verify bytes, replace only frozen lookup | Storage/query optimization without retraining; already-shared bucket rows remain shared |
+| Stable vocabulary for the next training run | Fix unique keys and original IDs at preprocessing; train with a mutable embedding table; freeze, export and query through NGramStore using the same IDs | Exact addressing can be part of the model design from the start; useful quality/cost differences still require trained controls |
 
-Key compression, exact row deduplication, block codecs and approximate vector
-sharing are different mechanisms. Approximate sharing must have its own error
-and downstream-quality study and cannot be advertised as lossless.
+The stable-vocabulary route is a model-side integration recipe, not a claim
+that the native backend supports training. Its current handles are frozen;
+there is no native gradient/update contract. DATrie can provide an exact key
+index for a registered vocabulary, while the model's trainable table owns
+parameter updates. Expanding the vocabulary or reallocating rows requires an
+explicit new registry/checkpoint version and rebuilt frozen artifact.
 
-The [public-text trained reference](trained_ngram_similarity_20261018.md) is the
-starting evidence for shared updates, including all nine runs and frequency
-strata. Median cosine is about 0.996 for identical-update structural pairs;
-random weights are initialization/interface controls only. Native zlib saves
-about 5%; offline shared-update-group XOR estimates save 6.9–9.1%, with every
-byte verified. The [native version 2 codec](native_xor_compression_20261020.md)
-now implements adaptive XOR with actual file/query measurements. Next test grouping
-that does not require source training signatures. High cosine does not itself
-establish exact duplicates or a universal compression ratio.
+Keep a dense or raw-mmap option for tables where exact compression adds cost
+without meaningful savings. Approximation remains a separately chosen quality
+budget, not a prerequisite for the full-vocabulary route.
 
-The [approximate-sharing curves](approximate_ngram_compression_20261018.md) add
-direct representative cosine thresholds and a norm-ratio constraint. At max
-order 12, joint 0.99 cosine/norm gives 2.14–2.16× actual n-gram table compression;
-0.98 gives about 2.35×. Mean n-gram component distortion is small, while changed
-row errors and tail errors are reported separately. Complete-model held-out
-quality remains required before accepting approximation for a serving workload.
+## Adoption goal
 
-## Experimental design before learned-weight claims
+Make NGramStore a routine evaluation option when a team serves a large n-gram
+embedding table. A user should export existing rows, verify unchanged addressing
+and outputs, measure the storage/serving tradeoff, and replace only the table
+backend. Industry-wide adoption remains a goal, not a measured result.
 
-Freeze checkpoint/source hash, tokenizer normalization/hash settings, layers,
-head sizes, dtype, row dimensions and test queries. Compare both fixed-total-
-memory and fixed-per-head-capacity protocols across max orders 2/3/4/6/8/12;
-the current synthetic sweep uses only the latter and cannot isolate all effects.
-Include identity-order shuffling to separate lexical/index locality from accidental
-row placement, and matched request counts as well as full per-token fan-out.
+Track independent integrations/reproductions, retained use after evaluation and
+source-linked software/paper citations. Stars and article views cannot establish
+those outcomes. Failed or no-benefit evaluations identify where the engine needs
+work.
 
-Baselines: ordinary tensor gather; raw mmap; block codec without dedup;
-exact-byte dedup plus block codec; exact trie/front-coded key variants when a
-working query implementation exists. Report maps/descriptors, metadata,
-construction peak memory/disk, cold and warm load/RSS, p50/p95/p99, throughput,
-batch size, worker count, hit/locality distribution and CPU/GPU transfers.
-Record repeated runs and variation rather than choosing the fastest run.
+## Current baseline
 
-Acceptance for storage: all rows and arbitrary queries preserve IDs/dtype/bytes,
-including boundaries/unseen keys/hash collisions/repetition. Acceptance for a
-model: controlled deterministic embedding outputs, gated states/logits and
-generation/quality checks. Then measure accuracy/perplexity/task metrics and
-cost on the trained model, with retained negative results.
+| Capability | Existing evidence | Unresolved constraint |
+| --- | --- | --- |
+| Original-ID/byte-preserving storage and adapters | [Actual FastText outputs](fasttext_native_evidence_20261031/README.md), [trained TinyEngram/Qwen](tinyengram_qwen_evidence_20261030/README.md), Linux/macOS wheel CI | Frozen handles; reduction contracts differ; official Engram verification uses a demo, not trained weights |
+| Sparse native queries | [1.85M trained rows](cpu_capacity_evidence_20261030/README.md) and [smaller blocks](sparse_blocks_evidence_20261030/README.md) | Misses improved 16–27× over the prior layout; raw mmap remains faster |
+| DATrie / mark-compact | [Trained SGNS/GRU ablations](structural_native_evidence_20261030/README.md) | Exact key indexing helps these traces; no identical structural rows found; extra joint row savings are approximate |
+| End-to-end artifact cost | [FastText matched controls](fasttext_native_evidence_20261031/README.md) | Whole bundle saves only 0.46%; queries are slower; structural order adds no benefit on this model |
+| Construction/runtime resources | [Implementation boundaries](native_ngram_memory.md) | Structural planning copies full rows/maps offline; cache budgets do not bound RSS; FastText retains an unused 200 MB hash allocation |
 
-## Paper and project positioning
+Correctness is a starting point on supported paths. Useful compression and
+serving gains still depend on the trained table and workload.
 
-The current paper is about FastText. Describe the native high-order memory
-direction as a follow-up systems artifact; do not rewrite its old reported
-benchmarks as Engram evidence. The legacy norm-ratio/cosine mismatch remains
-documented and should be corrected/reproduced in a dedicated change.
+## Ordered engineering priorities
 
-A credible follow-up contribution would combine exact high-order key storage,
-scalable immutable-table construction, trace-aware batch/prefetch scheduling,
-and matched-cost learned-model results. A C wrapper and synthetic order curve
-alone are insufficient for a model/research superiority claim.
+Stable export/query contracts and historical compatibility are release gates
+throughout. Optimize measured bottlenecks before adding another named-model adapter.
 
-## Distribution and reusable evidence
+| Priority | Concrete deliverable | Acceptance gate |
+| --- | --- | --- |
+| 1. Sparse-query serving cost | Trace-driven block/cache comparison, then improve miss decoding and batch scheduling at the measured bottleneck | Same trained rows and ID trace versus dense, raw mmap and current native. Report cold/first-query and warm p50/p95/p99, throughput, full artifact bytes and RSS. Include any storage/resource regression; a gain over prior native does not imply a win over raw mmap |
+| 2. N-gram structural benefit | Matched DATrie/mark-compact ablation and a reversible structural predictor/layout candidate | Compare identity, shuffled and structural layouts under the same codec/cache settings. Count keys, maps and residual metadata. Exact mode reconstructs every byte; joint mode reports row error and held-out task quality. Retain candidates for workloads where complete costs improve |
+| 3. Large-table construction and process memory | Profile staging/maps and runtime allocations; remove avoidable copies/legacy allocations and implement chunked construction where feasible | Sweep table size at fixed row width and a declared RAM budget. Record build time, peak RSS, temporary disk and final bytes; verify rows and failure cleanup. Describe remaining O(N) maps; cache budgets alone do not prove bounded RSS |
+| 4. Independent reuse | Third-party trained-table export and query integration through the common engine API | An independent user reproduces with a pinned environment and licensed/public artifact or documented manifest. Model internals need not change; original IDs/dtypes/outputs and dense/raw-mmap controls stay inspectable |
 
-Publish a source-linked technical article and one-command reproduction with the
-current limits. Update each result only after new evidence; avoid generic
-keyword/listing churn. Offer a specific benchmark request: a licensed frozen
-table or serving trace with original hash IDs, shapes and dtype. Keep the
-project name/ABI stable and make model adapters discoverable by tested boundary.
-External outreach and social posting require explicit destination/content
-authorization; the repository's technical materials can be shared now.
+CPU traces suffice for decoding and resource comparisons. GPU measurements are
+required only for device-transfer or whole-model serving claims. Separate key
+indexing, row layout, exact residual compression and approximate sharing gains.
+
+Show tradeoffs across full artifact size, latency and memory. Declare workload
+and resource/quality budgets before tuning; retain a separate held-out trace.
+Keeping the original dense/raw-mmap path is valid when compression does not help.
+
+## High-order n-gram research
+
+Higher order is a testable structural opportunity, not a universal monotonic
+gain. Keep key length, dimension, total capacity and query fan-out separate.
+
+| Hypothesis | Supporting evidence to seek | Competing explanation |
+| --- | --- | --- |
+| Longer keys benefit from shared-prefix indexing | Same-source key storage/query comparisons by order with identities preserved | Diverse keys share little structure; index metadata outweighs savings |
+| Shared training creates high-cosine structural rows | Trained prefix/suffix and identical-update distributions across orders, languages, seeds and training duration | Spelling alone does not imply shared gradients; sparse training and initialization matter |
+| Structural prediction compresses similar rows without losing bits | Reversible residual codecs beat ordinary blocks/shuffled layouts including predictor overhead | Low-bit differences or decode work erase benefits |
+| Larger memories contain exact-byte redundancy | Frozen row hashes/dedup rates by order/layer/head | Learned rows stay unique; only quantization creates duplicates |
+| Batched decoding reduces serving cost | Byte-exact outputs and better latency/throughput/RSS tradeoffs | Tensor/raw-mmap gathers remain faster; scheduling or transfer dominates |
+| Exact key addressing avoids harmful bucket interference | Matched trained key-index versus bucket baselines with occupancy/collision statistics and held-out quality, at fixed capacity/compute and separately fixed coverage | Larger capacity, changed training or multiple heads explain task differences; replacing existing buckets alone cannot restore per-key rows |
+
+The [trained similarity reference](trained_ngram_similarity_20261018.md)
+includes all nine runs and frequency strata: identical-update structural pairs
+have median cosine about 0.996. Random vectors establish initialization/interface
+controls only. High cosine does not establish identical bytes or a universal
+ratio. The [native XOR codec](native_xor_compression_20261020.md) is a reversible
+baseline; structural grouping must not depend on unavailable training signatures.
+
+The [approximate curves](approximate_ngram_compression_20261018.md) constrain
+representative cosine and norm ratio. At max order 12, joint 0.99 gives
+2.14–2.16× n-gram table compression and 0.98 gives about 2.35× on that reference.
+These are approximate table results, not whole-model gains or loss bounds.
+The [SGNS/GRU structural study](structural_native_evidence_20261030/README.md)
+finds a plateau from order 8 to 12 for SGNS and continued improvement for GRU.
+Maximum per-row relative L2 error reaches 14.24% despite the 0.99 joint guard.
+Retain tail errors and held-out model quality next to savings.
+
+Whether higher-order memory improves task quality is a separate model experiment
+requiring equal-capacity/compute trained ablations. The engine supports that
+experiment without claiming its outcome.
+
+## Common evidence and release gates
+
+Freeze source/checkpoint hashes, preprocessing/tokenizer/hash rules, key
+registry, layer/head layout, dimensions, dtype and query traces. For order sweeps,
+compare fixed-total-memory and fixed-per-head-capacity across orders 2/3/4/6/8/12.
+Include matched request counts and actual per-token fan-out. For addressing
+comparisons, report distinct key count, allocated bucket count, occupancy and
+collision distribution; do not treat exact storage as a free increase in capacity.
+
+Use working dense/raw-mmap and ordinary-codec controls. Include exact-byte dedup,
+quantization and alternative key indices when implemented, with actual query
+costs and their own fidelity contracts. Report repeated-run variation, block/cache
+budgets, workers, locality, load time, anonymous/file-backed RSS, build peak
+memory/disk and transfers. Record commit, commands, toolchain, hardware,
+data/license provenance and omissions with raw results. Preserve failed/slow runs.
+
+Verify original IDs, shape/dtype and every reconstructed row byte, including
+signed zero/nonfinite payloads, boundaries, repetition and registered keys.
+Retain existing model collision semantics. Adapters also verify ordered
+aggregation, embeddings, gated states/logits and controlled generation/task
+metrics as applicable. Row identity does not prove a changed reduction order
+preserves model outputs.
+
+Release gates include installed C/Python/PyTorch paths on their declared platforms,
+legacy imports/readers and explicit format versions. Do not promise mutable
+weights, shared-worker handles or portable legacy serialization before validation.
+Distribution/compatibility aliases stay in the [quickstart](evaluator_quickstart.md).
+
+Use the [contribution guide](../CONTRIBUTING.md) for integrations or measurements.
+A follow-up paper needs a specific verified algorithm/resource contribution and
+matched trained-model evidence; adapters and visibility alone do not prove
+research superiority.

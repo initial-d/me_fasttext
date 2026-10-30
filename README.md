@@ -1,8 +1,8 @@
 # NGramStore
 
-**Compression, storage and exact lookup for learned n-gram vectors.**
+**A general-purpose backend for learned n-gram embeddings: compression, storage and exact lookup.**
 
-**面向 learned n-gram 向量表的压缩、存储与精确查询后端引擎。**
+**面向 learned n-gram embedding 的通用后端引擎：压缩、存储与精确查询。**
 
 [![CI](https://github.com/initial-d/ngram-store/actions/workflows/ci.yml/badge.svg)](https://github.com/initial-d/ngram-store/actions/workflows/ci.yml)
 [![Paper](https://img.shields.io/badge/arXiv-2506.01254-b31b1b.svg)](https://arxiv.org/abs/2506.01254)
@@ -12,23 +12,40 @@ Formerly **me_fasttext**. The engine grew from
 [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).
 The paper keeps its original title; later Engram integrations are software extensions.
 
-NGramStore stores frozen learned vectors in compressed native blocks and queries
-original row IDs through mmap, decoded caches and batched gathers. Registered
-string keys additionally support DATrie indexing and structural mark-compact
-planning. FastText and Engram are applications of this shared backend.
+NGramStore separates the learned n-gram table from the model that uses it.
+It stores frozen vectors in compressed native blocks and queries original row
+IDs through mmap, decoded caches and batched gathers. The common boundary is
+the embedding table: models retain their own training, addressing and vector
+aggregation. Registered string keys add DATrie indexing and structural
+mark-compact planning; numeric/hash IDs can use the engine directly.
 
 | Layer | Responsibility |
 | --- | --- |
-| Core engine | Lossless block encoding, original-ID forwarding, mmap, bounded decoded caches and gather |
-| Registered n-gram structure | DATrie keys, prefix/suffix representative selection and mark-compact export |
-| Word embeddings: FastText | Original dictionary, training and word/sentence/classification APIs |
-| LLM memory: Engram / TinyEngram | Original token hashing, head offsets, gates and decoder remain in the model |
+| 1. Shared table engine | Lossless block encoding, original-ID forwarding, mmap, bounded decoded caches and gather |
+| 2. Optional n-gram structure | Registered DATrie keys, prefix/suffix representative selection and mark-compact export |
+| 3. Model applications | FastText word embeddings and Engram/TinyEngram LLM memory, each retaining its model semantics |
+
+FastText is the historical word-embedding application; Engram is the LLM-memory
+application. Both exercise the same engine. Generality is at the frozen-table
+boundary; it does not require a new model architecture or retraining.
 
 **Lossless and approximate modes are explicit.** Ordinary packing and
 structural `layout`/`exact` preserve source bytes. Opt-in `joint` sharing uses
 cosine and norm-ratio guards and can change vectors. Engram hash collisions do
 not certify string-prefix/suffix relations. Storage, latency and model quality
 are measured separately; gains depend on the trained table and query workload.
+
+The motivation is the tradeoff between n-gram identity, capacity and fidelity:
+hash buckets can make distinct n-grams share a learned row; full distinct-key
+tables increase storage and working-set pressure; quantization or approximate
+sharing changes vectors. NGramStore offers byte-preserving storage and optional
+exact key indexing. It cannot undo already-trained hash collisions, and exact
+compression can save little or query more slowly. [Tradeoffs and roadmap](docs/ngram_memory_research_plan.md).
+
+For a stable vocabulary, fix unique key-to-ID mappings before training, train
+mutable embeddings, then freeze and export the same IDs and rows. Cover the
+chosen vocabulary within resource limits; the native backend does not currently
+perform gradient updates. Existing frozen tables can be packed directly.
 
 ## Quick start
 
@@ -97,6 +114,11 @@ rows/maps offline. Trusted legacy metadata/index formats retain their own
 limits. [C ABI and runtime boundaries](docs/native_ngram_memory.md).
 
 ## History, citation and contribution
+
+The [engineering roadmap](docs/ngram_memory_research_plan.md) targets a backend
+that n-gram embedding users can routinely evaluate and reuse. Next priorities
+are sparse-query cost, useful structural compression and bounded construction
+resources, with stable integration and same-source baselines as acceptance gates.
 
 Repository history, releases, issues and original paper attribution continue
 under NGramStore. Old model formats, C ABI symbols, `meft_memory` imports and
