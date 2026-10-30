@@ -4,6 +4,12 @@
 Formerly me_fasttext; the original Memory-Efficient FastText paper is the method
 origin, while native row storage and LLM integrations are later software work.
 
+The historical thread runs from n-gram embeddings for word representations to
+learned n-gram memory modules in LLMs. FastText and Engram illustrate these
+application generations: both query trained vector tables, with different keys,
+addressing and model computation. This table-based form of parametric memory is
+the scope of the shared engine.
+
 | Layer / component | What it provides | Boundary |
 | --- | --- | --- |
 | 1. Shared native C engine | Lossless compressed blocks, original-ID forwarding, mmap and gather | Frozen single-worker handles; caches do not bound RSS |
