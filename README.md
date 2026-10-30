@@ -20,6 +20,7 @@ legacy C++ exporter also supports approximate row sharing.
 [**C / PyTorch integration**](docs/native_ngram_memory.md)
 · [**Trained-model quality checks**](docs/causal_lm_evidence_20261024/README.md)
 · [**Query latency and memory results**](docs/bag_compaction_evidence_20261026/README.md)
+· [**Installable TinyEngram/Qwen checkpoint backend**](docs/tinyengram_qwen_evidence_20261030/README.md)
 
 Current learned-model evidence uses small CPU reference models; Engram
 compatibility is checked through the official demonstration implementation.
