@@ -1,7 +1,7 @@
 # Citation guide
 
 This page is for researchers who want to cite, compare, or reproduce
-`me_fasttext`.
+NGramStore (formerly me_fasttext).
 
 For a one-page summary of the artifact, including fit, claims, evidence, and
 non-goals, see [`artifact_card.md`](artifact_card.md).
@@ -25,7 +25,8 @@ useful in your work, please cite the arXiv paper:
 
 ## Cite the native n-gram artifact
 
-The C gather ABI, immutable PyTorch adapters and Engram-related experiments are
+NGramStore is the renamed repository, with the original paper title and method
+attribution retained. The C gather ABI, immutable PyTorch adapters and Engram-related experiments are
 later software work. Cite their exact repository commit/report alongside the
 FastText paper when relevant; do not attribute the new results to that paper.
 Replace the bracketed commit below with the full SHA used in your experiment:
@@ -33,10 +34,10 @@ Replace the bracketed commit below with the full SHA used in your experiment:
 ```bibtex
 @misc{du2026mefasttextngramstorage,
   author       = {Yimin Du},
-  title        = {me_fasttext: Native n-gram storage and gather experiments},
+  title        = {NGramStore: Compression, Storage and Exact Lookup for Learned N-Gram Vectors},
   year         = {2026},
   howpublished = {Software and reproducibility artifact},
-  url          = {https://github.com/initial-d/me_fasttext},
+  url          = {https://github.com/initial-d/ngram-store},
   note         = {Commit [full SHA]; report [report path and date]}
 }
 ```
@@ -47,10 +48,11 @@ verification, trained results and comparison requirements.
 
 Suggested wording for the tested boundary:
 
-> The me_fasttext artifact provides immutable CPU storage/gather adapters that
+> The NGramStore engine provides immutable storage/gather adapters that
 > preserve original hash IDs, head offsets and row bytes. Small source-pinned
-> Engram demo checks also preserve gated module output; trained checkpoint,
-> GPU-serving and task-quality validation remain open.
+> Engram demo checks also preserve gated module output. Separate trained
+> TinyEngram/Qwen CPU/CUDA checks and timing controls do not establish official
+> trained DeepSeek Engram or production serving results.
 
 For approximate compression, name the actual trained table/corpus, threshold,
 norm guard, byte denominator and distortion metric. Do not describe the

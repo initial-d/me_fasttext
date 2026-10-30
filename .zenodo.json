@@ -1,14 +1,18 @@
 {
-  "title": "me_fasttext: Memory-Efficient FastText with Exact Trie N-Gram IDs and mmap Serving",
+  "title": "NGramStore: Compression, Storage and Exact Lookup for Learned N-Gram Vectors",
   "creators": [
     {
       "name": "Du, Yimin",
       "affiliation": "Independent Researcher"
     }
   ],
-  "description": "A FastText-derived C++ research prototype that replaces hash-bucketed character n-gram ids with exact trie-backed ids, then exports a compact mmap serving index through conservative n-gram row sharing and mark-compact layout.",
+  "description": "Formerly me_fasttext. A native compression, storage and exact-query engine for frozen learned n-gram vectors, with registered DATrie/mark-compact planning and FastText/Engram application integrations. Lossless and approximate modes are reported separately; the original FastText paper retains its title and attribution.",
   "license": "MIT",
   "keywords": [
+    "n-gram memory",
+    "vector compression",
+    "Engram",
+    "LLM memory",
     "fastText",
     "word embeddings",
     "subword embeddings",
@@ -28,7 +32,7 @@
       "resource_type": "publication-preprint"
     },
     {
-      "identifier": "https://github.com/initial-d/me_fasttext",
+      "identifier": "https://github.com/initial-d/ngram-store",
       "relation": "isIdenticalTo",
       "scheme": "url",
       "resource_type": "software"

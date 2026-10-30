@@ -1,5 +1,5 @@
 name: Compression comparison
-description: Compare me_fasttext with sparse, quantized, or compact-serving baselines
+description: Compare NGramStore with sparse, quantized, or compact-serving baselines
 title: "[Compression] "
 labels:
   - benchmark
@@ -10,16 +10,17 @@ body:
         Use this for focused comparisons against model-compression,
         sparse-lookup, quantized embedding, or compact-serving baselines.
 
-        Please keep the claim narrow. me_fasttext is a compact lexical
-        embedding artifact, not a general LLM compression framework.
+        NGramStore is a learned n-gram vector storage/query backend.
+        Name the actual table and exact/approximate mode; separate storage,
+        query costs and downstream quality. FastText and Engram are applications.
   - type: dropdown
     id: comparison_type
     attributes:
       label: Comparison type
       options:
-        - Original FastText vs me_fasttext compact .z
-        - Quantized FastText vs me_fasttext compact .z
-        - Hash-free uncompressed vs compact export
+        - Dense or raw mmap vs native n-gram store
+        - Quantized table vs lossless native store
+        - DATrie/structural contribution ablation
         - Sparse or table-compression baseline
         - Lexical search or retrieval baseline
         - Dense embedding or reranker prefilter comparison
@@ -42,7 +43,7 @@ body:
     id: commit
     attributes:
       label: Git commit
-      description: The me_fasttext commit used for this run.
+      description: The NGramStore commit used for this run.
       placeholder: "abcdef1"
     validations:
       required: true
@@ -87,10 +88,10 @@ body:
       description: List all compared methods and explain omissions.
       placeholder: |
         compared:
-          - Original FastText:
+          - Dense resident / raw mmap:
           - Quantized FastText:
-          - Hash-free uncompressed:
-          - me_fasttext compact .z:
+          - Identity-layout native control:
+          - NGramStore native table/index/metadata:
         omitted:
     validations:
       required: true
@@ -126,7 +127,7 @@ body:
         | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
         | Original FastText | | | | | | | |
         | Quantized FastText | | | | | | | |
-        | me_fasttext .z | | | | | | | |
+        | NGramStore native | | | | | | | |
     validations:
       required: true
   - type: textarea

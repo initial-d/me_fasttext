@@ -7,7 +7,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping other readers understand where `me_fasttext` fits.
+        Thanks for helping other readers understand where `NGramStore` fits.
 
         Use this template for citations, public list entries, comparison notes,
         integration experiments, deployment notes, or concrete use cases. Short
@@ -35,7 +35,7 @@ body:
     id: summary
     attributes:
       label: Summary
-      description: Briefly describe how `me_fasttext` was used, cited, compared, or listed.
+      description: Briefly describe how `NGramStore` was used, cited, compared, or listed.
       placeholder: |
         Example: Used as a compact lexical embedding baseline before dense
         reranking on an entity-heavy product-title retrieval corpus.
@@ -82,7 +82,7 @@ body:
       label: Suggested public wording
       description: Optional wording maintainers can quote in README, docs, release notes, or distribution logs.
       placeholder: |
-        Example: me_fasttext was useful as a compact lexical embedding layer
+        Example: NGramStore was used as a frozen n-gram memory backend
         for OOV-heavy candidate generation before dense reranking.
   - type: checkboxes
     id: disclosure

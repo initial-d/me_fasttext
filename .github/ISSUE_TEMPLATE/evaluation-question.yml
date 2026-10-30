@@ -1,5 +1,5 @@
 name: Evaluation question
-description: Ask about building, benchmarking, reproducing, or interpreting me_fasttext
+description: Ask about building, benchmarking, reproducing, or interpreting NGramStore
 title: "[Question] "
 labels:
   - question

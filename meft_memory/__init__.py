@@ -1,9 +1,9 @@
-"""Installable native memory API; Torch/Transformers adapters load on demand."""
+"""Historical NGramStore API; Torch/Transformers adapters load on demand."""
 from importlib import import_module
 
 from ._runtime.native_row_store import NativeRows, pack_native
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 _ADAPTERS = {
     "StructuralPlan": "structural_native",
@@ -13,6 +13,8 @@ _ADAPTERS = {
     "GatherTicket": "device_row_adapter",
     "MappedEmbedding": "engram_row_adapter",
     "export_multihead": "engram_row_adapter",
+    "open_demo_embedding": "engram_row_adapter",
+    "export_demo_embedding": "engram_row_adapter",
     "export_embedding": "engram_row_adapter",
     "MappedEmbeddingBag": "mapped_embedding_bag",
     "TinyEngramModel": "tinyengram_checkpoint",

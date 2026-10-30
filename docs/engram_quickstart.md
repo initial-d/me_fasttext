@@ -1,6 +1,6 @@
-# Engram memory storage: run, evaluate, cite
+# Engram application: NGramStore for LLM n-gram memory
 
-`me_fasttext` provides immutable CPU n-gram table storage and gather adapters.
+NGramStore provides the shared immutable n-gram table engine and gather adapters.
 For an existing Engram memory table, keep its original hash IDs and head offsets;
 replace the gather storage behind `MultiHeadEmbedding`. The default path recovers
 the original bytes. This project also studies approximate structural row sharing
@@ -13,7 +13,8 @@ on trained character n-grams, with an explicit cosine/norm distortion budget.
 | Verify current official Engram module outputs | [Official CPU forward](engram_full_adapter_verification_20261018.md), [codec follow-up](native_xor_compression_20261020.md) | Nine cases with Python/native/native-XOR across three dtypes; tiny random weights |
 | Open a frozen table without allocating the default table first | Factory example below | Proposed fork API; nine cases including native-XOR, default allocation prevented |
 | Evaluate learned redundancy and compression | [Trained study](trained_ngram_similarity_20261018.md), [distortion curves](approximate_ngram_compression_20261018.md) | Nine trained character-ngram tables; 135 approximate cases, not trained Engram weights |
-| Integrate another model/runtime | [C ABI and model guide](native_ngram_memory.md) | CPU gather boundary; GPU/checkpoint/runtime work remains |
+| Convert a trained TinyEngram/Qwen checkpoint | [Checkpoint guide and trained evidence](tinyengram_qwen_evidence_20261030/README.md) | Trained CPU/CUDA outputs and timing controls; distinct from an official DeepSeek checkpoint |
+| Integrate another model/runtime | [C ABI and model guide](native_ngram_memory.md) | Same native backend, model-specific addressing/gates retained |
 
 The [upstream draft PR #27](https://github.com/deepseek-ai/Engram/pull/27)
 proposes an optional `embedding_factory`. It is **open and unmerged** as checked
@@ -69,7 +70,7 @@ checked loader to that layer's directory:
 ```python
 from functools import partial
 import torch
-from tools.engram_row_adapter import open_demo_embedding
+from ngram_store import open_demo_embedding
 
 factory = partial(open_demo_embedding, "/path/to/exported/layer-1",
                   native_library="build/libmeft_rows.so")
@@ -90,7 +91,10 @@ head partitions with the same total row count. A mismatch closes the store and
 raises an error. Each layer/worker needs its own handle. The factory does not
 restore projections/gates, tokenizer settings or the rest of a checkpoint.
 Calling `.to(dtype=...)` does not recode stored rows; use the exported dtype and
-compatible CPU projections. Training and GPU/offload scheduling are unsupported.
+compatible CPU projections. This factory path is frozen CPU inference.
+The separate [device staging adapter](device_memory_prefetch.md) and
+[TinyEngram/Qwen CUDA controls](qwen_cuda_performance_20261030/README.md)
+document the measured device/checkpoint boundary.
 The [current-main replacement example](engram_full_adapter_verification_20261018.md)
 works without the proposal but initially allocates the original embedding table.
 

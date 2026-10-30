@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for taking a look at `me_fasttext`. This is a research prototype, so the
+Thanks for taking a look at NGramStore. This is a research prototype, so the
 most valuable contributions are the ones that make its evidence easier to
 understand, reproduce, or falsify.
 
@@ -18,11 +18,11 @@ Good first contributions include:
 - a public-corpus benchmark report using the
   [evaluator quickstart](docs/evaluator_quickstart.md);
 - an
-  [evaluation question](https://github.com/initial-d/me_fasttext/issues/new?template=evaluation-question.yml)
+  [evaluation question](https://github.com/initial-d/ngram-store/issues/new?template=evaluation-question.yml)
   about build, benchmark setup, corpus preparation, baselines, or result
   interpretation;
 - a
-  [showcase or use-case note](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
+  [showcase or use-case note](https://github.com/initial-d/ngram-store/issues/new?template=showcase.yml)
   for citations, list entries, comparisons, integrations, or deployment notes;
 - a retrieval, ranking, classification, or OOV-heavy serving result;
 - a negative result showing where the compact `.z` path does not help;
@@ -35,15 +35,15 @@ logs, or credentials. Aggregate metrics and corpus manifests are enough.
 ## Benchmark reports
 
 Use the
-[benchmark result issue template](https://github.com/initial-d/me_fasttext/issues/new?template=benchmark-result.yml)
+[benchmark result issue template](https://github.com/initial-d/ngram-store/issues/new?template=benchmark-result.yml)
 when possible. A useful report should include:
 
-- exact `me_fasttext` commit SHA;
+- exact NGramStore commit SHA;
 - corpus name, language, license status, split, and preprocessing;
 - hardware, OS, compiler, filesystem, and storage type;
 - build, training, export, and benchmark commands;
-- `.bin`, `.vec`, and `.z` artifact sizes;
-- `bench_ftindex` output for compact `.z` serving;
+- full input/table/index/metadata bytes and the exact lossless/approximate mode;
+- dense/raw-mmap controls, native query latency and anonymous/file-backed RSS;
 - one quality metric, or an explicit serving-only caveat;
 - failures, omitted baselines, and anything unfavorable to the method.
 
@@ -55,7 +55,7 @@ for the fuller report shape.
 ## Showcase and visibility notes
 
 Use the
-[showcase issue template](https://github.com/initial-d/me_fasttext/issues/new?template=showcase.yml)
+[showcase issue template](https://github.com/initial-d/ngram-store/issues/new?template=showcase.yml)
 for lighter-weight adoption evidence: citations, public list entries,
 integration notes, talks, blog posts, retrieval experiments, or compact-serving
 deployment notes.
@@ -90,11 +90,7 @@ or platform limitation.
 
 ## Scope and positioning
 
-Keep claims narrow. `me_fasttext` is best framed as a FastText-derived compact
-lexical embedding artifact for memory-sensitive serving, OOV-heavy text, and
-first-stage retrieval or ranking. It is not a replacement for transformer
-embeddings, a vector database, or a full RAG system.
-
+NGramStore is a compression, storage and exact-query backend for learned n-gram vectors. FastText and Engram/TinyEngram are applications with different training and addressing contracts. Numeric/hash queries use the native row engine; structural sharing requires registered string keys. Lossless bytes, approximate distortion, query cost and task quality need separate evidence.
 See [`docs/artifact_card.md`](docs/artifact_card.md) and
 [`docs/citation_guide.md`](docs/citation_guide.md) for wording that is easier
 to cite without overclaiming.

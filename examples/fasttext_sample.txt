@@ -1,0 +1,6 @@
+memory tables store learned vectors and queries retrieve learned vectors from memory tables
+exact lookup preserves original row identities while compact storage preserves original vector bytes
+memory tables support word embeddings and language model memory through shared storage and lookup
+compact storage and exact lookup work together while learned vectors retain original row identities
+word embeddings use character ngrams and language models use token ngrams in learned memory tables
+original vector bytes and original row identities remain stable through compact storage and exact lookup
