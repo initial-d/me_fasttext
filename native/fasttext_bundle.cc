@@ -100,7 +100,8 @@ int dumpKey(const char* key, size_t id, void* ptr) {
   if (id>=d.rows-d.words) { d.valid=false; return 0; }
   write64(d.out,d.words+id); write64(d.out,std::strlen(key));
   d.out.write(key,std::strlen(key)); ++d.written;
-  return 0;
+  // DATrie's callback convention: 1 continues, 0 stops traversal.
+  return 1;
 }
 }
 

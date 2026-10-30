@@ -742,6 +742,8 @@ std::string Dictionary::getLabel(int32_t lid) const {
   return words_[lid + nwords_].word;
 }
 
+void Dictionary::save(std::ostream& out) const { save(out, true); }
+
 void Dictionary::save(std::ostream& out, bool auxiliary_files) const {
   if (auxiliary_files) {
     datrie_store_to_file(worddat, "worddat.bin");
@@ -765,6 +767,8 @@ void Dictionary::save(std::ostream& out, bool auxiliary_files) const {
     out.write((char*) &(pair.second), sizeof(int32_t));
   }
 }
+
+void Dictionary::load(std::istream& in) { load(in, true); }
 
 void Dictionary::load(std::istream& in, bool initialize_ngrams) {
   frozen_ngrams_ = false;

@@ -114,8 +114,10 @@ class Dictionary {
     bool readWord(std::istream&, std::string&) const;
     void readFromFile(std::istream&);
     std::string getLabel(int32_t) const;
-    void save(std::ostream&, bool auxiliary_files = true) const;
-    void load(std::istream&, bool initialize_ngrams = true);
+    void save(std::ostream&) const;
+    void save(std::ostream&, bool auxiliary_files) const;
+    void load(std::istream&);
+    void load(std::istream&, bool initialize_ngrams);
     void setNativeNgramLookup(std::function<int32_t(const std::string&)> lookup);
     std::vector<int64_t> getCounts(entry_type) const;
     int32_t getLine(std::istream&, std::vector<int32_t>&,

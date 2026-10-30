@@ -35,9 +35,11 @@ class NativeFastTextTest(unittest.TestCase):
         cls.tmp=tempfile.TemporaryDirectory(); cls.root=Path(cls.tmp.name)
         cls.executable=cls.root/'fixture'; cls.library=cls.root/'rows.so'; cls.structural=cls.root/'structural.so'
         cls.object=cls.root/'rows.o'
-        subprocess.run(['cc','-std=c11','-O1','-g','-fPIC','-c',str(ROOT/'native/meft_rows.c'),'-o',str(cls.object)],check=True)
+        sanitizers=(['-fsanitize=address,undefined','-fno-omit-frame-pointer']
+                    if os.environ.get('MEFT_FUSION_SANITIZERS')=='1' else [])
+        subprocess.run(['cc','-std=c11','-O1','-g','-fPIC',*sanitizers,'-c',str(ROOT/'native/meft_rows.c'),'-o',str(cls.object)],check=True)
         sources=['args','dictionary','productquantizer','matrix','qmatrix','vector','model','utils','fasttext','ftindex']
-        subprocess.run(['c++','-std=c++11','-O1','-g','-pthread','-DMEFT_NATIVE_FASTTEXT',
+        subprocess.run(['c++','-std=c++11','-O1','-g','-pthread',*sanitizers,'-DMEFT_NATIVE_FASTTEXT',
             '-I'+str(ROOT/'src'),'-I'+str(ROOT/'native'),'-I'+str(ROOT/'mylib/include'),
             str(ROOT/'tests/fasttext_native_fixture.cc'),*[str(ROOT/f'src/{n}.cc') for n in sources],
             str(ROOT/'native/fasttext_bundle.cc'),str(cls.object),'-L'+str(ROOT/'mylib/lib'),'-ltrie','-lpub','-lz',
