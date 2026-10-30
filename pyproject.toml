@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "meft-memory"
-version = "0.2.0"
+version = "0.3.0"
 description = "Native lossless row storage and frozen learned n-gram memory adapters"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -19,6 +19,7 @@ tinyengram = ["torch", "numpy", "sympy", "loguru", "transformers==4.57.3", "toke
 [project.scripts]
 meft-tiny-export = "meft_memory._runtime.tinyengram_checkpoint:main"
 meft-tiny-verify = "meft_memory._runtime.verify_tinyengram_checkpoint:main"
+meft-tiny-verify-device = "meft_memory._runtime.verify_tinyengram_device:main"
 meft-tiny-train-reference = "meft_memory._runtime.train_tinyengram_reference:main"
 
 [tool.setuptools]

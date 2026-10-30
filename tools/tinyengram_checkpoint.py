@@ -2,8 +2,9 @@
 
 The upstream Python files are supplied locally and verified against one pinned
 revision. Loading/exporting never downloads a model or executes checkpoint code.
-Only CPU, unpadded batches, eager attention and sequential greedy decode are
-supported. Backbone weights and tokenizer assets are included in the bundle.
+Supports unpadded eager inference and sequential greedy decode. CPU memory can
+stage queried vectors to a fixed accelerator; CUDA requires hardware validation.
+Backbone weights and tokenizer assets are included in the bundle.
 """
 import argparse
 from contextvars import ContextVar
@@ -29,6 +30,7 @@ import transformers
 from .engram_row_adapter import (
     MappedMultiHeadEmbedding, export_multihead, file_sha256, head_offsets,
 )
+from .device_row_adapter import StagedMultiHeadEmbedding, _device
 
 UPSTREAM_SHA = "317f23832aa8f8e382a0916ec469e81ba12b6dff"
 SOURCE_HASHES = {
@@ -280,6 +282,14 @@ class TinyEngramCache:
     valid: bool = True
 
 
+@dataclass
+class _ForwardContext:
+    cache: TinyEngramCache | None
+    host_ids: torch.Tensor
+    hashes: dict = field(default_factory=dict)
+    prefetched: dict = field(default_factory=dict)
+
+
 class _HistoryHash:
     def __init__(self, original):
         self.original = original
@@ -291,15 +301,18 @@ class _HistoryHash:
         context = _decode_context.get()
         if context is None:
             return self.original.hash(input_ids)
-        cache, current_ids = context
-        if cache.token_tail is None:
-            return self.original.hash(input_ids)
-        all_ids = torch.cat((cache.token_tail, current_ids), dim=1).numpy()
-        return {key: value[:, -current_ids.shape[1]:] for key, value in self.original.hash(all_ids).items()}
+        key = id(self.original)
+        if key not in context.hashes:
+            cache, current_ids = context.cache, context.host_ids
+            all_ids = (current_ids if cache is None or cache.token_tail is None
+                       else torch.cat((cache.token_tail, current_ids), dim=1))
+            context.hashes[key] = {k: v[:, -current_ids.shape[1]:]
+                                   for k, v in self.original.hash(all_ids.numpy()).items()}
+        return context.hashes[key]
 
 
 class TinyEngramModel(nn.Module):
-    """CPU inference wrapper, with cache state owned by the caller's request.
+    """Inference wrapper, with CPU raw IDs and request-owned device KV/conv state.
 
     Adds missing n-gram/ShortConv history to the upstream incremental path.
     No-cache forward still calls upstream hashing/convolution unchanged.
@@ -308,19 +321,44 @@ class TinyEngramModel(nn.Module):
     def __init__(self, model):
         super().__init__()
         self.model, self.config = model, model.config
+        self.device = next(model.parameters()).device
         self._cache_owner = uuid.uuid4().hex
         for layer_id, layer in model.model.engram_layers.items():
             if isinstance(layer.hash_mapping, _HistoryHash):
                 raise ValueError("model is already wrapped")
             layer.hash_mapping = _HistoryHash(layer.hash_mapping)
+            if isinstance(layer.multi_head_embedding, StagedMultiHeadEmbedding):
+                embedding = layer.multi_head_embedding
+                original_layer = layer.forward
+                original_gather = embedding.forward
+
+                def host_layer(hidden_states, input_ids, *, original=original_layer):
+                    context = _decode_context.get()
+                    if context is None:
+                        raise RuntimeError("staged Engram layers must run through TinyEngramModel")
+                    # Upstream then hashes CPU IDs and avoids its GPU->CPU->GPU
+                    # hash-ID round trip. Hidden states/gates remain on device.
+                    return original(hidden_states, context.host_ids)
+
+                def prefetched_gather(ids, *, original=original_gather, layer_id=layer_id):
+                    context = _decode_context.get()
+                    if context is None or layer_id not in context.prefetched:
+                        return original(ids)
+                    expected_ids, ticket = context.prefetched[layer_id]
+                    if not torch.equal(ids, expected_ids):
+                        raise RuntimeError("prefetched hash IDs differ from the layer query")
+                    return ticket.wait()
+
+                layer.forward = host_layer
+                embedding.forward = prefetched_gather
             original = layer.short_conv.forward
             keep = (layer.short_conv.conv.kernel_size[0] - 1) * layer.short_conv.conv.dilation[0]
 
             def cached_conv(x, *, original=original, keep=keep, layer_id=layer_id):
                 context = _decode_context.get()
-                if context is None:
+                if context is None or context.cache is None:
                     return original(x)
-                cache, _ = context
+                cache = context.cache
                 tail = cache.conv_tails.get(layer_id)
                 full = x if tail is None else torch.cat((tail, x), dim=1)
                 result = original(full)[:, -x.shape[1]:]
@@ -333,8 +371,13 @@ class TinyEngramModel(nn.Module):
         if (input_ids.device.type != "cpu" or input_ids.ndim != 2 or not all(input_ids.shape)
                 or input_ids.dtype not in (torch.int32, torch.int64)):
             raise ValueError("requires a nonempty 2-D CPU integer token batch")
-        if any(p.device.type != "cpu" for p in self.model.parameters()):
-            raise ValueError("TinyEngram checkpoint integration currently supports CPU models only")
+        if any(p.device != self.device for p in self.model.parameters()):
+            raise ValueError("model placement changed; load a new bundle for the target device")
+        staged = [layer for layer in self.model.model.engram_layers.values()
+                  if isinstance(layer.multi_head_embedding, StagedMultiHeadEmbedding)]
+        if self.device.type != "cpu" and any(isinstance(layer.multi_head_embedding, MappedMultiHeadEmbedding)
+                                            for layer in self.model.model.engram_layers.values()):
+            raise ValueError("accelerator models require staged host memory")
         if self.training and use_cache:
             raise ValueError("incremental cache is inference only; call eval()")
         if any(name in kwargs for name in ("inputs_embeds", "position_ids", "cache_position")):
@@ -359,12 +402,23 @@ class TinyEngramModel(nn.Module):
         if attention_mask is not None and (attention_mask.shape != (input_ids.shape[0], seen + input_ids.shape[1])
                                            or not bool((attention_mask == 1).all())):
             raise ValueError("only unpadded all-one attention masks are supported")
-        token = _decode_context.set((cache, input_ids) if use_cache else None)
+        context = _ForwardContext(cache, input_ids) if use_cache or staged else None
+        token = _decode_context.set(context)
         if cache is not None:
             cache.valid = False  # KV/conv updates cannot be rolled back on a failed forward.
         try:
-            output = self.model(input_ids=input_ids, attention_mask=attention_mask,
-                                past_key_values=cache.kv if cache else None, use_cache=use_cache, **kwargs)
+            # Hashing needs no hidden states, so queue every memory layer before
+            # the first decoder block. H2D can overlap the intervening backbone.
+            for layer_id, layer in self.model.model.engram_layers.items():
+                if isinstance(layer.multi_head_embedding, StagedMultiHeadEmbedding):
+                    ids = torch.from_numpy(layer.hash_mapping.hash(input_ids.numpy())[int(layer_id)])
+                    context.prefetched[layer_id] = (ids, layer.multi_head_embedding.prefetch(ids))
+            model_kwargs = dict(kwargs)
+            if isinstance(model_kwargs.get("labels"), torch.Tensor):
+                model_kwargs["labels"] = model_kwargs["labels"].to(self.device)
+            output = self.model(input_ids=input_ids.to(self.device),
+                                attention_mask=attention_mask.to(self.device) if attention_mask is not None else None,
+                                past_key_values=cache.kv if cache else None, use_cache=use_cache, **model_kwargs)
             if cache is not None:
                 tail = input_ids if cache.token_tail is None else torch.cat((cache.token_tail, input_ids), dim=1)
                 keep = self.model.model.engram_cfg.max_ngram_size - 1
@@ -385,14 +439,14 @@ class TinyEngramModel(nn.Module):
         for _ in range(max_new_tokens):
             current = sequence if cache is None else sequence[:, -1:]
             output = self(current, past_key_values=cache, use_cache=use_cache)
-            next_ids = output.logits[:, -1].argmax(-1, keepdim=True)
+            next_ids = output.logits[:, -1].argmax(-1, keepdim=True).cpu()
             sequence = torch.cat((sequence, next_ids), dim=1)
             cache = output.past_key_values if use_cache else None
         return sequence
 
     def close(self):
         for module in self.model.modules():
-            if isinstance(module, MappedMultiHeadEmbedding):
+            if isinstance(module, (StagedMultiHeadEmbedding, MappedMultiHeadEmbedding)):
                 module.close()
 
     def __enter__(self):
@@ -403,12 +457,17 @@ class TinyEngramModel(nn.Module):
 
 
 def load_tinyengram_checkpoint(output_dir, *, upstream_dir, native_library=None,
-                              native_cache_bytes=0, query_chunk_rows=65536):
-    """Construct on meta, install mapped tables, then assign unchanged CPU tensors.
+                              native_cache_bytes=0, query_chunk_rows=65536, device="cpu",
+                              prefetch_memory=False, staging_rows=65536, staging_slots=2):
+    """Construct on meta, assign original tensors, optionally place the backbone.
 
     Does not allocate original dense memory tables. File checksums scan the whole
     bundle; this is not lazy startup. The original full checkpoint is unnecessary.
+    device=cuda/mps keeps tables/IDs on CPU and prefetches rows before decoder
+    execution. CPU can use the same scheduler with prefetch_memory=True. CUDA
+    overlap and performance need real hardware validation; MPS is synchronous.
     """
+    target = _device(device)
     root = Path(output_dir).resolve()
     manifest = _json(root / "bundle.json")
     if (manifest["schema_version"] != 1 or manifest["upstream_sha"] != UPSTREAM_SHA
@@ -460,6 +519,18 @@ def load_tinyengram_checkpoint(output_dir, *, upstream_dir, native_library=None,
         model.tie_weights()
         if any(t.device.type == "meta" for t in (*model.parameters(), *model.buffers())):
             raise ValueError("checkpoint left uninitialized model tensors")
+        if prefetch_memory or target.type != "cpu":
+            for layer_id, layer in model.model.engram_layers.items():
+                old = layer.multi_head_embedding
+                staged = StagedMultiHeadEmbedding(
+                    old._output_dir, device=target, native_library=native_library,
+                    native_cache_bytes=native_cache_bytes, query_chunk_rows=query_chunk_rows,
+                    staging_rows=staging_rows, staging_slots=staging_slots,
+                )
+                opened.append(staged)
+                layer.multi_head_embedding = staged
+                old.close()
+            model.to(target)
         return TinyEngramModel(model.requires_grad_(False)).eval()
     except BaseException:
         for mapped in opened:

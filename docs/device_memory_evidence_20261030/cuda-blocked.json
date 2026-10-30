@@ -1,0 +1,45 @@
+{
+  "code_sha": "1bef0944368bf51911cd385ff43eacec42993a63",
+  "command": "/tmp/projects-push-20261028-venv/bin/python -m tools.verify_tinyengram_device --checkpoint artifacts/tinyengram-qwen-20261030/checkpoint --bundle artifacts/tinyengram-qwen-20261030/bundle --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --upstream-dir /tmp/meft-tinyengram-source-20261030 --native-library build/libmeft_rows.dylib --device cuda --staging-rows 32 --staging-slots 2 --report-out artifacts/tinyengram-qwen-20261030/device-cuda.json",
+  "elapsed_seconds": 2.149958163499832e-05,
+  "environment": {
+    "cpu": "arm",
+    "cuda_available": false,
+    "cuda_runtime": null,
+    "device": "cuda",
+    "machine": "arm64",
+    "os": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "threads": 4,
+    "torch": "2.14.1",
+    "transformers": "4.57.3"
+  },
+  "error": "CUDA is unavailable; this is not a GPU validation",
+  "limitations": [
+    "small trained branch integration; not convergence or quality superiority",
+    "sampled held-out tokens; no trained DeepSeek checkpoint",
+    "one cold latency sample includes output readback, no speedup conclusion",
+    "resident/staged models coexist; no comparative peak memory benchmark",
+    "MPS copies synchronous; cannot validate CUDA pinned/event behavior",
+    "CPU hashing/decompression is synchronous; all layer outputs live for this forward",
+    "fixed unpadded greedy decode; no distributed/graph/serving integration"
+  ],
+  "settings": {
+    "native_cache_bytes_per_layer": 1048576,
+    "staging_rows": 32,
+    "staging_slots": 2
+  },
+  "source_file_hashes": {
+    "device_row_adapter.py": "dfaf3fdbcc5d9c5fdfa25f6fb54c74c5bd10c53679e69a6fb02abc7d3cb1b432",
+    "engram_row_adapter.py": "26d295737129081c3d2dc87fb2ca6ee3826d29c0df6098e9796a9db14b7b22e3",
+    "tinyengram_checkpoint.py": "af5d64e4b1dbf39c9a7551542988b27172a9c504dee212c5b1606d79ca4c29bb",
+    "train_tinyengram_reference.py": "bc8c2aa71dbd7ad9d0f99ed7075bd00b06b949fe25a201ad9d24df43d723015d",
+    "verify_tinyengram_device.py": "e055069e7bb1bb8fae9b61d038adec4abaf0a930cc97a18b19a24be9e0d55733"
+  },
+  "status": "blocked",
+  "upstream_sha": "317f23832aa8f8e382a0916ec469e81ba12b6dff",
+  "upstream_source_hashes": {
+    "engram.py": "b5f20018ee7ff73d0b43911830b0e8cd4c4540038c7c7775b821a6969b666630",
+    "engram_qwen.py": "9ff59ce9acaab626f6feb5aff44ccd3969257b4d11f62b9cedeb48c8030a59f6"
+  }
+}

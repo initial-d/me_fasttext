@@ -87,10 +87,49 @@ class TinyEngramCheckpointTest(unittest.TestCase):
                                     block_rows=3, shard_bytes=2048, **kwargs)
         return target
 
-    def load(self, path):
+    def load(self, path, **kwargs):
         from tools.tinyengram_checkpoint import load_tinyengram_checkpoint
         return load_tinyengram_checkpoint(path, upstream_dir=SOURCE, native_library=self.library,
-                                         native_cache_bytes=2048, query_chunk_rows=3)
+                                         native_cache_bytes=2048, query_chunk_rows=3, **kwargs)
+
+    def check_staged_model(self, device):
+        import copy
+        from tools.tinyengram_checkpoint import TinyEngramModel
+        from tools.device_row_adapter import StagedMultiHeadEmbedding
+        resident = TinyEngramModel(copy.deepcopy(self.original).to(device)).eval()
+        with self.load(self.export(), device=device, prefetch_memory=True,
+                       staging_rows=3, staging_slots=2) as mapped, torch.inference_mode():
+            reference = resident(self.ids).logits
+            self.assertTrue(torch.equal(mapped(self.ids).logits.cpu().view(torch.uint8),
+                                        reference.cpu().view(torch.uint8)))
+            left, right = None, None
+            for start, end in ((0, 5), (5, 8), (8, 19)):
+                a = mapped(self.ids[:, start:end], past_key_values=left, use_cache=True)
+                b = resident(self.ids[:, start:end], past_key_values=right, use_cache=True)
+                self.assertTrue(torch.equal(a.logits.cpu().view(torch.uint8), b.logits.cpu().view(torch.uint8)))
+                left, right = a.past_key_values, b.past_key_values
+            self.assertEqual(left.token_tail.device.type, "cpu")
+            self.assertTrue(all(t.device.type == device for t in left.conv_tails.values()))
+            self.assertEqual(left.kv.layers[0].keys.device.type, device)
+            for layer in mapped.model.model.engram_layers.values():
+                self.assertIsInstance(layer.multi_head_embedding, StagedMultiHeadEmbedding)
+                self.assertEqual(layer.multi_head_embedding.gather.offsets.device.type, "cpu")
+                self.assertEqual(layer.multi_head_embedding.stats["queries"], 4)
+            a = mapped.generate(self.ids[:, :6], max_new_tokens=4)
+            b = resident.generate(self.ids[:, :6], max_new_tokens=4)
+            self.assertTrue(torch.equal(a, b))
+            self.assertEqual(a.device.type, "cpu")
+
+    def test_staged_cpu_model_prefetch_preserves_full_and_cached_logits(self):
+        self.check_staged_model("cpu")
+
+    @unittest.skipUnless(torch is not None and torch.backends.mps.is_available(), "MPS unavailable")
+    def test_staged_mps_backbone_host_hashes_and_device_decode_history(self):
+        self.check_staged_model("mps")
+
+    @unittest.skipUnless(torch is not None and torch.cuda.is_available(), "real CUDA required")
+    def test_staged_cuda_backbone_host_hashes_and_device_decode_history(self):
+        self.check_staged_model("cuda")
 
     def test_complete_forward_rows_and_tied_backbone_survive_without_source_checkpoint(self):
         bundle = self.export()
