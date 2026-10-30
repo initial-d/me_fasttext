@@ -1,0 +1,14 @@
+test_workers_do_not_import_torch_or_initialize_cuda (tests.test_memory_capacity.CapacityImportsTest.test_workers_do_not_import_torch_or_initialize_cuda) ... ok
+test_initialized_rows_are_rejected_or_explicitly_excluded (tests.test_memory_capacity.CapacityProvenanceTest.test_initialized_rows_are_rejected_or_explicitly_excluded) ... ok
+test_rejects_dangling_chained_out_of_range_and_noninteger_maps (tests.test_structural_native.CompactionTest.test_rejects_dangling_chained_out_of_range_and_noninteger_maps) ... ok
+test_changed_source_and_failed_export_do_not_leave_partial_directory (tests.test_structural_native.RealStructuralTest.test_changed_source_and_failed_export_do_not_leave_partial_directory) ... ok
+test_compact_export_uses_existing_frozen_embedding_adapter (tests.test_structural_native.RealStructuralTest.test_compact_export_uses_existing_frozen_embedding_adapter) ... ok
+test_default_preserves_bytes_and_keeps_unindexed_rows (tests.test_structural_native.RealStructuralTest.test_default_preserves_bytes_and_keeps_unindexed_rows) ... ok
+test_joint_final_guard_rejects_direction_norm_and_chain_drift (tests.test_structural_native.RealStructuralTest.test_joint_final_guard_rejects_direction_norm_and_chain_drift) ... ok
+test_layout_only_bytes_exact_signed_zero_and_duplicate_keys (tests.test_structural_native.RealStructuralTest.test_layout_only_bytes_exact_signed_zero_and_duplicate_keys) ... ok
+test_prefix_suffix_utf8_keys_original_ids_compact_forwarding_and_both_caches (tests.test_structural_native.RealStructuralTest.test_prefix_suffix_utf8_keys_original_ids_compact_forwarding_and_both_caches) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 12.989s
+
+OK

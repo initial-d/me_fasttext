@@ -1,0 +1,57 @@
+{"vocabulary": 142308, "ngram_rows": 1860921, "raw_table_bytes": 1905583104, "coverage_centers": 141898}
+{"epoch": 0, "pairs": 128, "loss": 4.1588826179504395, "seconds": 0.19193150894716382}
+{"epoch": 0, "pairs": 25728, "loss": 4.15886926651001, "seconds": 0.8452140369918197}
+{"epoch": 0, "pairs": 51328, "loss": 4.1541571617126465, "seconds": 1.4759220939595252}
+{"epoch": 0, "pairs": 76928, "loss": 4.104265213012695, "seconds": 2.1016118400730193}
+{"epoch": 0, "pairs": 102528, "loss": 4.097651481628418, "seconds": 2.7271269829943776}
+{"epoch": 0, "pairs": 128128, "loss": 4.011539459228516, "seconds": 3.3539205021224916}
+{"epoch": 0, "pairs": 153728, "loss": 3.821012020111084, "seconds": 3.982373730977997}
+{"epoch": 0, "pairs": 179328, "loss": 3.7390387058258057, "seconds": 4.6114718050230294}
+{"epoch": 0, "pairs": 204928, "loss": 3.499899387359619, "seconds": 5.242717361077666}
+{"epoch": 0, "pairs": 230528, "loss": 3.392859935760498, "seconds": 5.878215278033167}
+{"epoch": 0, "pairs": 256128, "loss": 3.1507654190063477, "seconds": 6.504906689049676}
+{"epoch": 0, "pairs": 281728, "loss": 3.030824899673462, "seconds": 7.1590530150569975}
+{"epoch": 0, "pairs": 307328, "loss": 2.8885982036590576, "seconds": 7.794589343946427}
+{"epoch": 0, "pairs": 332928, "loss": 2.884829521179199, "seconds": 8.424949171952903}
+{"epoch": 0, "pairs": 358528, "loss": 2.5694169998168945, "seconds": 9.058681500144303}
+{"epoch": 0, "pairs": 384128, "loss": 2.682878017425537, "seconds": 9.725333339069039}
+{"epoch": 1, "pairs": 404170, "loss": 2.451352119445801, "seconds": 10.241254829103127}
+{"epoch": 1, "pairs": 429770, "loss": 2.7473137378692627, "seconds": 10.95576496515423}
+{"epoch": 1, "pairs": 455370, "loss": 2.586317777633667, "seconds": 11.704963346011937}
+{"epoch": 1, "pairs": 480970, "loss": 2.6172497272491455, "seconds": 12.485821790061891}
+{"epoch": 1, "pairs": 506570, "loss": 2.568492889404297, "seconds": 13.278360221069306}
+{"epoch": 1, "pairs": 532170, "loss": 2.551452875137329, "seconds": 14.073657386004925}
+{"epoch": 1, "pairs": 557770, "loss": 2.3971922397613525, "seconds": 14.869859137106687}
+{"epoch": 1, "pairs": 583370, "loss": 2.339668035507202, "seconds": 15.660077858017758}
+{"epoch": 1, "pairs": 608970, "loss": 2.3867764472961426, "seconds": 16.627258571097627}
+{"epoch": 1, "pairs": 634570, "loss": 2.358508348464966, "seconds": 17.716316216159612}
+{"epoch": 1, "pairs": 660170, "loss": 2.0983707904815674, "seconds": 18.541450584074482}
+{"epoch": 1, "pairs": 685770, "loss": 2.401175022125244, "seconds": 19.307270020013675}
+{"epoch": 1, "pairs": 711370, "loss": 2.5801897048950195, "seconds": 20.048419254133478}
+{"epoch": 1, "pairs": 736970, "loss": 2.0772454738616943, "seconds": 20.768055188003927}
+{"epoch": 1, "pairs": 762570, "loss": 2.13584566116333, "seconds": 21.47777888714336}
+{"epoch": 1, "pairs": 788170, "loss": 2.2601511478424072, "seconds": 22.200196810998023}
+{"epoch": 2, "pairs": 808212, "loss": 1.954177737236023, "seconds": 22.798420117935166}
+{"epoch": 2, "pairs": 833812, "loss": 2.157029151916504, "seconds": 23.53334020311013}
+{"epoch": 2, "pairs": 859412, "loss": 2.305432081222534, "seconds": 24.228998970938846}
+{"epoch": 2, "pairs": 885012, "loss": 2.092989921569824, "seconds": 24.89992503100075}
+{"epoch": 2, "pairs": 910612, "loss": 1.9835753440856934, "seconds": 25.56624100310728}
+{"epoch": 2, "pairs": 936212, "loss": 2.4388372898101807, "seconds": 26.22257692506537}
+{"epoch": 2, "pairs": 961812, "loss": 2.010632038116455, "seconds": 26.909226718125865}
+{"epoch": 2, "pairs": 987412, "loss": 2.254207134246826, "seconds": 27.737180860945955}
+{"epoch": 2, "pairs": 1013012, "loss": 2.1635193824768066, "seconds": 28.617287358036265}
+{"epoch": 2, "pairs": 1038612, "loss": 2.1499266624450684, "seconds": 29.34820532402955}
+{"epoch": 2, "pairs": 1064212, "loss": 1.9153399467468262, "seconds": 30.035563237965107}
+{"epoch": 2, "pairs": 1089812, "loss": 1.9550358057022095, "seconds": 30.718327685957775}
+{"epoch": 2, "pairs": 1115412, "loss": 2.0913519859313965, "seconds": 31.42198594403453}
+{"epoch": 2, "pairs": 1141012, "loss": 2.1659600734710693, "seconds": 32.087805204093456}
+{"epoch": 2, "pairs": 1166612, "loss": 2.104854106903076, "seconds": 32.742847664048895}
+{"epoch": 2, "pairs": 1192212, "loss": 2.1347568035125732, "seconds": 33.39719604095444}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/llm-align/duyimin/meft-cpu-capacity-20261030/source/tools/train_capacity_memory.py", line 203, in <module>
+    main()
+  File "/llm-align/duyimin/meft-cpu-capacity-20261030/source/tools/train_capacity_memory.py", line 171, in main
+    raise ValueError('every published capacity row must change from initialization and be finite')
+ValueError: every published capacity row must change from initialization and be finite
