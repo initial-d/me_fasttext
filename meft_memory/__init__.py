@@ -6,6 +6,8 @@ from ._runtime.native_row_store import NativeRows, pack_native
 __version__ = "0.3.0"
 
 _ADAPTERS = {
+    "StructuralPlan": "structural_native",
+    "StructuralIndex": "structural_native",
     "MappedMultiHeadEmbedding": "engram_row_adapter",
     "StagedMultiHeadEmbedding": "device_row_adapter",
     "GatherTicket": "device_row_adapter",

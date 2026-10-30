@@ -2,3 +2,7 @@
 docs/native_query_evidence_20261030/m5-order-*.json linguist-generated=true
 docs/native_query_evidence_20261030/epyc-order-*.json linguist-generated=true
 docs/native_query_evidence_20261030/cpu-query-latency.svg linguist-generated=true
+docs/structural_native_evidence_20261030/*-report.json linguist-generated=true
+docs/structural_native_evidence_20261030/artifact-manifest.json linguist-generated=true
+docs/structural_native_evidence_20261030/summary.json linguist-generated=true
+docs/structural_native_evidence_20261030/*.svg linguist-generated=true

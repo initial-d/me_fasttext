@@ -36,7 +36,7 @@ def _atomic_output(output):
 
 
 def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
-                predictor="none", row_order=None):
+                predictor="none", row_order=None, *, representatives=None):
     """Stream blocks into a spool; exact dedup index still grows with unique rows.
 
     deduplicate=False avoids the unbounded unique-row dictionary for large raw
@@ -46,6 +46,12 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
     and writes format version 2. Version 1 remains the default. Optional
     row_order is a full permutation of original IDs; its validation uses O(n)
     memory and reading becomes nonsequential. Original query IDs stay unchanged.
+    Optional representatives is an idempotent original-ID -> original-ID map.
+    Only marked representative rows are read and packed, then the original-ID
+    forwarding map is rewritten to dense physical IDs. This performs actual
+    mark/compact export without staging an expanded reconstructed table. The
+    caller owns its similarity/byte-preservation contract: nonidentical aliases
+    change original weights, even though decoding preserves representative bytes.
     The complete table is flushed/fsynced into a sibling temporary file before
     atomic replacement. Failed construction/publication preserves the old file;
     readers already mmap-ing it continue reading the old inode. This covers this
@@ -59,13 +65,19 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
         raise ValueError("partial input row")
     if predictor not in ("none", "xor"):
         raise ValueError("predictor must be none or xor")
+    if representatives is not None:
+        representatives = list(representatives)
+        if (len(representatives) != nrows or
+                any(type(i) is not int or not 0 <= i < nrows for i in representatives) or
+                any(representatives[r] != r for r in representatives)):
+            raise ValueError("representatives must be an idempotent map of original row IDs")
     if row_order is not None:
         row_order = list(row_order)
         if (len(row_order) != nrows or
                 any(type(i) is not int or not 0 <= i < nrows for i in row_order) or
                 len(set(row_order)) != nrows):
             raise ValueError("row_order must be a permutation of all original row IDs")
-    unique, blocks, seen, pending = 0, [], {}, []
+    unique, blocks, seen, pending, physical = 0, [], {}, [], {}
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryFile(dir=output.parent) as map_file, tempfile.TemporaryFile(dir=output.parent) as spool:
         def flush():
@@ -90,7 +102,9 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
 
         with source.open("rb") as stream:
             for original_id in range(nrows) if row_order is None else row_order:
-                if row_order is not None:
+                if representatives is not None and representatives[original_id] != original_id:
+                    continue
+                if row_order is not None or representatives is not None:
                     stream.seek(original_id * row_bytes)
                 row = stream.read(row_bytes)
                 if len(row) != row_bytes:
@@ -104,13 +118,19 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
                     pending.append(row)
                     if len(pending) == block_rows:
                         flush()
-                if row_order is not None:
-                    map_file.seek(original_id * ROW.size)
-                map_file.write(ROW.pack(index))
+                if representatives is not None:
+                    physical[original_id] = index
+                else:
+                    if row_order is not None:
+                        map_file.seek(original_id * ROW.size)
+                    map_file.write(ROW.pack(index))
             if os.fstat(stream.fileno()).st_size != nrows * row_bytes:
                 raise ValueError("source size changed while exporting")
         if pending:
             flush()
+        if representatives is not None:
+            for representative in representatives:
+                map_file.write(ROW.pack(physical[representative]))
         payload_start = HEADER.size + nrows * ROW.size + len(blocks) * DESC.size
         with _atomic_output(output) as dest:
             version = 2 if predictor == "xor" else 1
@@ -132,7 +152,9 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
             "zlib_blocks": sum(codec == 1 for _, _, _, codec in blocks),
             "xor_blocks": sum(codec == 2 for _, _, _, codec in blocks),
             "deduplicate": deduplicate, "predictor": predictor,
-            "reordered": row_order is not None}
+            "reordered": row_order is not None,
+            "external_representatives": representatives is not None,
+            "marked_rows": nrows if representatives is None else len(physical)}
 
 
 class NativeRows:

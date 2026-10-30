@@ -1,0 +1,689 @@
+{
+  "memory_report_sha256": "6af7e47513875df69ea1b2c29ebf7d18c1e412c1246e847b077d80510d233856",
+  "lookup_report_sha256": "d7255f333f2701e9d4333d984e062efd357313313e31d174791ef2ee67507d2f",
+  "generator": {
+    "command": "/tmp/projects-push-20261028-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/analyze_structural_native.py --memory-report docs/structural_native_evidence_20261030/memory-report.json --lookup-report docs/structural_native_evidence_20261030/lookup-report.json --output-dir docs/structural_native_evidence_20261030",
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2",
+    "source_sha256": "9eb5cfc27e07996fd4235f736b954ea4bf4012f355027220d823cc2be44e11ec"
+  },
+  "groups": {
+    "sgns-4": {
+      "seeds": [
+        3,
+        7,
+        11
+      ],
+      "rows": 5333,
+      "artifact_fraction_of_flat_ordinary": {
+        "flat_ordinary": {
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "datrie_ordinary": {
+          "median": 0.9773684099238009,
+          "min": 0.9773678809988582,
+          "max": 0.9773713563388243
+        },
+        "flat_compact": {
+          "median": 0.7637834878555755,
+          "min": 0.7598594470028988,
+          "max": 0.7639927425185509
+        },
+        "datrie_compact": {
+          "median": 0.7411548441943998,
+          "min": 0.7372273280017569,
+          "max": 0.7413611524423517
+        }
+      },
+      "mark_compact_table_saving": {
+        "median": 0.24570021157505362,
+        "min": 0.24548383897899284,
+        "max": 0.24978333630450067
+      },
+      "total_saving_vs_flat_ordinary": {
+        "median": 0.2588451558056002,
+        "min": 0.2586388475576483,
+        "max": 0.26277267199824306
+      },
+      "index_byte_saving": 0.5862546125461254,
+      "joint_merged_rows": {
+        "median": 1336.0,
+        "min": 1335.0,
+        "max": 1358.0
+      },
+      "exact_merged_rows": [
+        0,
+        0,
+        0
+      ],
+      "lookup_us": {
+        "flat": {
+          "median": 156.095,
+          "min": 155.4315,
+          "max": 156.165
+        },
+        "hash": {
+          "median": 40.6475,
+          "min": 40.2285,
+          "max": 41.137
+        },
+        "datrie": {
+          "median": 13.759,
+          "min": 13.689,
+          "max": 14.247
+        }
+      },
+      "datrie_lookup_speedup_vs_hash": {
+        "median": 2.923795333963224,
+        "min": 2.887414894363726,
+        "max": 2.969354956534444
+      },
+      "minimum_joint_cosine": 0.9900040679606642,
+      "mean_relative_l2": {
+        "median": 0.01884328678926973,
+        "min": 0.018818578252097564,
+        "max": 0.01921774489139315
+      },
+      "max_relative_l2": 0.14212765851757603,
+      "query_numeric_row_cache_ms": {
+        "first_empty_application_cache": {
+          "ordinary": {
+            "median": 18.958364,
+            "min": 18.948796,
+            "max": 18.995729
+          },
+          "joint": {
+            "median": 14.24987,
+            "min": 14.158588,
+            "max": 14.258809
+          }
+        },
+        "warm_numeric_gather": {
+          "ordinary": {
+            "median": 0.028356,
+            "min": 0.027937,
+            "max": 0.0284605
+          },
+          "joint": {
+            "median": 0.027937,
+            "min": 0.027867,
+            "max": 0.027937
+          }
+        }
+      }
+    },
+    "sgns-8": {
+      "seeds": [
+        3,
+        7,
+        11
+      ],
+      "rows": 13424,
+      "artifact_fraction_of_flat_ordinary": {
+        "flat_ordinary": {
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "datrie_ordinary": {
+          "median": 0.9739941666330874,
+          "min": 0.9739876204159601,
+          "max": 0.9739984276962695
+        },
+        "flat_compact": {
+          "median": 0.6513162241894094,
+          "min": 0.6488183394991981,
+          "max": 0.6516653793785581
+        },
+        "datrie_compact": {
+          "median": 0.6253038446053695,
+          "min": 0.6228125061322854,
+          "max": 0.6256638070748276
+        }
+      },
+      "mark_compact_table_saving": {
+        "median": 0.36407814760445834,
+        "min": 0.36370690581327103,
+        "max": 0.3666822396943912
+      },
+      "total_saving_vs_flat_ordinary": {
+        "median": 0.3746961553946305,
+        "min": 0.3743361929251724,
+        "max": 0.37718749386771455
+      },
+      "index_byte_saving": 0.6151948972360028,
+      "joint_merged_rows": {
+        "median": 5119.0,
+        "min": 5112.0,
+        "max": 5153.0
+      },
+      "exact_merged_rows": [
+        0,
+        0,
+        0
+      ],
+      "lookup_us": {
+        "flat": {
+          "median": 178.3395,
+          "min": 176.001,
+          "max": 178.794
+        },
+        "hash": {
+          "median": 47.283,
+          "min": 46.375,
+          "max": 47.283
+        },
+        "datrie": {
+          "median": 15.574,
+          "min": 15.155,
+          "max": 15.575000000000001
+        }
+      },
+      "datrie_lookup_speedup_vs_hash": {
+        "median": 3.0358266452648475,
+        "min": 2.9777192757159368,
+        "max": 3.1199604091059054
+      },
+      "minimum_joint_cosine": 0.9900007999373839,
+      "mean_relative_l2": {
+        "median": 0.03112516137545862,
+        "min": 0.03088048812596691,
+        "max": 0.03130694531921343
+      },
+      "max_relative_l2": 0.14236738964640794,
+      "query_numeric_row_cache_ms": {
+        "first_empty_application_cache": {
+          "ordinary": {
+            "median": 48.417584,
+            "min": 48.366879,
+            "max": 48.695762
+          },
+          "joint": {
+            "median": 30.195417,
+            "min": 29.960192,
+            "max": 30.475901
+          }
+        },
+        "warm_numeric_gather": {
+          "ordinary": {
+            "median": 0.028845,
+            "min": 0.028775,
+            "max": 0.0288795
+          },
+          "joint": {
+            "median": 0.027972,
+            "min": 0.027867,
+            "max": 0.0283205
+          }
+        }
+      }
+    },
+    "sgns-12": {
+      "seeds": [
+        3,
+        7,
+        11
+      ],
+      "rows": 14132,
+      "artifact_fraction_of_flat_ordinary": {
+        "flat_ordinary": {
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "datrie_ordinary": {
+          "median": 0.9734119354269093,
+          "min": 0.9734110108043156,
+          "max": 0.973417239395743
+        },
+        "flat_compact": {
+          "median": 0.6514229665711423,
+          "min": 0.6493386333308963,
+          "max": 0.6519826782731907
+        },
+        "datrie_compact": {
+          "median": 0.6248339773754579,
+          "min": 0.6227505687578055,
+          "max": 0.6253999176689337
+        }
+      },
+      "mark_compact_table_saving": {
+        "median": 0.3641615742962463,
+        "min": 0.3635730306202818,
+        "max": 0.36633852649144916
+      },
+      "total_saving_vs_flat_ordinary": {
+        "median": 0.37516602262454213,
+        "min": 0.37460008233106634,
+        "max": 0.37724943124219446
+      },
+      "index_byte_saving": 0.6213008292536717,
+      "joint_merged_rows": {
+        "median": 5386.0,
+        "min": 5377.0,
+        "max": 5419.0
+      },
+      "exact_merged_rows": [
+        0,
+        0,
+        0
+      ],
+      "lookup_us": {
+        "flat": {
+          "median": 179.772,
+          "min": 179.771,
+          "max": 185.8825
+        },
+        "hash": {
+          "median": 46.864000000000004,
+          "min": 45.397,
+          "max": 47.247499999999995
+        },
+        "datrie": {
+          "median": 15.5745,
+          "min": 15.5745,
+          "max": 15.644000000000002
+        }
+      },
+      "datrie_lookup_speedup_vs_hash": {
+        "median": 3.009021156377412,
+        "min": 2.9018793147532596,
+        "max": 3.0336447397990303
+      },
+      "minimum_joint_cosine": 0.9900010721780895,
+      "mean_relative_l2": {
+        "median": 0.03078177462642599,
+        "min": 0.03070619265155565,
+        "max": 0.031006401826595625
+      },
+      "max_relative_l2": 0.1422066988799605,
+      "query_numeric_row_cache_ms": {
+        "first_empty_application_cache": {
+          "ordinary": {
+            "median": 50.269776,
+            "min": 50.177586,
+            "max": 50.273129
+          },
+          "joint": {
+            "median": 31.802607,
+            "min": 30.687031,
+            "max": 31.88907
+          }
+        },
+        "warm_numeric_gather": {
+          "ordinary": {
+            "median": 0.028914,
+            "min": 0.028845,
+            "max": 0.029299
+          },
+          "joint": {
+            "median": 0.028355,
+            "min": 0.027936,
+            "max": 0.0284255
+          }
+        }
+      }
+    },
+    "gru-4": {
+      "seeds": [
+        3,
+        7,
+        11
+      ],
+      "rows": 11760,
+      "artifact_fraction_of_flat_ordinary": {
+        "flat_ordinary": {
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "datrie_ordinary": {
+          "median": 0.9568324942980962,
+          "min": 0.9568297688776419,
+          "max": 0.9568348735716384
+        },
+        "flat_compact": {
+          "median": 0.9438611737856023,
+          "min": 0.9437856301350019,
+          "max": 0.9441202211604804
+        },
+        "datrie_compact": {
+          "median": 0.9006960473572407,
+          "min": 0.9006153990126439,
+          "max": 0.9009527154585766
+        }
+      },
+      "mark_compact_table_saving": {
+        "median": 0.060605284852242036,
+        "min": 0.06032589197524141,
+        "max": 0.06068740982676357
+      },
+      "total_saving_vs_flat_ordinary": {
+        "median": 0.09930395264275926,
+        "min": 0.09904728454142342,
+        "max": 0.09938460098735613
+      },
+      "index_byte_saving": 0.585706707481455,
+      "joint_merged_rows": {
+        "median": 738.0,
+        "min": 735.0,
+        "max": 739.0
+      },
+      "exact_merged_rows": [
+        0,
+        0,
+        0
+      ],
+      "lookup_us": {
+        "flat": {
+          "median": 176.978,
+          "min": 176.41899999999998,
+          "max": 178.30499999999998
+        },
+        "hash": {
+          "median": 47.772,
+          "min": 47.353,
+          "max": 48.26
+        },
+        "datrie": {
+          "median": 15.155999999999999,
+          "min": 15.155999999999999,
+          "max": 15.644000000000002
+        }
+      },
+      "datrie_lookup_speedup_vs_hash": {
+        "median": 3.124373185537081,
+        "min": 3.053694707236001,
+        "max": 3.184217471628398
+      },
+      "minimum_joint_cosine": 0.9902119474867733,
+      "mean_relative_l2": {
+        "median": 0.002177182218231527,
+        "min": 0.002162167872962852,
+        "max": 0.002194145516018723
+      },
+      "max_relative_l2": 0.14017569822550982,
+      "query_numeric_row_cache_ms": {
+        "first_empty_application_cache": {
+          "ordinary": {
+            "median": 20.896741,
+            "min": 20.88389,
+            "max": 20.957294
+          },
+          "joint": {
+            "median": 19.649165,
+            "min": 19.579603,
+            "max": 19.698263
+          }
+        },
+        "warm_numeric_gather": {
+          "ordinary": {
+            "median": 0.0216855,
+            "min": 0.0213365,
+            "max": 0.02172
+          },
+          "joint": {
+            "median": 0.021721,
+            "min": 0.0210925,
+            "max": 0.0222095
+          }
+        }
+      },
+      "ppl_relative_change_percent": {
+        "validation": [
+          -0.004269117868789314,
+          0.0027771921049442663,
+          0.008383998932280921
+        ],
+        "test": [
+          -0.0015293604083157382,
+          0.001926555862198874,
+          -0.0026733518576487173
+        ]
+      },
+      "maximum_top1_change_fraction": 0.00030670142616163164
+    },
+    "gru-8": {
+      "seeds": [
+        3,
+        7,
+        11
+      ],
+      "rows": 36778,
+      "artifact_fraction_of_flat_ordinary": {
+        "flat_ordinary": {
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "datrie_ordinary": {
+          "median": 0.9500165057050423,
+          "min": 0.9500119306552197,
+          "max": 0.9500167655101353
+        },
+        "flat_compact": {
+          "median": 0.7728624429598993,
+          "min": 0.7722983208209659,
+          "max": 0.7730586915156327
+        },
+        "datrie_compact": {
+          "median": 0.722874373615119,
+          "min": 0.7223148265260082,
+          "max": 0.7230754570257679
+        }
+      },
+      "mark_compact_table_saving": {
+        "median": 0.2469027945897584,
+        "min": 0.2466873924823385,
+        "max": 0.24751403470696365
+      },
+      "total_saving_vs_flat_ordinary": {
+        "median": 0.27712562638488103,
+        "min": 0.2769245429742321,
+        "max": 0.2776851734739918
+      },
+      "index_byte_saving": 0.624439447609201,
+      "joint_merged_rows": {
+        "median": 9399.0,
+        "min": 9390.0,
+        "max": 9422.0
+      },
+      "exact_merged_rows": [
+        0,
+        0,
+        0
+      ],
+      "lookup_us": {
+        "flat": {
+          "median": 204.845,
+          "min": 204.42499999999998,
+          "max": 205.333
+        },
+        "hash": {
+          "median": 55.315000000000005,
+          "min": 54.406000000000006,
+          "max": 56.292
+        },
+        "datrie": {
+          "median": 17.53,
+          "min": 17.53,
+          "max": 17.53
+        }
+      },
+      "datrie_lookup_speedup_vs_hash": {
+        "median": 3.1554478037649742,
+        "min": 3.103593839132915,
+        "max": 3.211180832857958
+      },
+      "minimum_joint_cosine": 0.9900606923999148,
+      "mean_relative_l2": {
+        "median": 0.010062147313454804,
+        "min": 0.009961789294431892,
+        "max": 0.01010489966444938
+      },
+      "max_relative_l2": 0.14115591128178223,
+      "query_numeric_row_cache_ms": {
+        "first_empty_application_cache": {
+          "ordinary": {
+            "median": 48.223145,
+            "min": 48.121387,
+            "max": 48.367368
+          },
+          "joint": {
+            "median": 40.448826,
+            "min": 40.06414,
+            "max": 41.332598
+          }
+        },
+        "warm_numeric_gather": {
+          "ordinary": {
+            "median": 0.021721,
+            "min": 0.02172,
+            "max": 0.022279
+          },
+          "joint": {
+            "median": 0.02172,
+            "min": 0.0208825,
+            "max": 0.022209
+          }
+        }
+      },
+      "ppl_relative_change_percent": {
+        "validation": [
+          0.001173527699198737,
+          0.0072774938140495226,
+          0.009124726768285843
+        ],
+        "test": [
+          0.0021604294667527182,
+          -0.0021575416673470984,
+          -0.0031219192976317785
+        ]
+      },
+      "maximum_top1_change_fraction": 0.0010734549915657108
+    },
+    "gru-12": {
+      "seeds": [
+        3,
+        7,
+        11
+      ],
+      "rows": 43152,
+      "artifact_fraction_of_flat_ordinary": {
+        "flat_ordinary": {
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "datrie_ordinary": {
+          "median": 0.9475248390627734,
+          "min": 0.9475217051675305,
+          "max": 0.9475368162806785
+        },
+        "flat_compact": {
+          "median": 0.7258814425108201,
+          "min": 0.7256352787540326,
+          "max": 0.7261627109461728
+        },
+        "datrie_compact": {
+          "median": 0.6734031476783506,
+          "min": 0.673160117816806,
+          "max": 0.6736995272268513
+        }
+      },
+      "mark_compact_table_saving": {
+        "median": 0.2987612618570227,
+        "min": 0.2984469823284659,
+        "max": 0.2990279499001367
+      },
+      "total_saving_vs_flat_ordinary": {
+        "median": 0.32659685232164937,
+        "min": 0.32630047277314866,
+        "max": 0.32683988218319404
+      },
+      "index_byte_saving": 0.63623218256487,
+      "joint_merged_rows": {
+        "median": 13344.0,
+        "min": 13329.0,
+        "max": 13355.0
+      },
+      "exact_merged_rows": [
+        0,
+        0,
+        0
+      ],
+      "lookup_us": {
+        "flat": {
+          "median": 209.3495,
+          "min": 208.61599999999999,
+          "max": 209.524
+        },
+        "hash": {
+          "median": 52.9395,
+          "min": 52.101,
+          "max": 53.498999999999995
+        },
+        "datrie": {
+          "median": 17.5305,
+          "min": 17.53,
+          "max": 17.9145
+        }
+      },
+      "datrie_lookup_speedup_vs_hash": {
+        "median": 2.9721049629207075,
+        "min": 2.955120154065143,
+        "max": 3.051766920509968
+      },
+      "minimum_joint_cosine": 0.9900334924016594,
+      "mean_relative_l2": {
+        "median": 0.012526903122645183,
+        "min": 0.012410471547235846,
+        "max": 0.012565436873781678
+      },
+      "max_relative_l2": 0.14116478475441507,
+      "query_numeric_row_cache_ms": {
+        "first_empty_application_cache": {
+          "ordinary": {
+            "median": 52.240839,
+            "min": 52.19635,
+            "max": 52.247893
+          },
+          "joint": {
+            "median": 40.947493,
+            "min": 40.493245,
+            "max": 41.385119
+          }
+        },
+        "warm_numeric_gather": {
+          "ordinary": {
+            "median": 0.022698,
+            "min": 0.0216855,
+            "max": 0.0226985
+          },
+          "joint": {
+            "median": 0.020883,
+            "min": 0.020393500000000002,
+            "max": 0.021721
+          }
+        }
+      },
+      "ppl_relative_change_percent": {
+        "validation": [
+          -0.007574526945309828,
+          0.0024497104641860766,
+          -0.007046791284201621
+        ],
+        "test": [
+          0.013713155786803245,
+          -0.00032684143610367923,
+          0.007424971586491313
+        ]
+      },
+      "maximum_top1_change_fraction": 0.0015333895576171127
+    }
+  },
+  "aggregation": "Median and seed range; not confidence intervals."
+}

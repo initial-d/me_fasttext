@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstring>
 #include <map>
 #include <stdexcept>
 #include <string>
@@ -15,6 +16,19 @@ namespace fasttext {
 using std::map;
 using std::string;
 
+// Shared by the legacy exporter and the optional native structural planner.
+// The legacy defaults remain unchanged. Exact mode compares float bytes,
+// including signed zero / NaN payloads, rather than a rounded cosine of 1.
+struct RowSharingPolicy {
+    bool exact = false;
+    double cosine = 0.99;
+    double norm_ratio = 0.99;
+    bool accepts(const float* a, const float* b, size_t dim) const {
+        return exact ? std::memcmp(a, b, dim * sizeof(float)) == 0
+                     : joint_row_similarity(a, b, dim, cosine, norm_ratio);
+    }
+};
+
 struct LegacyMergeState {
     string pq;
     size_t pid;
@@ -24,6 +38,7 @@ struct LegacyMergeState {
     bool initialized = false;
     map<size_t, string>* original_keys = nullptr;
     std::vector<std::pair<string, size_t>> ancestors;
+    RowSharingPolicy policy;
 };
 
 inline string reverse(string word) {
@@ -55,8 +70,8 @@ inline int datrie_foreach_cal(const char* key, size_t value, void* udata) {
     }
     size_t representative = value;
     for (auto entry = state->ancestors.rbegin(); entry != state->ancestors.rend(); ++entry) {
-        if (joint_row_similarity(pos + entry->second * state->dim,
-                                 pos + value * state->dim, state->dim)) {
+        if (state->policy.accepts(pos + entry->second * state->dim,
+                                  pos + value * state->dim, state->dim)) {
             representative = entry->second;
             break;
         }
@@ -76,6 +91,10 @@ struct FinalMergeGuard {
     int32_t dim;
     DATrie* merged;
     const map<size_t, string>* original_keys;
+    RowSharingPolicy policy;
+    FinalMergeGuard(real* r, int32_t d, DATrie* m, const map<size_t, string>* k,
+                    RowSharingPolicy p = RowSharingPolicy())
+        : rows(r), dim(d), merged(m), original_keys(k), policy(p) {}
 };
 
 inline int datrie_foreach_guard(const char* key, size_t value, void* udata) {
@@ -86,8 +105,8 @@ inline int datrie_foreach_guard(const char* key, size_t value, void* udata) {
     }
     const string& rep_key = state->original_keys->at(representative);
     if (!structurally_related(key, rep_key) ||
-        !joint_row_similarity(state->rows + value * state->dim,
-                              state->rows + representative * state->dim, state->dim)) {
+        !state->policy.accepts(state->rows + value * state->dim,
+                               state->rows + representative * state->dim, state->dim)) {
         datrie_insert_key(state->merged, key, value);
     }
     return 1;

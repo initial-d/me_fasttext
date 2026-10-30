@@ -48,6 +48,11 @@ jobs:
           python-version: "3.12"
       - name: Check native ABI and malformed files
         run: python tools/check_native_sanitizers.py
+      - name: Check original DATrie bridge and final representative guards
+        run: |
+          mkdir -p build
+          c++ -std=c++11 -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -Isrc -Inative -Imylib/include tests/structural_native_test.cc native/meft_structural.cc -Lmylib/lib -ltrie -lpub -o build/structural-sanitizers
+          ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 build/structural-sanitizers
 
   legacy-roundtrip:
     name: Legacy artifact roundtrip
