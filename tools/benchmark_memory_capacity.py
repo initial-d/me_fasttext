@@ -51,6 +51,12 @@ def samples(values):
     return {'p50_ms':float(np.median(values)), 'p95_ms':float(np.percentile(values,95)), 'samples_ms':values}
 
 
+def table_path(directory, variant):
+    if variant in ('native-exact', 'native-joint'):
+        return directory/variant.removeprefix('native-')/'table.men'
+    return directory/(variant+'.men')
+
+
 def worker(args):
     label = 'joint' if args.worker == 'native-joint' else 'ordinary'
     manifest = json.loads((args.output_dir/('queries-'+label+'.json')).read_text())
@@ -66,7 +72,7 @@ def worker(args):
     elif args.worker == 'raw-mmap':
         table = np.memmap(source,mode='r',dtype='<f4',shape=shape)
     else:
-        table = NativeRows(args.output_dir/(args.worker+'.men'),args.native_library,
+        table = NativeRows(table_path(args.output_dir,args.worker),args.native_library,
                            cache_bytes=args.cache_bytes,cache_policy='rows')
     report['open_ms'] = (time.perf_counter()-started)*1000
     report['memory_after_open'] = memory()
@@ -120,6 +126,7 @@ def worker(args):
                 'memory_before_queries':start_memory,'memory_after_first_trace':first_memory,
                 'memory_after_hot':memory(),
                 'cache_payload_bytes':table.cache_bytes if isinstance(table,NativeRows) else 0})
+            report['cases'][-1]['query_output_buffer_bytes'] = sum(len(item[1]) for item in queries)
         report['memory_final'] = memory()
         report['status'] = 'passed'
     finally:
@@ -178,7 +185,6 @@ def main():
                 directory = args.output_dir/mode
                 metadata = plan.export(source,directory,block_rows=args.block_rows)
                 plan.save_index(directory/'keys.flat',index='flat')
-                (directory/'table.men').replace(args.output_dir/('native-'+mode+'.men'))
                 report['variants']['native-'+mode] = {'storage':metadata,'export_seconds':time.perf_counter()-started,
                     'index_bytes':{'flat':(directory/'keys.flat').stat().st_size,'datrie':(directory/'keys.das').stat().st_size},
                     'merged_rows':sum(i!=r for i,r in enumerate(plan.representatives)), 'export_memory':memory()}
@@ -199,7 +205,7 @@ def main():
     for label in report['variants']:
         mapping = oracle[label.removeprefix('native-')]
         digest = hashlib.sha256()
-        with NativeRows(args.output_dir/(label+'.men'),args.native_library) as table:
+        with NativeRows(table_path(args.output_dir,label),args.native_library) as table:
             for begin in range(0,len(rows),4096):
                 ids = np.arange(begin,min(begin+4096,len(rows)))
                 expected = rows[ids if mapping is None else mapping[ids]].tobytes()
