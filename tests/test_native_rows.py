@@ -14,6 +14,77 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class NativeRowsTest(unittest.TestCase):
+    def test_chunked_query_preserves_bytes_order_and_aggregates_all_counters(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table"
+            rows = [bytes([i]) * 128 for i in range(16)]
+            source.write_bytes(b"".join(rows))
+            pack_native(source, packed, 128, 4, False)
+            ids = [0, 4, 0, 4, 1, 5]
+            query = (ctypes.c_uint64 * len(ids))(*ids)
+            output = ctypes.create_string_buffer(len(ids) * 128)
+            with NativeRows(packed, self.library) as table:
+                for limit, reads in ((None, 2), (1, 6), (3, 4), (100, 2)):
+                    table.gather_into(ctypes.addressof(query), len(ids), ctypes.addressof(output), len(output),
+                                      max_query_rows=limit)
+                    self.assertEqual(output.raw, b"".join(rows[i] for i in ids))
+                    self.assertEqual(table.last_block_reads, reads)
+                    self.assertEqual(table.last_decompressions, reads)
+                table.set_cache_bytes(1024)
+                table.gather_into(ctypes.addressof(query), len(ids), ctypes.addressof(output), len(output), max_query_rows=3)
+                self.assertEqual(table.last_block_reads, 2)
+                self.assertEqual(table.last_decompressions, 2)
+                self.assertEqual(table.last_cache_hits, 2)
+                table.gather_into(0, 0, 0, 0, max_query_rows=3)
+                self.assertEqual(table.last_block_reads, 0)
+                self.assertEqual(table.last_cache_hits, 0)
+
+    def test_chunked_query_rejects_limits_capacities_and_late_invalid_ids(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table"
+            source.write_bytes(b"A" * 64)
+            pack_native(source, packed, 8, 2, False)
+            query = (ctypes.c_uint64 * 3)(0, 1, 8)
+            output = ctypes.create_string_buffer(24)
+            with NativeRows(packed, self.library) as table:
+                for invalid in (0, -1, True, 1.5, ctypes.c_size_t(-1).value + 1):
+                    with self.assertRaises(ValueError):
+                        table.gather_into(ctypes.addressof(query), 3, ctypes.addressof(output), 24,
+                                          max_query_rows=invalid)
+                with self.assertRaisesRegex(ValueError, "capacity"):
+                    table.gather_into(ctypes.addressof(query), 3, ctypes.addressof(output), 23, max_query_rows=2)
+                with self.assertRaisesRegex(ValueError, "row ID"):
+                    table.gather_into(ctypes.addressof(query), 3, ctypes.addressof(output), 24, max_query_rows=2)
+                # Error output can be partial and must be discarded.
+                self.assertEqual(table.last_block_reads, 1)
+                function = table.lib.meft_rows_gather_chunked
+                error = ctypes.create_string_buffer(256)
+                self.assertNotEqual(function(table.handle, 0, 0, 0, 0, 0, error, len(error)), 0)
+                self.assertNotEqual(function(table.handle, 0, 3, ctypes.addressof(output), 24, 2, error, len(error)), 0)
+                self.assertNotEqual(function(0, 0, 0, 0, 0, 2, error, len(error)), 0)
+
+    def test_small_queries_and_disabled_chunking_keep_older_library_compatibility(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table"
+            source.write_bytes(b"A" * 64)
+            pack_native(source, packed, 8, 2, False)
+            with NativeRows(packed, self.library) as table:
+                real_library = table.lib
+                class OlderLibrary:
+                    def __getattr__(self, name):
+                        if name == "meft_rows_gather_chunked":
+                            raise AttributeError(name)
+                        return getattr(real_library, name)
+                query = (ctypes.c_uint64 * 2)(0, 1)
+                output = ctypes.create_string_buffer(16)
+                with patch.object(table, "lib", OlderLibrary()):
+                    for limit in (None, 2):
+                        table.gather_into(ctypes.addressof(query), 2, ctypes.addressof(output), 16, max_query_rows=limit)
+                        self.assertEqual(output.raw, b"A" * 16)
+                    with self.assertRaisesRegex(ValueError, "rebuilding"):
+                        table.gather_into(ctypes.addressof(query), 2, ctypes.addressof(output), 16, max_query_rows=1)
+
     def test_atomic_replacement_keeps_old_mmap_readers_on_original_bytes(self):
         rng = random.Random(27)
         with tempfile.TemporaryDirectory() as tmp:

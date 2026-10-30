@@ -28,6 +28,49 @@ def _read_in_spawned_worker(module, queue):
 
 @unittest.skipUnless(torch is not None and shutil.which("cc"), "PyTorch and compiler required")
 class WorkerMemoryTest(unittest.TestCase):
+    def test_query_budget_preserves_multihead_factory_and_copy_results(self):
+        from tools.engram_row_adapter import MappedMultiHeadEmbedding, export_multihead, open_demo_embedding
+        with tempfile.TemporaryDirectory() as tmp:
+            weight = torch.arange(21).float().reshape(7, 3)
+            export_multihead(weight, [3, 4], tmp, backend="native", block_rows=2)
+            query = torch.tensor([[[2, 3], [0, 0]], [[0, 1], [2, 3]]]).transpose(0, 1)
+            expected = torch.nn.functional.embedding(query + torch.tensor([0, 3]), weight)
+            with MappedMultiHeadEmbedding(tmp, native_library=self.library, query_chunk_rows=1) as original:
+                self.assertTrue(torch.equal(original(query), expected))
+                self.assertEqual(original.table.last_block_reads, query.numel())
+                with copy.deepcopy(original) as clone:
+                    self.assertEqual(clone.query_chunk_rows, 1)
+                    self.assertTrue(torch.equal(clone(query), expected))
+                state = original.__getstate__()
+                state.pop("query_chunk_rows")  # Previously serialized module settings.
+                restored = MappedMultiHeadEmbedding.__new__(MappedMultiHeadEmbedding)
+                restored.__setstate__(state)
+                with restored:
+                    self.assertEqual(restored.query_chunk_rows, 65536)
+                    self.assertTrue(torch.equal(restored(query), expected))
+            with open_demo_embedding(tmp, [3, 4], 3, native_library=self.library, query_chunk_rows=2) as factory:
+                self.assertTrue(torch.equal(factory(query), expected))
+            for invalid in (0, -1, True, 1.5):
+                with self.assertRaises(ValueError):
+                    MappedMultiHeadEmbedding(tmp, native_library=self.library, query_chunk_rows=invalid)
+
+    def test_ordinary_embedding_and_unique_bag_use_the_query_budget(self):
+        from tools.engram_row_adapter import MappedEmbedding, export_embedding
+        from tools.mapped_embedding_bag import export_embedding_bag, open_embedding_bag
+        with tempfile.TemporaryDirectory() as tmp:
+            source = torch.nn.Embedding(8, 4)
+            export_embedding(source, Path(tmp) / "embedding", block_rows=2)
+            ids = torch.tensor([[7, 0, 7, 1]])
+            with MappedEmbedding(Path(tmp) / "embedding", native_library=self.library, query_chunk_rows=1) as mapped:
+                self.assertTrue(torch.equal(mapped(ids), source(ids)))
+                self.assertEqual(mapped.gather.table.last_block_reads, ids.numel())
+            bag = torch.nn.EmbeddingBag(8, 4, mode="sum")
+            export_embedding_bag(bag, Path(tmp) / "bag", block_rows=2)
+            with open_embedding_bag(Path(tmp) / "bag", native_library=self.library, query_chunk_rows=1) as mapped:
+                self.assertTrue(torch.equal(mapped(ids), bag(ids)))
+                self.assertEqual(mapped.last_unique_rows, 3)
+                self.assertEqual(mapped.gather.table.last_block_reads, 3)
+
     @classmethod
     def setUpClass(cls):
         cls.temp = tempfile.TemporaryDirectory()
