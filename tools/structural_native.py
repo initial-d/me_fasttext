@@ -94,7 +94,7 @@ class StructuralPlan(StructuralIndex):
     omitted and remain identity-mapped. Hash bucket aliases need a separate
     provenance/structural certificate; this API rejects duplicate key-bound IDs.
     """
-    def __init__(self, rows, dim, keys, library=None, *, mode="joint",
+    def __init__(self, rows, dim, keys, library=None, *, mode="exact",
                  cosine=.99, norm_ratio=.99):
         if type(dim) is not int or not 0 < dim <= (1 << 31) - 1:
             raise ValueError("positive float32 dimension required")

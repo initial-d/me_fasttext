@@ -82,7 +82,7 @@ class RealStructuralTest(unittest.TestCase):
         keys = {i: key for i, key in enumerate(["a", "ab", "abc", "ax", "ay", "az"]) }
         rows = [(1., 0.), (.996, .089), (.984, .178), (-1., 0.), (2., 0.), (math.nan, 0.)]
         raw = b"".join(struct.pack("<2f", *r) for r in rows)
-        with StructuralPlan(raw, 2, keys, self.library) as plan:
+        with StructuralPlan(raw, 2, keys, self.library, mode="joint") as plan:
             self.assertEqual(plan.representatives[1], 0)
             self.assertEqual(plan.representatives[2], 2)  # chain to a fails direct .99 cosine
             self.assertEqual(plan.representatives[3:], [3, 4, 5])
@@ -138,7 +138,7 @@ class RealStructuralTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             source, output = Path(tmp) / "raw", Path(tmp) / "compact"
             source.write_bytes(raw)
-            with StructuralPlan(raw, 2, {1: "a", 2: "ab"}, self.library) as plan:
+            with StructuralPlan(raw, 2, {1: "a", 2: "ab"}, self.library, mode="joint") as plan:
                 plan.export(source, output)
             with MappedEmbedding(output, self.rows_library, native_cache_bytes=1024,
                                  native_cache_policy="rows") as memory:
@@ -146,3 +146,14 @@ class RealStructuralTest(unittest.TestCase):
                 self.assertTrue(torch.equal(memory(ids), torch.tensor([[[1., 0.], [0., 0.], [1., 0.], [1., 0.]]])))
                 self.assertTrue(memory.gather.metadata["approximate"])
                 self.assertEqual(memory.gather.table.header["n_rows"], 3)
+
+    def test_default_preserves_bytes_and_keeps_unindexed_rows(self):
+        raw = struct.pack("<6f", 0., 0., 1., 0., .996, .089)
+        with StructuralPlan(raw, 2, {1: "a", 2: "ab"}, self.library) as plan:
+            self.assertEqual(plan.mode, "exact")
+            self.assertTrue(plan.original_bytes_preserved)
+            self.assertEqual(plan.representatives, [0, 1, 2])
+        for mode in ("layout", "exact", "joint"):
+            with StructuralPlan(raw, 2, {}, self.library, mode=mode) as plan:
+                self.assertEqual(plan.representatives, [0, 1, 2])
+                self.assertEqual(plan.lookup(["unknown"]), [None])
