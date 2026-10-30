@@ -11,6 +11,9 @@ not been run on CUDA hardware.** The tests exercise pinned staging, copy events,
 non-default consumer streams, allocation lifetime and partial-failure cleanup
 when a real CUDA device is available. Skips do not constitute GPU validation.
 
+The [trained Qwen replay reports](device_memory_evidence_20261030/README.md)
+record MPS, installed-wheel CPU and the explicit CUDA blocker.
+
 ## Use a trained TinyEngram bundle
 
 Install the Torch or TinyEngram extra from source or a compatible release wheel:

@@ -1,0 +1,178 @@
+{
+  "all_memory_rows_byte_exact": true,
+  "bundle_manifest_sha256": "cdb970a1d030be8956bdead60fd70b692b6ed830b3ea96f5cde5dd602d4c33a0",
+  "code_sha": null,
+  "command": "/tmp/projects-push-20261028-venv/bin/python -m meft_memory._runtime.verify_tinyengram_device --checkpoint /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/artifacts/tinyengram-qwen-20261030/checkpoint --bundle /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/artifacts/tinyengram-qwen-20261030/bundle --corpus /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --upstream-dir /tmp/meft-tinyengram-source-20261030 --device cpu --staging-rows 32 --staging-slots 2 --report-out /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/artifacts/tinyengram-qwen-20261030/device-wheel-cpu.json",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "elapsed_seconds": 11.76018587499857,
+  "environment": {
+    "cpu": "arm",
+    "cuda_available": false,
+    "cuda_runtime": null,
+    "device": "cpu",
+    "machine": "arm64",
+    "os": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "threads": 4,
+    "torch": "2.14.1",
+    "transformers": "4.57.3"
+  },
+  "limitations": [
+    "small trained branch integration; not convergence or quality superiority",
+    "sampled held-out tokens; no trained DeepSeek checkpoint",
+    "one cold latency sample includes output readback, no speedup conclusion",
+    "resident/staged models coexist; no comparative peak memory benchmark",
+    "MPS copies synchronous; cannot validate CUDA pinned/event behavior",
+    "CPU hashing/decompression is synchronous; all layer outputs live for this forward",
+    "fixed unpadded greedy decode; no distributed/graph/serving integration"
+  ],
+  "memory_layers": {
+    "1": {
+      "device": "cpu",
+      "head_sizes": [
+        257,
+        263,
+        61,
+        67
+      ],
+      "stats": {
+        "copy_chunks": 0,
+        "pinned": false,
+        "queries": 84,
+        "reuse_waits": 0,
+        "slot_allocations": 0,
+        "slot_reuses": 0,
+        "staging_byte_limit": 2048,
+        "staging_bytes": 0
+      },
+      "table_dtype": "torch.float32"
+    }
+  },
+  "resident_loading": {
+    "error_msgs": [],
+    "mismatched_keys": [],
+    "missing_keys": [],
+    "unexpected_keys": []
+  },
+  "settings": {
+    "native_cache_bytes_per_layer": 1048576,
+    "staging_rows": 32,
+    "staging_slots": 2
+  },
+  "source_file_hashes": {
+    "device_row_adapter.py": "dfaf3fdbcc5d9c5fdfa25f6fb54c74c5bd10c53679e69a6fb02abc7d3cb1b432",
+    "engram_row_adapter.py": "26d295737129081c3d2dc87fb2ca6ee3826d29c0df6098e9796a9db14b7b22e3",
+    "tinyengram_checkpoint.py": "af5d64e4b1dbf39c9a7551542988b27172a9c504dee212c5b1606d79ca4c29bb",
+    "train_tinyengram_reference.py": "bc8c2aa71dbd7ad9d0f99ed7075bd00b06b949fe25a201ad9d24df43d723015d",
+    "verify_tinyengram_device.py": "e055069e7bb1bb8fae9b61d038adec4abaf0a930cc97a18b19a24be9e0d55733"
+  },
+  "splits": {
+    "test": {
+      "characters": 1639,
+      "token_ids_sha256": "a0f6a6f99f4a7867b4a2cff495da6cfa1094032e5f1c09641f91e979ba82483f",
+      "tokens": 442
+    },
+    "train": {
+      "characters": 13107,
+      "token_ids_sha256": "6712b87cd689908fbb6842bc6c86535dc61d1f8db96944935ccc58237795ab3b",
+      "tokens": 3472
+    },
+    "validation": {
+      "characters": 1638,
+      "token_ids_sha256": "5e8670d672b1182a2496136e9896c3acfe28bd7068ae7aab133d6677903173f4",
+      "tokens": 446
+    }
+  },
+  "status": "passed",
+  "upstream_sha": "317f23832aa8f8e382a0916ec469e81ba12b6dff",
+  "upstream_source_hashes": {
+    "engram.py": "b5f20018ee7ff73d0b43911830b0e8cd4c4540038c7c7775b821a6969b666630",
+    "engram_qwen.py": "9ff59ce9acaab626f6feb5aff44ccd3969257b4d11f62b9cedeb48c8030a59f6"
+  },
+  "verification": {
+    "test": {
+      "cached_logits_byte_exact": true,
+      "cached_logits_sha256": "2c0900c3219ac66d4910a08c2c1367a041505ca30f75bdda541518d6efbba612",
+      "cached_vs_full_max_abs": 6.67572021484375e-05,
+      "cached_vs_full_top1_changed": 0,
+      "full_forward_logits_byte_exact": true,
+      "generated_ids": [
+        [
+          346,
+          41318,
+          566,
+          198,
+          54667,
+          33562,
+          1091,
+          304,
+          279,
+          198,
+          14615,
+          13,
+          1260,
+          572,
+          264,
+          883
+        ]
+      ],
+      "greedy_tokens_equal": true,
+      "history_devices": {
+        "convolution": {
+          "1": "cpu"
+        },
+        "kv": "cpu",
+        "raw_tokens": "cpu"
+      },
+      "logits_sha256": "1cd1de65a1d277712cc9f4718e05fbac9bde3a0d85c2739e39648d74c2b826b5",
+      "single_cold_full_forward_seconds": {
+        "resident": 0.09394408343359828,
+        "staged": 0.09306995803490281
+      },
+      "token_ids_sha256": "442f274b0a5c285f84514dfc653ddeaba12bb58dcf8fa5f28ad6a110404ae6f6",
+      "tokens": 32
+    },
+    "validation": {
+      "cached_logits_byte_exact": true,
+      "cached_logits_sha256": "052afdbc91845293a5566238902e8ab644b75f0a799e15e1269cc7e1ce81996b",
+      "cached_vs_full_max_abs": 5.245208740234375e-05,
+      "cached_vs_full_top1_changed": 0,
+      "full_forward_logits_byte_exact": true,
+      "generated_ids": [
+        [
+          30,
+          364,
+          51,
+          285,
+          537,
+          3040,
+          2849,
+          8048,
+          11,
+          714,
+          279,
+          1899,
+          374,
+          8048,
+          11,
+          323
+        ]
+      ],
+      "greedy_tokens_equal": true,
+      "history_devices": {
+        "convolution": {
+          "1": "cpu"
+        },
+        "kv": "cpu",
+        "raw_tokens": "cpu"
+      },
+      "logits_sha256": "bb747e3d0d731a68860d3b825acb70287fb84390a9486e5f371bf437c0df3070",
+      "single_cold_full_forward_seconds": {
+        "resident": 0.9248294592835009,
+        "staged": 0.20298987487331033
+      },
+      "token_ids_sha256": "79f21622712c760e04619cea018d49fb781393ad95f82b2ce15a327949fdf138",
+      "tokens": 32
+    }
+  }
+}
