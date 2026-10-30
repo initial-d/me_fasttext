@@ -57,6 +57,7 @@ class Dictionary {
 	int32_t nngrams_;
     int32_t nlabels_;
     std::function<int32_t(const std::string&)> native_ngram_lookup_;
+    bool frozen_ngrams_ = false;
     bool lookupNgram(const std::string&, size_t&) const;
     int64_t ntokens_;//所有word label的出现总次数
 

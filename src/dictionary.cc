@@ -281,7 +281,7 @@ void Dictionary::computeSubwords(const std::string& word,
 		size_t id = 0;
 		if (!lookupNgram(ngram, id))
 		{
-            if (native_ngram_lookup_) continue;
+            if (frozen_ngrams_) continue;
 			if (datrie_insert_key(ngramdat, ngram.c_str(), ncount) == -1)
 				std::cout << "insert ngram error: " << ngram << " " << ncount << std::endl;
 			id = ncount++;
@@ -310,7 +310,7 @@ void Dictionary::computeSubwords(const std::string& word,
 		size_t id = 0;
 		if (!lookupNgram(ngram, id))
 		{
-            if (native_ngram_lookup_) continue;
+            if (frozen_ngrams_) continue;
 			if (datrie_insert_key(ngramdat, ngram.c_str(), ncount) == -1)
 				std::cout << "insert ngram error: " << ngram << " " << ncount << std::endl;
 			id = ncount++;
@@ -438,6 +438,7 @@ bool Dictionary::readWord(std::istream& in, std::string& word) const
 }
 
 void Dictionary::readFromFile(std::istream& in) {
+  frozen_ngrams_ = false;
   std::string word;
   int64_t minThreshold = 1;
 
@@ -766,6 +767,7 @@ void Dictionary::save(std::ostream& out, bool auxiliary_files) const {
 }
 
 void Dictionary::load(std::istream& in, bool initialize_ngrams) {
+  frozen_ngrams_ = false;
   native_ngram_lookup_ = nullptr;
   datrie_delete(worddat);
   datrie_delete(ngramdat);
@@ -810,6 +812,7 @@ void Dictionary::load(std::istream& in, bool initialize_ngrams) {
   if (!in) throw std::invalid_argument("truncated dictionary");
   initTableDiscard();
   if (initialize_ngrams) initNgrams();
+  frozen_ngrams_ = true;
 }
 
 void Dictionary::prune(std::vector<int32_t>& idx) {

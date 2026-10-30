@@ -27,6 +27,7 @@ def sha256(path):
 
 
 def read_keys(path, rows):
+    path = Path(path)
     keys = {}
     with Path(path).open('rb') as stream:
         if stream.read(8) != b'MEFTKEY1':
