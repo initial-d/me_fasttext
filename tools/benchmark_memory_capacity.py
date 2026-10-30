@@ -65,6 +65,8 @@ def worker(args):
     width = shape[1]*4
     report = {'status':'running', **environment(), 'variant':args.worker,
               'cache_budget_bytes':args.cache_bytes if args.worker.startswith('native') else 0,
+              'oracle_kind':'approximate representative bytes' if label=='joint' else 'original trained-row bytes',
+              'output_strategy':'Preallocated shared output: NumPy take(out=..., mode=clip) or native gather_into. All fixture IDs are valid.',
               'memory_before_open':memory(), 'cases':[]}
     started = time.perf_counter()
     if args.worker == 'resident':
@@ -82,17 +84,20 @@ def worker(args):
             for query in case['queries']:
                 ids = np.asarray(query['ids'],dtype='<u8')
                 out = ctypes.create_string_buffer(len(ids)*width)
-                queries.append((ids,out,query['sha256']))
+                output_view = np.frombuffer(out,dtype='<f4').reshape(len(ids),shape[1])
+                queries.append((ids,out,query['sha256'],output_view))
             if isinstance(table,NativeRows):
                 table.set_cache_bytes(args.cache_bytes)
 
             def gather(item):
-                ids,out,_ = item
+                ids,out,_,output_view = item
                 if isinstance(table,NativeRows):
                     table.gather_into(ids.ctypes.data,len(ids),ctypes.addressof(out),len(out))
                 else:
-                    result = table[ids]
-                    ctypes.memmove(ctypes.addressof(out),result.ctypes.data,result.nbytes)
+                    # Validated fixture IDs permit clip mode, avoiding NumPy's
+                    # raise-mode temporary and an extra copy into the common
+                    # output. Native and dense controls both write directly.
+                    np.take(table,ids.view(np.int64),axis=0,out=output_view,mode='clip')
 
             def check(item):
                 if hashlib.sha256(item[1].raw).hexdigest() != item[2]:
