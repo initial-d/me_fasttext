@@ -19,8 +19,12 @@
  */
 #define HEADER 56u
 #define DESC 32u
-#define CACHE_ENTRIES 64u
-struct cached_block { uint64_t block; size_t size; unsigned char *bytes; };
+struct cached_block {
+    uint64_t block, query;
+    size_t size;
+    struct cached_block *hash_next, *previous, *next;
+    unsigned char bytes[];
+};
 struct meft_rows {
     unsigned char *data;
     size_t size;
@@ -29,7 +33,10 @@ struct meft_rows {
     size_t scratch_capacity;
     uint64_t last_blocks, last_decodes, last_hits;
     size_t cache_budget, cache_used, cache_count;
-    struct cached_block cache[CACHE_ENTRIES]; /* Most recently used first. */
+    size_t cache_buckets;
+    uint64_t cache_query;
+    struct cached_block **cache;
+    struct cached_block *newest, *oldest;
 };
 struct request { uint64_t block, within; size_t position; };
 static uint64_t le64(const unsigned char *p) {
@@ -107,38 +114,86 @@ uint64_t meft_rows_last_cache_hits(const meft_rows *s) { return s ? s->last_hits
 uint64_t meft_rows_cache_bytes(const meft_rows *s) { return s ? s->cache_used : 0; }
 int meft_rows_set_cache_bytes(meft_rows *s, size_t budget) {
     if (!s) return -1;
-    for (size_t i = 0; i < s->cache_count; ++i) free(s->cache[i].bytes);
+    while (s->newest) {
+        struct cached_block *next = s->newest->next;
+        free(s->newest);
+        s->newest = next;
+    }
+    free(s->cache);
+    s->cache = NULL; s->oldest = NULL;
+    s->cache_buckets = 0;
     s->cache_count = s->cache_used = 0;
     s->cache_budget = budget;
     return 0;
 }
+static size_t cache_bucket(uint64_t block, size_t buckets) {
+    /* Mix sparse/nonconsecutive block IDs; bucket counts are powers of two. */
+    block ^= block >> 30; block *= UINT64_C(0xbf58476d1ce4e5b9);
+    block ^= block >> 27; block *= UINT64_C(0x94d049bb133111eb);
+    block ^= block >> 31;
+    return (size_t)block & (buckets - 1);
+}
+static void cache_unlink(meft_rows *s, struct cached_block *entry) {
+    if (entry->previous) entry->previous->next = entry->next;
+    else s->newest = entry->next;
+    if (entry->next) entry->next->previous = entry->previous;
+    else s->oldest = entry->previous;
+}
+static void cache_promote(meft_rows *s, struct cached_block *entry) {
+    entry->previous = NULL; entry->next = s->newest;
+    if (s->newest) s->newest->previous = entry;
+    else s->oldest = entry;
+    s->newest = entry;
+}
+static void cache_resize(meft_rows *s) {
+    if (s->cache_buckets && s->cache_count < s->cache_buckets) return;
+    if (s->cache_buckets > SIZE_MAX / 2) return;
+    size_t count = s->cache_buckets ? s->cache_buckets * 2 : 16;
+    if (count > SIZE_MAX / sizeof(*s->cache)) return;
+    struct cached_block **buckets = calloc(count, sizeof(*buckets));
+    if (!buckets) return; /* Keep the existing index on optional allocation failure. */
+    for (struct cached_block *entry = s->newest; entry; entry = entry->next) {
+        size_t bucket = cache_bucket(entry->block, count);
+        entry->hash_next = buckets[bucket]; buckets[bucket] = entry;
+    }
+    free(s->cache); s->cache = buckets; s->cache_buckets = count;
+}
 static const unsigned char *cache_find(meft_rows *s, uint64_t block) {
-    for (size_t i = 0; i < s->cache_count; ++i) {
-        if (s->cache[i].block == block) {
-            struct cached_block hit = s->cache[i];
-            memmove(s->cache + 1, s->cache, i * sizeof(hit));
-            s->cache[0] = hit;
-            ++s->last_hits;
-            return hit.bytes;
+    if (!s->cache_buckets) return NULL;
+    for (struct cached_block *entry = s->cache[cache_bucket(block, s->cache_buckets)];
+         entry; entry = entry->hash_next) {
+        if (entry->block == block) {
+            if (entry != s->newest) { cache_unlink(s, entry); cache_promote(s, entry); }
+            if (entry->query != s->cache_query) {
+                entry->query = s->cache_query; ++s->last_hits;
+            }
+            return entry->bytes;
         }
     }
     return NULL;
 }
 static void cache_insert(meft_rows *s, uint64_t block, size_t size) {
-    if (size > s->cache_budget) return;
-    while (s->cache_count && (s->cache_used > s->cache_budget - size ||
-                             s->cache_count == CACHE_ENTRIES)) {
-        struct cached_block *old = s->cache + --s->cache_count;
+    if (size > s->cache_budget || size > SIZE_MAX - sizeof(struct cached_block)) return;
+    while (s->oldest && s->cache_used > s->cache_budget - size) {
+        struct cached_block *old = s->oldest;
+        struct cached_block **link = s->cache + cache_bucket(old->block, s->cache_buckets);
+        while (*link != old) link = &(*link)->hash_next;
+        *link = old->hash_next;
+        cache_unlink(s, old); --s->cache_count;
         s->cache_used -= old->size;
-        free(old->bytes);
+        free(old);
     }
     /* Evict before allocation to respect the payload budget even transiently.
      * Cache allocation is optional; failure leaves a valid scratch result. */
-    unsigned char *copy = malloc(size);
+    cache_resize(s);
+    if (!s->cache_buckets) return;
+    struct cached_block *copy = malloc(sizeof(*copy) + size);
     if (!copy) return;
-    memcpy(copy, s->scratch, size);
-    memmove(s->cache + 1, s->cache, s->cache_count * sizeof(s->cache[0]));
-    s->cache[0] = (struct cached_block){block, size, copy};
+    copy->block = block; copy->size = size; copy->query = 0;
+    memcpy(copy->bytes, s->scratch, size);
+    size_t bucket = cache_bucket(block, s->cache_buckets);
+    copy->hash_next = s->cache[bucket]; s->cache[bucket] = copy;
+    cache_promote(s, copy);
     ++s->cache_count;
     s->cache_used += size;
 }
@@ -165,50 +220,63 @@ int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
         requests[i].within = row % s->block_rows;
         requests[i].position = i;
     }
-    qsort(requests, count, sizeof(*requests), order);
+    if (s->cache_count) {
+        if (!++s->cache_query) {
+            for (struct cached_block *entry = s->newest; entry; entry = entry->next) entry->query = 0;
+            s->cache_query = 1;
+        }
+        /* Validate every ID above before touching output/cache. Consume all
+         * existing hits before misses can evict a block needed later in this
+         * call. Fully cached queries skip sorting and decompression entirely. */
+        size_t pending = 0;
+        for (size_t i = 0; i < count; ++i) {
+            const unsigned char *bytes = cache_find(s, requests[i].block);
+            if (bytes) {
+                memcpy((unsigned char *)out + requests[i].position * s->width,
+                       bytes + requests[i].within * s->width, (size_t)s->width);
+            } else requests[pending++] = requests[i];
+        }
+        count = pending;
+    }
+    if (count > 1) qsort(requests, count, sizeof(*requests), order);
     for (size_t i = 0; i < count;) {
         uint64_t block = requests[i].block;
         const unsigned char *d = s->data + s->desc_start + block * DESC;
         uint64_t off = le64(d), stored = le64(d + 8), raw = le64(d + 16), codec = le64(d + 24);
         const unsigned char *bytes = s->data + off;
-        const unsigned char *cached = codec ? cache_find(s, block) : NULL;
-        if (cached) {
-            bytes = cached;
-        } else {
-            ++s->last_blocks;
-            if (codec) {
-                if (s->scratch_capacity < raw) {
-                    void *next = realloc(s->scratch, (size_t)raw);
-                    if (!next) { reason = "allocation failed"; goto done; }
-                    s->scratch = next; s->scratch_capacity = (size_t)raw;
-                }
-                uLongf actual = (uLongf)raw;
-                if (uncompress(s->scratch, &actual, bytes, (uLong)stored) != Z_OK || actual != raw) {
-                    reason = "block decompression failed"; goto done;
-                }
-                /* Prediction resets at each block's first row. Bytewise XOR
-                 * reconstructs original bits without floating-point arithmetic. */
-                if (codec == 2) {
-                    size_t width = (size_t)s->width;
-                    for (size_t start = width; start < (size_t)raw; start += width) {
-                        unsigned char *current = s->scratch + start;
-                        const unsigned char *previous = current - width;
-                        size_t j = 0;
-                        /* memcpy permits unaligned rows/odd widths without aliasing
-                         * or alignment UB, and compilers lower it to word loads. */
-                        for (; width - j >= sizeof(uint64_t); j += sizeof(uint64_t)) {
-                            uint64_t a, b;
-                            memcpy(&a, current + j, sizeof(a));
-                            memcpy(&b, previous + j, sizeof(b));
-                            a ^= b;
-                            memcpy(current + j, &a, sizeof(a));
-                        }
-                        for (; j < width; ++j) current[j] ^= previous[j];
-                    }
-                }
-                bytes = s->scratch; ++s->last_decodes;
-                cache_insert(s, block, (size_t)raw);
+        ++s->last_blocks;
+        if (codec) {
+            if (s->scratch_capacity < raw) {
+                void *next = realloc(s->scratch, (size_t)raw);
+                if (!next) { reason = "allocation failed"; goto done; }
+                s->scratch = next; s->scratch_capacity = (size_t)raw;
             }
+            uLongf actual = (uLongf)raw;
+            if (uncompress(s->scratch, &actual, bytes, (uLong)stored) != Z_OK || actual != raw) {
+                reason = "block decompression failed"; goto done;
+            }
+            /* Prediction resets at each block's first row. Bytewise XOR
+             * reconstructs original bits without floating-point arithmetic. */
+            if (codec == 2) {
+                size_t width = (size_t)s->width;
+                for (size_t start = width; start < (size_t)raw; start += width) {
+                    unsigned char *current = s->scratch + start;
+                    const unsigned char *previous = current - width;
+                    size_t j = 0;
+                    /* memcpy permits unaligned rows/odd widths without aliasing
+                     * or alignment UB, and compilers lower it to word loads. */
+                    for (; width - j >= sizeof(uint64_t); j += sizeof(uint64_t)) {
+                        uint64_t a, b;
+                        memcpy(&a, current + j, sizeof(a));
+                        memcpy(&b, previous + j, sizeof(b));
+                        a ^= b;
+                        memcpy(current + j, &a, sizeof(a));
+                    }
+                    for (; j < width; ++j) current[j] ^= previous[j];
+                }
+            }
+            bytes = s->scratch; ++s->last_decodes;
+            cache_insert(s, block, (size_t)raw);
         }
         do {
             memcpy((unsigned char *)out + requests[i].position * s->width,

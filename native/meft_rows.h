@@ -17,8 +17,9 @@ void meft_rows_close(meft_rows *store);
 uint64_t meft_rows_count(const meft_rows *store);
 uint64_t meft_rows_width(const meft_rows *store);
 /* Optional decoded-block LRU cache, disabled at open. Setting a budget clears
- * all entries; payload bytes never exceed budget. At most 64 entries per handle.
- * Scratch and query locations are additional memory. Single-worker only. */
+ * all entries; payload bytes never exceed budget. Hash/LRU metadata grows lazily
+ * with cached blocks; there is no fixed entry cap or full-table allocation.
+ * Metadata, scratch and query locations are additional memory. Single-worker only. */
 int meft_rows_set_cache_bytes(meft_rows *store, size_t budget);
 uint64_t meft_rows_cache_bytes(const meft_rows *store);
 /* output must contain count * width bytes and must not overlap ids.

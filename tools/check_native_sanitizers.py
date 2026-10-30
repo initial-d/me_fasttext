@@ -38,7 +38,14 @@ def main():
                     raw = raw[:rng.randrange(len(raw))]
                 table.write_bytes(raw)
                 subprocess.run([str(driver), str(table)], check=True)
-    print("ASan/UBSan: versions 1/2 and 128 mutated/truncated files checked.")
+        # Many small compressed blocks exceed the old 64-entry cap and force
+        # hash growth, collision chains, LRU eviction and close/reset cleanup.
+        source.write_bytes(b"".join(i.to_bytes(2, "little") * 64 for i in range(300)))
+        packed = pack_native(source, table, 128, 1, False)
+        if packed["raw_blocks"]:
+            raise AssertionError("cache sanitizer fixture must use compressed blocks")
+        subprocess.run([str(driver), str(table)], check=True)
+    print("ASan/UBSan: versions 1/2, 128 mutated/truncated files and 300-block cache growth/eviction checked.")
 
 
 if __name__ == "__main__":

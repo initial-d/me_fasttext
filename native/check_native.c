@@ -17,6 +17,19 @@ int main(int argc, char **argv) {
     (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_gather(s, ids, 4, out, (size_t)width * 4, error, sizeof(error));
+    /* Exercise lazy hash growth, LRU unlink/eviction and budget resets without
+     * allocating a full query/table. Malformed reads may legitimately fail. */
+    const size_t budgets[] = {65536, 8192, 0, 65536};
+    for (size_t budget = 0; budget < sizeof(budgets) / sizeof(budgets[0]); ++budget) {
+        (void)meft_rows_set_cache_bytes(s, budgets[budget]);
+        uint64_t limit = n < 300 ? n : 300;
+        for (uint64_t row = 0; row < limit; ++row)
+            (void)meft_rows_gather(s, &row, 1, out, (size_t)width * 4, error, sizeof(error));
+        for (uint64_t row = limit; row;) {
+            --row;
+            (void)meft_rows_gather(s, &row, 1, out, (size_t)width * 4, error, sizeof(error));
+        }
+    }
     (void)meft_rows_set_cache_bytes(s, 1);
     (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_set_cache_bytes(s, 0);

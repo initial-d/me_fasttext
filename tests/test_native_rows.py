@@ -293,23 +293,69 @@ class NativeRowsTest(unittest.TestCase):
                     self.assertEqual(table.cache_bytes, 0)
                     self.assertEqual(table.last_cache_hits, 0)
 
-    def test_cache_entry_cap_and_invalid_query_do_not_corrupt_cached_rows(self):
+    def test_cache_uses_budget_beyond_64_entries_and_invalid_query_is_atomic(self):
         with tempfile.TemporaryDirectory() as tmp:
             source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
-            rows = [bytes([i]) * 128 for i in range(70)]
+            rows = [bytes([i % 256]) * 128 for i in range(300)]
             source.write_bytes(b"".join(rows))
             pack_native(source, packed, 128, 1, False)
             with NativeRows(packed, self.library, 1024 * 1024) as table:
-                self.assertEqual(table.rows(range(70)), b"".join(rows))
-                self.assertEqual(table.cache_bytes, 64 * 128)
-                table.rows([69]); self.assertEqual(table.last_cache_hits, 1)
-                ids = (ctypes.c_uint64 * 2)(69, 70)
+                self.assertEqual(table.cache_bytes, 0)  # Budget allocation is lazy.
+                self.assertEqual(table.rows(range(300)), b"".join(rows))
+                self.assertEqual(table.cache_bytes, 300 * 128)
+                self.assertEqual(table.rows([0, 299, 0, 128, 299]), b"".join(rows[i] for i in [0, 299, 0, 128, 299]))
+                self.assertEqual(table.last_cache_hits, 3)  # Count blocks, not repeated rows.
+                self.assertEqual(table.last_decompressions, 0)
+                ids = (ctypes.c_uint64 * 2)(299, 300)
                 out = ctypes.create_string_buffer(256)
+                original_output = out.raw
                 with self.assertRaisesRegex(ValueError, "row ID"):
                     table.gather_into(ctypes.addressof(ids), 2, ctypes.addressof(out), 256)
-                self.assertEqual(table.rows([69]), rows[69])
+                self.assertEqual(out.raw, original_output)
+                self.assertEqual(table.rows([299]), rows[299])
                 self.assertEqual(table.last_cache_hits, 1)
-                table.rows([0]); self.assertEqual(table.last_decompressions, 1)
+                table.rows([0]); self.assertEqual(table.last_decompressions, 0)
+
+    def test_cache_consumes_later_hits_before_earlier_misses_evict_them(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            rows = [bytes([i]) * 128 for i in range(10)]
+            source.write_bytes(b"".join(rows))
+            pack_native(source, packed, 128, 1, False)
+            with NativeRows(packed, self.library, cache_bytes=256) as table:
+                table.rows([8, 9])
+                self.assertEqual(table.rows([0, 8, 1, 9, 8]), b"".join(rows[i] for i in [0, 8, 1, 9, 8]))
+                self.assertEqual(table.last_cache_hits, 2)
+                self.assertEqual(table.last_decompressions, 2)
+                self.assertEqual(table.cache_bytes, 256)
+                self.assertEqual(table.rows([0, 1, 0]), rows[0] + rows[1] + rows[0])
+                self.assertEqual(table.last_decompressions, 0)
+
+    def test_cache_hash_growth_eviction_and_budget_reset_match_lru_model(self):
+        from collections import OrderedDict
+        rng = random.Random(76)
+        with tempfile.TemporaryDirectory() as tmp:
+            source, packed = Path(tmp) / "raw", Path(tmp) / "table.men"
+            rows = [i.to_bytes(2, "little") * 64 for i in range(300)]
+            source.write_bytes(b"".join(rows))
+            pack_native(source, packed, 128, 1, False)
+            with NativeRows(packed, self.library) as table:
+                for capacity in (150, 65, 1, 0, 300):
+                    table.set_cache_bytes(capacity * 128)
+                    self.assertEqual(table.cache_bytes, 0)
+                    model = OrderedDict()
+                    # Growth, collisions, eviction and reset use a deterministic replay.
+                    for row in [*range(300), *(rng.randrange(300) for _ in range(400))]:
+                        hit = row in model
+                        self.assertEqual(table.rows([row, row]), rows[row] * 2)
+                        self.assertEqual(table.last_cache_hits, int(hit))
+                        self.assertEqual(table.last_decompressions, int(not hit))
+                        if capacity:
+                            model[row] = None
+                            model.move_to_end(row)
+                            if len(model) > capacity:
+                                model.popitem(last=False)
+                        self.assertEqual(table.cache_bytes, len(model) * 128)
 
     def test_cache_preserves_older_library_loading_when_disabled(self):
         from unittest.mock import patch

@@ -90,7 +90,8 @@ def main():
               "exact_command": shlex.join([sys.executable, *sys.argv]),
               "python": sys.version, "pytorch": torch.__version__, "numpy": np.__version__,
               "platform": platform.platform(), "device": "CPU", "threads": 1,
-              "repeat": args.repeat, "cache_budget": args.cache_bytes, "cache_entry_cap": 64,
+              "repeat": args.repeat, "cache_budget": args.cache_bytes,
+              "cache_entry_cap": None, "cache_index": "lazy hash index and linked LRU; payload-budget bounded",
               "cache_budgets": [0, args.cache_bytes, args.larger_cache_bytes],
               "training_commit": training["commit"], "training_report_sha256": file_sha256(args.training_dir / "report.json"),
               "corpus_sha256": training["corpus_sha256"], "corpus_bytes": len(corpus),
@@ -104,7 +105,7 @@ def main():
                               "Hot/uniform controls manipulate ID locality explicitly; random IDs are not random embeddings.",
                               "Warm filesystem; three trace warmups, then repeat passes over the same 16 batches. No cold I/O or real trace distribution.",
                               "ctypes/C gather timed with preallocated IDs/output; no resident tensor/raw mmap latency baseline or end-to-end model speedup.",
-                              "Cache payload counter excludes fixed metadata, allocator overhead, scratch, per-batch requests, mapped pages and process RSS.",
+                              "Cache payload counter excludes dynamic hash/LRU metadata, allocator overhead, scratch, per-batch requests, mapped pages and process RSS.",
                               "CPU single-worker only; no GPU, concurrency, task quality or trained Engram checkpoint.",
                               "Corpus license not established; corpus/weights are not redistributed."], "runs": []}
     if sys.platform == "darwin":
