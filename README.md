@@ -14,13 +14,15 @@
 
 The native C row store and PyTorch adapters serve immutable CPU memory tables
 through compressed blocks, mmap, bounded row/block caches and batched queries. The
-byte-preservation contract applies to this native backend; the FastText-derived
-legacy C++ exporter also supports approximate row sharing.
+byte-preservation contract applies to ordinary native export and layout/exact
+structural modes. Opt-in joint structural sharing changes source weights and
+records that separately; the legacy C++ exporter also supports approximate sharing.
 
 [**C / PyTorch integration**](docs/native_ngram_memory.md)
 · [**Trained-model quality checks**](docs/causal_lm_evidence_20261024/README.md)
 · [**Query latency and memory results**](docs/bag_compaction_evidence_20261026/README.md)
 · [**Native query cache optimization and CPU evidence**](docs/native_query_evidence_20261030/README.md)
+· [**Original DATrie + mark-compact native integration and trained ablations**](docs/structural_native_evidence_20261030/README.md)
 · [**Installable TinyEngram/Qwen checkpoint backend**](docs/tinyengram_qwen_evidence_20261030/README.md)
 · [**Host memory → device query and prefetch**](docs/device_memory_prefetch.md)
 
