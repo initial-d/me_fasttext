@@ -9,7 +9,6 @@ import json
 from pathlib import Path
 import platform
 import shlex
-import subprocess
 import sys
 import time
 
@@ -18,7 +17,7 @@ import transformers
 from transformers import AutoTokenizer
 
 from .engram_row_adapter import file_sha256
-from .tinyengram_checkpoint import TinyEngramModel, load_tinyengram_checkpoint, load_upstream
+from .tinyengram_checkpoint import TinyEngramModel, load_tinyengram_checkpoint, load_upstream, source_revision
 from .train_tinyengram_reference import _tensor_hash, cached_logits, logit_delta, verify
 
 
@@ -38,8 +37,8 @@ def main():
     args = parser.parse_args()
     if args.report_out.exists():
         parser.error("use a fresh report path to preserve earlier evidence")
-    report = {"command": shlex.join([sys.executable, "-m", "tools.verify_tinyengram_checkpoint", *sys.argv[1:]]),
-              "code_sha": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+    report = {"command": shlex.join(sys.orig_argv),
+              "code_sha": source_revision(),
               "source_file_hashes": {name: file_sha256(Path(__file__).parent / name) for name in
                                      ("tinyengram_checkpoint.py", "train_tinyengram_reference.py", "verify_tinyengram_checkpoint.py")},
               "environment": {"python": sys.version, "torch": torch.__version__,

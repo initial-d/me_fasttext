@@ -13,6 +13,7 @@ import importlib.util
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import uuid
@@ -35,6 +36,17 @@ SOURCE_HASHES = {
     "engram_qwen.py": "9ff59ce9acaab626f6feb5aff44ccd3969257b4d11f62b9cedeb48c8030a59f6",
 }
 _decode_context = ContextVar("meft_tinyengram_decode", default=None)
+
+
+def source_revision():
+    """Report the source checkout, never an unrelated caller's working directory."""
+    try:
+        return subprocess.check_output(
+            ["git", "-C", str(Path(__file__).resolve().parents[1]), "rev-parse", "HEAD"],
+            text=True, stderr=subprocess.DEVNULL,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None  # Installed wheels retain exact source-file hashes instead.
 
 
 def load_upstream(upstream_dir):

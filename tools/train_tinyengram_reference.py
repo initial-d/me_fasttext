@@ -10,7 +10,6 @@ import json
 from pathlib import Path
 import platform
 import shlex
-import subprocess
 import sys
 import time
 
@@ -22,6 +21,7 @@ from .engram_row_adapter import file_sha256
 from .tinyengram_checkpoint import (
     SOURCE_HASHES, UPSTREAM_SHA, TinyEngramModel,
     export_tinyengram_checkpoint, load_tinyengram_checkpoint, load_upstream,
+    source_revision,
 )
 
 
@@ -109,8 +109,8 @@ def main():
     args.output_dir.mkdir(parents=True)
     report_path = args.output_dir / "report.json"
     report = {"evidence": "small trained Qwen3 + TinyEngram checkpoint integration; not throughput/quality superiority",
-              "command": shlex.join([sys.executable, "-m", "tools.train_tinyengram_reference", *sys.argv[1:]]),
-              "code_sha": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+              "command": shlex.join(sys.orig_argv),
+              "code_sha": source_revision(),
               "source_file_hashes": {name: file_sha256(Path(__file__).parent / name) for name in
                                      ("tinyengram_checkpoint.py", "train_tinyengram_reference.py")},
               "upstream_sha": UPSTREAM_SHA, "upstream_source_hashes": SOURCE_HASHES,

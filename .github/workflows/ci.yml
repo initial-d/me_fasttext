@@ -116,3 +116,27 @@ jobs:
         env:
           MEFT_TINYENGRAM_SOURCE: /tmp/meft-tiny-source
         run: python -m unittest tests.test_tinyengram_checkpoint -v
+
+  memory-wheels:
+    name: Native memory wheel (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build and install standalone native wheel
+        run: |
+          python -m pip wheel . --no-deps --wheel-dir /tmp/meft-wheels
+          python -m pip install --no-deps /tmp/meft-wheels/*.whl
+      - name: Verify installed package outside checkout without Torch
+        run: |
+          cd /tmp
+          python "$GITHUB_WORKSPACE/tools/check_memory_wheel.py"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: meft-memory-${{ matrix.os }}
+          path: /tmp/meft-wheels/*.whl
