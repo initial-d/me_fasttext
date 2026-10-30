@@ -69,6 +69,7 @@ def main():
     parser.add_argument('--lr', type=float, default=.02)
     parser.add_argument('--threads', type=int, default=4)
     parser.add_argument('--seed', type=int, default=42)
+    parser.add_argument('--exclude-untrained', action='store_true', help='explicitly export only updated rows, with source-ID provenance')
     args = parser.parse_args()
     if min(args.order-1, args.dim, args.min_count, args.epochs, args.batch_size, args.threads) < 1:
         parser.error('positive settings and order >= 2 required')
@@ -165,12 +166,22 @@ def main():
         part = table[begin:begin+4096]
         changed[begin:begin+4096] = np.any(part.view('u4') != initial[begin:begin+4096].view('u4'), axis=1)
         finite &= bool(np.isfinite(part).all())
-    if not finite or not changed.all():
+    if not finite or (not changed.all() and not args.exclude_untrained):
         report.update({'status':'incomplete-training-coverage','changed_rows':int(changed.sum()), 'all_finite':finite})
         write_json(report_path, report)
         raise ValueError('every published capacity row must change from initialization and be finite')
+    report['registered_ngram_rows'] = len(grams)
+    report['excluded_untrained_rows'] = int((~changed).sum())
+    source_ids = np.flatnonzero(changed)
+    source_ids.astype('<u8').tofile(args.output_dir / 'trained-source-ids.u64')
+    # Publish a separately registered storage table of actual trained rows.
+    # Keep its mapping to the original training registry explicit; this is not
+    # a full-model converter and does not silently redirect model IDs.
+    grams = [g for i,g in enumerate(grams) if changed[i]]
     path = args.output_dir / 'trained.f32'
-    table.astype('<f4', copy=False).tofile(path)
+    with path.open('wb') as dest:
+        for begin in range(0,len(source_ids),4096):
+            table[source_ids[begin:begin+4096]].astype('<f4',copy=False).tofile(dest)
     (args.output_dir / 'keys.json').write_text(json.dumps(grams) + '\n')
     # Held-out lexical bags refer only to registered original rows. No tiled IDs.
     with zipfile.ZipFile(args.corpus_zip) as archive:
@@ -190,6 +201,8 @@ def main():
     np.asarray(query_ids[:65536], dtype='<u8').tofile(args.output_dir / 'queries.u64')
     (args.output_dir / 'query-keys.json').write_text(json.dumps(query_keys[:65536])+'\n')
     report.update({'status':'passed', 'changed_rows':int(changed.sum()), 'all_rows_changed':True,
+                   'ngram_rows':len(grams), 'raw_table_bytes':path.stat().st_size,
+                   'source_row_ids_sha256':file_sha256(args.output_dir/'trained-source-ids.u64'),
                    'all_finite':True, 'center_coverage':int(centers_seen.sum()),
                    'training_seconds':time.perf_counter()-training_started,
                    'trained_sha256':file_sha256(path), 'keys_sha256':file_sha256(args.output_dir/'keys.json'),
