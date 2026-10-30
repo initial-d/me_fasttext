@@ -683,11 +683,11 @@ void FastText::loadModel(std::istream& in) {
   model_->quant_ = quant_;
   model_->setQuantizePointer(qinput_, qoutput_, args_->qout);
 
-  //if (args_->model == model_name::sup) {
-  //  model_->setTargetCounts(dict_->getCounts(entry_type::label));
-  //} else {
-  //  model_->setTargetCounts(dict_->getCounts(entry_type::word));
-  //}
+  // HS inference needs its output tree. NS inference does not need a training
+  // negative-sampling table; both dense and native loaders omit that table.
+  if (args_->loss == loss_name::hs)
+    model_->setTargetCounts(dict_->getCounts(args_->model == model_name::sup
+                                           ? entry_type::label : entry_type::word));
 }
 
 void FastText::printInfo(real progress, real loss) {
@@ -1120,6 +1120,9 @@ void FastText::loadVectors(std::string filename) {
 
 void FastText::train(std::shared_ptr<Args> args) {
   input_backend_.reset();
+  quant_ = false;
+  qinput_.reset();
+  qoutput_.reset();
   args_ = args;
   dict_ = std::make_shared<Dictionary>(args_);
   if (args_->input == "-") {

@@ -17,9 +17,9 @@ class FixtureDictionary : public Dictionary {
 };
 class Fixture : public FastText {
  public:
-  explicit Fixture(int dim) {
+  explicit Fixture(int dim, bool hs=false) {
     args_=std::make_shared<Args>(); args_->dim=dim; args_->minn=2; args_->maxn=4;
-    args_->model=model_name::sup; args_->loss=loss_name::softmax;
+    args_->model=model_name::sup; args_->loss=hs ? loss_name::hs : loss_name::softmax;
     dict_=std::make_shared<FixtureDictionary>(args_);
     input_=std::make_shared<Matrix>(dict_->nwords()+dict_->nngrams(),dim);
     output_=std::make_shared<Matrix>(dict_->nlabels(),dim);
@@ -28,6 +28,7 @@ class Fixture : public FastText {
     for (int64_t i=0;i<output_->m_;++i)
       for(int j=0;j<dim;++j) output_->at(i,j)=float((i*7+j*3)%17-8)/19.f;
     model_=std::make_shared<Model>(input_,output_,args_,0); model_->quant_=false;
+    model_->setTargetCounts(dict_->getCounts(entry_type::label));
     for (int i=0;i<5;++i) model_->update(dict_->getSubwords("alpha"),i%2,.01f);
   }
 };
@@ -37,7 +38,7 @@ void same(const Vector& a,const Vector& b) {
 int main(int argc,char** argv) {
   assert(argc>=3);
   if(std::string(argv[1])=="create") {
-    Fixture model(std::stoi(argv[3])); model.saveModel(argv[2]); return 0;
+    Fixture model(std::stoi(argv[3]),argc>4 && std::string(argv[4])=="hs"); model.saveModel(argv[2]); return 0;
   }
   assert(argc==4);
   FastText dense,native; dense.loadModel(argv[2]); native.loadModel(argv[3]);

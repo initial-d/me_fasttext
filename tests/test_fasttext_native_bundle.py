@@ -52,10 +52,10 @@ class NativeFastTextTest(unittest.TestCase):
     def tearDownClass(cls):cls.tmp.cleanup()
 
     def test_real_model_all_rows_and_legacy_inference_are_exact(self):
-        for dim in (7,32):
-            with self.subTest(dim=dim),tempfile.TemporaryDirectory(dir=self.root) as tmp:
+        for dim,loss in ((7,'softmax'),(32,'softmax'),(7,'hs')):
+            with self.subTest(dim=dim,loss=loss),tempfile.TemporaryDirectory(dir=self.root) as tmp:
                 root=Path(tmp); model=root/'original.bin'
-                subprocess.run([str(self.executable),'create',str(model),str(dim)],cwd=root,check=True,capture_output=True)
+                subprocess.run([str(self.executable),'create',str(model),str(dim),loss],cwd=root,check=True,capture_output=True)
                 for mode in ('layout','exact'):
                     bundle=root/mode
                     report=export_fasttext_model(model,bundle,fasttext_binary=self.binary,
