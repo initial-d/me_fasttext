@@ -1,0 +1,57 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Some weights of EngramQwenForCausalLM were not initialized from the model checkpoint at /Users/duyimin/.cache/huggingface/hub/models--Qwen--Qwen3-0.6B/snapshots/c1899de289a04d12100db370d81485cdf75e47ca and are newly initialized: ['model.engram_layers.1.key_projs.0.bias', 'model.engram_layers.1.key_projs.0.weight', 'model.engram_layers.1.multi_head_embedding.embedding.weight', 'model.engram_layers.1.multi_head_embedding.offsets', 'model.engram_layers.1.norm1.0.weight', 'model.engram_layers.1.norm2.0.weight', 'model.engram_layers.1.short_conv.conv.weight', 'model.engram_layers.1.short_conv.norms.0.weight', 'model.engram_layers.1.value_proj.bias', 'model.engram_layers.1.value_proj.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+step 1/32: loss=4.482777
+step 2/32: loss=5.104952
+step 3/32: loss=5.282508
+step 4/32: loss=5.392684
+step 5/32: loss=5.664809
+step 6/32: loss=5.243408
+step 7/32: loss=5.677074
+step 8/32: loss=5.566960
+step 9/32: loss=6.118093
+step 10/32: loss=5.748915
+step 11/32: loss=4.503542
+step 12/32: loss=4.529226
+step 13/32: loss=5.597640
+step 14/32: loss=4.824859
+step 15/32: loss=5.844946
+step 16/32: loss=5.462224
+step 17/32: loss=6.103072
+step 18/32: loss=5.583623
+step 19/32: loss=5.223930
+step 20/32: loss=5.570213
+step 21/32: loss=6.148136
+step 22/32: loss=5.293234
+step 23/32: loss=5.380599
+step 24/32: loss=5.983365
+step 25/32: loss=5.430633
+step 26/32: loss=5.501898
+step 27/32: loss=5.191880
+step 28/32: loss=5.714190
+step 29/32: loss=5.200933
+step 30/32: loss=5.441249
+step 31/32: loss=4.397096
+step 32/32: loss=4.926625
+The tokenizer you are loading from '/Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/artifacts/tinyengram-qwen-20261030/checkpoint' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+Report: /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/artifacts/tinyengram-qwen-20261030/report.json
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/train_tinyengram_reference.py", line 206, in <module>
+    main()
+  File "/Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/train_tinyengram_reference.py", line 192, in main
+    name: verify(resident, mapped, encoded[name][:, :args.eval_tokens], args.decode_tokens)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/projects-push-20261028-venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/train_tinyengram_reference.py", line 55, in verify
+    torch.testing.assert_close(cached, reference, rtol=2e-4, atol=2e-5)
+  File "/tmp/projects-push-20261028-venv/lib/python3.12/site-packages/torch/testing/_comparison.py", line 1689, in assert_close
+    raise error_metas[0].to_error(msg)
+AssertionError: Tensor-likes are not close!
+
+Mismatched elements: 158 / 4861952 (0.0%)
+Greatest absolute difference: 4.538893699645996e-05 at index (0, 2, 41505) (up to 2e-05 allowed)
+Greatest relative difference: 0.1709374189376831 at index (0, 21, 103336) (up to 0.0002 allowed)

@@ -94,3 +94,49 @@ jobs:
         with:
           name: engram-factory-report
           path: artifacts/engram-factory/report.json
+
+  tinyengram-checkpoint:
+    name: TinyEngram checkpoint and cached Qwen decode
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned inference dependencies
+        run: |
+          python -m pip install numpy sympy loguru transformers==4.57.3 tokenizers==0.22.2 safetensors==0.7.0
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Fetch pinned TinyEngram source
+        run: |
+          mkdir -p /tmp/meft-tiny-source
+          curl -fL https://raw.githubusercontent.com/AutoArk/TinyEngram/317f23832aa8f8e382a0916ec469e81ba12b6dff/engram.py -o /tmp/meft-tiny-source/engram.py
+          curl -fL https://raw.githubusercontent.com/AutoArk/TinyEngram/317f23832aa8f8e382a0916ec469e81ba12b6dff/engram_qwen.py -o /tmp/meft-tiny-source/engram_qwen.py
+      - name: Verify conversion and decode with real Qwen classes
+        env:
+          MEFT_TINYENGRAM_SOURCE: /tmp/meft-tiny-source
+        run: python -m unittest tests.test_tinyengram_checkpoint -v
+
+  memory-wheels:
+    name: Native memory wheel (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build and install standalone native wheel
+        run: |
+          python -m pip wheel . --no-deps --wheel-dir /tmp/meft-wheels
+          python -m pip install --no-deps /tmp/meft-wheels/*.whl
+      - name: Verify installed package outside checkout without Torch
+        run: |
+          cd /tmp
+          python "$GITHUB_WORKSPACE/tools/check_memory_wheel.py"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: meft-memory-${{ matrix.os }}
+          path: /tmp/meft-wheels/*.whl

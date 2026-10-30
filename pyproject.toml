@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "meft-memory"
+version = "0.2.0"
+description = "Native lossless row storage and frozen learned n-gram memory adapters"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[project.urls]
+Repository = "https://github.com/initial-d/me_fasttext"
+
+[project.optional-dependencies]
+torch = ["torch", "numpy"]
+tinyengram = ["torch", "numpy", "sympy", "loguru", "transformers==4.57.3", "tokenizers==0.22.2", "safetensors==0.7.0"]
+
+[project.scripts]
+meft-tiny-export = "meft_memory._runtime.tinyengram_checkpoint:main"
+meft-tiny-verify = "meft_memory._runtime.verify_tinyengram_checkpoint:main"
+meft-tiny-train-reference = "meft_memory._runtime.train_tinyengram_reference:main"
+
+[tool.setuptools]
+packages = ["meft_memory", "meft_memory._runtime"]
+package-dir = {"meft_memory._runtime" = "tools"}

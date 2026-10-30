@@ -20,9 +20,11 @@ legacy C++ exporter also supports approximate row sharing.
 [**C / PyTorch integration**](docs/native_ngram_memory.md)
 · [**Trained-model quality checks**](docs/causal_lm_evidence_20261024/README.md)
 · [**Query latency and memory results**](docs/bag_compaction_evidence_20261026/README.md)
+· [**Installable TinyEngram/Qwen checkpoint backend**](docs/tinyengram_qwen_evidence_20261030/README.md)
 
-Current learned-model evidence uses small CPU reference models; Engram
-compatibility is checked through the official demonstration implementation.
+Learned-model evidence includes small CPU references and a trained memory branch
+on pretrained Qwen3-0.6B. Official Engram compatibility uses its demonstration;
+GPU serving remains unmeasured.
 
 This repository accompanies the paper [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).
 
@@ -88,7 +90,8 @@ interface proposal to executable code and source-linked evidence.
 The new reference preserves each original row's bytes and ID lookup. The legacy
 C++ `.z` exporter performs approximate row sharing and has known implementation
 limits. The new gather adapter is independent of that exporter. No trained
-Engram checkpoint or end-to-end model has been evaluated here. See the
+DeepSeek Engram checkpoint or GPU serving has been evaluated here. The separate
+TinyEngram/Qwen CPU checkpoint checks are linked above. See the
 [implementation audit](docs/engram_storage.md#legacy-export-audit).
 
 ## Help the project grow

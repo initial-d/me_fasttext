@@ -1,0 +1,222 @@
+{
+  "all_memory_rows_byte_exact": true,
+  "bundle_manifest_sha256": "cdb970a1d030be8956bdead60fd70b692b6ed830b3ea96f5cde5dd602d4c33a0",
+  "code_sha": "fcbc6766647869c5decad02c2e12dce9ef2c905b",
+  "command": "/tmp/projects-push-20261028-venv/bin/python -u -m tools.verify_tinyengram_checkpoint --checkpoint artifacts/tinyengram-qwen-20261030/checkpoint --bundle artifacts/tinyengram-qwen-20261030/bundle --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --upstream-dir /tmp/meft-tinyengram-source-20261030 --native-library build/libmeft_rows.dylib --training-report artifacts/tinyengram-qwen-20261030/report.json --report-out artifacts/tinyengram-qwen-20261030/verification-final.json --eval-tokens 32 --decode-tokens 8 --threads 4",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "elapsed_seconds": 16.928078250028193,
+  "environment": {
+    "device": "cpu",
+    "machine": "arm64",
+    "os": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "threads": 4,
+    "torch": "2.14.1",
+    "transformers": "4.57.3"
+  },
+  "limitations": [
+    "small trained branch on pretrained Qwen3; not convergence or upstream reproduction",
+    "only sampled validation/test tokens and fixed-length greedy decode",
+    "CPU eager inference; no CUDA offload, latency/RSS or compression-benefit measurement",
+    "full-vs-cached arithmetic can round differently; same-schedule equality isolates storage"
+  ],
+  "memory_off_backbone_rounding_control": {
+    "test": {
+      "cross_entropy_change": -4.76837158203125e-07,
+      "max_abs": 5.339086055755615e-05,
+      "mean_abs": 5.672939096257323e-06,
+      "top1_changed_fraction": 0.0
+    },
+    "validation": {
+      "cross_entropy_change": 9.5367431640625e-07,
+      "max_abs": 5.638599395751953e-05,
+      "mean_abs": 6.390847374859732e-06,
+      "top1_changed_fraction": 0.0
+    }
+  },
+  "resident_checkpoint_loading": {
+    "error_msgs": [],
+    "mismatched_keys": [],
+    "missing_keys": [],
+    "unexpected_keys": []
+  },
+  "source_file_hashes": {
+    "tinyengram_checkpoint.py": "0034943b105285a3a52a0e5c1801a86aafa044e9d330f771eb144b3816baff0f",
+    "train_tinyengram_reference.py": "bc8c2aa71dbd7ad9d0f99ed7075bd00b06b949fe25a201ad9d24df43d723015d",
+    "verify_tinyengram_checkpoint.py": "47c42b1e63e38133e192af73849fff9f48eccbe4100cd3ed90252b05e03263bc"
+  },
+  "status": "passed",
+  "tokenizer_roundtrip_ids_exact": true,
+  "training": {
+    "backbone_frozen": true,
+    "learning_rate": 0.001,
+    "losses": [
+      4.482776641845703,
+      5.104951858520508,
+      5.282508373260498,
+      5.392683506011963,
+      5.664808750152588,
+      5.243407726287842,
+      5.677073955535889,
+      5.566960334777832,
+      6.118093490600586,
+      5.748915195465088,
+      4.503541946411133,
+      4.529225826263428,
+      5.597639560699463,
+      4.824859142303467,
+      5.844945907592773,
+      5.462223529815674,
+      6.103071689605713,
+      5.58362340927124,
+      5.2239298820495605,
+      5.5702128410339355,
+      6.148136138916016,
+      5.293234348297119,
+      5.380599021911621,
+      5.983365058898926,
+      5.430633068084717,
+      5.501898288726807,
+      5.191879749298096,
+      5.714189529418945,
+      5.200932502746582,
+      5.441248893737793,
+      4.397095680236816,
+      4.926624774932861
+    ],
+    "memory_rows": {
+      "model.engram_layers.1.multi_head_embedding.embedding.weight": {
+        "changed": 636,
+        "total": 648
+      }
+    },
+    "optimizer": "Adam",
+    "parameter_changed": {
+      "model.engram_layers.1.key_projs.0.bias": true,
+      "model.engram_layers.1.key_projs.0.weight": true,
+      "model.engram_layers.1.multi_head_embedding.embedding.weight": true,
+      "model.engram_layers.1.norm1.0.weight": true,
+      "model.engram_layers.1.norm2.0.weight": true,
+      "model.engram_layers.1.short_conv.conv.weight": true,
+      "model.engram_layers.1.short_conv.norms.0.weight": true,
+      "model.engram_layers.1.value_proj.bias": true,
+      "model.engram_layers.1.value_proj.weight": true
+    },
+    "seed": 731,
+    "sequence_length": 32,
+    "steps": 32,
+    "total_parameters": 596128832,
+    "trainable_parameters": 78912
+  },
+  "training_report_sha256": "2327bd0657a6ba457b5ddc4790e0deab835f0f1ff68b008d13e222d492cc2a57",
+  "upstream_incremental_without_memory_history_control": {
+    "test": {
+      "cross_entropy_change": -0.047882080078125,
+      "max_abs": 2.0604190826416016,
+      "mean_abs": 0.1456272155046463,
+      "top1_changed_fraction": 0.15625
+    },
+    "validation": {
+      "cross_entropy_change": -0.00664520263671875,
+      "max_abs": 2.642381191253662,
+      "mean_abs": 0.1361243575811386,
+      "top1_changed_fraction": 0.125
+    }
+  },
+  "verification": {
+    "test": {
+      "cached_mapped_vs_resident_logits_byte_exact": true,
+      "cached_vs_full_forward_delta": {
+        "cross_entropy_change": 1.430511474609375e-06,
+        "max_abs": 6.67572021484375e-05,
+        "mean_abs": 5.534388037631288e-06,
+        "top1_changed_fraction": 0.0
+      },
+      "convolution_history_shapes": {
+        "1": [
+          1,
+          6,
+          1,
+          1024
+        ]
+      },
+      "decode_tokens": 8,
+      "full_forward": {
+        "logits_sha256": "1cd1de65a1d277712cc9f4718e05fbac9bde3a0d85c2739e39648d74c2b826b5",
+        "next_token_cross_entropy": 5.895005702972412,
+        "perplexity": 363.21893310546875,
+        "scored_tokens": 31
+      },
+      "full_forward_logits_byte_exact": true,
+      "generated_token_ids": [
+        [
+          346,
+          41318,
+          566,
+          198,
+          54667,
+          33562,
+          1091,
+          304,
+          279,
+          198,
+          14615,
+          13,
+          1260,
+          572,
+          264,
+          883
+        ]
+      ],
+      "greedy_cached_and_uncached_tokens_equal": true,
+      "memory_history_tokens": 2
+    },
+    "validation": {
+      "cached_mapped_vs_resident_logits_byte_exact": true,
+      "cached_vs_full_forward_delta": {
+        "cross_entropy_change": 0.0,
+        "max_abs": 5.245208740234375e-05,
+        "mean_abs": 6.0428055803640746e-06,
+        "top1_changed_fraction": 0.0
+      },
+      "convolution_history_shapes": {
+        "1": [
+          1,
+          6,
+          1,
+          1024
+        ]
+      },
+      "decode_tokens": 8,
+      "full_forward": {
+        "logits_sha256": "bb747e3d0d731a68860d3b825acb70287fb84390a9486e5f371bf437c0df3070",
+        "next_token_cross_entropy": 4.701569557189941,
+        "perplexity": 110.119873046875,
+        "scored_tokens": 31
+      },
+      "full_forward_logits_byte_exact": true,
+      "generated_token_ids": [
+        [
+          30,
+          364,
+          51,
+          285,
+          537,
+          3040,
+          2849,
+          8048,
+          11,
+          714,
+          279,
+          1899,
+          374,
+          8048,
+          11,
+          323
+        ]
+      ],
+      "greedy_cached_and_uncached_tokens_equal": true,
+      "memory_history_tokens": 2
+    }
+  }
+}

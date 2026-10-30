@@ -140,6 +140,15 @@ class NativeRows:
     def __init__(self, path, library=None, cache_bytes=0):
         library = library or os.environ.get("MEFT_ROWS_LIBRARY")
         if not library:
+            root = Path(__file__).resolve().parents[1]
+            for directory in (root / "_native", root / "meft_memory" / "_native"):
+                for filename in ("libmeft_rows.so", "libmeft_rows.dylib"):
+                    if (directory / filename).is_file():
+                        library = directory / filename
+                        break
+                if library:
+                    break
+        if not library:
             raise ValueError("set MEFT_ROWS_LIBRARY or pass a compiled library path")
         if type(cache_bytes) is not int or not 0 <= cache_bytes <= ctypes.c_size_t(-1).value:
             raise ValueError("cache bytes must fit a nonnegative size_t")
