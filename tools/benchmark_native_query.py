@@ -41,6 +41,7 @@ def worker(args):
               "fixture_sha256": file_sha256(args.fixture / "manifest.json"),
               "weight_sha256": manifest["weight_sha256"], "source_shape": manifest["shape"],
               "library_sha256": file_sha256(args.worker_library),
+              "cache_policy": args.worker_policy,
               "cache_budget_bytes": args.worker_cache, "chunk_rows": args.worker_chunk,
               "rss_before_open": rss(), "cases": []}
     if sys.platform == "darwin":
@@ -48,7 +49,7 @@ def worker(args):
     elif Path("/proc/cpuinfo").exists():
         report["cpu"] = next((line.split(":", 1)[1].strip() for line in Path("/proc/cpuinfo").read_text().splitlines()
                               if line.startswith("model name")), platform.machine())
-    with NativeRows(args.fixture / "native/table.men", args.worker_library) as store:
+    with NativeRows(args.fixture / "native/table.men", args.worker_library, cache_policy=args.worker_policy) as store:
         report["rss_after_open"] = rss()
         for case in manifest["cases"]:
             if args.positions and case["positions"] not in args.positions:
@@ -62,7 +63,7 @@ def worker(args):
             store.set_cache_bytes(args.worker_cache)  # independent empty-cache cases
 
             def gather(ids, output):
-                blocks = decodes = hits = 0
+                blocks = decodes = hits = row_hits = 0
                 for start in range(0, ids.numel(), args.worker_chunk):
                     count = min(args.worker_chunk, ids.numel() - start)
                     store.gather_into(ids.data_ptr() + start * ids.element_size(), count,
@@ -71,17 +72,29 @@ def worker(args):
                     blocks += store.last_block_reads
                     decodes += store.last_decompressions
                     hits += store.last_cache_hits
-                return blocks, decodes, hits
+                    row_hits += store.last_row_cache_hits
+                return blocks, decodes, hits, row_hits
 
             def check(item, output):
                 if hashlib.sha256(output.raw).hexdigest() != item["output_sha256"]:
                     raise AssertionError("native bytes changed: " + item["key"])
 
+            initial_samples, initial_counts = [], [0, 0, 0, 0]
+            for item, ids, output in queries:
+                start = time.perf_counter_ns()
+                counts = gather(ids, output)
+                initial_samples.append((time.perf_counter_ns() - start) / 1e6)
+                initial_counts = [a + b for a, b in zip(initial_counts, counts)]
+                check(item, output)
+            initial_trace = {"samples_ms": initial_samples, "p50_ms": statistics.median(initial_samples),
+                             "block_reads": initial_counts[0], "decompressions": initial_counts[1],
+                             "block_cache_hits": initial_counts[2], "row_cache_hits": initial_counts[3],
+                             "note": "Empty-cache chronological first pass; OS page cache is warm, not disk-cold."}
             for _ in range(args.warmup):
                 for item, ids, output in queries:
                     gather(ids, output)
                     check(item, output)
-            samples, cpu_samples, counters = [], [], [0, 0, 0]
+            samples, cpu_samples, counters = [], [], [0, 0, 0, 0]
             peak_cache = store.cache_bytes
             for _ in range(args.repeat):
                 for item, ids, output in queries:
@@ -96,6 +109,7 @@ def worker(args):
                     check(item, output)
             ordered = sorted(samples)
             report["cases"].append({"positions": case["positions"], "queries": len(samples),
+                                    "empty_cache_first_trace": initial_trace,
                                     "query_hashes": [{"ids": q[0]["ids_sha256"], "output": q[0]["output_sha256"]}
                                                      for q in queries],
                                     "p50_ms": statistics.median(samples),
@@ -103,6 +117,7 @@ def worker(args):
                                     "samples_ms": samples, "cpu_samples_ms": cpu_samples,
                                     "block_reads": counters[0], "decompressions": counters[1],
                                     "cache_hits": counters[2], "peak_cached_payload_bytes": peak_cache,
+                                    "row_cache_hits": counters[3],
                                     "all_outputs_byte_exact": True, "rss_after_case": rss()})
     report["status"] = "passed"
     args.worker_report.write_text(json.dumps(report, indent=2) + "\n")
@@ -112,6 +127,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--fixture", type=Path, required=True)
     parser.add_argument("--library", action="append", default=[], help="label=/absolute/library/path")
+    parser.add_argument("--row-library", action="append", default=[], help="label=/absolute/library/path; row-cache variant")
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--cache-bytes", default="0,1048576,4194304")
     parser.add_argument("--chunk-rows", default="256,8192")
@@ -119,6 +135,7 @@ def main():
     parser.add_argument("--warmup", type=int, default=3)
     parser.add_argument("--repeat", type=int, default=10)
     parser.add_argument("--worker-library", type=Path)
+    parser.add_argument("--worker-policy", choices=("blocks", "rows"), default="blocks")
     parser.add_argument("--worker-cache", type=int)
     parser.add_argument("--worker-chunk", type=int)
     parser.add_argument("--worker-report", type=Path)
@@ -132,9 +149,10 @@ def main():
         worker(args)
         return
     budgets, chunks = [int(n) for n in args.cache_bytes.split(",")], [int(n) for n in args.chunk_rows.split(",")]
-    if not args.output_dir or not args.library or min(budgets) < 0 or min(chunks) < 1:
+    if not args.output_dir or not (args.library or args.row_library) or min(budgets) < 0 or min(chunks) < 1:
         parser.error("libraries, fresh output directory, nonnegative budgets and positive chunks required")
-    libraries = [value.split("=", 1) for value in args.library]
+    libraries = [(*value.split("=", 1), "blocks") for value in args.library]
+    libraries += [(*value.split("=", 1), "rows") for value in args.row_library]
     labels = [value[0] for value in libraries]
     if len(set(labels)) != len(labels) or any(not label.replace("-", "").replace("_", "").isalnum() for label in labels):
         parser.error("unique alphanumeric library labels required")
@@ -151,11 +169,12 @@ def main():
                               "Fixed variant order, single worker, shared host; no statistical significance claim."], "variants": []}
     for chunk in chunks:
         for budget in budgets:
-            for label, library in libraries:
+            for label, library, policy in libraries:
                 target = args.output_dir / f"{label}-cache{budget}-chunk{chunk}.json"
                 cmd = [sys.executable, "-m", "tools.benchmark_native_query", "--fixture", str(args.fixture),
                        "--worker-library", str(Path(library).resolve()), "--worker-cache", str(budget),
                        "--worker-chunk", str(chunk), "--worker-report", str(target),
+                       "--worker-policy", policy,
                        "--warmup", str(args.warmup), "--repeat", str(args.repeat)]
                 if args.positions:
                     cmd.extend(["--positions", ",".join(map(str, args.positions))])

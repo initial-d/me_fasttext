@@ -72,7 +72,7 @@ class DeviceBenchmarkTest(unittest.TestCase):
         # Missing source weights are a stronger guard than recording load calls.
         (directory / "dense.pt").unlink()
         args = argparse.Namespace(worker="native", device="cpu", fixture=directory,
-            native_library=self.library, cache_bytes=0, query_chunk_rows=2, staging_rows=3,
+            native_library=self.library, cache_bytes=256, cache_policy="rows", query_chunk_rows=2, staging_rows=3,
             staging_slots=2, warmup=1, repeat=2, worker_report=directory / "result.json")
         with patch("torch.cuda.is_available", side_effect=AssertionError("CPU mode probed GPU")):
             self.assertEqual(worker(args), 0)

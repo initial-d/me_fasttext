@@ -115,7 +115,7 @@ class MappedMultiHeadEmbedding(nn.Module):
     """
 
     def __init__(self, output_dir, cache_blocks=4, native_library=None, native_cache_bytes=0,
-                 query_chunk_rows=65536):
+                 query_chunk_rows=65536, *, native_cache_policy="blocks"):
         super().__init__()
         if query_chunk_rows is not None and (type(query_chunk_rows) is not int or
                                             not 1 <= query_chunk_rows <= ctypes.c_size_t(-1).value):
@@ -124,7 +124,9 @@ class MappedMultiHeadEmbedding(nn.Module):
         output_dir = Path(output_dir).resolve()
         meta = json.loads((output_dir / "embedding.json").read_text())
         backend = meta.get("backend", "python")
-        if backend != "native" and native_cache_bytes:
+        if native_cache_policy not in ("blocks", "rows"):
+            raise ValueError("native cache policy must be blocks or rows")
+        if backend != "native" and (native_cache_bytes or native_cache_policy != "blocks"):
             raise ValueError("native_cache_bytes requires a native artifact")
         table_name = {"python": "table.mer", "native": "table.men"}.get(backend)
         if (meta["schema_version"] != 1 or meta["dtype"] not in DTYPES
@@ -142,6 +144,7 @@ class MappedMultiHeadEmbedding(nn.Module):
         self._cache_blocks = cache_blocks
         self._native_library = native_library
         self._native_cache_bytes = native_cache_bytes
+        self._native_cache_policy = native_cache_policy
         self.register_buffer("offsets", torch.tensor(offsets, dtype=torch.int64, device="cpu"))
         self.register_buffer("head_sizes", torch.tensor(meta["head_sizes"], dtype=torch.int64, device="cpu"))
         self._open_table()
@@ -155,7 +158,8 @@ class MappedMultiHeadEmbedding(nn.Module):
         path = Path(self._output_dir) / self.metadata["table_file"]
         if file_sha256(path) != self.metadata["artifact_sha256"]:
             raise ValueError("row-store checksum mismatch")
-        self.table = (NativeRows(path, self._native_library, self._native_cache_bytes)
+        self.table = (NativeRows(path, self._native_library, self._native_cache_bytes,
+                                 cache_policy=self._native_cache_policy)
                       if self.backend == "native" else MappedRows(path, self._cache_blocks))
         width = self.embedding_dim * torch.empty((), dtype=self.dtype).element_size()
         if (self.table.header["n_rows"] != self.metadata["shape"][0]
@@ -226,7 +230,7 @@ class MappedMultiHeadEmbedding(nn.Module):
 
 
 def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library=None, native_cache_bytes=0,
-                        query_chunk_rows=65536):
+                        query_chunk_rows=65536, *, native_cache_policy="blocks"):
     """Factory-compatible loader for one exported immutable CPU layer.
 
     Bind output_dir with functools.partial for Engram's proposed factory hook.
@@ -236,7 +240,7 @@ def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library
     if type(D) is not int or D <= 0:
         raise ValueError("embedding dimension must be a positive integer")
     mapped = MappedMultiHeadEmbedding(output_dir, cache_blocks, native_library, native_cache_bytes,
-                                     query_chunk_rows)
+                                     query_chunk_rows, native_cache_policy=native_cache_policy)
     if list(list_of_N) != mapped.metadata["head_sizes"] or D != mapped.embedding_dim:
         mapped.close()
         raise ValueError("exported head sizes/dimension differ from requesting Engram layer")
@@ -258,10 +262,12 @@ class MappedEmbedding(nn.Module):
     Compatible with callers that only invoke embedding(ids); model-specific
     wrappers that inspect .weight or perform training need separate integration.
     """
-    def __init__(self, output_dir, native_library=None, native_cache_bytes=0, query_chunk_rows=65536):
+    def __init__(self, output_dir, native_library=None, native_cache_bytes=0, query_chunk_rows=65536,
+                 *, native_cache_policy="blocks"):
         super().__init__()
         self.gather = MappedMultiHeadEmbedding(output_dir, native_library=native_library,
                                              native_cache_bytes=native_cache_bytes,
+                                             native_cache_policy=native_cache_policy,
                                              query_chunk_rows=query_chunk_rows)
         if self.gather.num_heads != 1:
             self.gather.close()

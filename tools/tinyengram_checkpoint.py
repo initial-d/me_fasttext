@@ -458,7 +458,8 @@ class TinyEngramModel(nn.Module):
 
 def load_tinyengram_checkpoint(output_dir, *, upstream_dir, native_library=None,
                               native_cache_bytes=0, query_chunk_rows=65536, device="cpu",
-                              prefetch_memory=False, staging_rows=65536, staging_slots=2):
+                              prefetch_memory=False, staging_rows=65536, staging_slots=2,
+                              native_cache_policy="blocks"):
     """Construct on meta, assign original tensors, optionally place the backbone.
 
     Does not allocate original dense memory tables. File checksums scan the whole
@@ -495,6 +496,7 @@ def load_tinyengram_checkpoint(output_dir, *, upstream_dir, native_library=None,
             sizes = [n for group in layer.hash_mapping.vocab_size_across_layers[int(layer_id)] for n in group]
             mapped = MappedMultiHeadEmbedding(_safe_path(root, entry["path"]), native_library=native_library,
                                              native_cache_bytes=native_cache_bytes,
+                                             native_cache_policy=native_cache_policy,
                                              query_chunk_rows=query_chunk_rows)
             opened.append(mapped)
             if (sizes != entry["head_sizes"] or sizes != mapped.metadata["head_sizes"]
@@ -525,7 +527,7 @@ def load_tinyengram_checkpoint(output_dir, *, upstream_dir, native_library=None,
                 staged = StagedMultiHeadEmbedding(
                     old._output_dir, device=target, native_library=native_library,
                     native_cache_bytes=native_cache_bytes, query_chunk_rows=query_chunk_rows,
-                    staging_rows=staging_rows, staging_slots=staging_slots,
+                    staging_rows=staging_rows, staging_slots=staging_slots, native_cache_policy=native_cache_policy,
                 )
                 opened.append(staged)
                 layer.multi_head_embedding = staged

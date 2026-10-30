@@ -92,13 +92,13 @@ class TinyEngramCheckpointTest(unittest.TestCase):
         return load_tinyengram_checkpoint(path, upstream_dir=SOURCE, native_library=self.library,
                                          native_cache_bytes=2048, query_chunk_rows=3, **kwargs)
 
-    def check_staged_model(self, device):
+    def check_staged_model(self, device, cache_policy="blocks"):
         import copy
         from tools.tinyengram_checkpoint import TinyEngramModel
         from tools.device_row_adapter import StagedMultiHeadEmbedding
         resident = TinyEngramModel(copy.deepcopy(self.original).to(device)).eval()
         with self.load(self.export(), device=device, prefetch_memory=True,
-                       staging_rows=3, staging_slots=2) as mapped, torch.inference_mode():
+                       staging_rows=3, staging_slots=2, native_cache_policy=cache_policy) as mapped, torch.inference_mode():
             reference = resident(self.ids).logits
             self.assertTrue(torch.equal(mapped(self.ids).logits.cpu().view(torch.uint8),
                                         reference.cpu().view(torch.uint8)))
@@ -119,6 +119,13 @@ class TinyEngramCheckpointTest(unittest.TestCase):
             b = resident.generate(self.ids[:, :6], max_new_tokens=4)
             self.assertTrue(torch.equal(a, b))
             self.assertEqual(a.device.type, "cpu")
+
+    def test_cpu_row_cache_full_and_cached_logits(self):
+        self.check_staged_model("cpu", "rows")
+
+    @unittest.skipUnless(torch is not None and torch.cuda.is_available(), "real CUDA required")
+    def test_cuda_row_cache_full_and_cached_logits(self):
+        self.check_staged_model("cuda", "rows")
 
     def test_staged_cpu_model_prefetch_preserves_full_and_cached_logits(self):
         self.check_staged_model("cpu")

@@ -82,7 +82,7 @@ class StagedMultiHeadEmbedding(nn.Module):
     """
     def __init__(self, output_dir, *, device="cuda", native_library=None,
                  native_cache_bytes=0, query_chunk_rows=65536,
-                 staging_rows=65536, staging_slots=2):
+                 staging_rows=65536, staging_slots=2, native_cache_policy="blocks"):
         super().__init__()
         for name, value in (("staging_rows", staging_rows), ("staging_slots", staging_slots)):
             if type(value) is not int or value <= 0:
@@ -90,7 +90,7 @@ class StagedMultiHeadEmbedding(nn.Module):
         self.device = _device(device)
         self.gather = MappedMultiHeadEmbedding(
             output_dir, native_library=native_library, native_cache_bytes=native_cache_bytes,
-            query_chunk_rows=query_chunk_rows,
+            query_chunk_rows=query_chunk_rows, native_cache_policy=native_cache_policy,
         )
         if self.gather.backend != "native":
             self.gather.close()

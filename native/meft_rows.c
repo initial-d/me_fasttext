@@ -20,7 +20,7 @@
 #define HEADER 56u
 #define DESC 32u
 struct cached_block {
-    uint64_t block, query;
+    uint64_t key, query; /* key is a block ID, or a forwarded row ID in row mode. */
     size_t size;
     struct cached_block *hash_next, *previous, *next;
     unsigned char bytes[];
@@ -31,7 +31,8 @@ struct meft_rows {
     uint64_t nrows, width, unique, block_rows, nblocks, desc_start;
     unsigned char *scratch;
     size_t scratch_capacity;
-    uint64_t last_blocks, last_decodes, last_hits;
+    uint64_t last_blocks, last_decodes, last_hits, last_row_hits;
+    int cache_rows;
     size_t cache_budget, cache_used, cache_count;
     size_t cache_buckets;
     uint64_t cache_query;
@@ -111,6 +112,7 @@ uint64_t meft_rows_width(const meft_rows *s) { return s ? s->width : 0; }
 uint64_t meft_rows_last_block_reads(const meft_rows *s) { return s ? s->last_blocks : 0; }
 uint64_t meft_rows_last_decompressions(const meft_rows *s) { return s ? s->last_decodes : 0; }
 uint64_t meft_rows_last_cache_hits(const meft_rows *s) { return s ? s->last_hits : 0; }
+uint64_t meft_rows_last_row_cache_hits(const meft_rows *s) { return s ? s->last_row_hits : 0; }
 uint64_t meft_rows_cache_bytes(const meft_rows *s) { return s ? s->cache_used : 0; }
 int meft_rows_set_cache_bytes(meft_rows *s, size_t budget) {
     if (!s) return -1;
@@ -124,6 +126,12 @@ int meft_rows_set_cache_bytes(meft_rows *s, size_t budget) {
     s->cache_buckets = 0;
     s->cache_count = s->cache_used = 0;
     s->cache_budget = budget;
+    return 0;
+}
+int meft_rows_set_cache_policy(meft_rows *s, int rows) {
+    if (!s || (rows != 0 && rows != 1)) return -1;
+    meft_rows_set_cache_bytes(s, s->cache_budget);
+    s->cache_rows = rows;
     return 0;
 }
 static size_t cache_bucket(uint64_t block, size_t buckets) {
@@ -153,30 +161,42 @@ static void cache_resize(meft_rows *s) {
     struct cached_block **buckets = calloc(count, sizeof(*buckets));
     if (!buckets) return; /* Keep the existing index on optional allocation failure. */
     for (struct cached_block *entry = s->newest; entry; entry = entry->next) {
-        size_t bucket = cache_bucket(entry->block, count);
+        size_t bucket = cache_bucket(entry->key, count);
         entry->hash_next = buckets[bucket]; buckets[bucket] = entry;
     }
     free(s->cache); s->cache = buckets; s->cache_buckets = count;
 }
-static const unsigned char *cache_find(meft_rows *s, uint64_t block) {
+static struct cached_block *cache_lookup(meft_rows *s, uint64_t key) {
     if (!s->cache_buckets) return NULL;
-    for (struct cached_block *entry = s->cache[cache_bucket(block, s->cache_buckets)];
+    for (struct cached_block *entry = s->cache[cache_bucket(key, s->cache_buckets)];
          entry; entry = entry->hash_next) {
-        if (entry->block == block) {
-            if (entry != s->newest) { cache_unlink(s, entry); cache_promote(s, entry); }
-            if (entry->query != s->cache_query) {
-                entry->query = s->cache_query; ++s->last_hits;
-            }
-            return entry->bytes;
-        }
+        if (entry->key == key) return entry;
     }
     return NULL;
 }
-static void cache_insert(meft_rows *s, uint64_t block, size_t size) {
+static const unsigned char *cache_find(meft_rows *s, uint64_t key) {
+    struct cached_block *entry = cache_lookup(s, key);
+    if (!entry) return NULL;
+    if (entry != s->newest) { cache_unlink(s, entry); cache_promote(s, entry); }
+    if (entry->query != s->cache_query) {
+        entry->query = s->cache_query;
+        if (s->cache_rows) ++s->last_row_hits;
+        else ++s->last_hits;
+    }
+    return entry->bytes;
+}
+static void cache_insert(meft_rows *s, uint64_t key, size_t size, const unsigned char *bytes) {
     if (size > s->cache_budget || size > SIZE_MAX - sizeof(struct cached_block)) return;
+    /* Repeated rows in a freshly decoded group must not create duplicate keys
+     * or count as hits on data that was absent at query start. */
+    struct cached_block *existing = s->cache_rows ? cache_lookup(s, key) : NULL;
+    if (existing) {
+        if (existing != s->newest) { cache_unlink(s, existing); cache_promote(s, existing); }
+        return;
+    }
     while (s->oldest && s->cache_used > s->cache_budget - size) {
         struct cached_block *old = s->oldest;
-        struct cached_block **link = s->cache + cache_bucket(old->block, s->cache_buckets);
+        struct cached_block **link = s->cache + cache_bucket(old->key, s->cache_buckets);
         while (*link != old) link = &(*link)->hash_next;
         *link = old->hash_next;
         cache_unlink(s, old); --s->cache_count;
@@ -189,9 +209,9 @@ static void cache_insert(meft_rows *s, uint64_t block, size_t size) {
     if (!s->cache_buckets) return;
     struct cached_block *copy = malloc(sizeof(*copy) + size);
     if (!copy) return;
-    copy->block = block; copy->size = size; copy->query = 0;
-    memcpy(copy->bytes, s->scratch, size);
-    size_t bucket = cache_bucket(block, s->cache_buckets);
+    copy->key = key; copy->size = size; copy->query = 0;
+    memcpy(copy->bytes, bytes, size);
+    size_t bucket = cache_bucket(key, s->cache_buckets);
     copy->hash_next = s->cache[bucket]; s->cache[bucket] = copy;
     cache_promote(s, copy);
     ++s->cache_count;
@@ -204,7 +224,7 @@ static int order(const void *a, const void *b) {
 int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
                      void *out, size_t outbytes, char *err, size_t cap) {
     if (!s) return fail(err, cap, "null store");
-    s->last_blocks = s->last_decodes = s->last_hits = 0;
+    s->last_blocks = s->last_decodes = s->last_hits = s->last_row_hits = 0;
     if (count > SIZE_MAX / s->width || count * s->width > outbytes ||
         count > SIZE_MAX / sizeof(struct request) || (count && (!ids || !out)))
         return fail(err, cap, "invalid output capacity or query size");
@@ -230,10 +250,11 @@ int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
          * call. Fully cached queries skip sorting and decompression entirely. */
         size_t pending = 0;
         for (size_t i = 0; i < count; ++i) {
-            const unsigned char *bytes = cache_find(s, requests[i].block);
+            uint64_t key = s->cache_rows ? requests[i].block * s->block_rows + requests[i].within : requests[i].block;
+            const unsigned char *bytes = cache_find(s, key);
             if (bytes) {
                 memcpy((unsigned char *)out + requests[i].position * s->width,
-                       bytes + requests[i].within * s->width, (size_t)s->width);
+                       bytes + (s->cache_rows ? 0 : requests[i].within * s->width), (size_t)s->width);
             } else requests[pending++] = requests[i];
         }
         count = pending;
@@ -276,11 +297,14 @@ int meft_rows_gather(meft_rows *s, const uint64_t *ids, size_t count,
                 }
             }
             bytes = s->scratch; ++s->last_decodes;
-            cache_insert(s, block, (size_t)raw);
+            if (!s->cache_rows) cache_insert(s, block, (size_t)raw, bytes);
         }
         do {
+            const unsigned char *row = bytes + requests[i].within * s->width;
             memcpy((unsigned char *)out + requests[i].position * s->width,
-                   bytes + requests[i].within * s->width, (size_t)s->width);
+                   row, (size_t)s->width);
+            if (codec && s->cache_rows)
+                cache_insert(s, block * s->block_rows + requests[i].within, (size_t)s->width, row);
             ++i;
         } while (i < count && requests[i].block == block);
     }
@@ -293,23 +317,23 @@ int meft_rows_gather_chunked(meft_rows *s, const uint64_t *ids, size_t count,
                              void *out, size_t outbytes, size_t max_query_rows,
                              char *err, size_t cap) {
     if (!s) return fail(err, cap, "null store");
-    s->last_blocks = s->last_decodes = s->last_hits = 0;
+    s->last_blocks = s->last_decodes = s->last_hits = s->last_row_hits = 0;
     if (!max_query_rows || count > SIZE_MAX / s->width ||
         count * s->width > outbytes || count > SIZE_MAX / sizeof(uint64_t) ||
         (count && (!ids || !out)))
         return fail(err, cap, "invalid output capacity, query size or chunk limit");
-    uint64_t blocks = 0, decodes = 0, hits = 0;
+    uint64_t blocks = 0, decodes = 0, hits = 0, row_hits = 0;
     int status = 0;
     for (size_t start = 0; start < count;) {
         size_t n = count - start < max_query_rows ? count - start : max_query_rows;
         status = meft_rows_gather(s, ids + start, n,
                                   (unsigned char *)out + start * (size_t)s->width,
                                   n * (size_t)s->width, err, cap);
-        blocks += s->last_blocks; decodes += s->last_decodes; hits += s->last_hits;
+        blocks += s->last_blocks; decodes += s->last_decodes; hits += s->last_hits; row_hits += s->last_row_hits;
         if (status) break;
         start += n;
     }
-    s->last_blocks = blocks; s->last_decodes = decodes; s->last_hits = hits;
+    s->last_blocks = blocks; s->last_decodes = decodes; s->last_hits = hits; s->last_row_hits = row_hits;
     return status;
 }
 
@@ -346,7 +370,7 @@ static int embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
                            float *out, size_t out_floats, char *err, size_t cap,
                            int weighted, const unsigned char *weights, size_t weights_bytes) {
     if (!s) return fail(err, cap, "null store");
-    s->last_blocks = s->last_decodes = s->last_hits = 0;
+    s->last_blocks = s->last_decodes = s->last_hits = s->last_row_hits = 0;
     size_t element = dtype == 1 ? 4 : 2;
     if (sizeof(float) != 4 || FLT_RADIX != 2 || FLT_MANT_DIG != 24 ||
         dtype < 1 || dtype > 3 || (mean != 0 && mean != 1) || !chunk_rows ||
@@ -380,7 +404,7 @@ static int embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
         free(rows); free(sum);
         return fail(err, cap, "allocation failed");
     }
-    uint64_t blocks = 0, decodes = 0, hits = 0;
+    uint64_t blocks = 0, decodes = 0, hits = 0, row_hits = 0;
     int status = 0;
     size_t bag = 0, observed = 0;
     /* Coalesce blocks across bag boundaries, then consume restored ID order.
@@ -389,7 +413,7 @@ static int embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
     for (size_t start = 0; start < count;) {
         size_t n = count - start < staged ? count - start : staged;
         status = meft_rows_gather(s, ids + start, n, rows, n * (size_t)s->width, err, cap);
-        blocks += s->last_blocks; decodes += s->last_decodes; hits += s->last_hits;
+        blocks += s->last_blocks; decodes += s->last_decodes; hits += s->last_hits; row_hits += s->last_row_hits;
         if (status) goto done_bags;
         for (size_t i = 0; i < n; ++i) {
             while (bag < bags && offsets[bag + 1] <= start + i) {
@@ -414,7 +438,7 @@ static int embedding_bag(meft_rows *s, const uint64_t *ids, size_t count,
         memset(sum, 0, dim * sizeof(*sum));
     }
 done_bags:
-    s->last_blocks = blocks; s->last_decodes = decodes; s->last_hits = hits;
+    s->last_blocks = blocks; s->last_decodes = decodes; s->last_hits = hits; s->last_row_hits = row_hits;
     free(rows); free(sum);
     return status;
 }

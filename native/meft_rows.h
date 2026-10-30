@@ -21,6 +21,12 @@ uint64_t meft_rows_width(const meft_rows *store);
  * with cached blocks; there is no fixed entry cap or full-table allocation.
  * Metadata, scratch and query locations are additional memory. Single-worker only. */
 int meft_rows_set_cache_bytes(meft_rows *store, size_t budget);
+/* Cache policy: 0=decoded blocks (default), 1=queried rows from compressed
+ * blocks. Changing policy clears entries and retains the byte budget. Rows
+ * use forwarded IDs, so aliases share one byte-exact cache entry. Row mode
+ * favors sparse repeated queries; it does not avoid first-miss block decoding.
+ * Returns -1 for null store or invalid policy. No new artifact format. */
+int meft_rows_set_cache_policy(meft_rows *store, int rows);
 uint64_t meft_rows_cache_bytes(const meft_rows *store);
 /* output must contain count * width bytes and must not overlap ids.
  * Failure may leave partial output; ignore it unless return value is zero.
@@ -66,6 +72,9 @@ int meft_rows_embedding_bag_weighted(meft_rows *store, const uint64_t *ids, size
 uint64_t meft_rows_last_block_reads(const meft_rows *store);
 uint64_t meft_rows_last_decompressions(const meft_rows *store);
 uint64_t meft_rows_last_cache_hits(const meft_rows *store);
+/* Distinct cached forwarded rows hit per gather, summed across chunk/bag calls.
+ * Block hits remain separate and are zero in row mode (and vice versa). */
+uint64_t meft_rows_last_row_cache_hits(const meft_rows *store);
 #ifdef __cplusplus
 }
 #endif

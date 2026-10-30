@@ -137,7 +137,9 @@ def pack_native(source, output, row_bytes, block_rows=256, deduplicate=True,
 
 class NativeRows:
     """Single-worker C handle. Library path is explicit or MEFT_ROWS_LIBRARY."""
-    def __init__(self, path, library=None, cache_bytes=0):
+    def __init__(self, path, library=None, cache_bytes=0, *, cache_policy="blocks"):
+        if cache_policy not in ("blocks", "rows"):
+            raise ValueError("cache policy must be blocks or rows")
         library = library or os.environ.get("MEFT_ROWS_LIBRARY")
         if not library:
             root = Path(__file__).resolve().parents[1]
@@ -171,9 +173,13 @@ class NativeRows:
         self.header = {"n_rows": self.lib.meft_rows_count(self.handle),
                        "row_bytes": self.lib.meft_rows_width(self.handle)}
         # Keep zero-budget loading compatible with older compiled libraries.
-        if cache_bytes:
+        self.cache_policy = "blocks"
+        if cache_bytes or cache_policy != "blocks":
             try:
-                self.set_cache_bytes(cache_bytes)
+                if cache_bytes:
+                    self.set_cache_bytes(cache_bytes)
+                if cache_policy != "blocks":
+                    self.set_cache_policy(cache_policy)
             except Exception:
                 self.close()
                 raise
@@ -200,6 +206,21 @@ class NativeRows:
         method.restype = ctypes.c_uint64
         return method(self.handle)
 
+    def set_cache_policy(self, policy):
+        if not self.handle:
+            raise ValueError("row store is closed")
+        if policy not in ("blocks", "rows"):
+            raise ValueError("cache policy must be blocks or rows")
+        try:
+            setter = self.lib.meft_rows_set_cache_policy
+        except AttributeError as error:
+            raise ValueError("row-cache policy requires rebuilding the row library") from error
+        setter.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        setter.restype = ctypes.c_int
+        if setter(self.handle, int(policy == "rows")):
+            raise ValueError("cannot configure native cache policy")
+        self.cache_policy = policy
+
     @property
     def cache_bytes(self):
         return self._counter("cache_bytes")
@@ -207,6 +228,14 @@ class NativeRows:
     @property
     def last_cache_hits(self):
         return self._counter("last_cache_hits")
+
+    @property
+    def last_row_cache_hits(self):
+        if not self.handle:
+            raise ValueError("row store is closed")
+        if not hasattr(self.lib, "meft_rows_last_row_cache_hits"):
+            return 0  # Older block-only libraries remain supported.
+        return self._counter("last_row_cache_hits")
 
     def gather_into(self, ids_address, count, output_address, output_bytes, *, max_query_rows=None):
         if not self.handle:
