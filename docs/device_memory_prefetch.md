@@ -6,13 +6,18 @@ on CPU. Only the queried vectors are copied to the target device, without
 changing their dtype or bytes. The backbone, gates, KV cache and convolution
 history live on that device; raw-token history remains on CPU.
 
-CPU and synchronous MPS checks pass locally. **CUDA is experimental and has
-not been run on CUDA hardware.** The tests exercise pinned staging, copy events,
-non-default consumer streams, allocation lifetime and partial-failure cleanup
-when a real CUDA device is available. Skips do not constitute GPU validation.
+CPU and synchronous MPS checks pass locally. **CUDA correctness now passes on a
+real A100 with PyTorch 2.11.0+cu130**, including pinned staging, copy events,
+non-default consumer streams, allocation lifetime and partial-failure cleanup.
+[The trained Qwen CUDA replay](cuda_a100_evidence_20261030/README.md) preserves
+same-schedule full/cached logits and fixed greedy tokens byte for byte.
+Shared-card correctness does not establish latency, throughput or large-table
+memory savings. The [three-baseline benchmark](device_gather_benchmark.md) is
+prepared but CUDA timing awaits an idle GPU. Skips do not constitute validation.
 
 The [trained Qwen replay reports](device_memory_evidence_20261030/README.md)
-record MPS, installed-wheel CPU and the explicit CUDA blocker.
+record MPS, installed-wheel CPU and the earlier local CUDA blocker, retained as
+historical evidence. The later A100 result is linked above.
 
 ## Use a trained TinyEngram bundle
 

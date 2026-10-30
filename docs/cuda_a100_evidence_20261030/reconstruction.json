@@ -1,0 +1,7 @@
+{
+  "original_checkpoint_tensors": 320,
+  "base_model": "/llm-align/open_models/Qwen3/Qwen3-0.6B",
+  "status": "passed",
+  "every_saved_tensor_matches_original": true,
+  "elapsed_seconds": 36.00433844001964
+}

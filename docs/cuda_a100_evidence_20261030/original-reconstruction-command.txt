@@ -1,0 +1,71 @@
+set -euo pipefail
+MEFT_GPU_WORK=/llm-align/duyimin/meft-cuda-20261030
+cd "$MEFT_GPU_WORK/source"
+export CUDA_VISIBLE_DEVICES=""
+export OMP_NUM_THREADS=4
+export USE_TF=0
+"$MEFT_GPU_WORK/compat/bin/python" -u - <<'PY' > "$MEFT_GPU_WORK/results/reconstruction.txt" 2>&1
+import hashlib,json,shutil,sys,time
+from pathlib import Path
+import torch
+from safetensors import safe_open
+from transformers import Qwen3Config
+from tools.tinyengram_checkpoint import load_upstream, export_tinyengram_checkpoint
+
+root=Path('/llm-align/duyimin/meft-cuda-20261030'); delta=root/'delta'; checkpoint=root/'checkpoint'
+base=Path('/llm-align/open_models/Qwen3/Qwen3-0.6B')
+expected=json.loads((delta/'expected-tensors.json').read_text())
+report={'original_checkpoint_tensors':len(expected),'base_model':str(base),'status':'running'}
+started=time.perf_counter()
+torch.set_num_threads(4)
+try:
+    engram,qwen=load_upstream(root/'upstream')
+    values=json.loads((delta/'engram_config.json').read_text())
+    values['tokenizer_name_or_path']=str(delta/'tokenizer')
+    engram_config=engram.EngramConfig(**values)
+    config=Qwen3Config.from_dict(json.loads((delta/'config.json').read_text()))
+    config._attn_implementation='eager'
+    with torch.device('meta'):
+        model=qwen.EngramQwenForCausalLM(config,engram_cfg=engram_config)
+    model.model.rotary_emb=type(model.model.rotary_emb)(config=config,device='cpu')
+    with safe_open(base/'model.safetensors',framework='pt',device='cpu') as source, \
+         safe_open(delta/'branch.safetensors',framework='pt',device='cpu') as branch:
+        for key,meta in expected.items():
+            tensor=(branch if key.startswith('model.engram_layers.') else source).get_tensor(key)
+            tensor=tensor.to(getattr(torch,meta['dtype'].removeprefix('torch.'))).contiguous()
+            digest=hashlib.sha256(tensor.view(torch.uint8).numpy().tobytes()).hexdigest()
+            if list(tensor.shape)!=meta['shape'] or digest!=meta['sha256']:
+                raise AssertionError('shared base + trained branch differs at '+key)
+            model.load_state_dict({key:tensor},strict=False,assign=True)
+    model.tie_weights()
+    assert not any(t.is_meta for t in (*model.parameters(),*model.buffers()))
+    model.requires_grad_(False).eval()
+    for key,meta in expected.items():
+        tensor=model.state_dict()[key].contiguous()
+        assert hashlib.sha256(tensor.view(torch.uint8).numpy().tobytes()).hexdigest()==meta['sha256'],key
+    model.save_pretrained(checkpoint,safe_serialization=True)
+    for name in ('engram_config.json','trainer_state.json','generation_config.json'):
+        if (delta/name).is_file():
+            shutil.copyfile(delta/name,checkpoint/name)
+    for path in (delta/'tokenizer').iterdir():
+        if path.is_file():
+            shutil.copyfile(path,checkpoint/path.name)
+    with safe_open(checkpoint/'model.safetensors',framework='pt',device='cpu') as saved:
+        assert set(saved.keys())==set(expected)
+        for key,meta in expected.items():
+            tensor=saved.get_tensor(key).contiguous()
+            assert hashlib.sha256(tensor.view(torch.uint8).numpy().tobytes()).hexdigest()==meta['sha256'],key
+    report['every_saved_tensor_matches_original']=True
+    del model
+    export_tinyengram_checkpoint(checkpoint,root/'bundle',upstream_dir=root/'upstream',
+                                block_rows=64,predictor='xor')
+    report['status']='passed'
+except BaseException as error:
+    report.update(status='failed',error=repr(error))
+    raise
+finally:
+    report['elapsed_seconds']=time.perf_counter()-started
+    (root/'results/reconstruction.json').write_text(json.dumps(report,indent=2)+'\n')
+    print(json.dumps(report,indent=2),flush=True)
+PY
+cat "$MEFT_GPU_WORK/results/reconstruction.txt"

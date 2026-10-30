@@ -1,0 +1,87 @@
+{
+  "time_utc": "2026-10-30T07:05:27.014383+00:00",
+  "gpus": [
+    {
+      "index": 0,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "total_mib": 81920,
+      "used_mib": 80071,
+      "free_mib": 979,
+      "utilization_percent": 100,
+      "driver": "535.54.03"
+    },
+    {
+      "index": 1,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "total_mib": 81920,
+      "used_mib": 75433,
+      "free_mib": 5617,
+      "utilization_percent": 100,
+      "driver": "535.54.03"
+    },
+    {
+      "index": 2,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "total_mib": 81920,
+      "used_mib": 77673,
+      "free_mib": 3377,
+      "utilization_percent": 100,
+      "driver": "535.54.03"
+    },
+    {
+      "index": 3,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "total_mib": 81920,
+      "used_mib": 74773,
+      "free_mib": 6277,
+      "utilization_percent": 97,
+      "driver": "535.54.03"
+    },
+    {
+      "index": 4,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "total_mib": 81920,
+      "used_mib": 79253,
+      "free_mib": 1797,
+      "utilization_percent": 100,
+      "driver": "535.54.03"
+    },
+    {
+      "index": 5,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "total_mib": 81920,
+      "used_mib": 77897,
+      "free_mib": 3153,
+      "utilization_percent": 94,
+      "driver": "535.54.03"
+    },
+    {
+      "index": 6,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "total_mib": 81920,
+      "used_mib": 79155,
+      "free_mib": 1895,
+      "utilization_percent": 63,
+      "driver": "535.54.03"
+    },
+    {
+      "index": 7,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "total_mib": 81920,
+      "used_mib": 80273,
+      "free_mib": 777,
+      "utilization_percent": 100,
+      "driver": "535.54.03"
+    }
+  ],
+  "cpu": {
+    "Architecture:": "x86_64",
+    "CPU(s):": "256",
+    "Model name:": "AMD EPYC 7742 64-Core Processor",
+    "Thread(s) per core:": "2",
+    "Core(s) per socket:": "64",
+    "Socket(s):": "2"
+  },
+  "performance_status": "waiting_for_idle_gpu_per_user_instruction",
+  "note": "No benchmark speed conclusions from shared GPU correctness runs"
+}

@@ -1,0 +1,392 @@
+{
+  "all_native_rows_byte_exact": true,
+  "cases": [
+    {
+      "positions": 1,
+      "queries": [
+        {
+          "distinct_rows": 6,
+          "ids_sha256": "f3ff14953b11aa8fb67213647ff386700ca28def86b493df2d262828292ad31d",
+          "key": "positions-1/query-0",
+          "output_sha256": "7f2d11194db8f23dd4671da22133073ecd9c9403ae9bd5a935f0d604c575da1c",
+          "shape": [
+            7,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 7,
+          "ids_sha256": "0663ff36de9eb68acd42fa4b0c94ce40d4e33d61b72153d2c9d9071b95ae3180",
+          "key": "positions-1/query-1",
+          "output_sha256": "fd30a47d8fb26d19fe02000d6d914fd2013fc9d8875ceda015fa38033ac2d758",
+          "shape": [
+            7,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 7,
+          "ids_sha256": "ad2b91e9b279e4e4dc8e227dbc11f53eac79e6dcef8019c3ebbdf679ca1be746",
+          "key": "positions-1/query-2",
+          "output_sha256": "9f4f3371af0a993a1dbff94bbfa1f36fbb9d5cd83c4a3459f6877abfdceb5d8f",
+          "shape": [
+            7,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 7,
+          "ids_sha256": "4e017f5d4117c2bc23decab6b96d8a845ccdef5fe11f3d1695e46d1b63a848da",
+          "key": "positions-1/query-3",
+          "output_sha256": "39f7fce4ffddac5707d67eafbe1f9b3f01937b8050ffb9ab8fca2e97f63eb3d9",
+          "shape": [
+            7,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 6,
+          "ids_sha256": "d3f715375a17787ba01a4fec1af50e2fa1f06a6599cc626b98726840ed9d0124",
+          "key": "positions-1/query-4",
+          "output_sha256": "1e83dba0e3c4b9874a221343b1f0871f7294bdfcc5cc374c00ea0b4ddabaed2a",
+          "shape": [
+            7,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 5,
+          "ids_sha256": "c43949f9427545f2d2ba145961b2b11a858784f922b864ad8dbcbd30e797afba",
+          "key": "positions-1/query-5",
+          "output_sha256": "4a1606c8a40c494e09c5eb09205f40ca9a96ed69a3cec2d8a71285dbdae641b1",
+          "shape": [
+            7,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 4,
+          "ids_sha256": "64ac3b4cc71dcc214cc66db8692804501c0d4b87e1b194ede4488aa88b004624",
+          "key": "positions-1/query-6",
+          "output_sha256": "9f9ffb3bc72dc5e06b6a403f627e8ff4cbebba785fde9d7544e31e0b63b4a756",
+          "shape": [
+            7,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 5,
+          "ids_sha256": "64156665a5d1d4df9afb4cf386c2439957e4b232a301083428e3b6e4a6188845",
+          "key": "positions-1/query-7",
+          "output_sha256": "6872afe6295644fd72838e8483716c1e765ec478177472c3c0d6fbf9604425ef",
+          "shape": [
+            7,
+            1
+          ]
+        }
+      ],
+      "suffix_slots_per_position": 7
+    },
+    {
+      "positions": 32,
+      "queries": [
+        {
+          "distinct_rows": 122,
+          "ids_sha256": "0e461cbfe1803ea0bc916bf19f8e7a624e2159e8381258ce67784ea11c535798",
+          "key": "positions-32/query-0",
+          "output_sha256": "6c489a02fb15983edb3f0d7bc10c03c6e81533c51709b846284384f12cd20ea5",
+          "shape": [
+            224,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 173,
+          "ids_sha256": "22d225b2354dd08d98de99d97948d932b83de5cd060a2f69d389eac257070632",
+          "key": "positions-32/query-1",
+          "output_sha256": "cc7a1631869d2147f33efcacdd4491c00b8f76441172cf229a85258e0f1bd785",
+          "shape": [
+            224,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 161,
+          "ids_sha256": "4bbb5772357ebfa3d5fe04fe5df95b60cb3068e25db940d92a7ce1acd70aa443",
+          "key": "positions-32/query-2",
+          "output_sha256": "b21b439fb75b6f4e9f8bf4e48b30a2b5bc40708412e337348980aa6ad0116d58",
+          "shape": [
+            224,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 100,
+          "ids_sha256": "292159758f97f3290041b0fd86b8548e4dec56b60db9dbd9b6bc5a54781ba487",
+          "key": "positions-32/query-3",
+          "output_sha256": "444dd079afbd7065bc77a0f8f863d11a65eab9509c01a0c4a372dacd80dfd8ae",
+          "shape": [
+            224,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 136,
+          "ids_sha256": "8ca3bfab1a71e5bacb0f9f09fb8b2ab93ea4807256e5953b1594b0f045110fbe",
+          "key": "positions-32/query-4",
+          "output_sha256": "df86af90381394634ee8175073c66f1a084b3a8966dd1db02407fef408e91883",
+          "shape": [
+            224,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 160,
+          "ids_sha256": "30f7aa7e3a13a80ac362bd2a4fb14c8b03593631d75d3713d1a2a16c708833e8",
+          "key": "positions-32/query-5",
+          "output_sha256": "aa69a65d0dd84d54ed753f0e43dbba882fb75c6b396a0204cf3a185d8513c1ce",
+          "shape": [
+            224,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 107,
+          "ids_sha256": "0dfecc95a4a0b0416c18931576d736ca69b4e84c88b7e87fe48dad5f03a76b73",
+          "key": "positions-32/query-6",
+          "output_sha256": "7280eb71e95b264d02db25100575006821b40790ee281d8bad59a4d7433ae502",
+          "shape": [
+            224,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 141,
+          "ids_sha256": "14b66859c597be206412bab18e839db1ffb66c98d4bfe377dd343cf731a71c49",
+          "key": "positions-32/query-7",
+          "output_sha256": "73872c70f7514dea32d578e556ffac118bf16e9f9d2b2118ee8002f26bb145fb",
+          "shape": [
+            224,
+            1
+          ]
+        }
+      ],
+      "suffix_slots_per_position": 7
+    },
+    {
+      "positions": 128,
+      "queries": [
+        {
+          "distinct_rows": 524,
+          "ids_sha256": "242f03853eea69127f0d1772396451546d646d152f51e6a1b3ea95770a4fbb23",
+          "key": "positions-128/query-0",
+          "output_sha256": "74138fc8d5736569ea4f4e0675191d7cd4a2342fe6074f9125774da43d26a3ba",
+          "shape": [
+            896,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 504,
+          "ids_sha256": "c7d26396b9b03fc6defb2dc56c6eca95e3eabdde9dfdb6593e15480a2e5f574d",
+          "key": "positions-128/query-1",
+          "output_sha256": "5a9969187713f4b9c3ece4d8b002d7c17d801e4bbb9bc73aff491c1c7af934c8",
+          "shape": [
+            896,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 524,
+          "ids_sha256": "7e405313d7177e78b4a0288db1f68705dda304554f03bb740a56796bd1b9afea",
+          "key": "positions-128/query-2",
+          "output_sha256": "2669338c47073b1f47c79a739d8e914c6cc8516c07cfe47bb5a184e9d5917529",
+          "shape": [
+            896,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 491,
+          "ids_sha256": "3fda463c746cf20eee97b4ecf13f4a898dcdad3e827d038024aa514fae0836ee",
+          "key": "positions-128/query-3",
+          "output_sha256": "e9d5b93e5822ef4be4fc3275cba9495a1bfe2f60cc5d4e7c783006b34f65bce3",
+          "shape": [
+            896,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 507,
+          "ids_sha256": "751a4c51179d9cd3d4a5f7223d38582c5708ee4fbd5148c7919c9e6bbc161349",
+          "key": "positions-128/query-4",
+          "output_sha256": "f9f685ad50725ebfc2abc7d990020919de8b29d1a9bded316cd7f0c3fe9c11fa",
+          "shape": [
+            896,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 470,
+          "ids_sha256": "3acf1f3c946ee4d1b229488b0f0fe02bc8c217d702420b40d0b305d7d61c4d63",
+          "key": "positions-128/query-5",
+          "output_sha256": "da66a449fcf64b88b8b0ea34e05f1a38c2d290c3ef5768acde320fcc7d75ef29",
+          "shape": [
+            896,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 469,
+          "ids_sha256": "09bfe0c824a23a5f99fb62f169277dfaded6e3d393bde042c4c52beeb7ab8cb4",
+          "key": "positions-128/query-6",
+          "output_sha256": "ba49723f5872d98ae8fd9bd96d629d5b1d60c076cc6240326c7faf275453732d",
+          "shape": [
+            896,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 482,
+          "ids_sha256": "b781a09d0b0e11a1bdc21dd378883713ff86cfa9b91b028b3b4fab9ed1d26052",
+          "key": "positions-128/query-7",
+          "output_sha256": "0e2dc839f6a7371e9f2e94a73a17942c00bb4b9ef671e33002d7bbb40af245bd",
+          "shape": [
+            896,
+            1
+          ]
+        }
+      ],
+      "suffix_slots_per_position": 7
+    },
+    {
+      "positions": 512,
+      "queries": [
+        {
+          "distinct_rows": 1635,
+          "ids_sha256": "64d38c45397a8eedc06a7eacc2ac6813a6fa64ca2f3c6a5e3516c0ebf11a8958",
+          "key": "positions-512/query-0",
+          "output_sha256": "1539f9357cf89cb965fe8aab48329c564b279cc9cd68d8d24d3cb257871a948b",
+          "shape": [
+            3584,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 1537,
+          "ids_sha256": "b2a2c3c27c154538bcdf9cb31c859b0329cdd031536930306b3c1027cb38cb18",
+          "key": "positions-512/query-1",
+          "output_sha256": "46c6862257682d60186ecd6964f9d643bb5c57d6f821f33c3f9e8b2a3a77ff1e",
+          "shape": [
+            3584,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 1531,
+          "ids_sha256": "828bdd1cff4e84578f34806b96f266c7a8579957a20a2e31df9fddc8a886a941",
+          "key": "positions-512/query-2",
+          "output_sha256": "4f33785fe9a6d4c9b25c47e0f4507e1c6d0e7c5e7fe22e3dec04d5dceb23e2e5",
+          "shape": [
+            3584,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 1388,
+          "ids_sha256": "bb1d81532706616d9aa3bb4dd270ee046e7687d64f74d44186b6fe431314a857",
+          "key": "positions-512/query-3",
+          "output_sha256": "62eb911b2a9faece0207b5fe3af7a8d18b9426cc998611c2176278a825df4878",
+          "shape": [
+            3584,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 1552,
+          "ids_sha256": "c7cc86956ff02918f21c5fc78113fe13034d3c2fcb5fa3637bceacd17ac7ba47",
+          "key": "positions-512/query-4",
+          "output_sha256": "da7be5db643bb3236355768bd366959ac3d5f183d360afb5a1511d9b6430bcf0",
+          "shape": [
+            3584,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 1612,
+          "ids_sha256": "f5fb548a8d9a1bf25a6d3cfefb3764e770bf7a2736fff4b364546844ae104e6e",
+          "key": "positions-512/query-5",
+          "output_sha256": "9514e2809ddea06e7d638d07440cd603940fd5df429e69813af03d6faa4a91eb",
+          "shape": [
+            3584,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 1637,
+          "ids_sha256": "2424c58bf11c0bb71cc4ee951384c35f735f73e9d9a8d64883895de1e6663b80",
+          "key": "positions-512/query-6",
+          "output_sha256": "ad13e5041f07a35fa251368af2afdc00378fc91484af79278f6c0ac0a2ae0ce7",
+          "shape": [
+            3584,
+            1
+          ]
+        },
+        {
+          "distinct_rows": 1675,
+          "ids_sha256": "302c022a40a41676b5d249b5eb450f4b00d35594c11f4d9fa5eedf3ec4d8c4e3",
+          "key": "positions-512/query-7",
+          "output_sha256": "e6c1197632d75ede793148d9c92fa3a36f25defbb7b09810f6126acd28ae9b15",
+          "shape": [
+            3584,
+            1
+          ]
+        }
+      ],
+      "suffix_slots_per_position": 7
+    }
+  ],
+  "category": "trained causal character-memory held-out gather replay",
+  "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+  "command": "/tmp/projects-push-20261028-venv/bin/python /Users/duyimin/Documents/Codex/2026-09-12/github/work/me_fasttext/tools/prepare_device_gather.py --training-dir artifacts/causal-lm-compression-20261024 --corpus artifacts/native-ngram-20261018/corpus/tinyshakespeare.txt --output-dir artifacts/device-gather-final-20261030/order-8-seed-3 --order 8 --native-library build/libmeft_rows.dylib",
+  "commit": "8f6ae4e563c9c0bf462e40a4e93cc6c2c76f608a",
+  "corpus_sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "corpus_source": "https://raw.githubusercontent.com/karpathy/char-rnn/6f9487a6fe5b420b7ca9afb0d7c078e37c1d1b4e/data/tinyshakespeare/input.txt",
+  "device": "cpu",
+  "dtype": "torch.float32",
+  "files": {
+    "dense.pt": "a95bbb1af1ef0b51a4fda0a70f93f3eb72375b6880f139af7ee359968215f578",
+    "native/embedding.json": "5e3aece3bc9d3f0e13df93d08ecc609865f3e09909360049e6ebef13659a224e",
+    "native/table.men": "1084704dcb06b1a1e2625852cca2fcb4dfa2ae90b9fda3b7d08abf08e7305573",
+    "queries.pt": "f7dff340215502512aaf7257d083f0be9bca483fb481d778de3e9233e6eeb54f"
+  },
+  "full_test_ids_sha256": "5f0ff556283f9b40e506fbc8577813bd8238480c7b5bd4accc0fd4eb6b3a826f",
+  "limitations": [
+    "Original lossless memory, not approximate cosine/norm variants.",
+    "Distinct chronological windows; no manufactured larger table or repeated rows.",
+    "Timed replay repeats these windows; gather microbenchmark, not model throughput.",
+    "One small character GRU/corpus, not TinyEngram or DeepSeek trained weights.",
+    "Corpus and weights remain local; no quality or compression claim from this preparation."
+  ],
+  "native_table_and_metadata_bytes": 9042576,
+  "order": 8,
+  "os": "macOS-26.6.2-arm64-arm-64bit",
+  "preparer_sha256": "d7d40b39a52f53253386031fb558056baa4a6c5f5cf5385d41c2abc7aed9126c",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "pytorch": "2.14.1",
+  "raw_table_bytes": 9415168,
+  "schema_version": 1,
+  "seed": 3,
+  "shape": [
+    36778,
+    64
+  ],
+  "start_position": 64,
+  "test_split": {
+    "characters": 13108,
+    "sha256": "88075da3f975631774f1913cbf2b6280dcc75f8bdd4ae46dd7b62061bf0ad174"
+  },
+  "training_commit": "0f16f3eb57ee90aa8969415927be763e7e20aecd",
+  "training_report_sha256": "0ab395574da8186552af5c342d8bc794dda3ef7c3c35a517397c431ea0ac3c2d",
+  "weight_sha256": "0e8b9cb031160e8df3fa6ebc3f76ab5e718940d0564b573772b46a06d6812b63"
+}
