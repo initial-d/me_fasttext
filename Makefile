@@ -15,7 +15,12 @@ LIBS = -L./mylib/lib -ltrie -lpub
 LIBNAME = libfasttext
 PYTHON ?= python3
 
-.PHONY: opt debug test clean native
+.PHONY: opt debug test clean native structural-native
+
+# Optional original-algorithm bridge; bundled archives require Linux x86-64.
+structural-native:
+	mkdir -p build
+	$(CXX) -std=c++11 -O2 -Wall -Wextra -Werror -fPIC -shared -Isrc -Imylib/include native/meft_structural.cc $(LIBS) -o build/libmeft_structural.so
 
 # Standalone C ABI: does not depend on the bundled legacy C++ libraries.
 # On macOS use: make native NATIVE_SHARED='-dynamiclib' NATIVE_EXT=dylib
