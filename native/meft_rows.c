@@ -221,6 +221,30 @@ done:
     return reason ? fail(err, cap, reason) : 0;
 }
 
+int meft_rows_gather_chunked(meft_rows *s, const uint64_t *ids, size_t count,
+                             void *out, size_t outbytes, size_t max_query_rows,
+                             char *err, size_t cap) {
+    if (!s) return fail(err, cap, "null store");
+    s->last_blocks = s->last_decodes = s->last_hits = 0;
+    if (!max_query_rows || count > SIZE_MAX / s->width ||
+        count * s->width > outbytes || count > SIZE_MAX / sizeof(uint64_t) ||
+        (count && (!ids || !out)))
+        return fail(err, cap, "invalid output capacity, query size or chunk limit");
+    uint64_t blocks = 0, decodes = 0, hits = 0;
+    int status = 0;
+    for (size_t start = 0; start < count;) {
+        size_t n = count - start < max_query_rows ? count - start : max_query_rows;
+        status = meft_rows_gather(s, ids + start, n,
+                                  (unsigned char *)out + start * (size_t)s->width,
+                                  n * (size_t)s->width, err, cap);
+        blocks += s->last_blocks; decodes += s->last_decodes; hits += s->last_hits;
+        if (status) break;
+        start += n;
+    }
+    s->last_blocks = blocks; s->last_decodes = decodes; s->last_hits = hits;
+    return status;
+}
+
 static float row_float(const unsigned char *p, int dtype) {
     uint32_t bits;
     if (dtype == 1) {

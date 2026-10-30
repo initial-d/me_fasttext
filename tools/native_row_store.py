@@ -199,12 +199,29 @@ class NativeRows:
     def last_cache_hits(self):
         return self._counter("last_cache_hits")
 
-    def gather_into(self, ids_address, count, output_address, output_bytes):
+    def gather_into(self, ids_address, count, output_address, output_bytes, *, max_query_rows=None):
         if not self.handle:
             raise ValueError("row store is closed")
+        if max_query_rows is not None and (type(max_query_rows) is not int or
+                                          not 1 <= max_query_rows <= ctypes.c_size_t(-1).value):
+            raise ValueError("max_query_rows must be a positive size_t or None")
+        chunked = max_query_rows is not None and count > max_query_rows
+        if chunked:
+            try:
+                function = self.lib.meft_rows_gather_chunked
+            except AttributeError as error:
+                raise ValueError("chunked queries require rebuilding the native row library") from error
+            function.argtypes = [ctypes.c_void_p, ctypes.c_void_p, ctypes.c_size_t,
+                                 ctypes.c_void_p, ctypes.c_size_t, ctypes.c_size_t,
+                                 ctypes.c_void_p, ctypes.c_size_t]
+            function.restype = ctypes.c_int
+        else:
+            function = self.lib.meft_rows_gather
         error = ctypes.create_string_buffer(256)
-        status = self.lib.meft_rows_gather(self.handle, ids_address, count, output_address,
-                                          output_bytes, error, len(error))
+        args = [self.handle, ids_address, count, output_address, output_bytes]
+        if chunked:
+            args.append(max_query_rows)
+        status = function(*args, error, len(error))
         if status:
             raise ValueError(error.value.decode())
 

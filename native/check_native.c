@@ -20,6 +20,12 @@ int main(int argc, char **argv) {
     (void)meft_rows_set_cache_bytes(s, 1);
     (void)meft_rows_gather(s, ids, 3, out, (size_t)width * 4, error, sizeof(error));
     (void)meft_rows_set_cache_bytes(s, 0);
+    (void)meft_rows_gather_chunked(s, ids, 3, out, (size_t)width * 4, 1, error, sizeof(error));
+    (void)meft_rows_gather_chunked(s, ids, 4, out, (size_t)width * 4, 2, error, sizeof(error));
+    (void)meft_rows_gather_chunked(s, ids, 3, out, 0, 2, error, sizeof(error));
+    (void)meft_rows_gather_chunked(s, ids, 3, out, (size_t)width * 4, 0, error, sizeof(error));
+    (void)meft_rows_gather_chunked(s, NULL, 3, out, (size_t)width * 4, 2, error, sizeof(error));
+    (void)meft_rows_gather_chunked(NULL, ids, 3, out, (size_t)width * 4, 2, error, sizeof(error));
     uint64_t offsets[3] = {0, 2, 3}, bad_offsets[3] = {0, 3, 2};
     unsigned char weights[12] = {0}; /* Enough LE FP32/FP16/BF16 scalar bytes. */
     for (int dtype = 1; dtype <= 3; ++dtype) {

@@ -4,6 +4,7 @@ Requires PyTorch. Hashing, tokenization, offsets and row bytes stay unchanged.
 This prototype packs an immutable table, not a full Engram checkpoint.
 """
 import hashlib
+import ctypes
 import json
 from pathlib import Path
 import sys
@@ -113,8 +114,13 @@ class MappedMultiHeadEmbedding(nn.Module):
     [..., heads, embedding_dim] preserve the official gather's layout.
     """
 
-    def __init__(self, output_dir, cache_blocks=4, native_library=None, native_cache_bytes=0):
+    def __init__(self, output_dir, cache_blocks=4, native_library=None, native_cache_bytes=0,
+                 query_chunk_rows=65536):
         super().__init__()
+        if query_chunk_rows is not None and (type(query_chunk_rows) is not int or
+                                            not 1 <= query_chunk_rows <= ctypes.c_size_t(-1).value):
+            raise ValueError("query_chunk_rows must be a positive size_t or None")
+        self.query_chunk_rows = query_chunk_rows
         output_dir = Path(output_dir).resolve()
         meta = json.loads((output_dir / "embedding.json").read_text())
         backend = meta.get("backend", "python")
@@ -167,6 +173,7 @@ class MappedMultiHeadEmbedding(nn.Module):
         return state
 
     def __setstate__(self, state):
+        state.setdefault("query_chunk_rows", 65536)
         super().__setstate__(state)
         # Copy/deepcopy and spawned workers each own a checksum-verified handle.
         # A replaced table is rejected rather than silently changing snapshots.
@@ -197,7 +204,8 @@ class MappedMultiHeadEmbedding(nn.Module):
         if self.backend == "native":
             output = torch.empty(shape, dtype=self.dtype)
             self.table.gather_into(global_tensor.data_ptr(), global_tensor.numel(),
-                                   output.data_ptr(), output.numel() * output.element_size())
+                                   output.data_ptr(), output.numel() * output.element_size(),
+                                   max_query_rows=self.query_chunk_rows)
             return output
         raw = self.table.rows(global_tensor.reshape(-1).tolist())
         # A fresh owned tensor avoids exposing mutable mmap/cache backing data.
@@ -213,7 +221,8 @@ class MappedMultiHeadEmbedding(nn.Module):
         self.close()
 
 
-def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library=None, native_cache_bytes=0):
+def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library=None, native_cache_bytes=0,
+                        query_chunk_rows=65536):
     """Factory-compatible loader for one exported immutable CPU layer.
 
     Bind output_dir with functools.partial for Engram's proposed factory hook.
@@ -222,7 +231,8 @@ def open_demo_embedding(output_dir, list_of_N, D, cache_blocks=4, native_library
     head_offsets(list_of_N)
     if type(D) is not int or D <= 0:
         raise ValueError("embedding dimension must be a positive integer")
-    mapped = MappedMultiHeadEmbedding(output_dir, cache_blocks, native_library, native_cache_bytes)
+    mapped = MappedMultiHeadEmbedding(output_dir, cache_blocks, native_library, native_cache_bytes,
+                                     query_chunk_rows)
     if list(list_of_N) != mapped.metadata["head_sizes"] or D != mapped.embedding_dim:
         mapped.close()
         raise ValueError("exported head sizes/dimension differ from requesting Engram layer")
@@ -244,10 +254,11 @@ class MappedEmbedding(nn.Module):
     Compatible with callers that only invoke embedding(ids); model-specific
     wrappers that inspect .weight or perform training need separate integration.
     """
-    def __init__(self, output_dir, native_library=None, native_cache_bytes=0):
+    def __init__(self, output_dir, native_library=None, native_cache_bytes=0, query_chunk_rows=65536):
         super().__init__()
         self.gather = MappedMultiHeadEmbedding(output_dir, native_library=native_library,
-                                             native_cache_bytes=native_cache_bytes)
+                                             native_cache_bytes=native_cache_bytes,
+                                             query_chunk_rows=query_chunk_rows)
         if self.gather.num_heads != 1:
             self.gather.close()
             raise ValueError("ordinary embedding needs a single global-ID table")

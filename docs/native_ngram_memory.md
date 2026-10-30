@@ -44,6 +44,20 @@ discarded. One handle is single-threaded because it owns a scratch buffer; use
 one per serving worker and close it explicitly. The C example is an ABI check,
 not an ANN/nearest-neighbor engine.
 
+`meft_rows_gather_chunked` limits the number of query-location records sorted
+at once and writes each chunk directly into the caller's complete output. The
+native PyTorch adapters use `query_chunk_rows=65536` by default; set a smaller
+positive value to lower this temporary allocation or `None` for the previous
+single-query gather. It counts global row requests, including each head's ID,
+not tokens. Ordinary embeddings, the Engram factory and unique embedding bags
+accept this setting. Outputs retain all original IDs, order, dtype and row bits;
+last-query block/decode/cache-hit counters aggregate the entire call. Small calls
+still use the original ABI, while larger chunked calls require the rebuilt
+library. Chunk boundaries can repeat block decoding, so throughput can decrease.
+This bounds C query-location/sort scratch only: the full output, Python/Torch ID
+and staged-row tensors, decoded-block scratch, cache and mmap remain separate.
+The Python reference backend is unchanged; this is not a total-RSS bound.
+
 The PyTorch mapped modules support `copy.deepcopy` and serialization into
 `multiprocessing` spawn workers. Only configuration, metadata and small buffers
 are copied; the mmap, C pointer and decoded cache are excluded. Each restored

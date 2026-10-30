@@ -27,6 +27,15 @@ uint64_t meft_rows_cache_bytes(const meft_rows *store);
  */
 int meft_rows_gather(meft_rows *store, const uint64_t *ids, size_t count,
                      void *output, size_t output_bytes, char *error, size_t error_capacity);
+/* Gather in chunks of at most max_query_rows>0 requests, directly into the
+ * caller's complete output. Bounds query-location/sort scratch, not output,
+ * decoded blocks, cache or total RSS. Each chunk groups its own block reads;
+ * crossing chunks can repeat decoding. Last-query counters aggregate all chunks.
+ * Same original-ID order, no-overlapping-inputs and partial-error-output contract.
+ */
+int meft_rows_gather_chunked(meft_rows *store, const uint64_t *ids, size_t count,
+                             void *output, size_t output_bytes, size_t max_query_rows,
+                             char *error, size_t error_capacity);
 /* Bounded gather + sum/mean for ragged bags. offsets contains bags+1 entries,
  * starts at 0 and ends at count. dtype: 1=LE float32, 2=LE IEEE float16,
  * 3=LE bfloat16. Output is bags * (width / element_bytes) native float32.

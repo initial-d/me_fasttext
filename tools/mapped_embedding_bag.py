@@ -32,7 +32,7 @@ class MappedEmbeddingBag(nn.Module):
 
     def __init__(self, output_dir, mode="sum", padding_idx=None, include_last_offset=False,
                  chunk_rows=1024, native_library=None, native_cache_bytes=0, strategy="unique",
-                 unique_method="auto", unique_index_bytes=8 * 1024 * 1024):
+                 unique_method="auto", unique_index_bytes=8 * 1024 * 1024, query_chunk_rows=65536):
         super().__init__()
         if mode not in ("sum", "mean") or type(include_last_offset) is not bool:
             raise ValueError("sum/mean mode and boolean include_last_offset required")
@@ -45,7 +45,8 @@ class MappedEmbeddingBag(nn.Module):
         if type(unique_index_bytes) is not int or unique_index_bytes < 0:
             raise ValueError("unique_index_bytes must be a nonnegative integer")
         self.gather = MappedMultiHeadEmbedding(output_dir, native_library=native_library,
-                                             native_cache_bytes=native_cache_bytes)
+                                             native_cache_bytes=native_cache_bytes,
+                                             query_chunk_rows=query_chunk_rows)
         self.num_embeddings, self.embedding_dim = self.gather.metadata["shape"]
         if (self.gather.backend != "native" or self.gather.num_heads != 1
                 or self.gather.metadata["byteorder"] != "little"):
@@ -147,7 +148,8 @@ class MappedEmbeddingBag(nn.Module):
             if unused_padding:
                 rows[-1].zero_()
             self.gather.table.gather_into(unique.data_ptr(), unique.numel(), rows.data_ptr(),
-                                         rows.numel() * rows.element_size())
+                                         rows.numel() * rows.element_size(),
+                                         max_query_rows=self.gather.query_chunk_rows)
             return F.embedding_bag(inverse, rows, boundary, mode=self.mode,
                                    include_last_offset=True, padding_idx=padding,
                                    per_sample_weights=weights)
