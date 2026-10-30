@@ -16,6 +16,7 @@
 #include <random>
 #include <memory>
 #include <unordered_map>
+#include <functional>
 
 #include "args.h"
 #include "real.h"
@@ -55,6 +56,8 @@ class Dictionary {
     int32_t nwords_;
 	int32_t nngrams_;
     int32_t nlabels_;
+    std::function<int32_t(const std::string&)> native_ngram_lookup_;
+    bool lookupNgram(const std::string&, size_t&) const;
     int64_t ntokens_;//所有word label的出现总次数
 
     int64_t pruneidx_size_;
@@ -84,6 +87,7 @@ class Dictionary {
     int64_t ntokens() const;
     int32_t getId(const std::string&) const;//words_下标，word id
     int32_t getId(const std::string&, uint32_t h) const;
+    int32_t getNgramId(const std::string&) const;
     entry_type getType(int32_t) const;
     entry_type getType(const std::string&) const;
     bool discard(int32_t, real) const;
@@ -109,8 +113,9 @@ class Dictionary {
     bool readWord(std::istream&, std::string&) const;
     void readFromFile(std::istream&);
     std::string getLabel(int32_t) const;
-    void save(std::ostream&) const;
-    void load(std::istream&);
+    void save(std::ostream&, bool auxiliary_files = true) const;
+    void load(std::istream&, bool initialize_ngrams = true);
+    void setNativeNgramLookup(std::function<int32_t(const std::string&)> lookup);
     std::vector<int64_t> getCounts(entry_type) const;
     int32_t getLine(std::istream&, std::vector<int32_t>&,
                     std::vector<int32_t>&, std::minstd_rand&) const;

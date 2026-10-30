@@ -24,6 +24,9 @@
 #include <algorithm>
 #include <stdexcept>
 #include <numeric>
+#ifdef MEFT_NATIVE_FASTTEXT
+#include <sys/stat.h>
+#endif
 
 
 namespace fasttext {
@@ -35,11 +38,20 @@ constexpr int32_t FASTTEXT_FILEFORMAT_MAGIC_INT32 = 793712314;
 FastText::FastText() : quant_(false) {}
 
 void FastText::addInputVector(Vector& vec, int32_t ind) const {
+  if (input_backend_) {
+    input_backend_->addRows(vec, std::vector<int32_t>{ind});
+    return;
+  }
   if (quant_) {
     vec.addRow(*qinput_, ind);
   } else {
     vec.addRow(*input_, ind);
   }
+}
+
+void FastText::addInputVectors(Vector& vec, const std::vector<int32_t>& ids) const {
+  if (input_backend_) input_backend_->addRows(vec, ids);
+  else for (int32_t id : ids) addInputVector(vec, id);
 }
 
 std::shared_ptr<const Dictionary> FastText::getDictionary() const {
@@ -51,6 +63,7 @@ const Args FastText::getArgs() const {
 }
 
 std::shared_ptr<const Matrix> FastText::getInputMatrix() const {
+  if (input_backend_) throw std::runtime_error("native input is not a resident Matrix");
   return input_;
 }
 
@@ -63,8 +76,7 @@ int32_t FastText::getWordId(const std::string& word) const {
 }
 
 int32_t FastText::getSubwordId(const std::string& word) const {
-  int32_t h = dict_->hash(word) % args_->bucket;
-  return dict_->nwords() + h;
+  return dict_->getNgramId(word);
 }
 
 void FastText::getVectorNorm(Vector& vec, const std::string& word) {
@@ -119,7 +131,7 @@ void FastText::ngramVectors(std::string word, std::vector<std::string>& sub_vec)
 	for (int32_t i = 0; i < ngrams.size(); i++) {
 		vec.zero();
 		if (ngrams[i] >= 0) {
-			vec.addRow(*input_, ngrams[i]);
+			addInputVector(vec, ngrams[i]);
 		}
 		std::ostringstream oss;
 		oss << vec;
@@ -144,7 +156,7 @@ void FastText::ngramVectors(std::string word, std::string& res, std::string& sub
 	    }
 	}
 	if(ngrams.size() > 0 && max_pos < ngrams.size() && ngrams[max_pos] >= 0) {
-		vec.addRow(*input_, ngrams[max_pos]);
+		addInputVector(vec, ngrams[max_pos]);
 		sub = substrings[max_pos];
 		std::ostringstream oss;
 		oss << vec;
@@ -180,9 +192,7 @@ void FastText::getWordVector(Vector& vec, const std::string& word) const {
   end = pub_time_clock();
   std::cout << "getsubwords time: " << end - start << std::endl;*/
   vec.zero();
-  for (int i = 0; i < ngrams.size(); i ++) {
-    addInputVector(vec, ngrams[i]);
-  }
+  addInputVectors(vec, ngrams);
   if (ngrams.size() > 0) {
     vec.mul(1.0 / ngrams.size());
   }
@@ -200,9 +210,7 @@ void FastText::getInputVector(Vector& vec, const std::string& word) const {
   }
   else {
     vec.zero();
-    for (int i = 0; i < ngrams.size(); i ++) {
-      addInputVector(vec, ngrams[i]);
-    }
+    addInputVectors(vec, ngrams);
     if (ngrams.size() > 0) {
       vec.mul(1.0 / ngrams.size());
     }
@@ -216,9 +224,8 @@ void FastText::getVector(Vector& vec, const std::string& word) const {
 void FastText::getSubwordVector(Vector& vec, const std::string& subword)
     const {
   vec.zero();
-  int32_t h = dict_->hash(subword) % args_->bucket;
-  h = h + dict_->nwords();
-  addInputVector(vec, h);
+  int32_t id = getSubwordId(subword);
+  if (id >= 0) addInputVector(vec, id);
 }
 
 void FastText::saveVectors() {
@@ -301,6 +308,7 @@ int datrie_foreach_id(const char* key, size_t value, void* udata) {
 
 
 void FastText::saveIndex() {
+  if (input_backend_) throw std::runtime_error("operation requires the dense source input matrix");
     std::string path(args_->output + ".z");
 	std::ofstream ofs(path, std::ofstream::binary);
 	if (!ofs.is_open()) {
@@ -424,6 +432,7 @@ void FastText::saveIndex() {
 
 
 void FastText::saveIndex(std::string path) {
+  if (input_backend_) throw std::runtime_error("operation requires the dense source input matrix");
     //std::string path(args_->output + ".z");
 	std::ofstream ofs(path, std::ofstream::binary);
 	if (!ofs.is_open()) {
@@ -586,6 +595,7 @@ void FastText::saveModel() {
 }
 
 void FastText::saveModel(const std::string path) {
+  if (input_backend_) throw std::runtime_error("native bundles are immutable; save the original dense model before export");
   std::ofstream ofs(path, std::ofstream::binary);
   if (!ofs.is_open()) {
     throw std::invalid_argument(path + " cannot be opened for saving!");
@@ -612,6 +622,13 @@ void FastText::saveModel(const std::string path) {
 }
 
 void FastText::loadModel(const std::string& filename) {
+#ifdef MEFT_NATIVE_FASTTEXT
+  struct stat info;
+  if (stat(filename.c_str(), &info) == 0 && S_ISDIR(info.st_mode)) {
+    loadNativeBundle(filename);
+    return;
+  }
+#endif
   std::ifstream ifs(filename, std::ifstream::binary);
   if (!ifs.is_open()) {
     throw std::invalid_argument(filename + " cannot be opened for loading!");
@@ -624,6 +641,7 @@ void FastText::loadModel(const std::string& filename) {
 }
 
 void FastText::loadModel(std::istream& in) {
+  input_backend_.reset();
   args_ = std::make_shared<Args>();
   dict_ = std::make_shared<Dictionary>(args_);
   input_ = std::make_shared<Matrix>();
@@ -697,6 +715,7 @@ void FastText::printInfo(real progress, real loss) {
 }
 
 std::vector<int32_t> FastText::selectEmbeddings(int32_t cutoff) const {
+  if (input_backend_) throw std::runtime_error("operation requires the dense source input matrix");
   Vector norms(input_->m_);
   input_->l2NormRow(norms);
   std::vector<int32_t> idx(input_->m_, 0);
@@ -711,6 +730,7 @@ std::vector<int32_t> FastText::selectEmbeddings(int32_t cutoff) const {
 }
 
 void FastText::quantize(std::shared_ptr<Args> qargs) {
+  if (input_backend_) throw std::runtime_error("native bundles are immutable; quantize the dense source model");
   if (args_->model != model_name::sup) {
     throw std::invalid_argument(
         "For now we only support quantization of supervised models");
@@ -889,9 +909,7 @@ void FastText::getSentenceVector(
   if (args_->model == model_name::sup) {
     std::vector<int32_t> line, labels;
     dict_->getLine(in, line, labels, model_->rng);
-    for (int32_t i = 0; i < line.size(); i++) {
-      addInputVector(svec, line[i]);
-    }
+    addInputVectors(svec, line);
     if (!line.empty()) {
       svec.mul(1.0 / line.size());
     }
@@ -928,7 +946,7 @@ void FastText::ngramVectors(std::string word) {
       if (quant_) {
         vec.addRow(*qinput_, ngrams[i]);
       } else {
-        vec.addRow(*input_, ngrams[i]);
+        addInputVector(vec, ngrams[i]);
       }
     }
     std::cout << ngrams[i] << " " << substrings[i] << " " << vec << std::endl;
@@ -1100,6 +1118,7 @@ void FastText::loadVectors(std::string filename) {
 }
 
 void FastText::train(std::shared_ptr<Args> args) {
+  input_backend_.reset();
   args_ = args;
   dict_ = std::make_shared<Dictionary>(args_);
   if (args_->input == "-") {

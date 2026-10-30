@@ -180,7 +180,8 @@ class StructuralPlan(StructuralIndex):
                 "artifact_sha256": hashlib.sha256((directory / "table.men").read_bytes()).hexdigest(),
                 "input_bytes": self.nrows * self.dim * 4, "artifact_bytes": metadata["artifact_bytes"],
                 "unique_rows": metadata["unique_rows"], "row_map_bytes": metadata["row_map_bytes"],
-                "block_rows": block_rows, "approximate": not self.original_bytes_preserved,
+                "block_rows": metadata["block_rows"], "max_block_bytes": metadata["max_block_bytes"],
+                "approximate": not self.original_bytes_preserved,
                 "contract": metadata["contract"]}
             (directory / "embedding.json").write_text(json.dumps(embedding, indent=2) + "\n")
             return metadata

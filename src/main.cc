@@ -31,6 +31,9 @@ void printUsage() {
     << "  print-ngrams            print ngrams given a trained model and word\n"
     << "  nn                      query for nearest neighbors\n"
     << "  analogies               query for analogies\n"
+#ifdef MEFT_NATIVE_FASTTEXT
+    << "  dump-native             extract a dense me_fasttext model for native bundle export\n"
+#endif
     << std::endl;
 }
 
@@ -272,6 +275,13 @@ int main(int argc, char** argv) {
     exit(EXIT_FAILURE);
   }
   std::string command(args[1]);
+#ifdef MEFT_NATIVE_FASTTEXT
+  if (command == "dump-native") {
+    if (args.size()!=4) throw std::invalid_argument("usage: fasttext-native dump-native <model.bin> <new-extraction-directory>");
+    FastText model; model.loadModel(args[2]); model.dumpNative(args[3]);
+    return 0;
+  }
+#endif
   if (command == "skipgram" || command == "cbow" || command == "supervised") {
     train(args);
   } else if (command == "test") {

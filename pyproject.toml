@@ -17,6 +17,7 @@ torch = ["torch", "numpy"]
 tinyengram = ["torch", "numpy", "sympy", "loguru", "transformers==4.57.3", "tokenizers==0.22.2", "safetensors==0.7.0"]
 
 [project.scripts]
+meft-fasttext-export = "meft_memory._runtime.fasttext_native_bundle:main"
 meft-tiny-export = "meft_memory._runtime.tinyengram_checkpoint:main"
 meft-tiny-verify = "meft_memory._runtime.verify_tinyengram_checkpoint:main"
 meft-tiny-verify-device = "meft_memory._runtime.verify_tinyengram_device:main"

@@ -127,6 +127,11 @@ real Model::softmax(int32_t target, real lr) {
 void Model::computeHidden(const std::vector<int32_t>& input, Vector& hidden) const {
   assert(hidden.size() == hsz_);
   hidden.zero();
+  if (input_backend_) {
+    input_backend_->addRows(hidden, input);
+    hidden.mul(1.0 / input.size());
+    return;
+  }
   for (auto it = input.cbegin(); it != input.cend(); ++it) {
     if(quant_) {
       hidden.addRow(*qwi_, *it);
@@ -212,6 +217,7 @@ void Model::dfs(int32_t k, int32_t node, real score,
 }
 
 void Model::update(const std::vector<int32_t>& input, int32_t target, real lr) {
+  if (input_backend_) throw std::runtime_error("native rows are immutable; load a dense model for training");
   assert(target >= 0);
   assert(target < osz_);
   if (input.size() == 0) return;
