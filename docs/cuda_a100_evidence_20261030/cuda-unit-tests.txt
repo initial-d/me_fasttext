@@ -1,0 +1,36 @@
+{
+  "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "device": "NVIDIA A100-SXM4-80GB",
+  "physical_gpu": 3,
+  "free_before": 6140198912,
+  "total": 84987740160,
+  "allocator_fraction_limit": 0.01
+}
+test_cpu_owned_results_and_original_bytes (tests.test_device_row_adapter.DeviceGatherTest.test_cpu_owned_results_and_original_bytes) ... ok
+test_cuda_owned_outputs_pinned_staging_and_stream_waits (tests.test_device_row_adapter.DeviceGatherTest.test_cuda_owned_outputs_pinned_staging_and_stream_waits) ... ok
+test_cuda_partial_failure_drains_copies_before_reusing_slots (tests.test_device_row_adapter.DeviceGatherTest.test_cuda_partial_failure_drains_copies_before_reusing_slots) ... ok
+test_cuda_request_fails_explicitly_without_hardware (tests.test_device_row_adapter.DeviceGatherTest.test_cuda_request_fails_explicitly_without_hardware) ... skipped 'requires host without CUDA'
+test_mps_synchronous_staging_and_reuse (tests.test_device_row_adapter.DeviceGatherTest.test_mps_synchronous_staging_and_reuse) ... skipped 'MPS unavailable'
+test_reject_invalid_ids_placement_dtype_training_and_concurrency (tests.test_device_row_adapter.DeviceGatherTest.test_reject_invalid_ids_placement_dtype_training_and_concurrency) ... ok
+test_bundle_corruption_and_unknown_config_are_rejected (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_bundle_corruption_and_unknown_config_are_rejected) ... ok
+test_cached_chunks_and_greedy_generation_preserve_hash_and_nonzero_conv_history (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_cached_chunks_and_greedy_generation_preserve_hash_and_nonzero_conv_history) ... ok
+test_complete_forward_rows_and_tied_backbone_survive_without_source_checkpoint (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_complete_forward_rows_and_tied_backbone_survive_without_source_checkpoint) ... ok
+test_gate_warmup_requires_checkpoint_step_metadata (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_gate_warmup_requires_checkpoint_step_metadata) ... ok
+test_incomplete_checkpoint_fails_before_publishing_bundle (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_incomplete_checkpoint_fails_before_publishing_bundle) ... ok
+test_independent_requests_and_invalid_cache_inputs (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_independent_requests_and_invalid_cache_inputs) ... ok
+test_indexed_input_shards_preserve_full_model (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_indexed_input_shards_preserve_full_model) ... ok
+test_staged_cpu_model_prefetch_preserves_full_and_cached_logits (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_staged_cpu_model_prefetch_preserves_full_and_cached_logits) ... ok
+test_staged_cuda_backbone_host_hashes_and_device_decode_history (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_staged_cuda_backbone_host_hashes_and_device_decode_history) ... ok
+test_staged_mps_backbone_host_hashes_and_device_decode_history (tests.test_tinyengram_checkpoint.TinyEngramCheckpointTest.test_staged_mps_backbone_host_hashes_and_device_decode_history) ... skipped 'MPS unavailable'
+
+----------------------------------------------------------------------
+Ran 16 tests in 8.936s
+
+OK (skipped=3)
+{
+  "max_allocated": 10014208,
+  "max_reserved": 41943040,
+  "free_after": 5987106816
+}

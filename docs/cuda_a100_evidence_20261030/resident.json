@@ -1,0 +1,172 @@
+{
+  "code_sha": "11cad573441918bec7a1a78b2ac5db311dcbb0c0",
+  "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python -u -m tools.verify_tinyengram_shared_cuda --phase resident --checkpoint /llm-align/duyimin/meft-cuda-20261030/checkpoint --bundle /llm-align/duyimin/meft-cuda-20261030/bundle --corpus /llm-align/duyimin/meft-cuda-20261030/delta/corpus.txt --upstream-dir /llm-align/duyimin/meft-cuda-20261030/upstream --output-dir /llm-align/duyimin/meft-cuda-20261030/results/sequential --native-library build/libmeft_rows.so",
+  "elapsed_seconds": 19.62858017999679,
+  "environment": {
+    "allocator_limit_bytes": 3399509606,
+    "cuda_runtime": "13.0",
+    "free_after_context_init": 6140198912,
+    "gpu": "NVIDIA A100-SXM4-80GB",
+    "os": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+    "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+    "torch": "2.11.0+cu130",
+    "total_bytes": 84987740160,
+    "transformers": "4.57.3",
+    "visible_devices": "3"
+  },
+  "inputs": {
+    "bundle": "cdb970a1d030be8956bdead60fd70b692b6ed830b3ea96f5cde5dd602d4c33a0",
+    "checkpoint_files": {
+      "model.safetensors": "25dbc45f793f693c462c027045335ee08b67b45b793bacc5ce53970842971972"
+    },
+    "config": "114e06ef3f4ea33eace4fc7c56b32eaede4643650b790d9ddefa1b55ffbd8576",
+    "corpus": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+    "engram_config": "a19b39ded3d245f4cdcf858ac048ea623295de58911ffbdc41d7bf7e958befdd"
+  },
+  "limitations": [
+    "shared GPU; not a latency/throughput benchmark",
+    "small trained memory branch, not large-table memory savings or model-quality evidence",
+    "allocator cap excludes CUDA context/library allocations; reserve is a preflight check",
+    "other jobs can change memory use after preflight; no exclusive resource reservation",
+    "same-device same-schedule equality; cross-device/full-vs-cached arithmetic can differ"
+  ],
+  "memory": {
+    "free_after": 3529244672,
+    "max_allocated_bytes": 2473268736,
+    "max_reserved_bytes": 2495610880
+  },
+  "phase": "resident",
+  "reference_sha256": "ea1276c1b3cec9759f962cd6f8531ceb93dc8d44961c891c462ae365095f6a15",
+  "settings": {
+    "allocator_fraction": 0.04,
+    "decode_tokens": 8,
+    "eval_tokens": 32,
+    "max_characters": 16384,
+    "reserve_bytes": 2147483648,
+    "staging_rows": 32,
+    "staging_slots": 2
+  },
+  "source_hashes": {
+    "device_row_adapter.py": "dfaf3fdbcc5d9c5fdfa25f6fb54c74c5bd10c53679e69a6fb02abc7d3cb1b432",
+    "tinyengram_checkpoint.py": "af5d64e4b1dbf39c9a7551542988b27172a9c504dee212c5b1606d79ca4c29bb",
+    "train_tinyengram_reference.py": "bc8c2aa71dbd7ad9d0f99ed7075bd00b06b949fe25a201ad9d24df43d723015d",
+    "verify_tinyengram_shared_cuda.py": "3ce3dc7591ee05a97c5d299fb6269d54db5e46268856eaaa6542528d97bb7c39"
+  },
+  "status": "passed",
+  "verification": {
+    "test": {
+      "cached_logits_sha256": "60ff10da3a46a2c0fbe0d802d9c7fbe523350f231b6487720a7bb4bbb31e511a",
+      "cached_vs_full_max_abs": 3.62396240234375e-05,
+      "cached_vs_full_top1_changed": 0,
+      "full_logits_sha256": "8872dcf70bb4fd729cfed2dac397a933d31a6132ab76d7a8257a1b61b7ab36ce",
+      "generated_ids": {
+        "False": [
+          [
+            346,
+            41318,
+            566,
+            198,
+            54667,
+            33562,
+            1091,
+            304,
+            279,
+            198,
+            14615,
+            13,
+            1260,
+            572,
+            264,
+            883
+          ]
+        ],
+        "True": [
+          [
+            346,
+            41318,
+            566,
+            198,
+            54667,
+            33562,
+            1091,
+            304,
+            279,
+            198,
+            14615,
+            13,
+            1260,
+            572,
+            264,
+            883
+          ]
+        ]
+      },
+      "history_devices": {
+        "conv": {
+          "1": "cuda:0"
+        },
+        "kv": "cuda:0",
+        "raw_tokens": "cpu"
+      },
+      "token_ids_sha256": "442f274b0a5c285f84514dfc653ddeaba12bb58dcf8fa5f28ad6a110404ae6f6",
+      "tokens": 32
+    },
+    "validation": {
+      "cached_logits_sha256": "ad8d2d870379259ae852e6e6f10ceb1ae9ec3523951594ff8258002e37987619",
+      "cached_vs_full_max_abs": 3.719329833984375e-05,
+      "cached_vs_full_top1_changed": 0,
+      "full_logits_sha256": "7f0ca724b30ddd8a63b6f7880ed1c0055f308cae26ac35add6300eef0cd038e9",
+      "generated_ids": {
+        "False": [
+          [
+            30,
+            364,
+            51,
+            285,
+            537,
+            3040,
+            2849,
+            8048,
+            11,
+            714,
+            279,
+            1899,
+            374,
+            8048,
+            11,
+            323
+          ]
+        ],
+        "True": [
+          [
+            30,
+            364,
+            51,
+            285,
+            537,
+            3040,
+            2849,
+            8048,
+            11,
+            714,
+            279,
+            1899,
+            374,
+            8048,
+            11,
+            323
+          ]
+        ]
+      },
+      "history_devices": {
+        "conv": {
+          "1": "cuda:0"
+        },
+        "kv": "cuda:0",
+        "raw_tokens": "cpu"
+      },
+      "token_ids_sha256": "79f21622712c760e04619cea018d49fb781393ad95f82b2ce15a327949fdf138",
+      "tokens": 32
+    }
+  }
+}

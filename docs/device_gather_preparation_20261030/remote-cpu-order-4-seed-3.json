@@ -1,0 +1,796 @@
+{
+  "category": "CPU protocol validation",
+  "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/meft-cuda-20261030/source/tools/benchmark_device_gather.py --fixture /llm-align/duyimin/meft-cuda-20261030/preparation/fixtures/order-4-seed-3 --native-library build/libmeft_rows.so --device cpu --output-dir /llm-align/duyimin/meft-cuda-20261030/preparation/cpu-order-4-seed-3 --warmup 1 --repeat 2",
+  "commit": "8f6ae4e563c9c0bf462e40a4e93cc6c2c76f608a",
+  "limitations": [
+    "Small trained character-GRU tables; no TinyEngram/DeepSeek compatibility or model throughput conclusion.",
+    "CPU mode validates bytes/protocol only; no accelerator speed or staging evidence.",
+    "Fresh processes, fixed baseline order; warm OS page cache is not flushed.",
+    "First-pass diagnostics include readback; warm timings exclude correctness D2H/hash.",
+    "One live gather output; full-model prefetch outputs/KV/backbone memory are excluded.",
+    "Dense offload shares native copy scheduling; generic offload savings are not compression gains.",
+    "GPU allocator metrics exclude driver/context allocations; RSS peak includes startup/transient tensors.",
+    "Idle gate samples external processes before/after timing, cannot reserve the GPU or rule out short interference.",
+    "Existing local checkpoints and corpus; no paid services, retraining or downloads."
+  ],
+  "settings": {
+    "allocator_fraction": 0.04,
+    "cache_bytes": 4194304,
+    "device": "cpu",
+    "fixture": "/llm-align/duyimin/meft-cuda-20261030/preparation/fixtures/order-4-seed-3",
+    "native_library": "build/libmeft_rows.so",
+    "output_dir": "/llm-align/duyimin/meft-cuda-20261030/preparation/cpu-order-4-seed-3",
+    "query_chunk_rows": 65536,
+    "repeat": 2,
+    "reserve_bytes": 2147483648,
+    "staging_rows": 256,
+    "staging_slots": 2,
+    "timeout": 300,
+    "warmup": 1
+  },
+  "source_hashes": {
+    "benchmark_device_gather.py": "402e33f93246eef7f7650bab65727c9c1d3bcda1d2b0bb73148721cd70847584",
+    "device_row_adapter.py": "dfaf3fdbcc5d9c5fdfa25f6fb54c74c5bd10c53679e69a6fb02abc7d3cb1b432",
+    "prepare_device_gather.py": "d7d40b39a52f53253386031fb558056baa4a6c5f5cf5385d41c2abc7aed9126c"
+  },
+  "status": "passed",
+  "time_utc": "2026-10-30T07:17:42.933122+00:00",
+  "workers": [
+    {
+      "cases": [
+        {
+          "first_pass_including_correctness_readback_seconds": 0.03176614991389215,
+          "gather_rows_per_second": 51331.075059570496,
+          "gpu_memory": null,
+          "median_seconds": 5.580298602581024e-05,
+          "output_bytes": 768,
+          "outputs_byte_exact": true,
+          "p95_seconds": 6.929994560778141e-05,
+          "positions": 1,
+          "query_id_bytes": 24,
+          "query_ids_sha256": [
+            "f879796d5e411d17bd6fdc81bd6eff7c000f548b274058c99587e4cd0c74fa07",
+            "32bbbe9942e8399b8ccbdfe4485f2592d11e9e6d7a902eb138f591e3ba773ad2",
+            "d4200ba84265d3f41a6b89afa8cba0f2d3d20fe3bd67dce02613917e1025d150",
+            "0acaceb2e30a36894b2f1239adaa61a5f85b84c8bc9dcaa3da7d528b5fa7d3c2",
+            "ec8da9aeeb5d1cd56ce3d1e0dfb5f9380c2e4dbbf4646e842d020acb683863f6",
+            "bd8b512d79978f2badc712b544607592b9d50b7f99472943dd172153a1169fd5",
+            "5c5e0d480309f45b6e5105565a22161d5c14135da0e8c2350f717ce1251d54ba",
+            "d98e429306c51841b154a540653be9a3e382e07d2664e605672f78b4659d5097"
+          ],
+          "query_shape": [
+            3,
+            1
+          ],
+          "rss": {
+            "current_bytes": 598016000,
+            "process_peak_bytes": 598016000
+          },
+          "seconds": [
+            8.988589979708195e-05,
+            6.243796087801456e-05,
+            5.77589962631464e-05,
+            5.7270051911473274e-05,
+            5.531497299671173e-05,
+            5.531497299671173e-05,
+            5.538412369787693e-05,
+            5.433592014014721e-05,
+            5.482509732246399e-05,
+            5.5383890867233276e-05,
+            5.720113404095173e-05,
+            5.622184835374355e-05,
+            5.538412369787693e-05,
+            5.6780874729156494e-05,
+            5.5314041674137115e-05,
+            5.629216320812702e-05
+          ],
+          "staging": null
+        },
+        {
+          "first_pass_including_correctness_readback_seconds": 0.0008549278136342764,
+          "gather_rows_per_second": 1599471.4954636055,
+          "gpu_memory": null,
+          "median_seconds": 5.936564411967993e-05,
+          "output_bytes": 24576,
+          "outputs_byte_exact": true,
+          "p95_seconds": 6.369553739205003e-05,
+          "positions": 32,
+          "query_id_bytes": 768,
+          "query_ids_sha256": [
+            "edfea7a622393096fb8ef408b5526d36aa35f82460cb31ca61756ea02fb1df69",
+            "5b831d7af066faba20d1695b78d122104d7e735a87b38094ab4abe60099ad4ca",
+            "81c45f3b09d51cc0ff1614b8f77ce4914f8af90285b803250cfd5c23a4066540",
+            "76d0a60d5ef1ba37408c4792a6e18cb5184f1fe3d05ace7f5794ec07cb1defda",
+            "ff688133c532aebbc95eef06d84865eab64c62ed0ec2c8f77d02634e8f9d656b",
+            "3c3bae0f15f666b821bdb879be0a8855dc723dca24cbc5d620d2aec8e5b045c7",
+            "154866631fa7861ebe4ddc7de95ba6704518dca3b3a1006e8c032170a6ee735d",
+            "ca880e9cb1f8fca72b76a15e2fb67db205211c12d1d0c501cf4c24b5719af642"
+          ],
+          "query_shape": [
+            96,
+            1
+          ],
+          "rss": {
+            "current_bytes": 598016000,
+            "process_peak_bytes": 598016000
+          },
+          "seconds": [
+            6.09720591455698e-05,
+            5.9644924476742744e-05,
+            5.964399315416813e-05,
+            5.824700929224491e-05,
+            5.768914707005024e-05,
+            5.964399315416813e-05,
+            5.9155048802495e-05,
+            5.915621295571327e-05,
+            6.006401963531971e-05,
+            5.866703577339649e-05,
+            5.859695374965668e-05,
+            5.817785859107971e-05,
+            7.186597213149071e-05,
+            6.055203266441822e-05,
+            5.866587162017822e-05,
+            5.9575075283646584e-05
+          ],
+          "staging": null
+        },
+        {
+          "first_pass_including_correctness_readback_seconds": 0.0014742109924554825,
+          "gather_rows_per_second": 5867838.2947390145,
+          "gpu_memory": null,
+          "median_seconds": 6.530201062560081e-05,
+          "output_bytes": 98304,
+          "outputs_byte_exact": true,
+          "p95_seconds": 6.64892140775919e-05,
+          "positions": 128,
+          "query_id_bytes": 3072,
+          "query_ids_sha256": [
+            "183eafc7fa486e22bef246d5150fbd1c382d9cd7e052613d2658f044d8decfd2",
+            "1e15697a2d19d35569341d2b5e22d7999af3bf01fd7c5ce5255dc605bd8de5f4",
+            "10481757704ab95346308f6488e5e889c857a5f2433a61e99e8eb8dd31bca312",
+            "37363a4790fcddd15ed76348fd91bd55039c3f8db794eea5cc231a907b23c221",
+            "0eaba7c82a9b540182af164db01896fa2a1b8b3b43fd3b94c83a6ec9e44489b8",
+            "609f3b2b7cab004eff87d137e5751c38be0983882ccdf7fd470c1afcebaf2556",
+            "b0b96572a8c63a519bef44644acdd5d2bdc83e08631c3b1aed9efbf7c6128516",
+            "72abf915d82c0d25a5bafa12b10f3a51e046a87f39895ffe4d9b28b2f7b28dff"
+          ],
+          "query_shape": [
+            384,
+            1
+          ],
+          "rss": {
+            "current_bytes": 598016000,
+            "process_peak_bytes": 598016000
+          },
+          "seconds": [
+            6.579095497727394e-05,
+            6.481306627392769e-05,
+            6.537116132676601e-05,
+            6.5231928601861e-05,
+            6.579095497727394e-05,
+            6.572110578417778e-05,
+            6.530201062560081e-05,
+            6.53010793030262e-05,
+            6.432412192225456e-05,
+            6.579095497727394e-05,
+            6.530201062560081e-05,
+            6.432412192225456e-05,
+            6.53010793030262e-05,
+            6.481306627392769e-05,
+            6.858399137854576e-05,
+            6.530201062560081e-05
+          ],
+          "staging": null
+        },
+        {
+          "first_pass_including_correctness_readback_seconds": 0.003964823903515935,
+          "gather_rows_per_second": 17940391.095182396,
+          "gpu_memory": null,
+          "median_seconds": 8.566002361476421e-05,
+          "output_bytes": 393216,
+          "outputs_byte_exact": true,
+          "p95_seconds": 8.861121023073792e-05,
+          "positions": 512,
+          "query_id_bytes": 12288,
+          "query_ids_sha256": [
+            "98de4185fca70662bd3576068805bbcdf3e882b031b2ff2b6221d4b066b1b03a",
+            "7df024b4acb6a764662229e51b38a6e8d5e25088076f81ada3d19935d1321d3f",
+            "c6132b44b88ac2a392ea482fda8214c96ab17898bbb7ff18fef1d163d612ec93",
+            "5fe097184843ed737465c1b0d993c96273fd62ddb0f85307245d73e08c8fbc43",
+            "e06dbf1fbc69875871b4b03d6e931ce773580d53818392e5b7191b4978a173c5",
+            "8751548eb4387fbbcf15c192f18927cc9b3fefc00be4baa9720a7e7a307f1805",
+            "544c096cff643fef32ca994d5d53394c94513ea99aa6b86e337bf8d176209306",
+            "f5aa03d08bf22976c3d4adb275924bb0ef1be163c8df7e49f3474c796174bcb6"
+          ],
+          "query_shape": [
+            1536,
+            1
+          ],
+          "rss": {
+            "current_bytes": 598016000,
+            "process_peak_bytes": 598016000
+          },
+          "seconds": [
+            8.848891593515873e-05,
+            8.618412539362907e-05,
+            8.667283691465855e-05,
+            8.422904647886753e-05,
+            8.611404336988926e-05,
+            8.513708598911762e-05,
+            8.611497469246387e-05,
+            8.464790880680084e-05,
+            8.422881364822388e-05,
+            8.464790880680084e-05,
+            8.569587953388691e-05,
+            8.325115777552128e-05,
+            8.56949482113123e-05,
+            8.562509901821613e-05,
+            8.415896445512772e-05,
+            8.897809311747551e-05
+          ],
+          "staging": null
+        }
+      ],
+      "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/meft-cuda-20261030/source/tools/benchmark_device_gather.py --worker resident --worker-report /llm-align/duyimin/meft-cuda-20261030/preparation/cpu-order-4-seed-3/resident.json --fixture /llm-align/duyimin/meft-cuda-20261030/preparation/fixtures/order-4-seed-3 --native-library build/libmeft_rows.so --device cpu --output-dir /llm-align/duyimin/meft-cuda-20261030/preparation/cpu-order-4-seed-3 --staging-rows 256 --staging-slots 2 --query-chunk-rows 65536 --cache-bytes 4194304 --warmup 1 --repeat 2 --timeout 300 --allocator-fraction 0.04 --reserve-bytes 2147483648",
+      "cpu": "x86_64",
+      "device": "cpu",
+      "dtype": "torch.float32",
+      "exit_code": 0,
+      "fixture_sha256": "adc46c0772ad0d64312b2f85a8cb7b501652ad04169f7cad8555a4df9df2974e",
+      "interop_threads": 1,
+      "mode": "resident",
+      "native_library_sha256": "d4a7ac2fdc7d25bbb32f7eb5cd009123d2346215bcd386ee8f0e182c33ee66f4",
+      "native_table_and_metadata_bytes": 2896214,
+      "open_seconds": 0.062688197940588,
+      "os": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+      "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+      "raw_table_bytes": 3010560,
+      "rss_after_open": {
+        "current_bytes": 597000192,
+        "process_peak_bytes": 597000192
+      },
+      "rss_before_open": {
+        "current_bytes": 595017728,
+        "process_peak_bytes": 595017728
+      },
+      "source_shape": [
+        11760,
+        64
+      ],
+      "status": "passed",
+      "stderr": "",
+      "stdout": "",
+      "threads": 1,
+      "torch": "2.11.0+cu130",
+      "weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323"
+    },
+    {
+      "cases": [
+        {
+          "first_pass_including_correctness_readback_seconds": 0.008225145982578397,
+          "gather_rows_per_second": 38326.59883758869,
+          "gpu_memory": null,
+          "median_seconds": 7.717497646808624e-05,
+          "output_bytes": 768,
+          "outputs_byte_exact": true,
+          "p95_seconds": 8.293677819892764e-05,
+          "positions": 1,
+          "query_id_bytes": 24,
+          "query_ids_sha256": [
+            "f879796d5e411d17bd6fdc81bd6eff7c000f548b274058c99587e4cd0c74fa07",
+            "32bbbe9942e8399b8ccbdfe4485f2592d11e9e6d7a902eb138f591e3ba773ad2",
+            "d4200ba84265d3f41a6b89afa8cba0f2d3d20fe3bd67dce02613917e1025d150",
+            "0acaceb2e30a36894b2f1239adaa61a5f85b84c8bc9dcaa3da7d528b5fa7d3c2",
+            "ec8da9aeeb5d1cd56ce3d1e0dfb5f9380c2e4dbbf4646e842d020acb683863f6",
+            "bd8b512d79978f2badc712b544607592b9d50b7f99472943dd172153a1169fd5",
+            "5c5e0d480309f45b6e5105565a22161d5c14135da0e8c2350f717ce1251d54ba",
+            "d98e429306c51841b154a540653be9a3e382e07d2664e605672f78b4659d5097"
+          ],
+          "query_shape": [
+            3,
+            1
+          ],
+          "rss": {
+            "current_bytes": 598040576,
+            "process_peak_bytes": 598040576
+          },
+          "seconds": [
+            8.325092494487762e-05,
+            7.899105548858643e-05,
+            8.283206261694431e-05,
+            7.8920042142272e-05,
+            7.703504525125027e-05,
+            7.710512727499008e-05,
+            7.947999984025955e-05,
+            7.905997335910797e-05,
+            7.710396312177181e-05,
+            7.766298949718475e-05,
+            7.717497646808624e-05,
+            7.619685493409634e-05,
+            7.661501877009869e-05,
+            7.66159500926733e-05,
+            7.717497646808624e-05,
+            7.717497646808624e-05
+          ],
+          "staging": {
+            "copy_chunks": 0,
+            "pinned": false,
+            "queries": 32,
+            "reuse_waits": 0,
+            "slot_allocations": 0,
+            "slot_reuses": 0,
+            "staging_byte_limit": 131072,
+            "staging_bytes": 0
+          }
+        },
+        {
+          "first_pass_including_correctness_readback_seconds": 0.0010261789429932833,
+          "gather_rows_per_second": 1214594.0048730536,
+          "gpu_memory": null,
+          "median_seconds": 7.899000775068998e-05,
+          "output_bytes": 24576,
+          "outputs_byte_exact": true,
+          "p95_seconds": 8.049275493249297e-05,
+          "positions": 32,
+          "query_id_bytes": 768,
+          "query_ids_sha256": [
+            "edfea7a622393096fb8ef408b5526d36aa35f82460cb31ca61756ea02fb1df69",
+            "5b831d7af066faba20d1695b78d122104d7e735a87b38094ab4abe60099ad4ca",
+            "81c45f3b09d51cc0ff1614b8f77ce4914f8af90285b803250cfd5c23a4066540",
+            "76d0a60d5ef1ba37408c4792a6e18cb5184f1fe3d05ace7f5794ec07cb1defda",
+            "ff688133c532aebbc95eef06d84865eab64c62ed0ec2c8f77d02634e8f9d656b",
+            "3c3bae0f15f666b821bdb879be0a8855dc723dca24cbc5d620d2aec8e5b045c7",
+            "154866631fa7861ebe4ddc7de95ba6704518dca3b3a1006e8c032170a6ee735d",
+            "ca880e9cb1f8fca72b76a15e2fb67db205211c12d1d0c501cf4c24b5719af642"
+          ],
+          "query_shape": [
+            96,
+            1
+          ],
+          "rss": {
+            "current_bytes": 598040576,
+            "process_peak_bytes": 598040576
+          },
+          "seconds": [
+            8.18539410829544e-05,
+            7.899012416601181e-05,
+            7.898989133536816e-05,
+            7.947906851768494e-05,
+            7.857196033000946e-05,
+            7.759407162666321e-05,
+            8.003902621567249e-05,
+            7.857196033000946e-05,
+            7.906113751232624e-05,
+            7.766392081975937e-05,
+            7.857196033000946e-05,
+            7.947883568704128e-05,
+            7.95489177107811e-05,
+            7.808301597833633e-05,
+            7.857219316065311e-05,
+            7.955008186399937e-05
+          ],
+          "staging": {
+            "copy_chunks": 0,
+            "pinned": false,
+            "queries": 64,
+            "reuse_waits": 0,
+            "slot_allocations": 0,
+            "slot_reuses": 0,
+            "staging_byte_limit": 131072,
+            "staging_bytes": 0
+          }
+        },
+        {
+          "first_pass_including_correctness_readback_seconds": 0.0016548910643905401,
+          "gather_rows_per_second": 4447241.9010130055,
+          "gpu_memory": null,
+          "median_seconds": 8.635851554572582e-05,
+          "output_bytes": 98304,
+          "outputs_byte_exact": true,
+          "p95_seconds": 8.752848953008652e-05,
+          "positions": 128,
+          "query_id_bytes": 3072,
+          "query_ids_sha256": [
+            "183eafc7fa486e22bef246d5150fbd1c382d9cd7e052613d2658f044d8decfd2",
+            "1e15697a2d19d35569341d2b5e22d7999af3bf01fd7c5ce5255dc605bd8de5f4",
+            "10481757704ab95346308f6488e5e889c857a5f2433a61e99e8eb8dd31bca312",
+            "37363a4790fcddd15ed76348fd91bd55039c3f8db794eea5cc231a907b23c221",
+            "0eaba7c82a9b540182af164db01896fa2a1b8b3b43fd3b94c83a6ec9e44489b8",
+            "609f3b2b7cab004eff87d137e5751c38be0983882ccdf7fd470c1afcebaf2556",
+            "b0b96572a8c63a519bef44644acdd5d2bdc83e08631c3b1aed9efbf7c6128516",
+            "72abf915d82c0d25a5bafa12b10f3a51e046a87f39895ffe4d9b28b2f7b28dff"
+          ],
+          "query_shape": [
+            384,
+            1
+          ],
+          "rss": {
+            "current_bytes": 598040576,
+            "process_peak_bytes": 598040576
+          },
+          "seconds": [
+            8.751102723181248e-05,
+            8.653406985104084e-05,
+            8.611404336988926e-05,
+            8.758087642490864e-05,
+            8.611404336988926e-05,
+            8.660322055220604e-05,
+            8.562486618757248e-05,
+            8.562509901821613e-05,
+            8.562509901821613e-05,
+            8.653290569782257e-05,
+            8.562603034079075e-05,
+            8.562603034079075e-05,
+            8.653406985104084e-05,
+            8.70218500494957e-05,
+            8.66730697453022e-05,
+            8.618412539362907e-05
+          ],
+          "staging": {
+            "copy_chunks": 0,
+            "pinned": false,
+            "queries": 96,
+            "reuse_waits": 0,
+            "slot_allocations": 0,
+            "slot_reuses": 0,
+            "staging_byte_limit": 131072,
+            "staging_bytes": 0
+          }
+        },
+        {
+          "first_pass_including_correctness_readback_seconds": 0.004098081029951572,
+          "gather_rows_per_second": 14254946.30905648,
+          "gpu_memory": null,
+          "median_seconds": 0.00010734598618000746,
+          "output_bytes": 393216,
+          "outputs_byte_exact": true,
+          "p95_seconds": 0.00011190358782187104,
+          "positions": 512,
+          "query_id_bytes": 12288,
+          "query_ids_sha256": [
+            "98de4185fca70662bd3576068805bbcdf3e882b031b2ff2b6221d4b066b1b03a",
+            "7df024b4acb6a764662229e51b38a6e8d5e25088076f81ada3d19935d1321d3f",
+            "c6132b44b88ac2a392ea482fda8214c96ab17898bbb7ff18fef1d163d612ec93",
+            "5fe097184843ed737465c1b0d993c96273fd62ddb0f85307245d73e08c8fbc43",
+            "e06dbf1fbc69875871b4b03d6e931ce773580d53818392e5b7191b4978a173c5",
+            "8751548eb4387fbbcf15c192f18927cc9b3fefc00be4baa9720a7e7a307f1805",
+            "544c096cff643fef32ca994d5d53394c94513ea99aa6b86e337bf8d176209306",
+            "f5aa03d08bf22976c3d4adb275924bb0ef1be163c8df7e49f3474c796174bcb6"
+          ],
+          "query_shape": [
+            1536,
+            1
+          ],
+          "rss": {
+            "current_bytes": 598040576,
+            "process_peak_bytes": 598040576
+          },
+          "seconds": [
+            0.0001083938404917717,
+            0.00011118780821561813,
+            0.00010741595178842545,
+            0.00010601989924907684,
+            0.00010741595178842545,
+            0.0001055300235748291,
+            0.00010734610259532928,
+            0.0001068569254130125,
+            0.00010734610259532928,
+            0.00010692677460610867,
+            0.00010734586976468563,
+            0.00010741595178842545,
+            0.00010692700743675232,
+            0.00010692700743675232,
+            0.00010692700743675232,
+            0.00011405092664062977
+          ],
+          "staging": {
+            "copy_chunks": 0,
+            "pinned": false,
+            "queries": 128,
+            "reuse_waits": 0,
+            "slot_allocations": 0,
+            "slot_reuses": 0,
+            "staging_byte_limit": 131072,
+            "staging_bytes": 0
+          }
+        }
+      ],
+      "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/meft-cuda-20261030/source/tools/benchmark_device_gather.py --worker dense-offload --worker-report /llm-align/duyimin/meft-cuda-20261030/preparation/cpu-order-4-seed-3/dense-offload.json --fixture /llm-align/duyimin/meft-cuda-20261030/preparation/fixtures/order-4-seed-3 --native-library build/libmeft_rows.so --device cpu --output-dir /llm-align/duyimin/meft-cuda-20261030/preparation/cpu-order-4-seed-3 --staging-rows 256 --staging-slots 2 --query-chunk-rows 65536 --cache-bytes 4194304 --warmup 1 --repeat 2 --timeout 300 --allocator-fraction 0.04 --reserve-bytes 2147483648",
+      "cpu": "x86_64",
+      "device": "cpu",
+      "dtype": "torch.float32",
+      "exit_code": 0,
+      "fixture_sha256": "adc46c0772ad0d64312b2f85a8cb7b501652ad04169f7cad8555a4df9df2974e",
+      "interop_threads": 1,
+      "mode": "dense-offload",
+      "native_library_sha256": "d4a7ac2fdc7d25bbb32f7eb5cd009123d2346215bcd386ee8f0e182c33ee66f4",
+      "native_table_and_metadata_bytes": 2896214,
+      "open_seconds": 0.010357053019106388,
+      "os": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+      "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+      "raw_table_bytes": 3010560,
+      "rss_after_open": {
+        "current_bytes": 597024768,
+        "process_peak_bytes": 597024768
+      },
+      "rss_before_open": {
+        "current_bytes": 594812928,
+        "process_peak_bytes": 594812928
+      },
+      "source_shape": [
+        11760,
+        64
+      ],
+      "status": "passed",
+      "stderr": "",
+      "stdout": "",
+      "threads": 1,
+      "torch": "2.11.0+cu130",
+      "weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323"
+    },
+    {
+      "cases": [
+        {
+          "first_pass_including_correctness_readback_seconds": 0.03198426403105259,
+          "gather_rows_per_second": 33353.07583320229,
+          "gpu_memory": null,
+          "median_seconds": 8.967600297182798e-05,
+          "output_bytes": 768,
+          "outputs_byte_exact": true,
+          "p95_seconds": 9.41460020840168e-05,
+          "positions": 1,
+          "query_id_bytes": 24,
+          "query_ids_sha256": [
+            "f879796d5e411d17bd6fdc81bd6eff7c000f548b274058c99587e4cd0c74fa07",
+            "32bbbe9942e8399b8ccbdfe4485f2592d11e9e6d7a902eb138f591e3ba773ad2",
+            "d4200ba84265d3f41a6b89afa8cba0f2d3d20fe3bd67dce02613917e1025d150",
+            "0acaceb2e30a36894b2f1239adaa61a5f85b84c8bc9dcaa3da7d528b5fa7d3c2",
+            "ec8da9aeeb5d1cd56ce3d1e0dfb5f9380c2e4dbbf4646e842d020acb683863f6",
+            "bd8b512d79978f2badc712b544607592b9d50b7f99472943dd172153a1169fd5",
+            "5c5e0d480309f45b6e5105565a22161d5c14135da0e8c2350f717ce1251d54ba",
+            "d98e429306c51841b154a540653be9a3e382e07d2664e605672f78b4659d5097"
+          ],
+          "query_shape": [
+            3,
+            1
+          ],
+          "rss": {
+            "current_bytes": 597184512,
+            "process_peak_bytes": 597184512
+          },
+          "seconds": [
+            9.41460020840168e-05,
+            9.226007387042046e-05,
+            9.41460020840168e-05,
+            8.98861326277256e-05,
+            9.128195233643055e-05,
+            8.79999715834856e-05,
+            8.988589979708195e-05,
+            8.897786028683186e-05,
+            8.988589979708195e-05,
+            8.841906674206257e-05,
+            8.792988955974579e-05,
+            8.946703746914864e-05,
+            8.988496847450733e-05,
+            8.751102723181248e-05,
+            8.79999715834856e-05,
+            8.946587331593037e-05
+          ],
+          "staging": {
+            "copy_chunks": 0,
+            "pinned": false,
+            "queries": 32,
+            "reuse_waits": 0,
+            "slot_allocations": 0,
+            "slot_reuses": 0,
+            "staging_byte_limit": 131072,
+            "staging_bytes": 0
+          }
+        },
+        {
+          "first_pass_including_correctness_readback_seconds": 0.02441485901363194,
+          "gather_rows_per_second": 34089.65367658246,
+          "gpu_memory": null,
+          "median_seconds": 0.0027148029766976833,
+          "output_bytes": 24576,
+          "outputs_byte_exact": true,
+          "p95_seconds": 0.003651270759291947,
+          "positions": 32,
+          "query_id_bytes": 768,
+          "query_ids_sha256": [
+            "edfea7a622393096fb8ef408b5526d36aa35f82460cb31ca61756ea02fb1df69",
+            "5b831d7af066faba20d1695b78d122104d7e735a87b38094ab4abe60099ad4ca",
+            "81c45f3b09d51cc0ff1614b8f77ce4914f8af90285b803250cfd5c23a4066540",
+            "76d0a60d5ef1ba37408c4792a6e18cb5184f1fe3d05ace7f5794ec07cb1defda",
+            "ff688133c532aebbc95eef06d84865eab64c62ed0ec2c8f77d02634e8f9d656b",
+            "3c3bae0f15f666b821bdb879be0a8855dc723dca24cbc5d620d2aec8e5b045c7",
+            "154866631fa7861ebe4ddc7de95ba6704518dca3b3a1006e8c032170a6ee735d",
+            "ca880e9cb1f8fca72b76a15e2fb67db205211c12d1d0c501cf4c24b5719af642"
+          ],
+          "query_shape": [
+            96,
+            1
+          ],
+          "rss": {
+            "current_bytes": 599347200,
+            "process_peak_bytes": 599347200
+          },
+          "seconds": [
+            0.0025553549639880657,
+            0.0035489180590957403,
+            0.002212784020230174,
+            0.0036472550127655268,
+            0.003120721084997058,
+            0.002456879010424018,
+            0.002874250989407301,
+            0.0021295330952852964,
+            0.0025463460478931665,
+            0.003529503010213375,
+            0.0022307331673800945,
+            0.0036633179988712072,
+            0.0031126888934522867,
+            0.0024341808166354895,
+            0.0028931780252605677,
+            0.0021020150743424892
+          ],
+          "staging": {
+            "copy_chunks": 0,
+            "pinned": false,
+            "queries": 64,
+            "reuse_waits": 0,
+            "slot_allocations": 0,
+            "slot_reuses": 0,
+            "staging_byte_limit": 131072,
+            "staging_bytes": 0
+          }
+        },
+        {
+          "first_pass_including_correctness_readback_seconds": 0.09338039811700583,
+          "gather_rows_per_second": 33017.93633954694,
+          "gpu_memory": null,
+          "median_seconds": 0.011445669690147042,
+          "output_bytes": 98304,
+          "outputs_byte_exact": true,
+          "p95_seconds": 0.012838812603149563,
+          "positions": 128,
+          "query_id_bytes": 3072,
+          "query_ids_sha256": [
+            "183eafc7fa486e22bef246d5150fbd1c382d9cd7e052613d2658f044d8decfd2",
+            "1e15697a2d19d35569341d2b5e22d7999af3bf01fd7c5ce5255dc605bd8de5f4",
+            "10481757704ab95346308f6488e5e889c857a5f2433a61e99e8eb8dd31bca312",
+            "37363a4790fcddd15ed76348fd91bd55039c3f8db794eea5cc231a907b23c221",
+            "0eaba7c82a9b540182af164db01896fa2a1b8b3b43fd3b94c83a6ec9e44489b8",
+            "609f3b2b7cab004eff87d137e5751c38be0983882ccdf7fd470c1afcebaf2556",
+            "b0b96572a8c63a519bef44644acdd5d2bdc83e08631c3b1aed9efbf7c6128516",
+            "72abf915d82c0d25a5bafa12b10f3a51e046a87f39895ffe4d9b28b2f7b28dff"
+          ],
+          "query_shape": [
+            384,
+            1
+          ],
+          "rss": {
+            "current_bytes": 600158208,
+            "process_peak_bytes": 600158208
+          },
+          "seconds": [
+            0.012177607044577599,
+            0.011622647987678647,
+            0.011817645048722625,
+            0.01129097118973732,
+            0.011052602902054787,
+            0.011010907823219895,
+            0.011284824926406145,
+            0.012845150893554091,
+            0.012139264959841967,
+            0.011600368190556765,
+            0.011796762002632022,
+            0.011261149076744914,
+            0.011042126920074224,
+            0.011025085812434554,
+            0.011276863981038332,
+            0.012836699839681387
+          ],
+          "staging": {
+            "copy_chunks": 0,
+            "pinned": false,
+            "queries": 96,
+            "reuse_waits": 0,
+            "slot_allocations": 0,
+            "slot_reuses": 0,
+            "staging_byte_limit": 131072,
+            "staging_bytes": 0
+          }
+        },
+        {
+          "first_pass_including_correctness_readback_seconds": 0.1556077830027789,
+          "gather_rows_per_second": 81022.7634225129,
+          "gpu_memory": null,
+          "median_seconds": 0.0191428855760023,
+          "output_bytes": 393216,
+          "outputs_byte_exact": true,
+          "p95_seconds": 0.01947653468232602,
+          "positions": 512,
+          "query_id_bytes": 12288,
+          "query_ids_sha256": [
+            "98de4185fca70662bd3576068805bbcdf3e882b031b2ff2b6221d4b066b1b03a",
+            "7df024b4acb6a764662229e51b38a6e8d5e25088076f81ada3d19935d1321d3f",
+            "c6132b44b88ac2a392ea482fda8214c96ab17898bbb7ff18fef1d163d612ec93",
+            "5fe097184843ed737465c1b0d993c96273fd62ddb0f85307245d73e08c8fbc43",
+            "e06dbf1fbc69875871b4b03d6e931ce773580d53818392e5b7191b4978a173c5",
+            "8751548eb4387fbbcf15c192f18927cc9b3fefc00be4baa9720a7e7a307f1805",
+            "544c096cff643fef32ca994d5d53394c94513ea99aa6b86e337bf8d176209306",
+            "f5aa03d08bf22976c3d4adb275924bb0ef1be163c8df7e49f3474c796174bcb6"
+          ],
+          "query_shape": [
+            1536,
+            1
+          ],
+          "rss": {
+            "current_bytes": 600158208,
+            "process_peak_bytes": 600158208
+          },
+          "seconds": [
+            0.018562783021479845,
+            0.01947358390316367,
+            0.01926112687215209,
+            0.018034852109849453,
+            0.019362396094948053,
+            0.018696179846301675,
+            0.01913485419936478,
+            0.019174593035131693,
+            0.018557125935330987,
+            0.01948538701981306,
+            0.01924275793135166,
+            0.018031499814242125,
+            0.019329220987856388,
+            0.01869003288447857,
+            0.019144281977787614,
+            0.019141489174216986
+          ],
+          "staging": {
+            "copy_chunks": 0,
+            "pinned": false,
+            "queries": 128,
+            "reuse_waits": 0,
+            "slot_allocations": 0,
+            "slot_reuses": 0,
+            "staging_byte_limit": 131072,
+            "staging_bytes": 0
+          }
+        }
+      ],
+      "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/meft-cuda-20261030/source/tools/benchmark_device_gather.py --worker native --worker-report /llm-align/duyimin/meft-cuda-20261030/preparation/cpu-order-4-seed-3/native.json --fixture /llm-align/duyimin/meft-cuda-20261030/preparation/fixtures/order-4-seed-3 --native-library build/libmeft_rows.so --device cpu --output-dir /llm-align/duyimin/meft-cuda-20261030/preparation/cpu-order-4-seed-3 --staging-rows 256 --staging-slots 2 --query-chunk-rows 65536 --cache-bytes 4194304 --warmup 1 --repeat 2 --timeout 300 --allocator-fraction 0.04 --reserve-bytes 2147483648",
+      "cpu": "x86_64",
+      "device": "cpu",
+      "dtype": "torch.float32",
+      "exit_code": 0,
+      "fixture_sha256": "adc46c0772ad0d64312b2f85a8cb7b501652ad04169f7cad8555a4df9df2974e",
+      "interop_threads": 1,
+      "mode": "native",
+      "native_library_sha256": "d4a7ac2fdc7d25bbb32f7eb5cd009123d2346215bcd386ee8f0e182c33ee66f4",
+      "native_table_and_metadata_bytes": 2896214,
+      "open_seconds": 0.004543808056041598,
+      "os": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+      "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+      "raw_table_bytes": 3010560,
+      "rss_after_open": {
+        "current_bytes": 596168704,
+        "process_peak_bytes": 596168704
+      },
+      "rss_before_open": {
+        "current_bytes": 594874368,
+        "process_peak_bytes": 594874368
+      },
+      "source_shape": [
+        11760,
+        64
+      ],
+      "status": "passed",
+      "stderr": "",
+      "stdout": "",
+      "threads": 1,
+      "torch": "2.11.0+cu130",
+      "weight_sha256": "74ba1cd907605debe6e87c0b632bf10ec6a40efceb5d71912f3cfe5977051323"
+    }
+  ]
+}
