@@ -110,6 +110,7 @@ external data or GPU. It checks integration, not representative compression.
 | [Structural contribution controls](docs/structural_native_evidence_20261030/README.md) | Trained SGNS/GRU references measure DATrie and approximate joint sharing separately; exact mode finds no identical rows to merge |
 | [FP16/INT8 + structural controls](docs/quantized_structural_evidence_20261031/README.md) | Same trained tables retain additional approximate savings after quantization; 4-order GRU INT8 regresses; quality failures and fixed-default audit are separate |
 | [1.85M trained-row capacity](docs/cpu_capacity_evidence_20261030/README.md) / [sparse blocks](docs/sparse_blocks_evidence_20261030/README.md) | Smaller blocks lower native miss latency 16–27× relative to the previous native layout; raw mmap remains faster |
+| [Large FP16/INT8 capacity and CPU controls](docs/quantized_capacity_evidence_20261031/README.md) | 54 fresh query workers; FP16 native saves 52.29% backend bytes versus raw FP32; INT8 native expands versus raw INT8, prompting an optional raw fallback; quantization is lossy |
 | [TinyEngram/Qwen trained integration](docs/tinyengram_qwen_evidence_20261030/README.md) / [CUDA controls](docs/qwen_cuda_performance_20261030/README.md) | Preserved trained outputs and measured CPU/device costs; native lookup remains slower than dense offload on these traces |
 
 Official DeepSeek Engram verification uses its small demonstration, not a

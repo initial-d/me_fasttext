@@ -103,14 +103,22 @@ def plot(summary, directory):
     query_names = ["fp32-direct"] + names
     for case, marker in (("heldout-lexical", "o"), ("uniform-id-stress", "s")):
         values = [summary["queries"][n][case]["first_trace"]["wall_p50_ms"]["median"] for n in query_names]
-        axes[1].plot(values, list(range(len(query_names))), marker=marker, label=case)
+        low = [summary["queries"][n][case]["first_trace"]["wall_p50_ms"]["min"] for n in query_names]
+        high = [summary["queries"][n][case]["first_trace"]["wall_p50_ms"]["max"] for n in query_names]
+        axes[1].errorbar(values, list(range(len(query_names))),
+                         xerr=[np.asarray(values) - low, np.asarray(high) - values],
+                         fmt=marker, capsize=2, label=case)
     axes[1].set_yticks(range(len(query_names)), [n.replace("fp32-direct", "FP32 direct mmap") for n in query_names])
     axes[1].set(xscale="log", xlabel="Fresh-process first-trace batch p50 (ms)", title="512-row CPU gather → FP32")
     axes[1].legend(fontsize=8)
     scale_names = ["int8-native-prefix-100000", "int8-native-prefix-500000", "int8-native"]
     scale_names = [n for n in scale_names if n in summary["builds"]]
-    axes[2].plot([summary["builds"][n]["rows"] / 1e6 for n in scale_names],
-                 [summary["builds"][n]["peak_rss_bytes"] / 2**20 for n in scale_names], "o-", color="#f28e2b")
+    scale_x = [summary["builds"][n]["rows"] / 1e6 for n in scale_names]
+    scale_y = [summary["builds"][n]["peak_rss_bytes"] / 2**20 for n in scale_names]
+    axes[2].plot(scale_x, scale_y, "o-", color="#f28e2b")
+    axes[2].set_ylim(0, max(scale_y) * 1.3)
+    for x, y in zip(scale_x, scale_y):
+        axes[2].annotate(f"{y:.1f}", (x, y), xytext=(0, 7), textcoords="offset points", ha="center", fontsize=8)
     axes[2].set(xlabel="Original trained rows (millions)", ylabel="Fresh builder peak RSS (MiB)",
                 title="INT8 streaming export, ≤8 KiB blocks")
     for ax in axes[:2]:

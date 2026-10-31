@@ -1,0 +1,12 @@
+...................ss.ss......../llm-align/duyimin/ngram-scale-20261031/checks-source/src/ftindex.cc: In function ‘FTIndex* ftindex_map_from_buffer(void*, size_t*)’:
+/llm-align/duyimin/ngram-scale-20261031/checks-source/mylib/include/pub/pub_malloc.h:16:82: warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+   16 | #define pub_calloc(num, size)                   pub_calloc_detail((num), (size), __FILE__, __FUNCTION__, __LINE__)
+      |                                                                                  ^~~~~~~~
+/llm-align/duyimin/ngram-scale-20261031/checks-source/src/ftindex.cc:461:31: note: in expansion of macro ‘pub_calloc’
+  461 |         if (!(fti = (FTIndex*)pub_calloc(1, sizeof(*fti)))) return NULL;
+      |                               ^~~~~~~~~~
+........................................................................................sssssssssssss.......
+----------------------------------------------------------------------
+Ran 140 tests in 66.453s
+
+OK (skipped=17)
