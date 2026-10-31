@@ -54,7 +54,7 @@ class StructureAuditTest(unittest.TestCase):
         info=dict(shape=[4,2],source_sha256='fixture',source_commit='fixture',
             keys_bytes=10000,settings=dict(encodings=['fp32'],rounds=1),limitations=['fixture'])
         variants=[]
-        workers=[dict(phase='audit',name='pair-audit',returncode=0,result=dict(status='passed',by_order={},strata=[]))]
+        workers=[dict(phase='audit',name='pair-audit',returncode=0,result=dict(status='passed',source_commit='fixture',by_order={},strata=[]))]
         for policy,size in [('raw',1000),('identity',800),('joint',850)]:
             name='fp32-'+policy
             fidelity=dict(rows=4,merged_rows=1)
@@ -66,13 +66,14 @@ class StructureAuditTest(unittest.TestCase):
             variants.append(dict(name=name,encoding='fp32',policy=policy,threshold=.99 if policy=='joint' else None,
                 build=built,verification=verification))
             for case in ('heldout-lexical','uniform-id-stress'):
-                value=dict(status='passed',all_first_and_second_query_bytes_exact=True)
+                value=dict(status='passed',source_commit='query-fixture',all_first_and_second_query_bytes_exact=True)
                 value.update({stage:dict(wall=dict(p50_ms=1),cpu=dict(p50_ms=1))
                     for stage in ('first_trace','second_trace','hot_trace')})
                 value.update({stage:dict(peak_rss_bytes=1) for stage in ('memory_open','memory_first','memory_second','memory_hot')})
                 workers.append(dict(phase='query',name='query-'+name+'-'+case+'-0',returncode=0,result=value))
         report=dict(status='passed',provenance=info,workers=workers,variants=variants,index_bytes={'keys.das':5000})
         summarized=analyze(report)
+        self.assertEqual(summarized['worker_source_commits'],['fixture','query-fixture'])
         joint=next(v for v in summarized['variants'] if v['policy']=='joint')
         self.assertAlmostEqual(joint['additional_saving_vs_best_same_encoding_control'],-50/10800)
         self.assertEqual(joint['bundle_with_datrie_bytes'],5850)
