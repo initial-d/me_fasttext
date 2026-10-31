@@ -1,6 +1,7 @@
 """Correctness fixtures only; fabricated values are never experimental evidence."""
 from argparse import Namespace
 import hashlib
+import copy
 import json
 from pathlib import Path
 import shutil
@@ -47,6 +48,40 @@ class StructureAuditTest(unittest.TestCase):
         self.assertEqual(result['cosine_only_error']['max'],1)
         self.assertAlmostEqual(result['ratio_only_error']['max'],2**.5)
         self.assertFalse(row_metrics(rows[3:],rows[3:])['nonzero'][0])
+
+    def test_complete_control_denominator_and_missing_round_rejection(self):
+        from tools.analyze_large_structure import analyze
+        info=dict(shape=[4,2],source_sha256='fixture',source_commit='fixture',
+            keys_bytes=10000,settings=dict(encodings=['fp32'],rounds=1),limitations=['fixture'])
+        variants=[]
+        workers=[dict(phase='audit',name='pair-audit',returncode=0,result=dict(status='passed',by_order={},strata=[]))]
+        for policy,size in [('raw',1000),('identity',800),('joint',850)]:
+            name='fp32-'+policy
+            fidelity=dict(rows=4,merged_rows=1)
+            verification=dict(all_rows_verified=4,all_encoded_and_decoded_original_ids_byte_exact_to_representative=True,
+                overall=fidelity,merged_only={},by_order={},heldout_query_weighted_relative_frobenius=0,
+                heldout_query_weighted_added_frobenius=0,composed_ngram_mean=None)
+            built=dict(bundle_bytes=size,metadata=dict(storage={}),build_seconds=0,
+                memory_after=dict(peak_rss_bytes=1))
+            variants.append(dict(name=name,encoding='fp32',policy=policy,threshold=.99 if policy=='joint' else None,
+                build=built,verification=verification))
+            for case in ('heldout-lexical','uniform-id-stress'):
+                value=dict(status='passed',all_first_and_second_query_bytes_exact=True)
+                value.update({stage:dict(wall=dict(p50_ms=1),cpu=dict(p50_ms=1))
+                    for stage in ('first_trace','second_trace','hot_trace')})
+                value.update({stage:dict(peak_rss_bytes=1) for stage in ('memory_open','memory_first','memory_second','memory_hot')})
+                workers.append(dict(phase='query',name='query-'+name+'-'+case+'-0',returncode=0,result=value))
+        report=dict(status='passed',provenance=info,workers=workers,variants=variants,index_bytes={'keys.das':5000})
+        summarized=analyze(report)
+        joint=next(v for v in summarized['variants'] if v['policy']=='joint')
+        self.assertAlmostEqual(joint['additional_saving_vs_best_same_encoding_control'],-50/10800)
+        self.assertEqual(joint['bundle_with_datrie_bytes'],5850)
+        missing=copy.deepcopy(report);missing['workers'].pop()
+        with self.assertRaisesRegex(ValueError,'missing independent query rounds'):
+            analyze(missing)
+        corrupt=copy.deepcopy(report);corrupt['variants'][0]['verification']['all_rows_verified']=3
+        with self.assertRaisesRegex(ValueError,'full original-ID verification missing'):
+            analyze(corrupt)
 
     @unittest.skipUnless(shutil.which('cc'),'C compiler required')
     def test_full_encoded_forwarding_and_tamper_guard(self):
