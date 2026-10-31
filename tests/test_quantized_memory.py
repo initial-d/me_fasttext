@@ -96,6 +96,27 @@ class CodecTest(unittest.TestCase):
                 pack_quantized_file(source, bad, 3, "int8", chunk_rows=2)
             self.assertFalse(bad.exists())
 
+    def test_same_size_source_mutation_is_rejected_by_streaming_audit(self):
+        from tools.quantized_memory import pack_quantized_file, encode_rows
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "source.f32"
+            source.write_bytes(np.ones((4, 2), dtype="<f4").tobytes())
+            target = Path(tmp) / "bundle"
+            calls = 0
+            def mutate_after_encoding(chunk, encoding):
+                nonlocal calls
+                result = encode_rows(chunk, encoding)
+                calls += 1
+                if calls == 1:
+                    changed = np.ones((4, 2), dtype="<f4")
+                    changed[0, 0] = 2
+                    source.write_bytes(changed.tobytes())
+                return result
+            with patch("tools.quantized_memory.encode_rows", side_effect=mutate_after_encoding):
+                with self.assertRaisesRegex(ValueError, "source changed"):
+                    pack_quantized_file(source, target, 2, "int8", native=False, chunk_rows=2)
+            self.assertFalse(target.exists())
+
 
 @unittest.skipUnless(np is not None and shutil.which("cc"), "NumPy and native C compiler required")
 class QuantizedNativeTest(unittest.TestCase):

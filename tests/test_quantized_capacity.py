@@ -18,7 +18,8 @@ except ImportError:
 @unittest.skipUnless(np is not None and shutil.which("cc"), "NumPy and C compiler required")
 class CapacityTest(unittest.TestCase):
     def test_fresh_worker_oracles_full_verification_and_direct_control(self):
-        from tools.benchmark_quantized_capacity import build, verify, query, prepare_oracle
+        from tools.benchmark_quantized_capacity import build, verify, query, prepare_oracle, software_environment
+        from tools.analyze_quantized_capacity import analyze
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             library = root / ("rows.dylib" if sys.platform == "darwin" else "rows.so")
@@ -37,23 +38,40 @@ class CapacityTest(unittest.TestCase):
             cfg = Namespace(source=source, dim=3, native_library=library, chunk_rows=2,
                             cache_bytes=128, max_block_bytes=12, repeat=2, case="fixture",
                             query_manifest=oracle_file, variant_label=None)
+            report = dict(status="passed", **software_environment(), shape=list(rows.shape),
+                          source_bytes=rows.nbytes, source_sha256=hashlib.sha256(rows.tobytes()).hexdigest(),
+                          settings={}, limitations=["fixture"], native_library_sha256="fixture",
+                          keys_bytes=42, keys_sha256="fixture", training_report_sha256="fixture",
+                          training={}, builds={}, verification={}, workers=[])
             for encoding in ("fp32", "fp16", "int8"):
                 for backend in ("raw", "native"):
+                    name = encoding + "-" + backend
                     cfg.encoding, cfg.backend = encoding, backend
                     cfg.bundle = root / (encoding + backend)
                     cfg.worker_report = root / "worker.json"
                     build(cfg)
+                    built = json.loads(cfg.worker_report.read_text())
+                    built["bundle_with_keys_bytes"] = built["bundle_bytes"] + report["keys_bytes"]
+                    report["builds"][name] = dict(returncode=0, result=built)
                     verify(cfg)
                     verified = json.loads(cfg.worker_report.read_text())
+                    report["verification"][name] = dict(returncode=0, result=verified)
                     self.assertEqual(verified["rows_verified"], len(rows))
                     self.assertTrue(verified["all_original_ids_encoded_byte_exact"])
                     if encoding == "fp32":
                         self.assertEqual(verified["relative_frobenius"], 0)
                     query(cfg)
                     checked = json.loads(cfg.worker_report.read_text())
+                    report["workers"].append(dict(returncode=0, variant=name, case="fixture", result=checked))
                     self.assertTrue(checked["all_query_bytes_exact"])
                     self.assertEqual(checked["query_rows"], 512)
                     self.assertEqual(len(checked["first_trace"]["wall"]["samples_ms"]), 1)
+            summarized = analyze(report)
+            self.assertEqual(summarized["failures"], [])
+            # Preserve format/metadata expansion against the same-encoding raw
+            # control instead of attributing quantization's gain to native.
+            self.assertLess(summarized["builds"]["int8-native"]["bundle_added_saving_vs_same_encoding_raw"], 0)
+            self.assertIn("wall_p99_ms", summarized["queries"]["int8-native"]["fixture"]["first_trace"])
             cfg.backend, cfg.encoding = "direct", "fp32"
             query(cfg)
             self.assertTrue(json.loads(cfg.worker_report.read_text())["all_query_bytes_exact"])
