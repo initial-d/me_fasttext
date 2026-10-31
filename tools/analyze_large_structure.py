@@ -14,6 +14,9 @@ def analyze(report):
     result=dict(source_sha256=info['source_sha256'],shape=info['shape'],
         source_commit=info['source_commit'],settings=info['settings'],limitations=info['limitations'],
         keys_bytes=info['keys_bytes'],index_bytes=report['index_bytes'],variants=[],pair_strata=[],queries={})
+    result['parts']=report.get('parts',[])
+    result['query_replay']=report.get('query_replay')
+    result['worker_source_commits']=sorted({w['result']['source_commit'] for w in report['workers']})
     audit=next(w['result'] for w in report['workers'] if w['phase']=='audit')
     result['row_norm_by_order']=audit['by_order']
     for s in audit['strata']:
@@ -86,6 +89,29 @@ def plot_training_support(support, output):
     fig.tight_layout()
     for ext in ('png','svg'):fig.savefig(output/('training-support.'+ext),dpi=180)
     plt.close(fig)
+    selected=[s for s in support['strata'] if s['direction'] in ('prefix','suffix')
+              and 'update_delta_cosine_when_identical_support' in s]
+    grouped=[]
+    for order in sorted({s['order'] for s in selected}):
+        strata=[s for s in selected if s['order']==order]
+        pairs=sum(s['cosine_when_identical_support']['count'] for s in strata)
+        if not pairs:continue
+        final=sum(s['cosine_when_identical_support'].get('mean',0)*s['cosine_when_identical_support']['count'] for s in strata)/pairs
+        delta=sum(s['update_delta_cosine_when_identical_support'].get('mean',0)*s['cosine_when_identical_support']['count'] for s in strata)/pairs
+        grouped.append((order,pairs,final,delta))
+    if grouped:
+        fig,axes=plt.subplots(1,2,figsize=(11,4.5))
+        axes[0].plot([v[0] for v in grouped],[v[2] for v in grouped],'o-',label='Final trained vectors')
+        axes[0].plot([v[0] for v in grouped],[v[3] for v in grouped],'o-',label='Actual trained − initial updates')
+        axes[0].set(xlabel='Source n-gram character length',ylabel='Mean cosine, identical word support')
+        axes[0].legend(fontsize=9)
+        axes[1].bar([v[0] for v in grouped],[v[1] for v in grouped])
+        axes[1].set(xlabel='Source n-gram character length',ylabel='Conditional sampled ancestor pairs')
+        for ax in axes:ax.grid(alpha=.2)
+        fig.suptitle('Co-training signal and initialization: actual CPU SGNS rows; conditional, correlated samples')
+        fig.tight_layout()
+        for ext in ('png','svg'):fig.savefig(output/('co-training-deltas.'+ext),dpi=180)
+        plt.close(fig)
 
 
 def plots(summary, output):
