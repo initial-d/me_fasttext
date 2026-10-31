@@ -95,7 +95,7 @@ def plots(report, directory):
     orders = sorted({r["max_order"] for r in report["runs"]})
     categories = sorted({r["category"] for r in report["runs"]}, reverse=True)
     names = ["fp16-raw", "int8-raw", "fp32-joint-0.99", "fp16-joint-0.99", "int8-joint-0.99"]
-    labels = ["FP16", "INT8", "FP32 + S", "FP16 + S", "INT8 + S"]
+    labels = ["FP16 raw", "INT8 raw", "FP32 + S", "FP16 + S", "INT8 + S"]
     colors = ["#5587b6", "#ed9c42", "#599268", "#83b4d7", "#f7bf7a"]
     fig, axes = plt.subplots(len(categories), len(orders), figsize=(12, 6), squeeze=False)
     for row, category in enumerate(categories):

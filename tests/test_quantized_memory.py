@@ -43,6 +43,10 @@ class CodecTest(unittest.TestCase):
             result = decode_rows(encode_rows(rows, encoding), 2, encoding)
             self.assertTrue(np.isfinite(result).all())
         self.assertEqual(decode_rows(encode_rows(rows, "fp32"), 2, "fp32").tobytes(), rows.tobytes())
+        extreme = np.array([[np.finfo(np.float32).max, -np.finfo(np.float32).max]], dtype=np.float32)
+        decoded = decode_rows(encode_rows(extreme, "int8"), 2, "int8")
+        self.assertTrue(np.isfinite(decoded).all())
+        np.testing.assert_allclose(decoded, extreme, rtol=2e-7, atol=0)
         for rows, encoding in (([[float("nan")]], "int8"), ([[float("inf")]], "fp32"), ([[1e10]], "fp16")):
             with self.assertRaises(ValueError):
                 encode_rows(np.array(rows, dtype=np.float32), encoding)

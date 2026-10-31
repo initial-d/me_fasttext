@@ -37,6 +37,9 @@ def encode_rows(rows, encoding):
     maximum = np.max(np.abs(rows.astype(np.float64)), axis=1)
     # Positive subnormals must not produce a zero scale through float32 rounding.
     scales = np.maximum(maximum / 127, np.finfo(np.float32).tiny).astype("<f4")
+    # Rounding max_float32 / 127 upward makes 127 * scale overflow at decode.
+    finite_ceiling = np.nextafter(np.float32(float(np.finfo(np.float32).max) / 127), np.float32(0))
+    scales = np.minimum(scales, finite_ceiling)
     scales[maximum == 0] = 1
     values = np.clip(np.rint(rows.astype(np.float64) / scales[:, None]), -127, 127).astype("i1")
     return np.concatenate((values.view("u1"), scales.view("u1").reshape(-1, 4)), axis=1)
