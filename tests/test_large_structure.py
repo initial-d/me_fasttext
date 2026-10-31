@@ -85,7 +85,7 @@ class StructureAuditTest(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which('cc'),'C compiler required')
     def test_full_encoded_forwarding_and_tamper_guard(self):
-        from tools.benchmark_large_structure import build,verify,write_json
+        from tools.benchmark_large_structure import build,verify,query,write_json
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp); training=root/'training';training.mkdir()
             library=root/('rows.dylib' if sys.platform=='darwin' else 'rows.so')
@@ -97,11 +97,13 @@ class StructureAuditTest(unittest.TestCase):
             write_json(training/'keys.json',['ab','abc','xy','xyz'])
             write_json(training/'training.json',dict(ngram_rows=4,dim=2))
             np.array([0,1,2,3],dtype='<u8').tofile(training/'queries.u64')
+            np.array([3,1,0,2],dtype='<u8').tofile(root/'heldout-lexical.u64')
             mapping=root/'rows.map';np.array([0,0,2,2],dtype='<u8').tofile(mapping)
             order=root/'rows.order';np.array([0,2,1,3],dtype='<u8').tofile(order)
             cfg=Namespace(training_dir=training,output_dir=root,native_library=library,map_file=mapping,
                 order_file=order,policy='joint',threshold=.99,norm_ratio=.99,max_block_bytes=16,chunk_rows=2,
                 worker_report=root/'worker.json')
+            cfg.case='heldout-lexical';cfg.batch_rows=2;cfg.cache_bytes=32;cfg.repeat=2
             for encoding in ('fp32','fp16','int8'):
                 cfg.encoding=encoding;cfg.bundle=root/encoding
                 build(cfg);verify(cfg)
@@ -109,6 +111,8 @@ class StructureAuditTest(unittest.TestCase):
                 self.assertEqual(result['all_rows_verified'],4)
                 self.assertEqual(result['overall']['merged_rows'],2)
                 self.assertTrue(result['all_encoded_and_decoded_original_ids_byte_exact_to_representative'])
+                query(cfg)
+                self.assertTrue(json.loads(cfg.worker_report.read_text())['all_first_and_second_query_bytes_exact'])
             # A valid idempotent but incorrect oracle must fail byte verification.
             np.array([0,1,2,3],dtype='<u8').tofile(mapping)
             with self.assertRaisesRegex(AssertionError,'representative bytes differ'):

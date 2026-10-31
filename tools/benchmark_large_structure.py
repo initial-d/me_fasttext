@@ -419,12 +419,17 @@ def verify(cfg):
 
 
 def query(cfg):
-    _, _, shape, source=source_info(cfg)
+    # Numeric serving does not need the lexical registry or offline full map.
+    # Construct the oracle first, then release its map/source before RSS/open.
+    training=json.loads((cfg.training_dir/'training.json').read_text())
+    shape=(training['ngram_rows'],training['dim'])
+    source=cfg.training_dir/'trained.f32'
     rows=np.memmap(source,mode='r',dtype='<f4',shape=shape)
     ids=np.fromfile(cfg.output_dir/(cfg.case+'.u64'),dtype='<u8')
     mapping=maps(cfg)
     selected=ids if mapping is None else mapping[ids]
     expected=decode_rows(encode_rows(rows[selected],cfg.encoding),shape[1],cfg.encoding)
+    del mapping, selected
     batches=[np.ascontiguousarray(ids[i:i+cfg.batch_rows]) for i in range(0,len(ids),cfg.batch_rows)]
     # Release oracle source pages before opening the measured backend.
     rows._mmap.close()
