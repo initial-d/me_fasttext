@@ -1,0 +1,26 @@
+{"phase": "audit", "name": "pair-audit", "returncode": 0, "seconds": 17.28354045096785}
+{"phase": "plan", "name": "plan-fp32-layout", "returncode": 0, "seconds": 20.944452942116186}
+{"phase": "plan", "name": "plan-fp32-joint-0.99", "returncode": 0, "seconds": 49.26128035597503}
+{"phase": "plan", "name": "plan-fp32-joint-0.98", "returncode": 0, "seconds": 49.57097114715725}
+{"phase": "plan", "name": "plan-fp32-joint-0.97", "returncode": 0, "seconds": 42.736875407164916}
+{"phase": "plan", "name": "plan-fp32-joint-0.95", "returncode": 0, "seconds": 55.798316252883524}
+{"phase": "plan", "name": "plan-fp32-joint-0.9", "returncode": 0, "seconds": 54.55839246814139}
+{"phase": "build", "name": "build-fp32-raw", "returncode": 0, "seconds": 11.465282249031588}
+{"phase": "verify", "name": "verify-fp32-raw", "returncode": 0, "seconds": 17.449927757959813}
+{"phase": "build", "name": "build-fp32-identity", "returncode": 0, "seconds": 173.18653448601253}
+{"phase": "verify", "name": "verify-fp32-identity", "returncode": 0, "seconds": 50.43241473706439}
+{"phase": "build", "name": "build-fp32-layout", "returncode": 0, "seconds": 173.84175527701154}
+{"phase": "verify", "name": "verify-fp32-layout", "returncode": 0, "seconds": 57.657311738003045}
+{"phase": "build", "name": "build-fp32-encoded-dedup", "returncode": 0, "seconds": 163.39273775415495}
+{"phase": "verify", "name": "verify-fp32-encoded-dedup", "returncode": 0, "seconds": 56.58853678009473}
+{"phase": "build", "name": "build-fp32-joint-0.99", "returncode": 0, "seconds": 174.51667159004137}
+{"phase": "verify", "name": "verify-fp32-joint-0.99", "returncode": 0, "seconds": 45.14974576397799}
+{"phase": "build", "name": "build-fp32-joint-0.98", "returncode": 0, "seconds": 172.1972983009182}
+{"phase": "verify", "name": "verify-fp32-joint-0.98", "returncode": 0, "seconds": 45.277466950938106}
+{"phase": "build", "name": "build-fp32-joint-0.97", "returncode": 0, "seconds": 171.68904441501945}
+{"phase": "verify", "name": "verify-fp32-joint-0.97", "returncode": 0, "seconds": 48.852756274165586}
+{"phase": "build", "name": "build-fp32-joint-0.95", "returncode": 0, "seconds": 178.5490551670082}
+{"phase": "verify", "name": "verify-fp32-joint-0.95", "returncode": 0, "seconds": 45.14612707006745}
+{"phase": "build", "name": "build-fp32-joint-0.9", "returncode": 0, "seconds": 170.3782710339874}
+{"phase": "verify", "name": "verify-fp32-joint-0.9", "returncode": 0, "seconds": 45.521747038001195}
+已终止

@@ -1,0 +1,7 @@
+{
+  "source_commit": "a79f2dde380f7bf2863b8c6ab38fb5bbe47f9428",
+  "command": "/tmp/projects-push-20261028-venv/bin/python -m pytest tests/test_large_structure.py tests/test_quantized_memory.py tests/test_quantized_capacity.py -q",
+  "result": "16 passed in 2.91s",
+  "category": "correctness checks; fabricated fixtures never compression evidence",
+  "note": "Observed tool output; separate from earlier full-suite snapshots and final-head CI."
+}
