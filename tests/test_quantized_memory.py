@@ -1,5 +1,6 @@
 """Codec/forwarding correctness fixtures; not compression/quality evidence."""
 from argparse import Namespace
+import hashlib
 from pathlib import Path
 import shutil
 import subprocess
@@ -67,6 +68,34 @@ class CodecTest(unittest.TestCase):
                 pack_quantized(rows, target, "fp16")
             self.assertEqual(keep.read_text(), "existing")
 
+    def test_file_export_streams_chunks_and_checks_original_id_hashes(self):
+        from tools.quantized_memory import pack_quantized_file, encode_rows, decode_rows
+        rows = np.array([[127., .5, -.5], [1., .3, -.2], [0., -0., 0.],
+                         [2., .6, -.4], [1., .3, -.2]], dtype="<f4")
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "source.f32"
+            source.write_bytes(rows.tobytes())
+            for encoding in ("fp32", "fp16", "int8"):
+                with patch("tools.quantized_memory.encode_rows", wraps=encode_rows) as encoder:
+                    target = Path(tmp) / encoding
+                    meta = pack_quantized_file(source, target, 3, encoding, native=False, chunk_rows=2)
+                    self.assertEqual([len(call.args[0]) for call in encoder.call_args_list], [2, 2, 1])
+                encoded = encode_rows(rows, encoding)
+                self.assertEqual((target / "table.rows").read_bytes(), encoded.tobytes())
+                self.assertEqual(meta["source_float32_sha256"], hashlib.sha256(rows.tobytes()).hexdigest())
+                expected = decode_rows(encoded, 3, encoding).tobytes()
+                self.assertEqual(meta["decoded_float32_sha256"], hashlib.sha256(expected).hexdigest())
+            bad = Path(tmp) / "bad"
+            source.write_bytes(rows.tobytes() + b"x")
+            with self.assertRaisesRegex(ValueError, "complete"):
+                pack_quantized_file(source, bad, 3, "int8")
+            self.assertFalse(bad.exists())
+            rows[-1, 1] = np.inf
+            source.write_bytes(rows.tobytes())
+            with self.assertRaisesRegex(ValueError, "finite"):
+                pack_quantized_file(source, bad, 3, "int8", chunk_rows=2)
+            self.assertFalse(bad.exists())
+
 
 @unittest.skipUnless(np is not None and shutil.which("cc"), "NumPy and native C compiler required")
 class QuantizedNativeTest(unittest.TestCase):
@@ -101,26 +130,42 @@ class QuantizedNativeTest(unittest.TestCase):
                         for _ in range(2):
                             self.assertEqual(reader.encoded_rows(ids).tobytes(), encoded[ids].tobytes())
                             self.assertEqual(reader.gather(ids).tobytes(), rounded[ids].tobytes())
+                            out = np.empty((len(ids), 2), dtype="<f4")
+                            scratch = np.empty((len(ids), reader.width), dtype="u1")
+                            reader.gather_into(ids, out, encoded_scratch=scratch)
+                            self.assertEqual(out.tobytes(), rounded[ids].tobytes())
                         self.assertEqual(reader.gather([]).shape, (0, 2))
                         for bad in ([-1], [4], [1.5], [[0]]):
                             with self.assertRaises(ValueError):
                                 reader.gather(bad)
+                            with self.assertRaises(ValueError):
+                                reader.gather_into(bad, out)
+                        with self.assertRaises(ValueError):
+                            reader.gather_into(ids, out[:, :1])
+                        out.flags.writeable = False
+                        with self.assertRaises(ValueError):
+                            reader.gather_into(ids, out)
                     with self.assertRaises(ValueError):
                         reader.gather(ids)
 
     def test_mark_compact_forwards_entire_quantized_representative(self):
-        from tools.quantized_memory import pack_quantized, QuantizedRows, encode_rows, decode_rows
+        from tools.quantized_memory import pack_quantized_file, QuantizedRows, encode_rows, decode_rows
         rows = np.array([[0., 0.], [1., .3], [2., .6]], dtype=np.float32)
         mapping = [0, 1, 1]
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "shared"
-            meta = pack_quantized(rows, target, "int8", representatives=mapping,
-                                  row_order=[0, 1, 2], max_block_bytes=12)
+            source = Path(tmp) / "source.f32"
+            source.write_bytes(rows.tobytes())
+            meta = pack_quantized_file(source, target, 2, "int8", representatives=mapping,
+                                       row_order=[0, 1, 2], max_block_bytes=12, chunk_rows=1)
             self.assertEqual(meta["storage"]["marked_rows"], 2)
             self.assertFalse(meta["source_bytes_preserved"])
             expected = decode_rows(encode_rows(rows, "int8"), 2, "int8")[mapping]
             with QuantizedRows(target, self.library) as reader:
                 self.assertEqual(reader.gather([2, 0, 1]).tobytes(), expected[[2, 0, 1]].tobytes())
+                output = np.empty((3, 2), dtype="<f4")
+                reader.gather_into([2, 0, 1], output)
+                self.assertEqual(output.tobytes(), expected[[2, 0, 1]].tobytes())
 
     @unittest.skipUnless(torch is not None, "optional PyTorch required")
     def test_quantized_reader_preserves_model_reduction_logits_and_restores_on_failure(self):
