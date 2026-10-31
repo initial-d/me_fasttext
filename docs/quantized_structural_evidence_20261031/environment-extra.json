@@ -1,0 +1,11 @@
+{
+  "platform": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+  "cpu": "AMD EPYC 7742 64-Core Processor",
+  "logical_cpus": 255,
+  "host_MemTotal": "2113631756 kB",
+  "CUDA_VISIBLE_DEVICES": "",
+  "experiment_device": "cpu",
+  "experiment_GPU": "unused",
+  "worker_policy": "one PyTorch/interop/BLAS worker at nice 19",
+  "shared_host": "no exclusivity or CPU frequency pinning; no full-model latency/RSS claim"
+}

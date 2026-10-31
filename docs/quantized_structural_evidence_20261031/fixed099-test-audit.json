@@ -1,0 +1,994 @@
+{
+  "category": "post-main-run fixed-default test audit; not preregistered confirmatory evidence",
+  "primary_report_sha256": "eb73b44ef9ccd359160b38a371c2629f9c1f7ea8d0990450dc67ec125cfa08d0",
+  "commit": "3a54de2d8a7b97ee1432980c41b4edb0f64566d3",
+  "script_sha256": "dffa700970f77de375a1ee85b2ef8b9ee1e2b325400e5bf00fa75899da79fc3f",
+  "command": "/llm-align/duyimin/meft-cuda-20261030/compat/bin/python /llm-align/duyimin/ngram-quantized-20261031/audit_fixed099.py --study-root /llm-align/duyimin/ngram-quantized-20261031 --output /llm-align/duyimin/ngram-quantized-20261031/fixed099-test-audit.json",
+  "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+  "pytorch": "2.11.0+cu130",
+  "platform": "Linux-5.4.0-42-generic-x86_64-with-glibc2.35",
+  "device": "cpu",
+  "gpu": "unused",
+  "threads": 1,
+  "interop_threads": 1,
+  "primary_validation_choices_unchanged": true,
+  "quality_budgets": {
+    "ppl_relative": 0.005,
+    "mean_kl_nats": 0.0001,
+    "top1_flip_fraction": 0.01
+  },
+  "checks": [
+    {
+      "max_order": 4,
+      "seed": 3,
+      "encoding": "fp32",
+      "name": "fp32-joint-0.99",
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6103373426612577,
+        "character_perplexity": 5.004499174179104,
+        "next_character_accuracy": 0.5304761174576401,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -1.529360408315738e-05,
+        "mean_prediction_kl_nats": 1.7120831127003061e-06,
+        "prediction_kl_p99_nats": 2.61046410822912e-05,
+        "maximum_prediction_kl_nats": 0.006801602568104317,
+        "top1_changed_fraction": 0.00030667791152342254,
+        "accuracy_change": 0.00015333895576175038,
+        "maximum_absolute_logit_change": 0.23801040649414062,
+        "maximum_per_target_cross_entropy_increase": 0.04171037673950195
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -4.49829433719927e-05,
+          1.578541096372571e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 4,
+      "seed": 3,
+      "encoding": "fp16",
+      "name": "fp16-joint-0.99",
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6103393421233734,
+        "character_perplexity": 5.004509180495614,
+        "next_character_accuracy": 0.5304761174576401,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -1.3294170547612814e-05,
+        "mean_prediction_kl_nats": 1.7180402708530163e-06,
+        "prediction_kl_p99_nats": 2.6131037333991233e-05,
+        "maximum_prediction_kl_nats": 0.006808221062134263,
+        "top1_changed_fraction": 0.00030667791152342254,
+        "accuracy_change": 0.00015333895576175038,
+        "maximum_absolute_logit_change": 0.2380363941192627,
+        "maximum_per_target_cross_entropy_increase": 0.0414736270904541
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -4.4146196455216834e-05,
+          1.7773715874158032e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 4,
+      "seed": 3,
+      "encoding": "int8",
+      "name": "int8-joint-0.99",
+      "checkpoint_sha256": "3576a59df8b4c48fb5cac466445e0472fd53af1450d4c7ffe30d612cf90a6214",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6103923585218516,
+        "character_perplexity": 5.004774508581822,
+        "next_character_accuracy": 0.5307827953691635,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 3.972292849695186e-05,
+        "mean_prediction_kl_nats": 4.650944368526283e-06,
+        "prediction_kl_p99_nats": 3.989562640500141e-05,
+        "maximum_prediction_kl_nats": 0.00023002610755576934,
+        "top1_changed_fraction": 0.001456720079736257,
+        "accuracy_change": 0.00046001686728514013,
+        "maximum_absolute_logit_change": 0.23500752449035645,
+        "maximum_per_target_cross_entropy_increase": 0.0469362735748291
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -1.9605531140350766e-05,
+          9.964713218480278e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 4,
+      "seed": 7,
+      "encoding": "fp32",
+      "name": "fp32-joint-0.99",
+      "checkpoint_sha256": "2a6ed05f8dd35bbd2851b5fa21fc34024df681e447fa8e426f5a8888bd13a567",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6155380906501848,
+        "character_perplexity": 5.030594110972346,
+        "next_character_accuracy": 0.5292494058115464,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 1.926555862198874e-05,
+        "mean_prediction_kl_nats": 1.8032067723003644e-06,
+        "prediction_kl_p99_nats": 3.1012494730281556e-05,
+        "maximum_prediction_kl_nats": 0.007373327653580067,
+        "top1_changed_fraction": 7.666947788085564e-05,
+        "accuracy_change": 0.0,
+        "maximum_absolute_logit_change": 0.27645206451416016,
+        "maximum_per_target_cross_entropy_increase": 0.05068206787109375
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -1.4909351380242913e-05,
+          5.253368237548624e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 4,
+      "seed": 7,
+      "encoding": "fp16",
+      "name": "fp16-joint-0.99",
+      "checkpoint_sha256": "2a6ed05f8dd35bbd2851b5fa21fc34024df681e447fa8e426f5a8888bd13a567",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6155369363808263,
+        "character_perplexity": 5.030588304315059,
+        "next_character_accuracy": 0.5292494058115464,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 1.8111267692118655e-05,
+        "mean_prediction_kl_nats": 1.806716082822584e-06,
+        "prediction_kl_p99_nats": 3.0720688622257e-05,
+        "maximum_prediction_kl_nats": 0.007369757393799058,
+        "top1_changed_fraction": 7.666947788085564e-05,
+        "accuracy_change": 0.0,
+        "maximum_absolute_logit_change": 0.2763652801513672,
+        "maximum_per_target_cross_entropy_increase": 0.050493717193603516
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -1.6793097959892104e-05,
+          5.1660681147827815e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 4,
+      "seed": 7,
+      "encoding": "int8",
+      "name": "int8-joint-0.99",
+      "checkpoint_sha256": "2a6ed05f8dd35bbd2851b5fa21fc34024df681e447fa8e426f5a8888bd13a567",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6155529379265168,
+        "character_perplexity": 5.030668802147704,
+        "next_character_accuracy": 0.5290960668557847,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 3.4113231218572145e-05,
+        "mean_prediction_kl_nats": 5.387190218382436e-06,
+        "prediction_kl_p99_nats": 4.374685590493577e-05,
+        "maximum_prediction_kl_nats": 0.007245252561058059,
+        "top1_changed_fraction": 0.0011500421682128345,
+        "accuracy_change": -0.00015333895576175038,
+        "maximum_absolute_logit_change": 0.2737741470336914,
+        "maximum_per_target_cross_entropy_increase": 0.04021501541137695
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -3.19065058511605e-05,
+          9.508497865481893e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 4,
+      "seed": 11,
+      "encoding": "fp32",
+      "name": "fp32-joint-0.99",
+      "checkpoint_sha256": "6f98acbd06c462d38cca0009605daa5986430f75993f62e281fc35ba0be9f1eb",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6054732126006208,
+        "character_perplexity": 4.98021574606221,
+        "next_character_accuracy": 0.5310128038028061,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -2.673351857648717e-05,
+        "mean_prediction_kl_nats": 4.141369138910643e-06,
+        "prediction_kl_p99_nats": 4.696098081167984e-05,
+        "maximum_prediction_kl_nats": 0.00394455171979604,
+        "top1_changed_fraction": 0.0002300084336425669,
+        "accuracy_change": -7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.23698687553405762,
+        "maximum_per_target_cross_entropy_increase": 0.11077344417572021
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -8.15899644717028e-05,
+          2.695571292072103e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 4,
+      "seed": 11,
+      "encoding": "fp16",
+      "name": "fp16-joint-0.99",
+      "checkpoint_sha256": "6f98acbd06c462d38cca0009605daa5986430f75993f62e281fc35ba0be9f1eb",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6054735438230436,
+        "character_perplexity": 4.980217395621609,
+        "next_character_accuracy": 0.5310128038028061,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -2.6402304953656114e-05,
+        "mean_prediction_kl_nats": 4.123843285603775e-06,
+        "prediction_kl_p99_nats": 4.622206702970199e-05,
+        "maximum_prediction_kl_nats": 0.003955611389927352,
+        "top1_changed_fraction": 0.0002300084336425669,
+        "accuracy_change": -7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.23705077171325684,
+        "maximum_per_target_cross_entropy_increase": 0.1109311580657959
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -8.179042015307988e-05,
+          2.682603927912067e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 4,
+      "seed": 11,
+      "encoding": "int8",
+      "name": "int8-joint-0.99",
+      "checkpoint_sha256": "6f98acbd06c462d38cca0009605daa5986430f75993f62e281fc35ba0be9f1eb",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.6055010224164472,
+        "character_perplexity": 4.980354246870715,
+        "next_character_accuracy": 0.5312428122364486,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 1.0759404819319943e-06,
+        "mean_prediction_kl_nats": 7.821151145785465e-06,
+        "prediction_kl_p99_nats": 5.6903488780835576e-05,
+        "maximum_prediction_kl_nats": 0.003953598947138336,
+        "top1_changed_fraction": 0.0011500421682128345,
+        "accuracy_change": 0.00015333895576163936,
+        "maximum_absolute_logit_change": 0.24121397733688354,
+        "maximum_per_target_cross_entropy_increase": 0.11120235919952393
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -7.882844742669443e-05,
+          7.906194596836203e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 8,
+      "seed": 3,
+      "encoding": "fp32",
+      "name": "fp32-joint-0.99",
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7330032812638991,
+        "character_perplexity": 5.6576198426114725,
+        "next_character_accuracy": 0.5240358813156483,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 2.1604294667527183e-05,
+        "mean_prediction_kl_nats": 7.78168988858872e-06,
+        "prediction_kl_p99_nats": 0.00011058258695271181,
+        "maximum_prediction_kl_nats": 0.0022485554921807044,
+        "top1_changed_fraction": 0.0005366863451659894,
+        "accuracy_change": -7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.24792087078094482,
+        "maximum_per_target_cross_entropy_increase": 0.08095335960388184
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -6.024743447126731e-05,
+          0.00011064608135001141
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 8,
+      "seed": 3,
+      "encoding": "fp16",
+      "name": "fp16-joint-0.99",
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7330043281755663,
+        "character_perplexity": 5.657625765642795,
+        "next_character_accuracy": 0.5240358813156483,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 2.2651229500529794e-05,
+        "mean_prediction_kl_nats": 7.79975451634245e-06,
+        "prediction_kl_p99_nats": 0.00010988026680244667,
+        "maximum_prediction_kl_nats": 0.002261641787947211,
+        "top1_changed_fraction": 0.0005366863451659894,
+        "accuracy_change": -7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.24807631969451904,
+        "maximum_per_target_cross_entropy_increase": 0.08090543746948242
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -5.991744542410419e-05,
+          0.00011220568407468823
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 8,
+      "seed": 3,
+      "encoding": "int8",
+      "name": "int8-joint-0.99",
+      "checkpoint_sha256": "0e8078af3c09f2b3fc9f9326eeadf80476c38c986ac134e9d92181c35b724578",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.733011266983305,
+        "character_perplexity": 5.65766502295644,
+        "next_character_accuracy": 0.5241125507935291,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 2.959021848603195e-05,
+        "mean_prediction_kl_nats": 1.1626656487954728e-05,
+        "prediction_kl_p99_nats": 0.00013220916162419904,
+        "maximum_prediction_kl_nats": 0.002340190267592224,
+        "top1_changed_fraction": 0.0013033811239745456,
+        "accuracy_change": 0.0,
+        "maximum_absolute_logit_change": 0.2520638704299927,
+        "maximum_per_target_cross_entropy_increase": 0.0828244686126709
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -5.804055918160391e-05,
+          0.00012844987515457383
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 8,
+      "seed": 7,
+      "encoding": "fp32",
+      "name": "fp32-joint-0.99",
+      "checkpoint_sha256": "f773d277a5444631a7ca1865880469f92d01fd664f4da9363621026ccd307845",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7264698748348142,
+        "character_perplexity": 5.6207767991020114,
+        "next_character_accuracy": 0.5249559150502185,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -2.1575416673470984e-05,
+        "mean_prediction_kl_nats": 5.807643260194993e-06,
+        "prediction_kl_p99_nats": 0.00010141657576575024,
+        "maximum_prediction_kl_nats": 0.0007125883040050816,
+        "top1_changed_fraction": 0.0009967032124511231,
+        "accuracy_change": -0.00015333895576163936,
+        "maximum_absolute_logit_change": 0.25301599502563477,
+        "maximum_per_target_cross_entropy_increase": 0.05091524124145508
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -8.06561119497958e-05,
+          4.467055448057322e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 8,
+      "seed": 7,
+      "encoding": "fp16",
+      "name": "fp16-joint-0.99",
+      "checkpoint_sha256": "f773d277a5444631a7ca1865880469f92d01fd664f4da9363621026ccd307845",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.726467159977237,
+        "character_perplexity": 5.620761539514243,
+        "next_character_accuracy": 0.5249559150502185,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -2.42902119913508e-05,
+        "mean_prediction_kl_nats": 5.815575679108724e-06,
+        "prediction_kl_p99_nats": 0.00010166998443153778,
+        "maximum_prediction_kl_nats": 0.0007118815655093643,
+        "top1_changed_fraction": 0.0009967032124511231,
+        "accuracy_change": -0.00015333895576163936,
+        "maximum_absolute_logit_change": 0.2531658411026001,
+        "maximum_per_target_cross_entropy_increase": 0.0510706901550293
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -8.436666262374752e-05,
+          4.227199612387919e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 8,
+      "seed": 7,
+      "encoding": "int8",
+      "name": "int8-joint-0.99",
+      "checkpoint_sha256": "f773d277a5444631a7ca1865880469f92d01fd664f4da9363621026ccd307845",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7264412324560523,
+        "character_perplexity": 5.620615808989577,
+        "next_character_accuracy": 0.5250325845280993,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -5.021676728397291e-05,
+        "mean_prediction_kl_nats": 9.692142442536032e-06,
+        "prediction_kl_p99_nats": 0.000108525150499449,
+        "maximum_prediction_kl_nats": 0.0008209585404893964,
+        "top1_changed_fraction": 0.001456720079736257,
+        "accuracy_change": -7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.25075554847717285,
+        "maximum_per_target_cross_entropy_increase": 0.050766944885253906
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -0.00013128774527874365,
+          3.87866733347212e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 8,
+      "seed": 11,
+      "encoding": "fp32",
+      "name": "fp32-joint-0.99",
+      "checkpoint_sha256": "b8b0017a1ced25157ff108b6d38a5aaf5dfe56e59ce071a16755aa916bd279f5",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.72803269792906,
+        "character_perplexity": 5.629567946606118,
+        "next_character_accuracy": 0.5291727363336656,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -3.121919297631779e-05,
+        "mean_prediction_kl_nats": 1.0537167107346687e-05,
+        "prediction_kl_p99_nats": 0.00010991141652174422,
+        "maximum_prediction_kl_nats": 0.005400081972263237,
+        "top1_changed_fraction": 0.0005366863451659894,
+        "accuracy_change": -7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.3041081428527832,
+        "maximum_per_target_cross_entropy_increase": 0.12840533256530762
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -0.00011841685450632379,
+          5.2997370424164765e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 8,
+      "seed": 11,
+      "encoding": "fp16",
+      "name": "fp16-joint-0.99",
+      "checkpoint_sha256": "b8b0017a1ced25157ff108b6d38a5aaf5dfe56e59ce071a16755aa916bd279f5",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7280324823027406,
+        "character_perplexity": 5.629566732723234,
+        "next_character_accuracy": 0.5291727363336656,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -3.143481254055395e-05,
+        "mean_prediction_kl_nats": 1.0534875189048734e-05,
+        "prediction_kl_p99_nats": 0.00011052448372342929,
+        "maximum_prediction_kl_nats": 0.0053958865398814355,
+        "top1_changed_fraction": 0.0005366863451659894,
+        "accuracy_change": -7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.30393123626708984,
+        "maximum_per_target_cross_entropy_increase": 0.12823724746704102
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -0.00011842676496203541,
+          5.1676833144090865e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 8,
+      "seed": 11,
+      "encoding": "int8",
+      "name": "int8-joint-0.99",
+      "checkpoint_sha256": "b8b0017a1ced25157ff108b6d38a5aaf5dfe56e59ce071a16755aa916bd279f5",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7280487235241493,
+        "character_perplexity": 5.629658164505454,
+        "next_character_accuracy": 0.5293260752894273,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -1.5193969786458584e-05,
+        "mean_prediction_kl_nats": 1.4494837743019004e-05,
+        "prediction_kl_p99_nats": 0.00012026770353101802,
+        "maximum_prediction_kl_nats": 0.005769573978476713,
+        "top1_changed_fraction": 0.002070075902783102,
+        "accuracy_change": 7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.308438777923584,
+        "maximum_per_target_cross_entropy_increase": 0.1331770420074463
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -0.0001269264060790776,
+          8.718167565233331e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 12,
+      "seed": 3,
+      "encoding": "fp32",
+      "name": "fp32-joint-0.99",
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.746792423275222,
+        "character_perplexity": 5.736173918029833,
+        "next_character_accuracy": 0.522579161235912,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 0.00013713155786803245,
+        "mean_prediction_kl_nats": 8.387160403224065e-06,
+        "prediction_kl_p99_nats": 0.00010513767379755445,
+        "maximum_prediction_kl_nats": 0.016954457411952714,
+        "top1_changed_fraction": 0.0013800506018554013,
+        "accuracy_change": -0.00023000843364262558,
+        "maximum_absolute_logit_change": 0.37196114659309387,
+        "maximum_per_target_cross_entropy_increase": 0.25717687606811523
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          4.1956194323943976e-05,
+          0.0002322068940903893
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 12,
+      "seed": 3,
+      "encoding": "fp16",
+      "name": "fp16-joint-0.99",
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7467906956675798,
+        "character_perplexity": 5.736164008180495,
+        "next_character_accuracy": 0.522579161235912,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 0.0001354037148087213,
+        "mean_prediction_kl_nats": 8.39024307721582e-06,
+        "prediction_kl_p99_nats": 0.00010461888524421549,
+        "maximum_prediction_kl_nats": 0.0169355323084063,
+        "top1_changed_fraction": 0.0013800506018554013,
+        "accuracy_change": -0.00023000843364262558,
+        "maximum_absolute_logit_change": 0.3721938729286194,
+        "maximum_per_target_cross_entropy_increase": 0.2576470375061035
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          4.106371111382881e-05,
+          0.00023184921531607292
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 12,
+      "seed": 3,
+      "encoding": "int8",
+      "name": "int8-joint-0.99",
+      "checkpoint_sha256": "b1dc4a4b7a8ae2ed1ef9688aa0cccf047c766581b08fe1608fc5625cfc93d0d6",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7467712194244922,
+        "character_perplexity": 5.736052290343807,
+        "next_character_accuracy": 0.5227325001916737,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 0.00011592502425189617,
+        "mean_prediction_kl_nats": 1.230479487328579e-05,
+        "prediction_kl_p99_nats": 0.00012420683382845062,
+        "maximum_prediction_kl_nats": 0.017946778591312353,
+        "top1_changed_fraction": 0.0019167369470213908,
+        "accuracy_change": -7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.36850810050964355,
+        "maximum_per_target_cross_entropy_increase": 0.25458717346191406
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          1.0180332353287482e-05,
+          0.00022089795485964647
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 12,
+      "seed": 7,
+      "encoding": "fp32",
+      "name": "fp32-joint-0.99",
+      "checkpoint_sha256": "464242bc5b4367053b82ea7fa20f47536b2311fd0a3f4c4aaf6c0d4ed4a9e0c7",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7467790163747046,
+        "character_perplexity": 5.736097014232285,
+        "next_character_accuracy": 0.5232691865368397,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -3.2684143610367924e-06,
+        "mean_prediction_kl_nats": 8.262291321689492e-06,
+        "prediction_kl_p99_nats": 0.00011778528468316299,
+        "maximum_prediction_kl_nats": 0.0065499537993800126,
+        "top1_changed_fraction": 0.0015333895576171127,
+        "accuracy_change": -0.00023000843364251455,
+        "maximum_absolute_logit_change": 0.3585476875305176,
+        "maximum_per_target_cross_entropy_increase": 0.06969976425170898
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -6.586554962312211e-05,
+          5.9801644730695365e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 12,
+      "seed": 7,
+      "encoding": "fp16",
+      "name": "fp16-joint-0.99",
+      "checkpoint_sha256": "464242bc5b4367053b82ea7fa20f47536b2311fd0a3f4c4aaf6c0d4ed4a9e0c7",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7467771339496792,
+        "character_perplexity": 5.73608621646988,
+        "next_character_accuracy": 0.5232691865368397,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -5.150831462224922e-06,
+        "mean_prediction_kl_nats": 8.264931976770698e-06,
+        "prediction_kl_p99_nats": 0.00011714195461653951,
+        "maximum_prediction_kl_nats": 0.006543255282379136,
+        "top1_changed_fraction": 0.0015333895576171127,
+        "accuracy_change": -0.00023000843364251455,
+        "maximum_absolute_logit_change": 0.35859787464141846,
+        "maximum_per_target_cross_entropy_increase": 0.06992912292480469
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -6.79350738509818e-05,
+          5.794176369511996e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 12,
+      "seed": 7,
+      "encoding": "int8",
+      "name": "int8-joint-0.99",
+      "checkpoint_sha256": "464242bc5b4367053b82ea7fa20f47536b2311fd0a3f4c4aaf6c0d4ed4a9e0c7",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.746776289076794,
+        "character_perplexity": 5.736081370208216,
+        "next_character_accuracy": 0.5231925170589589,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": -5.995699638609195e-06,
+        "mean_prediction_kl_nats": 1.1917872167478483e-05,
+        "prediction_kl_p99_nats": 0.00013011856410837118,
+        "maximum_prediction_kl_nats": 0.0066352149169198555,
+        "top1_changed_fraction": 0.0022234148585448133,
+        "accuracy_change": -0.00030667791152338975,
+        "maximum_absolute_logit_change": 0.3574690818786621,
+        "maximum_per_target_cross_entropy_increase": 0.06202554702758789
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -9.433998286496988e-05,
+          9.024583100613763e-05
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 12,
+      "seed": 11,
+      "encoding": "fp32",
+      "name": "fp32-joint-0.99",
+      "checkpoint_sha256": "d2b8acfabccdc0f727220d8529bbe5b60c75d87bdefe10184232ad1310d868aa",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7495112993082373,
+        "character_perplexity": 5.7517910847663964,
+        "next_character_accuracy": 0.5253392624396228,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 7.424971586491312e-05,
+        "mean_prediction_kl_nats": 1.2781461306450973e-05,
+        "prediction_kl_p99_nats": 0.00013476159745037163,
+        "maximum_prediction_kl_nats": 0.004709698039633851,
+        "top1_changed_fraction": 0.0013033811239745456,
+        "accuracy_change": -0.00023000843364251455,
+        "maximum_absolute_logit_change": 0.38813066482543945,
+        "maximum_per_target_cross_entropy_increase": 0.19906091690063477
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -3.0042624596327334e-05,
+          0.00018320990325721725
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 12,
+      "seed": 11,
+      "encoding": "fp16",
+      "name": "fp16-joint-0.99",
+      "checkpoint_sha256": "d2b8acfabccdc0f727220d8529bbe5b60c75d87bdefe10184232ad1310d868aa",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7495114649184045,
+        "character_perplexity": 5.751792037321558,
+        "next_character_accuracy": 0.5253392624396228,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 7.441533834221121e-05,
+        "mean_prediction_kl_nats": 1.2761184812997986e-05,
+        "prediction_kl_p99_nats": 0.000135257071796772,
+        "maximum_prediction_kl_nats": 0.004700372572971191,
+        "top1_changed_fraction": 0.0013800506018554013,
+        "accuracy_change": -0.00023000843364251455,
+        "maximum_absolute_logit_change": 0.38828110694885254,
+        "maximum_per_target_cross_entropy_increase": 0.19883155822753906
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          -2.8572421869474518e-05,
+          0.00018264452205758513
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    },
+    {
+      "max_order": 12,
+      "seed": 11,
+      "encoding": "int8",
+      "name": "int8-joint-0.99",
+      "checkpoint_sha256": "d2b8acfabccdc0f727220d8529bbe5b60c75d87bdefe10184232ad1310d868aa",
+      "test": {
+        "targets": 13043,
+        "cross_entropy_nats": 1.7496088171948707,
+        "character_perplexity": 5.752352014627242,
+        "next_character_accuracy": 0.5254926013953845,
+        "unknown_targets": 0
+      },
+      "test_delta": {
+        "perplexity_relative_change": 0.00017177959855028355,
+        "mean_prediction_kl_nats": 1.6229808150624952e-05,
+        "prediction_kl_p99_nats": 0.0001448249874305474,
+        "maximum_prediction_kl_nats": 0.004485428819249324,
+        "top1_changed_fraction": 0.0023767538143065247,
+        "accuracy_change": -7.666947788087519e-05,
+        "maximum_absolute_logit_change": 0.3875594139099121,
+        "maximum_per_target_cross_entropy_increase": 0.2045726776123047
+      },
+      "test_paired_block_interval": {
+        "perplexity_relative_change_95_percent_interval": [
+          4.521165080624516e-05,
+          0.00029340706023153957
+        ],
+        "block_characters": 256,
+        "observed_blocks": 52,
+        "repeats": 1000,
+        "seed": 42,
+        "limitation": "Paired contiguous character blocks within one text split; not independent corpora."
+      },
+      "test_all_budgets_passed": true
+    }
+  ]
+}

@@ -125,6 +125,7 @@ work.
 | Original-ID/byte-preserving storage and adapters | [Actual FastText outputs](fasttext_native_evidence_20261031/README.md), [trained TinyEngram/Qwen](tinyengram_qwen_evidence_20261030/README.md), Linux/macOS wheel CI | Frozen handles; reduction contracts differ; official Engram verification uses a demo, not trained weights |
 | Sparse native queries | [1.85M trained rows](cpu_capacity_evidence_20261030/README.md) and [smaller blocks](sparse_blocks_evidence_20261030/README.md) | Misses improved 16–27× over the prior layout; raw mmap remains faster |
 | DATrie / mark-compact | [Trained SGNS/GRU ablations](structural_native_evidence_20261030/README.md) | Exact key indexing helps these traces; no identical structural rows found; extra joint row savings are approximate |
+| Quantization + structural sharing | [18 trained tables, 486 controls](quantized_structural_evidence_20261031/README.md) | Additional savings remain after FP16/INT8 on these references; low-order INT8 can regress; validation-selected test failures are retained |
 | End-to-end artifact cost | [FastText matched controls](fasttext_native_evidence_20261031/README.md) | Whole bundle saves only 0.46%; queries are slower; structural order adds no benefit on this model |
 | Construction/runtime resources | [Implementation boundaries](native_ngram_memory.md) | Structural planning copies full rows/maps offline; cache budgets do not bound RSS; FastText retains an unused 200 MB hash allocation |
 
