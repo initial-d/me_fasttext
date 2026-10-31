@@ -49,6 +49,11 @@ def analyze(report):
                       batch_rows=workers[0]["batch_rows"], query_buffer_bytes=workers[0]["query_buffer_bytes"],
                       cache_budget_bytes=workers[0]["cache_budget_bytes"],
                       all_query_bytes_exact=all(w["all_query_bytes_exact"] for w in workers))
+        if variant == "fp32-direct" and workers[0]["source_commit"] == "20d111c0830239b7b19ba787479a00fdffb90b07":
+            # The frozen run's field counted active output only; its unused
+            # encoded scratch allocation is retained in actual RSS/timings.
+            target["query_buffer_bytes"] += workers[0]["batch_rows"] * report["shape"][1] * 4
+            target["buffer_accounting_note"] = "Corrected allocated bytes: frozen raw worker field omitted unused FP32 scratch; RSS is unchanged."
         for phase in ("first_trace", "second_trace", "hot_repeated"):
             target[phase] = {"wall_" + key: range_summary([float(np.percentile(w[phase]["wall"]["samples_ms"], q)) for w in workers])
                              for key, q in (("p50_ms", 50), ("p95_ms", 95), ("p99_ms", 99))}

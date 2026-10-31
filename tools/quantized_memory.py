@@ -68,6 +68,8 @@ def pack_quantized(rows, directory, encoding, *, native=True, representatives=No
     chunks. Native block descriptors and optional dedup/order/representative
     indexes still grow with table size; chunk_rows is not a total RSS cap.
     A staging file holds encoded rows on disk until native packing completes.
+    native="auto" optionally discards a larger native bundle in favor of raw;
+    it is a size policy for identity rows, not a latency optimization guarantee.
     """
     rows = np.asarray(rows)
     if rows.ndim != 2:
@@ -113,6 +115,9 @@ def _pack_quantized(rows, directory, encoding, *, native=True, representatives=N
     if min(rows.shape) < 1 or type(chunk_rows) is not int or chunk_rows < 1:
         raise ValueError("nonempty matrix and positive integer chunk_rows required")
     width = row_width(rows.shape[1], encoding)
+    automatic = native == "auto"
+    if automatic and (representatives is not None or row_order is not None or deduplicate):
+        raise ValueError("auto backend requires identity rows without structural compaction")
     if not native and (representatives is not None or row_order is not None or deduplicate):
         raise ValueError("raw baseline must retain original row order without compaction")
     directory = Path(directory)
@@ -120,17 +125,21 @@ def _pack_quantized(rows, directory, encoding, *, native=True, representatives=N
     try:
         source = directory / "staging.rows"
         source_digest = hashlib.sha256()
+        encoded_digest = hashlib.sha256() if automatic else None
         with source.open("wb") as stream:
             for start in range(0, len(rows), chunk_rows):
                 chunk = np.ascontiguousarray(rows[start:start + chunk_rows], dtype="<f4")
                 encoded = encode_rows(chunk, encoding)
                 source_digest.update(chunk.tobytes())
+                if encoded_digest is not None:
+                    encoded_digest.update(encoded.tobytes())
                 stream.write(encoded.tobytes())
         table = directory / ("table.men" if native else "table.rows")
         if native:
             storage = pack_native(source, table, width, deduplicate=deduplicate,
                                   predictor="xor", representatives=representatives,
                                   row_order=row_order, max_block_bytes=max_block_bytes)
+            candidate_bytes = table.stat().st_size
         else:
             storage = {"artifact_bytes": source.stat().st_size, "unique_rows": len(rows),
                        "row_map_bytes": 0, "deduplicate": False}
@@ -154,9 +163,9 @@ def _pack_quantized(rows, directory, encoding, *, native=True, representatives=N
                 staged._mmap.close()
         if audit_source_digest.digest() != source_digest.digest():
             raise ValueError("FP32 source changed during export")
-        if native:
+        if native and not automatic:
             source.unlink()
-        else:
+        elif not native:
             source.rename(table)
         table_digest = hashlib.sha256()
         with table.open("rb") as stream:
@@ -172,6 +181,23 @@ def _pack_quantized(rows, directory, encoding, *, native=True, representatives=N
                     "int8_scale_bytes_per_physical_row": 4 if encoding == "int8" else 0,
                     "rounding": "nearest-even; symmetric [-127,127] per-row scale" if encoding == "int8" else encoding,
                     "contract": "frozen original IDs; exact encoded representative bytes; quantization/sharing may change float32 rows"}
+        if automatic:
+            metadata.update(backend_policy="auto_smallest_bundle", candidate_native_table_bytes=candidate_bytes,
+                            backend_selection_note="Choose smallest table + codec JSON including maps/descriptors; common keys cancel. Candidate construction still occurs. Latency is not the selection criterion.")
+            raw_bytes = source.stat().st_size
+            raw_metadata = dict(metadata, backend="raw_mmap", table_file="table.rows",
+                                table_sha256=encoded_digest.hexdigest(), storage={
+                                    "artifact_bytes": raw_bytes, "unique_rows": len(rows),
+                                    "row_map_bytes": 0, "deduplicate": False})
+            def metadata_bytes(value):
+                return len((json.dumps(value, indent=2, sort_keys=True) + "\n").encode("utf-8"))
+            if raw_bytes + metadata_bytes(raw_metadata) <= candidate_bytes + metadata_bytes(metadata):
+                table.unlink()
+                table = directory / "table.rows"
+                source.rename(table)
+                metadata = raw_metadata
+            else:
+                source.unlink()
         (directory / "codec.json").write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
         return metadata
     except BaseException:

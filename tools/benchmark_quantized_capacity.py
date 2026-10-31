@@ -128,7 +128,8 @@ def query(args):
     queries = [(np.asarray(q["ids"], dtype="<u8"), q["sha256_by_encoding"][args.encoding]) for q in case["queries"]]
     output = np.empty((report["batch_rows"], args.dim), dtype="<f4")
     scratch = np.empty((report["batch_rows"], width), dtype="u1")
-    report["query_buffer_bytes"] = output.nbytes + (0 if args.backend == "direct" else scratch.nbytes)
+    report["query_buffer_bytes"] = output.nbytes + scratch.nbytes
+    report["active_query_buffer_bytes"] = output.nbytes + (0 if args.backend == "direct" else scratch.nbytes)
 
     def gather(item):
         ids, expected = item

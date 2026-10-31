@@ -188,6 +188,28 @@ class QuantizedNativeTest(unittest.TestCase):
                 reader.gather_into([2, 0, 1], output)
                 self.assertEqual(output.tobytes(), expected[[2, 0, 1]].tobytes())
 
+    def test_optional_auto_backend_avoids_map_descriptor_expansion_and_retains_useful_native(self):
+        from tools.quantized_memory import pack_quantized_file, QuantizedRows, encode_rows, decode_rows
+        # Tiny format-overhead and compressible correctness fixtures, not evidence.
+        with tempfile.TemporaryDirectory() as tmp:
+            for name, rows, encoding in (("overhead", np.array([[1., .3], [2., .6]], dtype="<f4"), "int8"),
+                                         ("compressible", np.zeros((1024, 16), dtype="<f4"), "fp32")):
+                source = Path(tmp) / (name + ".f32")
+                source.write_bytes(rows.tobytes())
+                target = Path(tmp) / name
+                meta = pack_quantized_file(source, target, rows.shape[1], encoding, native="auto")
+                expected_backend = "raw_mmap" if name == "overhead" else "native"
+                self.assertEqual(meta["backend"], expected_backend)
+                self.assertEqual(meta["backend_policy"], "auto_smallest_bundle")
+                self.assertLessEqual(meta["storage"]["artifact_bytes"], len(rows) * meta["row_bytes"])
+                expected = decode_rows(encode_rows(rows, encoding), rows.shape[1], encoding)
+                with QuantizedRows(target, self.library) as table:
+                    ids = [len(rows) - 1, 0, len(rows) - 1]
+                    self.assertEqual(table.gather(ids).tobytes(), expected[ids].tobytes())
+            with self.assertRaisesRegex(ValueError, "identity"):
+                pack_quantized_file(source, Path(tmp) / "invalid", rows.shape[1], "int8",
+                                    native="auto", representatives=[0] * len(rows))
+
     @unittest.skipUnless(torch is not None, "optional PyTorch required")
     def test_quantized_reader_preserves_model_reduction_logits_and_restores_on_failure(self):
         from tools.quantized_memory import pack_quantized, encode_rows, decode_rows
