@@ -67,6 +67,27 @@ def analyze(report):
     return result
 
 
+def plot_training_support(support, output):
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    plt.rcParams.update({'font.size':10,'svg.fonttype':'none'})
+    orders=sorted(map(int,support['by_order']))
+    values=[support['by_order'][str(n)] for n in orders]
+    fig,axes=plt.subplots(1,3,figsize=(15,4.5))
+    axes[0].plot(orders,[100*v['one_source_word_fraction'] for v in values],'o-')
+    axes[0].set_ylabel('Rows supported by one source word (%)')
+    axes[1].plot(orders,[v['training_update_relative_to_initial']['p50'] for v in values],'o-')
+    axes[1].set_yscale('log');axes[1].set_ylabel('Median training update / initial norm')
+    axes[2].plot(orders,[v['cosine_to_initial']['p50'] for v in values],'o-')
+    axes[2].set_ylabel('Median cosine to actual initialization')
+    for ax in axes:ax.set_xlabel('N-gram character length');ax.grid(alpha=.2)
+    fig.suptitle('Potential word supports and actual updates; one finite CPU SGNS checkpoint, not convergence')
+    fig.tight_layout()
+    for ext in ('png','svg'):fig.savefig(output/('training-support.'+ext),dpi=180)
+    plt.close(fig)
+
+
 def plots(summary, output):
     import matplotlib
     matplotlib.use('Agg')
@@ -121,12 +142,19 @@ def main():
     p.add_argument('--report',type=Path,required=True)
     p.add_argument('--output-dir',type=Path,required=True)
     p.add_argument('--plots',action='store_true')
+    p.add_argument('--training-support',type=Path)
     cfg=p.parse_args()
     data=gzip.decompress(cfg.report.read_bytes()) if cfg.report.suffix=='.gz' else cfg.report.read_bytes()
     summary=analyze(json.loads(data))
     cfg.output_dir.mkdir(parents=True,exist_ok=True)
     (cfg.output_dir/'summary.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n')
     if cfg.plots:plots(summary,cfg.output_dir)
+    if cfg.training_support:
+        raw=gzip.decompress(cfg.training_support.read_bytes()) if cfg.training_support.suffix=='.gz' else cfg.training_support.read_bytes()
+        support=json.loads(raw)
+        if support['source_sha256']!=summary['source_sha256'] or support['status']!='passed':
+            raise ValueError('training support source mismatch')
+        plot_training_support(support,cfg.output_dir)
 
 
 if __name__=='__main__':

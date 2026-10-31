@@ -82,12 +82,23 @@ def main():
             if row in supports:
                 supports[row].append(wid)
     strata=[]
+    rows=np.memmap(cfg.training_dir/'trained.f32',mode='r',dtype='<f4',shape=shape)
     for entry in pairs:
         values=np.asarray([jaccard(supports[i],supports[j]) for i,j in entry['pairs']])
+        pair_ids=np.asarray(entry['pairs'],dtype=np.int64)
+        metric=row_metrics(rows[pair_ids[:,0]],rows[pair_ids[:,1]])
+        identical=values==1
+        strongly_updated=(update[pair_ids[:,0]]>5)&(update[pair_ids[:,1]]>5)
+        joint=(metric['cosine']>=.99)&(metric['norm_ratio']>=.99)&metric['nonzero']
         strata.append(dict(order=entry['order'],target_order=entry['target_order'],direction=entry['direction'],
             pairs=len(values),source_word_support_jaccard=distribution(values),
             identical_support_fraction=float(np.mean(values==1)),
+            cosine_when_identical_support=distribution(metric['cosine'][identical]),
+            norm_ratio_when_identical_support=distribution(metric['norm_ratio'][identical]),
+            joint099_fraction_when_identical_support=float(joint[identical].mean()) if identical.any() else None,
+            cosine_when_both_updates_exceed_5x_initial=distribution(metric['cosine'][strongly_updated]),
             pair_ids_sha256=hashlib.sha256(np.asarray(entry['pairs'],dtype='<u8').tobytes()).hexdigest()))
+    rows._mmap.close()
     result=dict(status='passed',**software_environment(),source_sha256=training['trained_sha256'],
         initial_sha256=training['initial_sha256'],source_ids_sha256=training['source_row_ids_sha256'],
         corpus_sha256=training['corpus_raw_sha256'],all_exported_rows_changed=True,
