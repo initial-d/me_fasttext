@@ -8,6 +8,14 @@
 [![Paper](https://img.shields.io/badge/arXiv-2506.01254-b31b1b.svg)](https://arxiv.org/abs/2506.01254)
 [![Release](https://img.shields.io/github/v/release/initial-d/ngram-store?label=release)](https://github.com/initial-d/ngram-store/releases/latest)
 
+**从早期 n-gram embedding，到大模型中的 learned n-gram 参数化记忆。**
+
+FastText uses learned subword vectors to build word representations;
+Engram-style LLM memory retrieves learned token-n-gram features and fuses them
+with hidden states. The application changes, while the need to index, store and
+query trained vectors continues. NGramStore follows this thread through a
+shared backend. Learned n-gram tables are one form of parametric memory.
+
 Formerly **me_fasttext**. The engine grew from
 [Memory-Efficient FastText: A Comprehensive Approach Using Double-Array Trie Structures and Mark-Compact Memory Management](https://arxiv.org/abs/2506.01254).
 The paper keeps its original title; later Engram integrations are software extensions.

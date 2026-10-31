@@ -1,5 +1,24 @@
 # NGramStore engine roadmap and research plan
 
+## Historical background: n-gram embeddings to LLM memory
+
+Early learned n-gram embeddings represent local patterns as trainable vectors.
+FastText's subword vectors contribute to word representations. Newer Engram-style
+LLM architectures retrieve learned token-n-gram features from tables and fuse
+them with hidden states. This gives the same addressable-vector abstraction a
+role as an explicit learned memory module alongside the LLM backbone.
+
+Here, n-gram parametric memory means learned lookup-table weights. This is one
+branch of model memory, with a common storage/query problem across application
+generations. The continuity is the table abstraction; character versus token
+keys, hash versus exact addressing, training and context fusion remain distinct.
+
+NGramStore's historical development follows that abstraction: the original
+me_fasttext method optimizes n-gram indexing and memory management for word
+embeddings; the shared engine extends storage and queries to frozen learned
+tables used by LLM memory modules. The later software evidence keeps its own
+scope and does not rewrite the original paper's experiments.
+
 ## Product contract and history
 
 NGramStore is a general-purpose backend for **learned n-gram embeddings**:
