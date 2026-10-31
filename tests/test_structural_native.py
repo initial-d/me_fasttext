@@ -97,6 +97,27 @@ class RealStructuralTest(unittest.TestCase):
                 self.assertGreaterEqual(cosine, .99)
                 self.assertGreaterEqual(ratio, .99)
 
+    def test_quantization_before_datrie_plan_keeps_scales_padding_and_original_ids(self):
+        try:
+            import numpy as np
+            from tools.quantized_memory import encode_rows, decode_rows, pack_quantized, QuantizedRows
+            from tools.benchmark_quantized_structural import structural_maps
+        except ImportError:
+            self.skipTest("optional NumPy/PyTorch required")
+        from argparse import Namespace
+        rows = np.array([[0., 0.], [1., 0.], [.996, .089], [2., 0.]], dtype=np.float32)
+        keys = {1: "a", 2: "ab", 3: "abc"}
+        cfg = Namespace(planner="native", structural_library=self.library, norm_ratio=.99)
+        with tempfile.TemporaryDirectory() as tmp:
+            for encoding in ("fp32", "fp16", "int8"):
+                rounded = decode_rows(encode_rows(rows, encoding), 2, encoding)
+                mapping, order = structural_maps(rounded, keys, cfg, .99)
+                self.assertEqual(mapping.tolist(), [0, 1, 1, 3])
+                target = Path(tmp) / encoding
+                pack_quantized(rows, target, encoding, representatives=mapping.tolist(), row_order=order)
+                with QuantizedRows(target, self.rows_library) as reader:
+                    self.assertEqual(reader.gather([2, 0, 3, 1, 2]).tobytes(), rounded[mapping][[2, 0, 3, 1, 2]].tobytes())
+
     def test_engine_cli_uses_original_key_ids_after_structural_compaction(self):
         import contextlib,io,json
         from ngram_store.cli import pack_store,main
