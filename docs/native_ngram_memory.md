@@ -207,6 +207,49 @@ the PyTorch adapter does. Use trusted, immutable artifacts and external checksum
 for archival provenance. Structural checks and sanitizers are not a production
 artifact-security guarantee.
 
+### Frozen quantized row files
+
+`tools.quantized_memory.pack_quantized_file` reads a headerless little-endian
+FP32 table in chunks, encodes FP32/FP16/per-row INT8, then packs the encoded
+rows with the same native format. The original source and decoded-original-ID
+hashes are computed incrementally. Use this file path for large exports to
+avoid accumulating resident source mmap pages:
+
+```python
+import numpy as np
+from tools.quantized_memory import pack_quantized_file, QuantizedRows
+
+pack_quantized_file("trained.f32", "int8-bundle", 256, "int8",
+                    native="auto", chunk_rows=4096, max_block_bytes=8192)
+ids = np.array([2, 0, 2], dtype="<u8")
+with QuantizedRows("int8-bundle", "build/libmeft_rows.so") as rows:
+    output = np.empty((len(ids), rows.dim), dtype="<f4")
+    scratch = np.empty((len(ids), rows.width), dtype="u1")
+    rows.gather_into(ids, output, encoded_scratch=scratch)
+```
+
+This is a frozen CPU research codec. INT8 includes a FP32 scale inside every
+encoded row; FP16/INT8 change source weights. Native preserves the encoded
+representative bytes and original IDs. Dequantization writes into reusable
+NumPy FP32 output; it is not a trainable `.weight` or fused GPU kernel.
+The existing `pack_quantized(matrix, ...)` interface also encodes/audits in
+chunks, but its caller-owned matrix/mmap residency remains outside that bound.
+`native="auto"` is an optional identity-row size policy: compare actual table
+and codec JSON bytes, including the native map/descriptors, and keep raw if it
+is smaller. The common key registry cancels in that comparison. The candidate
+native file is still constructed, and this policy does not select for latency.
+It rejects structural forwarding/reordering/dedup; the default `native=True`
+and explicit raw/native paths remain unchanged.
+
+Chunking limits codec/hash buffers, not total RSS: native descriptors grow
+with block count, optional dedup/order/representative indexes grow with rows,
+and structural planning still holds full vectors/maps. Encoded staging and
+native spool/publication files also consume temporary disk space. Smaller
+blocks reduce sparse decode work at a metadata/compression cost. See the
+[same-trained-table scale and performance controls](quantized_capacity_evidence_20261031/README.md).
+
+### Native layout and structural export
+
 To enable the optional codec, pass `predictor="xor"` to `pack_native`,
 `export_demo_embedding`, `export_multihead` or `export_embedding` with the native
 backend. Existing calls still write version 1. `pack_native(..., row_order=...)`

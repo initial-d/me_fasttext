@@ -126,8 +126,9 @@ work.
 | Sparse native queries | [1.85M trained rows](cpu_capacity_evidence_20261030/README.md) and [smaller blocks](sparse_blocks_evidence_20261030/README.md) | Misses improved 16–27× over the prior layout; raw mmap remains faster |
 | DATrie / mark-compact | [Trained SGNS/GRU ablations](structural_native_evidence_20261030/README.md) | Exact key indexing helps these traces; no identical structural rows found; extra joint row savings are approximate |
 | Quantization + structural sharing | [18 trained tables, 486 controls](quantized_structural_evidence_20261031/README.md) | Additional savings remain after FP16/INT8 on these references; low-order INT8 can regress; validation-selected test failures are retained |
+| Quantized scale and CPU serving | [1.85M rows, 54 fresh workers](quantized_capacity_evidence_20261031/README.md) | FP16 native saves storage with broad-query cost; INT8 native expands versus raw INT8; vector error is measured without large-table task quality |
 | End-to-end artifact cost | [FastText matched controls](fasttext_native_evidence_20261031/README.md) | Whole bundle saves only 0.46%; queries are slower; structural order adds no benefit on this model |
-| Construction/runtime resources | [Implementation boundaries](native_ngram_memory.md) | Structural planning copies full rows/maps offline; cache budgets do not bound RSS; FastText retains an unused 200 MB hash allocation |
+| Construction/runtime resources | [Streaming quantized files and resource controls](quantized_capacity_evidence_20261031/README.md), [implementation boundaries](native_ngram_memory.md) | File codecs/hashes use chunks; native descriptors and optional planner indexes still grow; structural planning copies full rows/maps; cache budgets do not bound RSS; FastText retains an unused 200 MB hash allocation |
 
 Correctness is a starting point on supported paths. Useful compression and
 serving gains still depend on the trained table and workload.

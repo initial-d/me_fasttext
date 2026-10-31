@@ -1,0 +1,7 @@
+The local final-check launcher used a 60-second SSH-wrapper timeout and exited
+with subprocess.TimeoutExpired. The remote command continued and preserved
+final-tests.log: 140 tests ran in 66.453 seconds, OK (skipped=17).
+
+This was a launcher timeout, not a failed codec/capacity test. No successful
+benchmark result is inferred from this timeout; the separate run.sh/status and
+raw report record each experiment worker's return code and verification result.
