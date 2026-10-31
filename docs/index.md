@@ -18,6 +18,7 @@
 - [Same-trained-table FP16/INT8 and structural-sharing controls](quantized_structural_evidence_20261031/README.md)
 - [1.85M trained-row CPU capacity](cpu_capacity_evidence_20261030/README.md)
 - [Large FP16/INT8 capacity, construction RSS and fresh CPU traces](quantized_capacity_evidence_20261031/README.md)
+- [Large-table structural applicability, shared updates and initialization](large_structural_evidence_20261031/README.md)
 - [Sparse-block native miss latency](sparse_blocks_evidence_20261030/README.md)
 - [Native query/cache controls](native_query_evidence_20261030/README.md)
 - [Causal language-model quality controls](causal_lm_evidence_20261024/README.md)

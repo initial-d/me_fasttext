@@ -1,0 +1,9 @@
+{
+  "python": "3.9.6 (default, Apr 17 2026, 18:15:52) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "numpy": "2.0.2",
+  "matplotlib": "3.9.4",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "analysis_source_commit": "a79f2dde380f7bf2863b8c6ab38fb5bbe47f9428",
+  "report_sha256": "95b422afc87d3fd148bc3a89ec8721d6a65d3dda315b884c3a37bea81ca1a7ae",
+  "command": "python3 -m tools.analyze_large_structure --report docs/large_structural_evidence_20261031/report.json.gz --output-dir docs/large_structural_evidence_20261031 --plots --training-support docs/large_structural_evidence_20261031/training-support.json.gz"
+}

@@ -1,0 +1,12 @@
+{"name": "query-fp32-encoded-dedup-uniform-id-stress-0", "returncode": 0, "seconds": 0.2000218629837036}
+{"name": "query-fp32-layout-uniform-id-stress-0", "returncode": 0, "seconds": 0.19570748414844275}
+{"name": "query-fp32-identity-heldout-lexical-0", "returncode": 0, "seconds": 0.19977909489534795}
+{"name": "query-fp32-joint-0.99-heldout-lexical-0", "returncode": 0, "seconds": 0.20029012416489422}
+{"name": "query-fp32-joint-0.99-uniform-id-stress-0", "returncode": 0, "seconds": 0.5815770470071584}
+{"name": "query-fp32-encoded-dedup-heldout-lexical-0", "returncode": 0, "seconds": 0.19672996108420193}
+{"name": "query-fp32-joint-0.9-uniform-id-stress-0", "returncode": 0, "seconds": 0.19920904887840152}
+{"name": "query-fp32-identity-uniform-id-stress-0", "returncode": 0, "seconds": 0.198432554025203}
+{"name": "query-fp32-layout-heldout-lexical-0", "returncode": 0, "seconds": 0.20214378205128014}
+{"name": "query-fp32-raw-heldout-lexical-0", "returncode": 0, "seconds": 0.5422359011135995}
+{"name": "query-fp32-raw-uniform-id-stress-0", "returncode": 0, "seconds": 0.2622616831213236}
+{"name": "query-fp32-joint-0.9-heldout-lexical-0", "returncode": 0, "seconds": 0.2435706011019647}

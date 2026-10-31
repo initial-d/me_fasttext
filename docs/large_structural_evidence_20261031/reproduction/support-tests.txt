@@ -1,0 +1,9 @@
+test_actual_id_sampling_and_sibling_boundary_control (test_large_structure.StructureAuditTest.test_actual_id_sampling_and_sibling_boundary_control) ... ok
+test_complete_control_denominator_and_missing_round_rejection (test_large_structure.StructureAuditTest.test_complete_control_denominator_and_missing_round_rejection) ... ok
+test_cosine_ratio_ablation_and_direct_error (test_large_structure.StructureAuditTest.test_cosine_ratio_ablation_and_direct_error) ... ok
+test_full_encoded_forwarding_and_tamper_guard (test_large_structure.StructureAuditTest.test_full_encoded_forwarding_and_tamper_guard) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.590s
+
+OK

@@ -1,0 +1,22 @@
+正克隆到 '/llm-align/duyimin/ngram-structure-20261031/final-source'...
+完成。
+注意：正在切换到 '2135a26e224b76280fe08a0ab1a18d4dbe0c17d7'。
+
+您正处于分离头指针状态。您可以查看、做试验性的修改及提交，并且您可以在切换
+回一个分支时，丢弃在此状态下所做的提交而不对分支造成影响。
+
+如果您想要通过创建分支来保留在此状态下所做的提交，您可以通过在 switch 命令
+中添加参数 -c 来实现（现在或稍后）。例如：
+
+  git switch -c <新分支名>
+
+或者撤销此操作：
+
+  git switch -
+
+通过将配置变量 advice.detachedHead 设置为 false 来关闭此建议
+
+来自 /llm-align/duyimin/ngram-structure-20261031/final-tools.bundle
+ * branch            HEAD       -> FETCH_HEAD
+之前的 HEAD 位置是 2135a26 Add real-row order and affix audits with full structural scale controls
+HEAD 目前位于 9553789 Join verified independent encoding runs without promoting partial controllers
