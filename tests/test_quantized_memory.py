@@ -162,6 +162,26 @@ class ValidationSelectionTest(unittest.TestCase):
         self.assertIs(choose_validation(candidates, "int8", cfg), good)
         self.assertIsNone(choose_validation(candidates[1:], "int8", cfg))
 
+    def test_analysis_uses_smallest_matched_baseline_and_preserves_negative_results(self):
+        from tools.analyze_quantized_structural import analyze
+        variants, selections = [], {}
+        for encoding in ("fp32", "fp16", "int8"):
+            for policy, size in (("raw", 100), ("identity", 90), ("layout", 80), ("dedup", 70), ("joint-0.99", 75)):
+                variants.append({"name": f"{encoding}-{policy}", "backend_with_key_registry_bytes": size,
+                    "full_model_serving_artifact_bytes": size + 100,
+                    "fidelity_vs_float32": {"weighted_relative_frobenius": .01, "relative_l2_max": .1},
+                    "added_fidelity_vs_quantization_only": {"weighted_relative_frobenius": .009},
+                    "queries": {"warm_p50_ms": 2 if policy != "raw" else 1}})
+            selections[encoding] = {"feasible": True, "name": f"{encoding}-joint-0.99",
+                                   "test_all_budgets_passed": False, "test_delta": {"mean_prediction_kl_nats": .01}}
+        report = {"commit": "fixture", "settings": {"planner": "native"}, "failures": [],
+                  "runs": [{"category": "gru", "max_order": 4, "seed": 3, "variants": variants, "selection": selections}]}
+        summary = analyze(report)
+        self.assertEqual(summary["models"][0]["best_encoded_baseline"], "fp32-dedup")
+        self.assertLess(summary["models"][0]["joint_099_added_saving_vs_best_encoded_baseline"], 0)
+        self.assertEqual(len(summary["test_budget_exceedances"]), 3)
+        self.assertEqual(summary["models"][0]["validation_selection"]["name"], "fp32-joint-0.99")
+
 
 if __name__ == "__main__":
     unittest.main()
