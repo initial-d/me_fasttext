@@ -83,10 +83,14 @@ def main():
                 supports[row].append(wid)
     strata=[]
     rows=np.memmap(cfg.training_dir/'trained.f32',mode='r',dtype='<f4',shape=shape)
+    initial=np.memmap(cfg.training_dir/'initial.f32',mode='r',dtype='<f4',shape=(training['registered_ngram_rows'],shape[1]))
     for entry in pairs:
         values=np.asarray([jaccard(supports[i],supports[j]) for i,j in entry['pairs']])
         pair_ids=np.asarray(entry['pairs'],dtype=np.int64)
         metric=row_metrics(rows[pair_ids[:,0]],rows[pair_ids[:,1]])
+        delta_a=rows[pair_ids[:,0]].astype(np.float64)-initial[ids[pair_ids[:,0]]].astype(np.float64)
+        delta_b=rows[pair_ids[:,1]].astype(np.float64)-initial[ids[pair_ids[:,1]]].astype(np.float64)
+        delta_metric=row_metrics(delta_a,delta_b)
         identical=values==1
         strongly_updated=(update[pair_ids[:,0]]>5)&(update[pair_ids[:,1]]>5)
         joint=(metric['cosine']>=.99)&(metric['norm_ratio']>=.99)&metric['nonzero']
@@ -96,9 +100,12 @@ def main():
             cosine_when_identical_support=distribution(metric['cosine'][identical]),
             norm_ratio_when_identical_support=distribution(metric['norm_ratio'][identical]),
             joint099_fraction_when_identical_support=float(joint[identical].mean()) if identical.any() else None,
+            update_delta_cosine_when_identical_support=distribution(delta_metric['cosine'][identical]),
+            update_delta_cos099_fraction_when_identical_support=float(np.mean(delta_metric['cosine'][identical]>=.99)) if identical.any() else None,
             cosine_when_both_updates_exceed_5x_initial=distribution(metric['cosine'][strongly_updated]),
             pair_ids_sha256=hashlib.sha256(np.asarray(entry['pairs'],dtype='<u8').tobytes()).hexdigest()))
     rows._mmap.close()
+    initial._mmap.close()
     result=dict(status='passed',**software_environment(),source_sha256=training['trained_sha256'],
         initial_sha256=training['initial_sha256'],source_ids_sha256=training['source_row_ids_sha256'],
         corpus_sha256=training['corpus_raw_sha256'],all_exported_rows_changed=True,
